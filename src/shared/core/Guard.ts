@@ -11,7 +11,7 @@ export interface IGuardArgument {
 export type GuardArgumentCollection = IGuardArgument[];
 
 export class Guard {
-  
+
   public static combine (guardResults: Result<any>[]): Result<GuardResponse> {
     for (let result of guardResults) {
       if (result.isFailure) return result;
@@ -21,26 +21,26 @@ export class Guard {
   }
 
   public static greaterThan (minValue: number, actualValue: number): Result<GuardResponse> {
-    return actualValue > minValue 
-      ? Result.ok<GuardResponse>() 
-      : Result.fail<GuardResponse>(`Number given {${actualValue}} is not greater than {${minValue}}`);
+    return actualValue > minValue
+      ? Result.ok<GuardResponse>()
+      : Result.fail<GuardResponse>(`El numero {${actualValue}} es menor que {${minValue}}`);
   }
 
   public static againstAtLeast (numChars: number, text: string): Result<GuardResponse> {
-    return text.length >= numChars 
-      ? Result.ok<GuardResponse>() 
-      : Result.fail<GuardResponse>(`Text is not at least ${numChars} chars.`);
+    return text.length >= numChars
+      ? Result.ok<GuardResponse>()
+      : Result.fail<GuardResponse>(`Al menos ${numChars} caracteres.`);
   }
 
   public static againstAtMost (numChars: number, text: string): Result<GuardResponse> {
-    return text.length <= numChars 
-      ? Result.ok<GuardResponse>() 
-      : Result.fail<GuardResponse>(`Text is greater than ${numChars} chars.`);
+    return text.length <= numChars
+      ? Result.ok<GuardResponse>()
+      : Result.fail<GuardResponse>(`Maximo ${numChars} caracteres.`);
   }
 
   public static againstNullOrUndefined (argument: any, argumentName: string): Result<GuardResponse> {
     if (argument === null || argument === undefined) {
-      return Result.fail<GuardResponse>(`${argumentName} is null or undefined`)
+      return Result.fail<GuardResponse>(`${argumentName} es requerido`)
     } else {
       return Result.ok<GuardResponse>();
     }
@@ -66,14 +66,14 @@ export class Guard {
     if (isValid) {
       return Result.ok<GuardResponse>()
     } else {
-      return Result.fail<GuardResponse>(`${argumentName} isn't oneOf the correct types in ${JSON.stringify(validValues)}. Got "${value}".`);
+      return Result.fail<GuardResponse>(`${argumentName} no esta dentro de los tipos permitidos en ${JSON.stringify(validValues)}. "${value}".`);
     }
   }
 
   public static inRange (num: number, min: number, max: number, argumentName: string) : Result<GuardResponse> {
     const isInRange = num >= min && num <= max;
     if (!isInRange) {
-      return Result.fail<GuardResponse>(`${argumentName} is not within range ${min} to ${max}.`);
+      return Result.fail<GuardResponse>(`${argumentName} no esta en el entre ${min} y ${max}.`);
     } else {
       return Result.ok<GuardResponse>()
     }
@@ -88,7 +88,7 @@ export class Guard {
     }
 
     if (failingResult) {
-      return Result.fail<GuardResponse>(`${argumentName} is not within the range.`);
+      return Result.fail<GuardResponse>(`${argumentName} no esta dentro del rango.`);
     } else {
       return Result.ok<GuardResponse>()
     }

@@ -4,6 +4,7 @@ import { Either, Result, left, right } from "../../../../shared/core/Result";
 import { UseCase } from "../../../../shared/core/UseCase";
 import { User } from "../../domain/user";
 import { UserEmail } from "../../domain/user-email";
+import { FirstName, LastName } from "../../domain/user-names";
 import { UserPassword } from "../../domain/user-password";
 import { UserRepository } from "../../repositories/user-repository";
 import { CreateUserDto } from "./create-user-dto";
@@ -24,30 +25,33 @@ export class CreateUserUseCase implements UseCase<CreateUserDto, Promise<Respons
     }
 
     async execute(request: CreateUserDto): Promise<Response> {
+        const firstNameOrError = FirstName.create({ value: request.firstName})
+        const lastNameOrError = LastName.create({ value: request.lastName})
         const emailOrError = UserEmail.create(request.email);
         const passwordOrError = UserPassword.create({
             value: request.password,
         });
-        const namesOrError = Guard.againstNullOrUndefinedBulk([
-            { argument: request.firstName, argumentName: "nombre" },
-            { argument: request.lastName, argumentName: "apellido" },
-        ]);
 
         const dtoResult = Result.combine([
+            firstNameOrError,
+            lastNameOrError,
             emailOrError,
             passwordOrError,
-            namesOrError,
         ]);
 
+        console.log(dtoResult, 'result')
+
         if (dtoResult.isFailure) {
-            return left(Result.fail<void>(dtoResult.getValue())) as Response;
+            return left(Result.fail<void>(dtoResult.getErrorValue())) as Response;
         }
 
+        const firstName: FirstName = firstNameOrError.getValue();
+        const lastName: LastName = lastNameOrError.getValue();
         const email: UserEmail = emailOrError.getValue();
         const password: UserPassword = passwordOrError.getValue();
 
         try {
-            const userExist = this.repository.exists(email);
+            const userExist = await this.repository.exists(email);
 
             if (userExist) {
                 return left(
@@ -56,6 +60,8 @@ export class CreateUserUseCase implements UseCase<CreateUserDto, Promise<Respons
             }
 
             const userOrError = User.create({
+                firstName,
+                lastName,
                 email,
                 password,
             });

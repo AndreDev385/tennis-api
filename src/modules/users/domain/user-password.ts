@@ -69,7 +69,7 @@ export class UserPassword extends ValueObject<IUserPasswordProps> {
   }
 
   public static create (props: IUserPasswordProps): Result<UserPassword> {
-    const propsResult = Guard.againstNullOrUndefined(props.value, 'password');
+    const propsResult = Guard.againstNullOrUndefined(props.value, 'contraseña');
 
     if (propsResult.isFailure) {
       return Result.fail<UserPassword>(propsResult.getErrorValue());
@@ -79,7 +79,7 @@ export class UserPassword extends ValueObject<IUserPasswordProps> {
         if (
           !this.isAppropriateLength(props.value)
         ) {
-          return Result.fail<UserPassword>('Password doesnt meet criteria [8 chars min].');
+          return Result.fail<UserPassword>('La contraseña debe tener al menos [8] caracteres.');
         }
       }
 

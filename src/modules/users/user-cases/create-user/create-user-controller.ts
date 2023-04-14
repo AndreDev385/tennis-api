@@ -13,10 +13,7 @@ export class CreateUserController extends BaseController {
         this.useCase = useCase;
     }
 
-    async executeImpl(
-        req: Request,
-        res: Response
-    ): Promise<any> {
+    async executeImpl(req: Request, res: Response): Promise<any> {
         let dto: CreateUserDto = req.body as CreateUserDto;
 
         dto = {
@@ -39,11 +36,10 @@ export class CreateUserController extends BaseController {
                             error.getErrorValue().message
                         );
                     default:
-                        return this.fail(res, error.getErrorValue().message);
+                        return this.fail(res, error.getErrorValue());
                 }
-            } else {
-                return this.ok(res);
             }
+            return this.ok(res, { message: "Registro exitoso" });
         } catch (err) {
             return this.fail(res, err);
         }

@@ -5,6 +5,7 @@ import { UserEmail } from "../domain/user-email";
 export interface UserRepository {
   exists (userEmail: UserEmail): Promise<boolean>;
   getUserByUserId (userId: string): Promise<User>;
+  getUserByEmail(email: UserEmail): Promise<User>;
   save (user: User): Promise<void>;
 }
 
