@@ -13,6 +13,7 @@ interface UserProps {
     lastName: LastName;
     email: UserEmail;
     password: UserPassword;
+    recoverPasswordCode?: number;
     isAdminUser?: boolean;
     accessToken?: JWTToken;
     isDeleted?: boolean;
@@ -52,6 +53,10 @@ export class User extends AggregateRoot<UserProps> {
         return !!this.props.isAdminUser;
     }
 
+    get recoverPasswordCode(): number {
+        return this.props.recoverPasswordCode;
+    }
+
     public isLoggedIn(): boolean {
         return !!this.props.accessToken;
     }
@@ -67,6 +72,10 @@ export class User extends AggregateRoot<UserProps> {
             //this.addDomainEvent(new UserDeleted(this));
             this.props.isDeleted = true;
         }
+    }
+
+    public generateCode(): void {
+        this.props.recoverPasswordCode = Math.floor(Math.random() * 1000000);
     }
 
     private constructor(props: UserProps, id?: UniqueEntityID) {

@@ -1,5 +1,3 @@
-import { sign } from "jsonwebtoken";
-
 import { Either, Result, left, right } from "../../../../shared/core/Result";
 import { UseCase } from "../../../../shared/core/UseCase";
 import { JWTToken } from "../../domain/jwt";
@@ -9,8 +7,8 @@ import { UserPassword } from "../../domain/user-password";
 import { UserRepository } from "../../repositories/user-repository";
 import { LoginDto } from "./login-dto";
 import { LoginUseCaseErrors } from "./login-errors";
-import { environment } from "../../../../config";
 import { AppError } from "../../../../shared/core/AppError";
+import { AuthService } from "../../services/auth/auth-service";
 
 type Response = Either<
     | AppError.UnexpectedError
@@ -22,9 +20,11 @@ type Response = Either<
 
 export class LoginUseCase implements UseCase<LoginDto, Response> {
     private repository: UserRepository;
+    private authService: AuthService
 
-    constructor(repository: UserRepository) {
+    constructor(repository: UserRepository, authService: AuthService) {
         this.repository = repository;
+        this.authService = authService
     }
 
     async execute(request: LoginDto): Promise<Response> {
@@ -57,14 +57,12 @@ export class LoginUseCase implements UseCase<LoginDto, Response> {
         }
 
         try {
-            const accessToken: JWTToken = sign(
-                {
-                    user_id: user.id.toString(),
-                    first_name: user.firstName.value,
-                    last_name: user.lastName.value,
-                },
-                environment.jwt_secret
-            );
+            const accessToken: JWTToken = this.authService.signJWT({
+                userId: user.id.toString(),
+                firstName: user.firstName.value,
+                lastName: user.lastName.value,
+                isAdmin: user.isAdminUser,
+            })
 
             user.setAccessToken(accessToken);
         } catch (error) {
