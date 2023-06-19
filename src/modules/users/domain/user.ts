@@ -1,11 +1,11 @@
-import { UserEmail } from "./user-email";
-import { UserId } from "./user-id";
-import { UserPassword } from "./user-password";
+import { UserEmail } from "./email";
+import { UserId } from "./userId";
+import { UserPassword } from "./password";
 import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
 import { Result } from "../../../shared/core/Result";
 import { Guard } from "../../../shared/core/Guard";
 import { AggregateRoot } from "../../../shared/domain/AggregateRoot";
-import { FirstName, LastName } from "./user-names";
+import { FirstName, LastName } from "./names";
 import { JWTToken } from "./jwt";
 
 interface UserProps {

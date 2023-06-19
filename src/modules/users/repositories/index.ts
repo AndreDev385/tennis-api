@@ -1,5 +1,6 @@
-import { MemoryUserRepository } from './implementations/memory-user-repository'
+import models from "../../../shared/infra/database/sequelize/models/index";
+import { SequelizeUserRepo } from "./implementations/sequelizeUserRepo"
 
-const userRepository = new MemoryUserRepository();
+const sequelizeUserRepo = new SequelizeUserRepo(models);
 
-export { userRepository }
+export { sequelizeUserRepo }

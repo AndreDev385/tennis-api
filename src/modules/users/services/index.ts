@@ -1,4 +1,4 @@
-import { AuthServiceImpl } from "./auth/auth-service-impl";
+import { AuthServiceImpl } from "./auth/authServiceImpl";
 import { NodeMailer } from "./mailer/nodemailer";
 
 const authService = new AuthServiceImpl();

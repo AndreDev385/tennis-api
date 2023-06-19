@@ -1,7 +1,8 @@
 import express from "express";
-import { createUserController } from "../../../user-cases/create-user";
-import { loginController } from "../../../user-cases/login";
-import { forgetPasswordController } from "../../../user-cases/forget-password";
+import { createUserController } from "../../../useCases/createUser";
+import { loginController } from "../../../useCases/login";
+import { forgetPasswordController } from "../../../useCases/forget-password";
+import { getUserByEmailController } from "../../../useCases/getUserByEmail";
 
 const userRouter = express.Router();
 
@@ -11,6 +12,10 @@ userRouter.post("/login", (req, res) => loginController.execute(req, res));
 
 userRouter.post("/forget-password", (req, res) =>
     forgetPasswordController.execute(req, res)
+);
+
+userRouter.get("/:email", (req, res) =>
+    getUserByEmailController.execute(req, res)
 );
 
 export { userRouter };

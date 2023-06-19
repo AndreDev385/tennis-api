@@ -5,9 +5,11 @@
     "main": "index.js",
     "scripts": {
         "build": "npx tsc",
-        "start": "node dist/index.js",
-        "start:dev": "nodemon",
-        "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\""
+        "db:create:dev": "cross-env NODE_ENV=development node scripts/db/create",
+        "migrate:dev": "npm run build && npx sequelize-cli db:migrate",
+        "seed:dev": "npm run build && npx sequelize-cli db:seed:all",
+        "start:dev": "concurrently \"npx tsc --watch\" \"nodemon\"",
+        "start": "node dist/index.js"
     },
     "keywords": [],
     "author": "",
@@ -16,6 +18,7 @@
         "bcrypt": "^5.1.0",
         "compression": "^1.7.4",
         "cors": "^2.8.5",
+        "cross-env": "^7.0.3",
         "dompurify": "^3.0.1",
         "dotenv": "^16.0.3",
         "express": "^4.18.2",
@@ -25,6 +28,10 @@
         "jsonwebtoken": "^9.0.0",
         "morgan": "^1.10.0",
         "nodemailer": "^6.9.1",
+        "pg": "^8.11.0",
+        "pg-hstore": "^2.3.4",
+        "sequelize": "^6.31.1",
+        "sequelize-cli": "^6.6.1",
         "typescript": "^5.0.4",
         "uuid": "^9.0.0",
         "validator": "^13.9.0"
