@@ -24,14 +24,15 @@ export class UserMap implements Mapper<User> {
             password: password,
             firstName: user.firstName.value,
             lastName: user.lastName.value,
-            isAdmin: user.isAdminUser,
+            isAdmin: user.isAdmin,
+            canTrack: user.canTrack || false,
             accessToken: user.accessToken || null,
         };
     }
 
     public static toDomain(raw: any): User {
         const emailOrError = UserEmail.create(raw.email);
-        const firstNameOrError = FirstName.create({ value: raw.lastName });
+        const firstNameOrError = FirstName.create({ value: raw.firstName });
         const lastNameOrError = LastName.create({ value: raw.lastName });
         const passwordOrError = UserPassword.create({
             value: raw.password,
@@ -44,7 +45,8 @@ export class UserMap implements Mapper<User> {
             lastName: lastNameOrError.getValue(),
             password: passwordOrError.getValue(),
             accessToken: raw.accessToken,
-            isAdminUser: raw.isAdmin,
+            canTrack: raw.canTrack,
+            isAdmin: raw.isAdmin,
         }, new UniqueEntityID(raw.userId));
 
         userOrError.isFailure && console.log(userOrError.getErrorValue());
@@ -58,7 +60,8 @@ export class UserMap implements Mapper<User> {
             email: user.email.value,
             firstName: user.firstName.value,
             lastName: user.lastName.value,
-            isAdmin: user.isAdminUser,
+            canTrack: user.canTrack,
+            isAdmin: user.isAdmin,
         };
     }
 }

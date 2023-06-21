@@ -1,0 +1,1 @@
+import { sequelizeClubRepo } from "../repositories/"

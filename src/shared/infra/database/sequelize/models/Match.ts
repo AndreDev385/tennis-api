@@ -1,10 +1,23 @@
-import { Sequelize } from "sequelize";
-import models from ".";
+import { DataTypes, Sequelize } from "sequelize";
+import config from "../config/config";
 
-export default (sequelize: Sequelize, DataTypes: any) => {
-    const MatchModel = sequelize.define("match", {
+const sequelize: Sequelize = config.connection;
+
+const MatchModel = sequelize.define(
+    "match",
+    {
+        matchId: {
+            type: DataTypes.UUID,
+            defaultValue: DataTypes.UUIDV4,
+            allowNull: false,
+            primaryKey: true,
+        },
         mode: {
             type: DataTypes.STRING,
+            allowNull: false,
+        },
+        categoryId: {
+            type: DataTypes.UUID,
             allowNull: false,
         },
         setsQuantity: {
@@ -30,10 +43,6 @@ export default (sequelize: Sequelize, DataTypes: any) => {
         player1: {
             type: DataTypes.UUID,
             allowNull: false,
-            references: {
-                model: "player",
-                key: "playerId",
-            },
         },
         player2: {
             type: DataTypes.STRING,
@@ -42,21 +51,13 @@ export default (sequelize: Sequelize, DataTypes: any) => {
         player3: {
             type: DataTypes.UUID,
             allowNull: true,
-            references: {
-                model: "player",
-                key: "playerId",
-            },
         },
         player4: {
             type: DataTypes.STRING,
             allowNull: true,
         },
-    });
+    },
+    { tableName: "match" }
+);
 
-    MatchModel.hasOne(models.TrackerModel);
-
-    MatchModel.hasOne(models.PlayerModel, { as: "player1" });
-    MatchModel.hasOne(models.PlayerModel, { as: "player2" });
-
-    return MatchModel;
-};
+export { MatchModel };

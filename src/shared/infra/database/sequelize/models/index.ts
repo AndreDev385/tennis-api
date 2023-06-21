@@ -1,20 +1,25 @@
-import * as Sequelize from "sequelize";
-
-import config from "../config/config";
-import UserModel from "./BaseUser";
-import PlayerTrackerModel from "./PlayerTracker";
-import PlayerModel from "./Player";
-import TrackerModel from "./Tracker";
-import MatchModel from "./Match";
-
-const sequelize = config.connection;
+import { UserModel } from "./BaseUser";
+import { PlayerTrackerModel } from "./PlayerTracker";
+import { PlayerModel } from "./Player";
+import { TrackerModel } from "./Tracker";
+import { MatchModel } from "./Match";
+import { ClashModel } from "./ClubClash";
+import { SeasonModel } from "./Season";
+import { CategoryModel } from "./Category";
+import { LeagueModel } from "./League";
+import { ClubModel } from "./Club";
 
 const models = {
-    UserModel: UserModel(sequelize, Sequelize.DataTypes),
-    PlayerModel: PlayerModel(sequelize, Sequelize.DataTypes),
-    PlayerTrackerModel: PlayerTrackerModel(sequelize, Sequelize.DataTypes),
-    TrackerModel: TrackerModel(sequelize, Sequelize.DataTypes),
-    MatchModel: MatchModel(sequelize, Sequelize.DataTypes),
+    UserModel: UserModel,
+    PlayerModel: PlayerModel,
+    PlayerTrackerModel: PlayerTrackerModel,
+    TrackerModel: TrackerModel,
+    MatchModel: MatchModel,
+    ClashModel: ClashModel,
+    SeasonModel: SeasonModel,
+    CategoryModel: CategoryModel,
+    LeagueModel: LeagueModel,
+    ClubModel: ClubModel,
 };
 
 export default models;
