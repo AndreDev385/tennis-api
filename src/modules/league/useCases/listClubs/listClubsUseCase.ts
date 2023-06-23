@@ -6,7 +6,7 @@ import { ClubRepository } from "../../repositories/clubRepo";
 
 type Response = Either<AppError.UnexpectedError, Result<Array<ClubDto>>>;
 
-export class ListClubsUseCase implements UseCase<void, Response> {
+export class ListClubs implements UseCase<void, Response> {
     private repo: ClubRepository;
 
     constructor(repo: ClubRepository) {

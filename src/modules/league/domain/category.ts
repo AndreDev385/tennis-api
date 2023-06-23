@@ -9,7 +9,7 @@ interface CategoryProps {
 }
 
 export class Category extends Entity<CategoryProps> {
-    get id(): CategoryId {
+    get categoryId(): CategoryId {
         return CategoryId.create(this._id).getValue();
     }
 

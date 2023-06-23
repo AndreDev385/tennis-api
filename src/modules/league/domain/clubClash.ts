@@ -2,9 +2,9 @@ import { Guard } from "../../../shared/core/Guard";
 import { Result } from "../../../shared/core/Result";
 import { Entity } from "../../../shared/domain/Entity";
 import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
-import { Category } from "./category";
+import { CategoryId } from "./categoryId";
 import { ClashId } from "./clashId";
-import { Club } from "./club";
+import { ClubId } from "./clubId";
 import { Match } from "./match";
 import { Matchs } from "./matchs";
 import { SeasonId } from "./seasonId";
@@ -12,11 +12,11 @@ import { SeasonId } from "./seasonId";
 interface ClubClashProps {
     seasonId: SeasonId;
     matchs: Matchs;
-    club: Club;
-    rivalClub: Club;
-    category: Category;
+    clubId: ClubId;
+    rivalClubId: ClubId;
+    categoryId: CategoryId;
     journey: string;
-    host: Club;
+    hostId: ClubId;
 }
 
 export class ClubClash extends Entity<ClubClashProps> {
@@ -32,24 +32,24 @@ export class ClubClash extends Entity<ClubClashProps> {
         return this.props.matchs.getItems();
     }
 
-    get club(): Club {
-        return this.props.club;
+    get clubId(): ClubId {
+        return this.props.clubId;
     }
 
-    get rivalClub(): Club {
-        return this.props.rivalClub;
+    get rivalClubId(): ClubId {
+        return this.props.rivalClubId;
     }
 
-    get category(): Category {
-        return this.props.category;
+    get categoryId(): CategoryId {
+        return this.props.categoryId;
     }
 
     get journey(): string {
         return this.props.journey;
     }
 
-    get host(): Club {
-        return this.props.host;
+    get hostId(): ClubId {
+        return this.props.hostId;
     }
 
     public static create(
@@ -59,11 +59,11 @@ export class ClubClash extends Entity<ClubClashProps> {
         const guardResult = Guard.againstNullOrUndefinedBulk([
             { argument: props.seasonId, argumentName: "season id" },
             { argument: props.matchs, argumentName: "matchs" },
-            { argument: props.club, argumentName: "club" },
-            { argument: props.rivalClub, argumentName: "rival club" },
-            { argument: props.category, argumentName: "category" },
+            { argument: props.clubId, argumentName: "club" },
+            { argument: props.rivalClubId, argumentName: "rival club" },
+            { argument: props.categoryId, argumentName: "category" },
             { argument: props.journey, argumentName: "journey" },
-            { argument: props.host, argumentName: "host" },
+            { argument: props.hostId, argumentName: "host" },
         ]);
 
         if (guardResult.isFailure) {

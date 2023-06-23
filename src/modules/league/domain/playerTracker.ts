@@ -2,6 +2,7 @@ import { Guard } from "../../../shared/core/Guard";
 import { Result } from "../../../shared/core/Result";
 import { Entity } from "../../../shared/domain/Entity";
 import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
+import { PlayerTrackerId } from "./playerTrackerId";
 
 interface PlayerTrackerProps {
     pointsWon: number;
@@ -31,6 +32,10 @@ interface PlayerTrackerProps {
 }
 
 export class PlayerTracker extends Entity<PlayerTrackerProps> {
+    get playerTrackerId(): PlayerTrackerId {
+        return PlayerTrackerId.create(this._id).getValue();
+    }
+
     get pointsWon(): number {
         return this.props.pointsWon;
     }

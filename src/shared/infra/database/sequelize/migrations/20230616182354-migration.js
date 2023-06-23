@@ -80,13 +80,11 @@ module.exports = {
                     type: Sequelize.STRING,
                     allowNull: false,
                 },
-                address: {
-                    type: Sequelize.STRING,
-                    allowNull: false,
-                },
                 code: {
                     type: Sequelize.STRING,
-                    allowNull: false,
+                    unique: true,
+                    allowNull: true,
+                    defaultValue: null,
                 },
                 createdAt: {
                     type: Sequelize.DATE,
@@ -616,6 +614,14 @@ module.exports = {
                 },
             });
 
+        const CREATE_JOURNEY_TABLE = () =>
+            queryInterface.createTable("journey", {
+                name: {
+                    type: Sequelize.STRING,
+                    allowNull: false,
+                },
+            });
+
         await CREATE_USER_TABLE();
         await CREATE_CLUB_TABLE();
         await CREATE_CATEGORY_TABLE();
@@ -626,6 +632,7 @@ module.exports = {
         await CREATE_MATCH_TABLE();
         await CREATE_TRACKER_TABLE();
         await CREATE_PLAYER_TRACKER_TABLE();
+        await CREATE_JOURNEY_TABLE();
     },
 
     async down(queryInterface, Sequelize) {
@@ -639,6 +646,7 @@ module.exports = {
         await queryInterface.dropTable("match");
         await queryInterface.dropTable("tracker");
         await queryInterface.dropTable("playerTracker");
+        await queryInterface.dropTable("journey")
     },
 };
 //# sourceMappingURL=20230616182354-migration.js.map

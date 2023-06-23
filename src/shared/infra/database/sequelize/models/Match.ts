@@ -34,7 +34,8 @@ const MatchModel = sequelize.define(
         },
         address: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: true,
+            defaultValue: null,
         },
         surface: {
             type: DataTypes.STRING,

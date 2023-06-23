@@ -22,22 +22,6 @@ module.exports = {
             },
         ]);
 
-        await queryInterface.bulkInsert("club", [
-            {
-                clubId: v4(),
-                name: "Valle Arriba",
-                symbol: "VAR",
-                address: "Colinas de Bello Monte",
-                code: "Ax12sH",
-            },
-            {
-                clubId: v4(),
-                name: "Test",
-                symbol: "TES",
-                address: "direccion",
-                code: "123123",
-            }
-        ]);
     },
 
     async down(queryInterface, Sequelize) {

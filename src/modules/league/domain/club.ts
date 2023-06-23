@@ -7,7 +7,6 @@ import { ClubId } from "./clubId";
 interface ClubProps {
     name: string;
     symbol: string;
-    address: string;
     code: string;
 }
 
@@ -22,10 +21,6 @@ export class Club extends Entity<ClubProps> {
 
     get symbol(): string {
         return this.props.symbol;
-    }
-
-    get address(): string {
-        return this.props.address;
     }
 
     get code(): string {
@@ -50,7 +45,6 @@ export class Club extends Entity<ClubProps> {
         const guardResult = Guard.againstNullOrUndefinedBulk([
             { argument: props.name, argumentName: "name" },
             { argument: props.symbol, argumentName: "symbol" },
-            { argument: props.address, argumentName: "addres" },
         ]);
 
         if (guardResult.isFailure) {

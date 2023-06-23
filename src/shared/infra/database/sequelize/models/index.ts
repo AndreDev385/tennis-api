@@ -8,6 +8,7 @@ import { SeasonModel } from "./Season";
 import { CategoryModel } from "./Category";
 import { LeagueModel } from "./League";
 import { ClubModel } from "./Club";
+import { JourneyModel } from "./Journey";
 
 const models = {
     UserModel: UserModel,
@@ -20,6 +21,7 @@ const models = {
     CategoryModel: CategoryModel,
     LeagueModel: LeagueModel,
     ClubModel: ClubModel,
+    JourneyModel: JourneyModel,
 };
 
 export default models;

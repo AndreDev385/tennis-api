@@ -2,16 +2,16 @@ import { UserId } from "../../users/domain/userId";
 import { Entity } from "../../../shared/domain/Entity";
 import { PlayerId } from "./playerId";
 import { ClubId } from "./clubId";
-import { FirstName, LastName } from "../../users/domain/names";
 import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
 import { Guard } from "../../../shared/core/Guard";
 import { Result } from "../../../shared/core/Result";
+import { FirstName, LastName } from "../../users/domain/names";
 
 interface PlayerProps {
     userId: UserId;
     clubId: ClubId;
-    firstName: FirstName;
-    lastName: LastName;
+    firstName: FirstName,
+    lastName: LastName,
 }
 
 export class Player extends Entity<PlayerProps> {
@@ -42,8 +42,8 @@ export class Player extends Entity<PlayerProps> {
         const guardResult = Guard.againstNullOrUndefinedBulk([
             { argument: props.userId, argumentName: "user id" },
             { argument: props.clubId, argumentName: "club id" },
-            { argument: props.firstName, argumentName: "firstName" },
-            { argument: props.lastName, argumentName: "lastName" },
+            { argument: props.firstName, argumentName: "nombre" },
+            { argument: props.lastName, argumentName: "apellido" },
         ]);
 
         if (guardResult.isFailure) {

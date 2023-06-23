@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
 import { BaseController } from "../../../../shared/infra/http/models/BaseController";
-import { ListClubsUseCase } from "./listClubsUseCase";
+import { ListClubs } from "./listClubsUseCase";
 
 export class ListClubsController extends BaseController {
-    useCase: ListClubsUseCase;
+    useCase: ListClubs;
 
-    constructor(useCase: ListClubsUseCase) {
+    constructor(useCase: ListClubs) {
         super();
         this.useCase = useCase;
     }

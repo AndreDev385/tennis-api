@@ -1,8 +1,8 @@
 import { sequelizeClubRepo } from "../../repositories";
 import { ListClubsController } from "./listClubController";
-import { ListClubsUseCase } from "./listClubsUseCase";
+import { ListClubs } from "./listClubsUseCase";
 
-const listClubsUseCase = new ListClubsUseCase(sequelizeClubRepo);
+const listClubsUseCase = new ListClubs(sequelizeClubRepo);
 const listClubController = new ListClubsController(listClubsUseCase);
 
 export {

@@ -1,4 +1,6 @@
+import { Category } from "../../domain/category";
 import { CategoryDto } from "../../dtos/categoryDto";
+import { CategoryMap } from "../../mappers/categoryMap";
 import { CategoryRepository } from "../categoryRepo";
 
 export class SequelizeCategoryRepository implements CategoryRepository {
@@ -6,6 +8,17 @@ export class SequelizeCategoryRepository implements CategoryRepository {
 
     constructor(models: any) {
         this.models = models;
+    }
+
+    async findById(categoryId: string): Promise<Category> {
+        const CategoryModel = this.models.CategoryModel;
+
+        const category = await CategoryModel.findOne({ where: { categoryId } });
+        if (!category) {
+            throw new Error("Category not found");
+        }
+
+        return CategoryMap.toDomain(category);
     }
 
     async list(): Promise<CategoryDto[]> {

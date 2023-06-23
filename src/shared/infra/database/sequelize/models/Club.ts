@@ -21,14 +21,11 @@ const ClubModel = sequelize.define(
             allowNull: false,
             unique: true,
         },
-        address: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
         code: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: true,
             unique: true,
+            defaultValue: null
         },
     },
     {
