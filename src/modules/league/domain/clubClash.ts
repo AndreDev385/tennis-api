@@ -5,6 +5,7 @@ import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
 import { CategoryId } from "./categoryId";
 import { ClashId } from "./clashId";
 import { ClubId } from "./clubId";
+import { Journey } from "./journey";
 import { Match } from "./match";
 import { Matchs } from "./matchs";
 import { SeasonId } from "./seasonId";
@@ -15,11 +16,11 @@ interface ClubClashProps {
     clubId: ClubId;
     rivalClubId: ClubId;
     categoryId: CategoryId;
-    journey: string;
+    journey: Journey;
     hostId: ClubId;
 }
 
-export class ClubClash extends Entity<ClubClashProps> {
+export class Clash extends Entity<ClubClashProps> {
     get clashId(): ClashId {
         return ClashId.create(this._id).getValue();
     }
@@ -44,7 +45,7 @@ export class ClubClash extends Entity<ClubClashProps> {
         return this.props.categoryId;
     }
 
-    get journey(): string {
+    get journey(): Journey {
         return this.props.journey;
     }
 
@@ -55,7 +56,7 @@ export class ClubClash extends Entity<ClubClashProps> {
     public static create(
         props: ClubClashProps,
         id?: UniqueEntityID
-    ): Result<ClubClash> {
+    ): Result<Clash> {
         const guardResult = Guard.againstNullOrUndefinedBulk([
             { argument: props.seasonId, argumentName: "season id" },
             { argument: props.matchs, argumentName: "matchs" },
@@ -67,11 +68,11 @@ export class ClubClash extends Entity<ClubClashProps> {
         ]);
 
         if (guardResult.isFailure) {
-            return Result.fail<ClubClash>(guardResult.getErrorValue());
+            return Result.fail<Clash>(guardResult.getErrorValue());
         }
 
-        const clash = new ClubClash(props, id);
+        const clash = new Clash(props, id);
 
-        return Result.ok<ClubClash>(clash);
+        return Result.ok<Clash>(clash);
     }
 }

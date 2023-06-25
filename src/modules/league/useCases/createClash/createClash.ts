@@ -1,10 +1,10 @@
 import { AppError } from "../../../../shared/core/AppError";
-import { Guard } from "../../../../shared/core/Guard";
 import { Either, Result, left, right } from "../../../../shared/core/Result";
 import { UseCase } from "../../../../shared/core/UseCase";
 import { Category } from "../../domain/category";
 import { Club } from "../../domain/club";
-import { ClubClash } from "../../domain/clubClash";
+import { Clash } from "../../domain/clubClash";
+import { Journey } from "../../domain/journey";
 import { Matchs } from "../../domain/matchs";
 import { Season } from "../../domain/season";
 import { CategoryRepository } from "../../repositories/categoryRepo";
@@ -14,7 +14,7 @@ import { SeasonRepository } from "../../repositories/seasonRepo";
 import { CreateClashDto } from "./createClashDto";
 
 type Response = Either<
-    AppError.UnexpectedError | AppError.NotFoundError | Result<string>,
+    AppError.UnexpectedError | AppError.NotFoundError | Result<any>,
     Result<void>
 >;
 
@@ -42,22 +42,16 @@ export class CreateClashUseCase implements UseCase<CreateClashDto, Response> {
         let host: Club;
         let category: Category;
         let season: Season;
+        let journey: Journey;
 
         try {
-            const guardResult = Guard.againstNullOrUndefinedBulk([
-                { argument: request.host, argumentName: "anfitrion" },
-                { argument: request.clubId, argumentName: "club id" },
-                {
-                    argument: request.rivalClubId,
-                    argumentName: "id club rival",
-                },
-                { argument: request.journey, argumentName: "jornada" },
-                { argument: request.categoryId, argumentName: "categoria" },
-            ]);
+            const journeyOrError = Journey.create({ value: request.journey });
 
-            if (guardResult.isFailure) {
-                return left(Result.fail(guardResult.getErrorValue())) as Response;
+            if (journeyOrError.isFailure) {
+                return left(Result.fail<string>("Jornada invalida"));
             }
+
+            journey = journeyOrError.getValue();
 
             try {
                 [club, rivalClub, host, category, season] = await Promise.all([
@@ -71,20 +65,22 @@ export class CreateClashUseCase implements UseCase<CreateClashDto, Response> {
                 return left(new AppError.NotFoundError(error));
             }
 
-            console.log(season.seasonId.id.toString(), "Season id")
+            console.log(season.seasonId.id.toString(), "Season id");
 
-            const clashOrError = ClubClash.create({
+            const clashOrError = Clash.create({
                 clubId: club.clubId,
                 rivalClubId: rivalClub.clubId,
                 hostId: host.clubId,
                 matchs: Matchs.create(),
-                journey: request.journey,
+                journey: journey,
                 categoryId: category.categoryId,
                 seasonId: season.seasonId,
             });
 
             if (clashOrError.isFailure) {
-                return left(Result.fail(guardResult.getErrorValue())) as Response;
+                return left(
+                    Result.fail(`${clashOrError.getErrorValue()}`)
+                ) as Response;
             }
 
             const clash = clashOrError.getValue();

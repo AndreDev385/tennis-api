@@ -1,4 +1,4 @@
-import { ClubClash } from "../../domain/clubClash";
+import { Clash } from "../../domain/clubClash";
 import { ClashMap } from "../../mappers/clashMap";
 import { ClashRepository } from "../clashRepo";
 
@@ -9,7 +9,7 @@ export class SequelizeClashRepo implements ClashRepository {
         this.models = models;
     }
 
-    async save(clash: ClubClash): Promise<void> {
+    async save(clash: Clash): Promise<void> {
         const ClashModel = this.models.ClashModel;
 
         const raw = ClashMap.toPersistance(clash);
@@ -28,7 +28,7 @@ export class SequelizeClashRepo implements ClashRepository {
         }
     }
 
-    async getClashById(id: string): Promise<ClubClash> {
+    async getClashById(id: string): Promise<Clash> {
         const ClashModel = this.models.ClashModel;
 
         const clash = await ClashModel.findOne({ where: { clashId: id } });

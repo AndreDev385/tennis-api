@@ -1,6 +1,7 @@
 import { DataTypes, Sequelize } from "sequelize";
 import config from "../config/config";
 import { MatchModel } from "./Match";
+import { PlayerTrackerModel } from "./PlayerTracker";
 
 const sequelize: Sequelize = config.connection;
 
@@ -138,5 +139,15 @@ TrackerModel.belongsTo(MatchModel, {
     targetKey: "matchId",
     as: "Match",
 });
+
+TrackerModel.hasOne(PlayerTrackerModel, {
+    foreignKey: "playerTrackerId",
+    sourceKey: 'me'
+})
+
+TrackerModel.hasOne(PlayerTrackerModel, {
+    foreignKey: "playerTrackerId",
+    sourceKey: 'partner'
+})
 
 export { TrackerModel };

@@ -65,12 +65,7 @@ const ClashModel = sequelize.define(
 ClashModel.belongsTo(SeasonModel, {
     foreignKey: "seasonId",
     targetKey: "seasonId",
-    as: "Season",
-});
-
-ClashModel.hasMany(MatchModel, {
-    foreignKey: "matchId",
-    as: "Match",
+    as: "season",
 });
 
 export { ClashModel };

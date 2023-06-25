@@ -1,7 +1,10 @@
 import { Guard } from "../../../shared/core/Guard";
 import { Result } from "../../../shared/core/Result";
-import { ValueObject } from "../../../shared/domain/ValueObject";
+import { Entity } from "../../../shared/domain/Entity";
+import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
 import { MatchId } from "./matchId";
+import { TrackerId } from "./matchTrackerId";
+import { PlayerId } from "./playerId";
 import { PlayerTracker } from "./playerTracker";
 
 interface MatchTrackerProps {
@@ -38,7 +41,11 @@ interface MatchTrackerProps {
     longRallyLost?: number;
 }
 
-export class MatchTracker extends ValueObject<MatchTrackerProps> {
+export class MatchTracker extends Entity<MatchTrackerProps> {
+    get trackerId(): TrackerId {
+        return TrackerId.create(this._id).getValue();
+    }
+
     get matchId(): MatchId {
         return this.props.matchId;
     }
@@ -127,7 +134,55 @@ export class MatchTracker extends ValueObject<MatchTrackerProps> {
         return this.props.longRallyLost;
     }
 
-    public static create(props: MatchTrackerProps): Result<MatchTracker> {
+    public static createNewTracker(
+        id: MatchId,
+        playerId: PlayerId,
+        partnerId?: PlayerId
+    ): Result<MatchTracker> {
+        const guard = Guard.againstNullOrUndefined(id, "match id");
+
+        if (guard.isFailure) {
+            return Result.fail<MatchTracker>(guard.getErrorValue());
+        }
+
+        const meOrError = PlayerTracker.createNewPlayerTracker(playerId);
+        let partner: PlayerTracker;
+
+        if (meOrError.isFailure) {
+            return Result.fail(`${meOrError.getErrorValue()}`);
+        }
+
+        if (!!partnerId === true) {
+            const partnerOrError =
+                PlayerTracker.createNewPlayerTracker(partnerId);
+            if (partnerOrError.isFailure) {
+                return Result.fail(`${partnerOrError.getErrorValue()}`);
+            }
+            partner = partnerOrError.getErrorValue();
+        }
+
+        const instance = new MatchTracker({
+            me: meOrError.getErrorValue(),
+            matchId: id,
+            gamesWonServing: 0,
+            partner: partner,
+            rivalAces: 0,
+            longRallyWon: 0,
+            rivalWinners: 0,
+            breakPtsWinned: 0,
+            gamesLostServing: 0,
+            gamesWonReturning: 0,
+            gamesLostReturning: 0,
+            winBreakPtsChances: 0,
+        });
+
+        return Result.ok(instance);
+    }
+
+    public static create(
+        props: MatchTrackerProps,
+        id?: UniqueEntityID
+    ): Result<MatchTracker> {
         const guardResult = Guard.againstNullOrUndefinedBulk([
             { argument: props.matchId, argumentName: "match id" },
             { argument: props.me, argumentName: "my statistics" },
@@ -161,7 +216,7 @@ export class MatchTracker extends ValueObject<MatchTrackerProps> {
             return Result.fail<MatchTracker>(guardResult.getErrorValue());
         }
 
-        const matchTracker = new MatchTracker(props);
+        const matchTracker = new MatchTracker(props, id);
 
         return Result.ok<MatchTracker>(matchTracker);
     }

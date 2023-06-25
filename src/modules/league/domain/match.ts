@@ -3,25 +3,29 @@ import { Result } from "../../../shared/core/Result";
 import { Entity } from "../../../shared/domain/Entity";
 import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
 import { Category } from "./category";
+import { Mode } from "./gameMode";
+import { GamesPerSet } from "./gamesPerSet";
 import { MatchId } from "./matchId";
 import { MatchTracker } from "./matchTracker";
 import { Player } from "./player";
+import { SetQuantity } from "./setQuantity";
 import { Sets } from "./sets";
+import { Surface } from "./surface";
 
 interface MatchProps {
-    mode: string;
-    setsQuantity: 1 | 3 | 5;
-    gamesPerSet: 4 | 6 | 9;
+    mode: Mode;
+    setsQuantity: SetQuantity;
+    gamesPerSet: GamesPerSet;
     superTieBreak: boolean;
     category: Category;
     address?: string;
     sets: Sets;
-    surface: string;
+    surface: Surface;
     player1: Player;
     player2: string;
     player3?: Player;
     player4?: string;
-    tracker: MatchTracker;
+    tracker?: MatchTracker;
 }
 
 export class Match extends Entity<MatchProps> {
@@ -29,7 +33,7 @@ export class Match extends Entity<MatchProps> {
         return MatchId.create(this._id).getValue();
     }
 
-    get mode(): string {
+    get mode(): Mode {
         return this.props.mode;
     }
 
@@ -37,11 +41,15 @@ export class Match extends Entity<MatchProps> {
         return this.props.category;
     }
 
-    get setsQuantity() {
+    get setsQuantity(): SetQuantity {
         return this.props.setsQuantity;
     }
 
-    get gamesPerSet() {
+    get sets(): Sets {
+        return this.props.sets;
+    }
+
+    get gamesPerSet(): GamesPerSet {
         return this.props.gamesPerSet;
     }
 
@@ -53,7 +61,7 @@ export class Match extends Entity<MatchProps> {
         return this.props.address;
     }
 
-    get surface(): string {
+    get surface(): Surface {
         return this.props.surface;
     }
 
@@ -71,6 +79,10 @@ export class Match extends Entity<MatchProps> {
 
     get player4() {
         return this.props.player4;
+    }
+
+    public addTracker(tracker: MatchTracker) {
+        this.props.tracker = tracker;
     }
 
     public static create(

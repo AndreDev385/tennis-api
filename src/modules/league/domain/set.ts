@@ -5,14 +5,14 @@ import { MatchId } from "./matchId";
 
 interface SetProps {
     matchId: MatchId;
-    games: number;
+    myGames: number;
     rivalGames: number;
     setWon: boolean;
 }
 
 export class Set extends ValueObject<SetProps> {
-    get games(): number {
-        return this.props.games;
+    get myGames(): number {
+        return this.props.myGames;
     }
 
     get rivalGames(): number {
@@ -30,7 +30,7 @@ export class Set extends ValueObject<SetProps> {
     public static create(props: SetProps): Result<Set> {
         const guardResult = Guard.againstNullOrUndefinedBulk([
             { argument: props.matchId, argumentName: "matchId" },
-            { argument: props.games, argumentName: "games won" },
+            { argument: props.myGames, argumentName: "games won" },
             { argument: props.rivalGames, argumentName: "games lost" },
         ]);
 

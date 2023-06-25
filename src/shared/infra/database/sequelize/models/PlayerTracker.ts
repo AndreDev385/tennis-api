@@ -1,7 +1,6 @@
 import { DataTypes, Sequelize } from "sequelize";
 import config from "../config/config";
 import { PlayerModel } from "./Player";
-import { TrackerModel } from "./Tracker";
 
 const sequelize: Sequelize = config.connection;
 
@@ -15,10 +14,6 @@ const PlayerTrackerModel = sequelize.define(
             primaryKey: true,
         },
         playerId: {
-            type: DataTypes.UUID,
-            allowNull: false,
-        },
-        trackerId: {
             type: DataTypes.UUID,
             allowNull: false,
         },
@@ -126,12 +121,6 @@ PlayerTrackerModel.belongsTo(PlayerModel, {
     foreignKey: "playerId",
     targetKey: "playerId",
     as: "Player",
-});
-
-PlayerTrackerModel.belongsTo(TrackerModel, {
-    foreignKey: "trackerId",
-    targetKey: "trackerId",
-    as: "Tracker",
 });
 
 export { PlayerTrackerModel };

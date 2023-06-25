@@ -1,5 +1,6 @@
 import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
 import { Mapper } from "../../../shared/infra/Mapper";
+import { PlayerId } from "../domain/playerId";
 import { PlayerTracker } from "../domain/playerTracker";
 
 export class PlayerTrackerMapper implements Mapper<PlayerTracker> {
@@ -34,8 +35,12 @@ export class PlayerTrackerMapper implements Mapper<PlayerTracker> {
     }
 
     public static toDomain(raw: any): PlayerTracker {
+
+        const playerId = PlayerId.create(new UniqueEntityID(raw.playerId))
+
         const playerTrackerOrError = PlayerTracker.create(
             {
+                playerId: playerId.getValue(),
                 pointsWon: raw.pointsWon,
                 pointsWonServing: raw.pointsWonServing,
                 pointsWonReturning: raw.pointsWonReturning,

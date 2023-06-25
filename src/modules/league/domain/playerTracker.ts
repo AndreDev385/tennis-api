@@ -2,9 +2,11 @@ import { Guard } from "../../../shared/core/Guard";
 import { Result } from "../../../shared/core/Result";
 import { Entity } from "../../../shared/domain/Entity";
 import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
+import { PlayerId } from "./playerId";
 import { PlayerTrackerId } from "./playerTrackerId";
 
 interface PlayerTrackerProps {
+    playerId: PlayerId;
     pointsWon: number;
     pointsWonServing: number;
     pointsWonReturning: number;
@@ -111,19 +113,64 @@ export class PlayerTracker extends Entity<PlayerTrackerProps> {
         return this.props.pointsWonReturning;
     }
 
+    public static createNewPlayerTracker(
+        playerId: PlayerId
+    ): Result<PlayerTracker> {
+        const guard = Guard.againstNullOrUndefinedBulk([
+            { argument: playerId, argumentName: "player id" },
+        ]);
+
+        if (guard.isFailure) {
+            return Result.fail(guard.getErrorValue());
+        }
+
+        const instance = new PlayerTracker({
+            playerId,
+            pointsLostReturning: 0,
+            pointsLostServing: 0,
+            pointsLost: 0,
+            pointsWon: 0,
+            pointsWonReturning: 0,
+            saveBreakPtsChances: 0,
+            breakPtsSaved: 0,
+            pointsWonServing: 0,
+        });
+
+        return Result.ok(instance);
+    }
+
     public static create(
         props: PlayerTrackerProps,
         id?: UniqueEntityID
     ): Result<PlayerTracker> {
         const guardResult = Guard.againstNullOrUndefinedBulk([
-            { argument: props.pointsWon, argumentName: "" },
-            { argument: props.pointsWonServing, argumentName: "" },
-            { argument: props.pointsWonReturning, argumentName: "" },
-            { argument: props.pointsLost, argumentName: "" },
-            { argument: props.pointsLostReturning, argumentName: "" },
-            { argument: props.pointsLostServing, argumentName: "" },
-            { argument: props.saveBreakPtsChances, argumentName: "" },
-            { argument: props.breakPtsSaved, argumentName: "" },
+            { argument: props.playerId, argumentName: "player id" },
+            { argument: props.pointsWon, argumentName: "puntos ganados" },
+            {
+                argument: props.pointsWonServing,
+                argumentName: "puntos ganados con el servicio",
+            },
+            {
+                argument: props.pointsWonReturning,
+                argumentName: "puntosn ganados devolviendo",
+            },
+            { argument: props.pointsLost, argumentName: "puntos perdidos" },
+            {
+                argument: props.pointsLostReturning,
+                argumentName: "puntos perdidos devolviendo",
+            },
+            {
+                argument: props.pointsLostServing,
+                argumentName: "puntos perdidos con el servicio",
+            },
+            {
+                argument: props.saveBreakPtsChances,
+                argumentName: "chances de salvar un break point",
+            },
+            {
+                argument: props.breakPtsSaved,
+                argumentName: "break points salvado",
+            },
         ]);
 
         if (guardResult.isFailure) {

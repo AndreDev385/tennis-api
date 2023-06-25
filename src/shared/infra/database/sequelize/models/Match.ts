@@ -1,5 +1,6 @@
 import { DataTypes, Sequelize } from "sequelize";
 import config from "../config/config";
+import { ClashModel } from "./ClubClash";
 
 const sequelize: Sequelize = config.connection;
 
@@ -12,6 +13,14 @@ const MatchModel = sequelize.define(
             allowNull: false,
             primaryKey: true,
         },
+        clashId: {
+            type: DataTypes.UUID,
+            allowNull: false,
+            references: {
+                model: "clash",
+                key: "clashId",
+            },
+        },
         mode: {
             type: DataTypes.STRING,
             allowNull: false,
@@ -19,10 +28,18 @@ const MatchModel = sequelize.define(
         categoryId: {
             type: DataTypes.UUID,
             allowNull: false,
+            references: {
+                model: "category",
+                key: "categoryId",
+            },
         },
         setsQuantity: {
             type: DataTypes.INTEGER,
             allowNull: false,
+        },
+        sets: {
+            type: DataTypes.ARRAY(DataTypes.JSON),
+            allowNull: true,
         },
         gamesPerSet: {
             type: DataTypes.INTEGER,
@@ -60,5 +77,11 @@ const MatchModel = sequelize.define(
     },
     { tableName: "match" }
 );
+
+MatchModel.belongsTo(ClashModel, {
+    foreignKey: "clashId",
+    targetKey: "clashId",
+    as: "clash",
+});
 
 export { MatchModel };

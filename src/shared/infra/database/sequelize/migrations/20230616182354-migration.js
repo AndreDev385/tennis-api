@@ -292,6 +292,14 @@ module.exports = {
                     allowNull: false,
                     primaryKey: true,
                 },
+                clashId: {
+                    type: DataTypes.UUID,
+                    allowNull: false,
+                    references: {
+                        model: "clash",
+                        key: "clashId",
+                    },
+                },
                 mode: {
                     type: Sequelize.STRING,
                     allowNull: false,
@@ -307,6 +315,10 @@ module.exports = {
                 setsQuantity: {
                     type: Sequelize.INTEGER,
                     allowNull: false,
+                },
+                sets: {
+                    type: DataTypes.ARRAY(DataTypes.JSON),
+                    allowNull: true,
                 },
                 gamesPerSet: {
                     type: Sequelize.INTEGER,
@@ -499,10 +511,6 @@ module.exports = {
                     primaryKey: true,
                 },
                 playerId: {
-                    type: Sequelize.UUID,
-                    allowNull: false,
-                },
-                trackerId: {
                     type: Sequelize.UUID,
                     allowNull: false,
                 },

@@ -1,9 +1,15 @@
 import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
 import { Mapper } from "../../../shared/infra/Mapper";
 import { Match } from "../domain/match";
+import { Sets } from "../domain/sets";
+import { SetMap } from "./setMap";
 
 export class MatchMap implements Mapper<Match> {
     public static toDomain(raw: any): Match {
+        const setsArr = raw.sets.map((s) => SetMap.toDomain(s));
+
+        const sets = Sets.create(setsArr);
+
         const matchOrError = Match.create(
             {
                 tracker: raw.tracker,
@@ -12,7 +18,7 @@ export class MatchMap implements Mapper<Match> {
                 gamesPerSet: raw.gamesPerSet,
                 player2: raw.player2,
                 player1: raw.player1,
-                sets: raw.sets,
+                sets: sets,
                 setsQuantity: raw.setsQuantity,
                 mode: raw.mode,
                 address: raw.address,
@@ -29,11 +35,14 @@ export class MatchMap implements Mapper<Match> {
     }
 
     public static toPersistance(match: Match) {
+        const raw = match.sets.getItems().map((s) => SetMap.toPersistance(s));
+
         return {
             matchId: match.matchId.id.toString(),
             mode: match.mode,
             categoryId: match.category.categoryId.id.toString(),
             setsQuantity: match.setsQuantity,
+            sets: raw,
             gamesPerSet: match.gamesPerSet,
             superTieBreak: match.superTieBreak,
             address: match.address,

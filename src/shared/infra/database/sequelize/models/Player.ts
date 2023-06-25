@@ -40,7 +40,7 @@ const PlayerModel = sequelize.define(
 PlayerModel.belongsTo(UserModel, {
     foreignKey: "userId",
     targetKey: "userId",
-    as: "User",
+    as: "user",
 });
 
 export { PlayerModel };
