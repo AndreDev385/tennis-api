@@ -26,7 +26,7 @@ export class Middleware {
                 if (signatureFailed) {
                     return this.endRequest(
                         403,
-                        "Token signature expired.",
+                        "No autorizado.",
                         res
                     );
                 }
@@ -35,7 +35,7 @@ export class Middleware {
                 req.decoded = decoded;
                 return next();
             } else {
-                return this.endRequest(403, "No access token provided", res);
+                return this.endRequest(403, "No autorizado.", res);
             }
         };
     }

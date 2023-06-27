@@ -32,6 +32,7 @@ export class Journey extends ValueObject<JourneyProps> {
     }
 
     public static create(props: JourneyProps): Result<Journey> {
+        console.log(props, 'props')
         const guarResult = Guard.againstNullOrUndefined(props.value, "Jornada");
 
         if (guarResult.isFailure) {

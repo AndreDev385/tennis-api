@@ -91,6 +91,7 @@ export class CreateMatch implements UseCase<CreateMatchDto, Promise<Response>> {
             }
 
             const matchOrError = Match.create({
+                clashId: clash.clashId,
                 mode: modeOrError.getValue(),
                 category,
                 player3,
@@ -118,6 +119,7 @@ export class CreateMatch implements UseCase<CreateMatchDto, Promise<Response>> {
                 player1.playerId,
                 player3?.playerId
             );
+
             if (trackerOrError.isFailure) {
                 return left(
                     Result.fail<string>(`${trackerOrError.getErrorValue()}`)

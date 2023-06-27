@@ -1,6 +1,6 @@
 import { Player } from "../../domain/player";
 import { PlayerMap } from "../../mappers/playerMap";
-import { PlayerRepository } from "../playerRepo";
+import { PlayerQuery, PlayerRepository } from "../playerRepo";
 
 export class SequelizePlayerRepository implements PlayerRepository {
     models: any;
@@ -21,6 +21,24 @@ export class SequelizePlayerRepository implements PlayerRepository {
 
         const exist = await PlayerModel.findOne({ where: { userId } });
         return !!exist === true;
+    }
+
+    async list(query?: PlayerQuery): Promise<Player[]> {
+        const PlayerModel = this.models.PlayerModel;
+
+        const baseQuery = this.baseQuery();
+
+        if (!!query?.clubId === true) {
+            baseQuery.where["clubId"] = query.clubId;
+        }
+
+        const rawList = await PlayerModel.findAll(baseQuery);
+
+        console.log(rawList)
+
+        const list = rawList.map((p) => PlayerMap.toDomain(p));
+
+        return list;
     }
 
     async save(player: Player): Promise<void> {

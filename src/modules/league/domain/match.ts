@@ -3,6 +3,7 @@ import { Result } from "../../../shared/core/Result";
 import { Entity } from "../../../shared/domain/Entity";
 import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
 import { Category } from "./category";
+import { ClashId } from "./clashId";
 import { Mode } from "./gameMode";
 import { GamesPerSet } from "./gamesPerSet";
 import { MatchId } from "./matchId";
@@ -14,6 +15,7 @@ import { Surface } from "./surface";
 
 interface MatchProps {
     mode: Mode;
+    clashId: ClashId;
     setsQuantity: SetQuantity;
     gamesPerSet: GamesPerSet;
     superTieBreak: boolean;
@@ -31,6 +33,10 @@ interface MatchProps {
 export class Match extends Entity<MatchProps> {
     get matchId(): MatchId {
         return MatchId.create(this._id).getValue();
+    }
+
+    get clashId(): ClashId {
+        return this.props.clashId;
     }
 
     get mode(): Mode {
@@ -91,15 +97,14 @@ export class Match extends Entity<MatchProps> {
     ): Result<Match> {
         const guardResult = Guard.againstNullOrUndefinedBulk([
             { argument: props.mode, argumentName: "modo" },
+            { argument: props.clashId, argumentName: "clash id" },
             { argument: props.setsQuantity, argumentName: "cantidad de sets" },
             { argument: props.sets, argumentName: "sets" },
-            //{ argument: props.address, argumentName: "modo" },
             { argument: props.player1, argumentName: "player 1" },
             { argument: props.player2, argumentName: "player 2" },
             { argument: props.gamesPerSet, argumentName: "juegos por set" },
             { argument: props.superTieBreak, argumentName: "super Tie-Break" },
             { argument: props.surface, argumentName: "superficie" },
-            { argument: props.tracker, argumentName: "estadisticas" },
             { argument: props.category, argumentName: "categoria" },
         ]);
 

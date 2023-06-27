@@ -5,10 +5,10 @@ export namespace AppError {
     export class UnexpectedError extends Result<UseCaseError> {
         public constructor(err: any) {
             super(false, {
-                message: `An unexpected error occurred.`,
+                message: `Ha ocurrido un error.`,
                 error: err,
             } as UseCaseError);
-            console.log(`[AppError]: An unexpected error occurred`);
+            console.log(`[AppError]: Ha ocurrido un error`);
             console.error(err);
         }
     }
@@ -16,10 +16,10 @@ export namespace AppError {
     export class NotFoundError extends Result<UseCaseError> {
         public constructor(err: any) {
             super(false, {
-                message: `Not found.`,
+                message: `No encontrado.`,
                 error: err,
             } as UseCaseError);
-            console.log(`[AppError]: Not found`);
+            console.log(`[AppError]: No encontrado`);
             console.error(err);
         }
     }

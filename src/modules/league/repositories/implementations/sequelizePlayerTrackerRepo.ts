@@ -34,6 +34,20 @@ export class SequelizePlayerTrackerRepository
         }
     }
 
+    async getById(playerTrackerId: string): Promise<PlayerTracker> {
+        const PlayerTrackerModel = this.models.PlayerTrackerModel;
+
+        const playerTracker = await PlayerTrackerModel.findOne({
+            where: { playerTrackerId },
+        });
+
+        if (!!playerTracker == false) {
+            throw new Error("Estadisticas no encontradas.");
+        }
+
+        return PlayerTrackerMapper.toDomain(playerTracker);
+    }
+
     async getByPlayerId(playerId: string): Promise<PlayerTracker[]> {
         const PlayerTrackerModel = this.models.PlayerTrackerModel;
 

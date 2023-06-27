@@ -7,3 +7,5 @@ const matchRouter = express.Router();
 matchRouter.post("/", middleware.ensureAuthenticated(), (req, res) =>
     createMatchController.execute(req, res)
 );
+
+export { matchRouter };

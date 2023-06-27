@@ -31,7 +31,6 @@ const TrackerModel = sequelize.define(
                 key: "matchId",
             },
         },
-
         gamesWonServing: {
             type: DataTypes.INTEGER,
             allowNull: false,

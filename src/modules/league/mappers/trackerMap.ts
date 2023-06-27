@@ -41,8 +41,8 @@ export class TrackerMap implements Mapper<MatchTracker> {
     public static toPersistance(tracker: MatchTracker) {
         return {
             matchId: tracker.matchId.id.toString(),
-            me: tracker.me,
-            partner: tracker.partner || null,
+            me: tracker.me.playerTrackerId.id.toString(),
+            partner: tracker.partner.playerTrackerId.id.toString() || null,
             rivalAces: tracker.rivalAces,
             longRallyWon: tracker.longRallyWon,
             rivalWinners: tracker.rivalWinners,

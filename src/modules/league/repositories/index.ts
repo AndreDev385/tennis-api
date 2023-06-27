@@ -8,18 +8,23 @@ import { SequelizeClashRepo } from "./implementations/sequelizeClashRepo";
 import { SequelizeLeagueRepository } from "./implementations/sequelizeLeagueRepo";
 import { SequelizePlayerRepository } from "./implementations/sequelizePlayerRepo";
 import { SequelizeMatchRepository } from "./implementations/sequelizeMatchRepo";
+import { SequelizePlayerTrackerRepository } from "./implementations/sequelizePlayerTrackerRepo";
 
 const sequelizeClubRepo = new SequelizeClubRepository(models);
 const sequelizeCategoryRepo = new SequelizeCategoryRepository(models);
 const sequelizeSeasonRepo = new SequelizeSeasonRepository(models);
-const sequelizeTrackerRepo = new SequelizeTrackerRepository(models);
-const sequelizeClashRepo = new SequelizeClashRepo(models);
+const sequelizePlayerTrackerRepo = new SequelizePlayerTrackerRepository(models);
+const sequelizeTrackerRepo = new SequelizeTrackerRepository(
+    models,
+    sequelizePlayerTrackerRepo
+);
 const sequelizeLeagueRepo = new SequelizeLeagueRepository(models);
 const sequelizePlayerRepo = new SequelizePlayerRepository(models);
 const sequelizeMatchRepo = new SequelizeMatchRepository(
     models,
     sequelizeTrackerRepo
 );
+const sequelizeClashRepo = new SequelizeClashRepo(models, sequelizeMatchRepo);
 
 export {
     sequelizeLeagueRepo,

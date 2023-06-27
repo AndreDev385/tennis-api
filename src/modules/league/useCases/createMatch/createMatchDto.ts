@@ -1,7 +1,7 @@
 export interface CreateMatchDto {
     clashId: string;
     mode: string;
-    setsQuantity: 1 | 2 | 5;
+    setsQuantity: 1 | 3 | 5;
     gamesPerSet: 4 | 6 | 9;
     superTieBreak: boolean;
     categoryId: string;

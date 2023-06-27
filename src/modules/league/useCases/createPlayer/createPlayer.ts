@@ -1,5 +1,5 @@
 import { AppError } from "../../../../shared/core/AppError";
-import { Either, Result, left } from "../../../../shared/core/Result";
+import { Either, Result, left, right } from "../../../../shared/core/Result";
 import { UseCase } from "../../../../shared/core/UseCase";
 import { User } from "../../../users/domain/user";
 import { UserRepository } from "../../../users/repositories/userRepo";
@@ -63,6 +63,7 @@ export class CreatePlayer
                 const alreadyExist = await this.playerRepo.exist(
                     request.userId
                 );
+                console.log(alreadyExist);
                 if (alreadyExist) {
                     return left(
                         new CreatePlayerErrors.PlayerAlreadyExistError(
@@ -88,6 +89,8 @@ export class CreatePlayer
             player = playerOrError.getValue();
 
             await this.playerRepo.save(player);
+
+            return right(Result.ok<void>());
         } catch (error) {
             return left(new AppError.UnexpectedError(error));
         }

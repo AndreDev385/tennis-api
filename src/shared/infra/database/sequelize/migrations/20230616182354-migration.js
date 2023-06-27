@@ -44,7 +44,7 @@ module.exports = {
                     allowNull: true,
                 },
                 accessToken: {
-                    type: Sequelize.STRING,
+                    type: Sequelize.STRING(500),
                     allowNull: true,
                     defaultValue: null,
                 },
@@ -293,7 +293,7 @@ module.exports = {
                     primaryKey: true,
                 },
                 clashId: {
-                    type: DataTypes.UUID,
+                    type: Sequelize.UUID,
                     allowNull: false,
                     references: {
                         model: "clash",
@@ -317,7 +317,7 @@ module.exports = {
                     allowNull: false,
                 },
                 sets: {
-                    type: DataTypes.ARRAY(DataTypes.JSON),
+                    type: Sequelize.ARRAY(Sequelize.JSON),
                     allowNull: true,
                 },
                 gamesPerSet: {

@@ -1,21 +1,31 @@
 import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
 import { Mapper } from "../../../shared/infra/Mapper";
+import { CategoryId } from "../domain/categoryId";
 import { Clash } from "../domain/clubClash";
+import { ClubId } from "../domain/clubId";
 import { Journey } from "../domain/journey";
+import { Matchs } from "../domain/matchs";
+import { SeasonId } from "../domain/seasonId";
 
 export class ClashMap implements Mapper<Clash> {
-    public static toDomain(raw: any): Clash {
-        const journeyOrError = Journey.create(raw.journey);
+    public static toDomain(raw: any, matchs?: Matchs): Clash {
+        const journeyOrError = Journey.create({ value: raw.journey });
+
+        const clubIdOrError = ClubId.create(new UniqueEntityID(raw.clubId))
+        const rivalClubIdOrError = ClubId.create(new UniqueEntityID(raw.rivalClubId))
+        const hostOrError = ClubId.create(new UniqueEntityID(raw.host))
+        const seasonIdOrError = SeasonId.create(new UniqueEntityID(raw.season))
+        const categoryIdOrError = CategoryId.create(new UniqueEntityID(raw.categoryId))
 
         const clashOrError = Clash.create(
             {
-                categoryId: raw.categoryId,
-                clubId: raw.clubId,
-                seasonId: raw.seasonId,
-                rivalClubId: raw.rivalClubId,
-                hostId: raw.hostId,
-                matchs: raw.matchs,
-                journey: journeyOrError.getValue(),
+                categoryId: categoryIdOrError.getValue(),
+                clubId: clubIdOrError.getValue(),
+                seasonId: seasonIdOrError.getValue(),
+                rivalClubId: rivalClubIdOrError.getValue(),
+                hostId: hostOrError.getValue(),
+                matchs,
+                journey: journeyOrError.getValue() || null,
             },
             new UniqueEntityID(raw.clashId)
         );

@@ -1,5 +1,6 @@
 import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
 import { Mapper } from "../../../shared/infra/Mapper";
+import { ClashId } from "../domain/clashId";
 import { Match } from "../domain/match";
 import { Sets } from "../domain/sets";
 import { SetMap } from "./setMap";
@@ -7,11 +8,13 @@ import { SetMap } from "./setMap";
 export class MatchMap implements Mapper<Match> {
     public static toDomain(raw: any): Match {
         const setsArr = raw.sets.map((s) => SetMap.toDomain(s));
+        const clashIdOrError = ClashId.create(new UniqueEntityID(raw.clashId));
 
         const sets = Sets.create(setsArr);
 
         const matchOrError = Match.create(
             {
+                clashId: clashIdOrError.getValue(),
                 tracker: raw.tracker,
                 surface: raw.surface,
                 superTieBreak: raw.superTieBreak,
@@ -39,14 +42,15 @@ export class MatchMap implements Mapper<Match> {
 
         return {
             matchId: match.matchId.id.toString(),
-            mode: match.mode,
+            clashId: match.clashId.id.toString(),
+            mode: match.mode.value,
             categoryId: match.category.categoryId.id.toString(),
-            setsQuantity: match.setsQuantity,
+            setsQuantity: match.setsQuantity.value,
             sets: raw,
-            gamesPerSet: match.gamesPerSet,
+            gamesPerSet: match.gamesPerSet.value,
             superTieBreak: match.superTieBreak,
             address: match.address,
-            surface: match.surface,
+            surface: match.surface.value,
             player1: match.player1.playerId.id.toString(),
             player2: match.player2,
             player3: match.player3.playerId.id.toString() || null,

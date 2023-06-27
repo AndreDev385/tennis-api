@@ -1,16 +1,21 @@
 "use strict";
 
 const { v4 } = require("uuid");
+const bcrypt = require("bcrypt");
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
     async up(queryInterface, Sequelize) {
+        const SALT_ROUNDS = 5;
+
+        const password = await bcrypt.hash("12345678", SALT_ROUNDS);
+
         await queryInterface.bulkInsert("users", [
             // admin
             {
                 userId: v4(),
                 email: "aizarra2015@gmail.com",
-                password: "12345678",
+                password,
                 firstName: "Andre",
                 lastName: "Izarra",
                 canTrack: true,
@@ -20,7 +25,7 @@ module.exports = {
             {
                 userId: v4(),
                 email: "andre1@tracker.com",
-                password: "12345678",
+                password,
                 firstName: "Andre",
                 lastName: "Izarra",
                 canTrack: true,
@@ -29,7 +34,7 @@ module.exports = {
             {
                 userId: v4(),
                 email: "andre2@tracker.com",
-                password: "12345678",
+                password,
                 firstName: "Andre",
                 lastName: "Izarra",
                 canTrack: true,
@@ -39,7 +44,7 @@ module.exports = {
             {
                 userId: v4(),
                 email: "andre1@player.com",
-                password: "12345678",
+                password,
                 firstName: "Andre",
                 lastName: "Izarra",
                 canTrack: false,
@@ -48,7 +53,7 @@ module.exports = {
             {
                 userId: v4(),
                 email: "andre2@player.com",
-                password: "12345678",
+                password,
                 firstName: "Andre",
                 lastName: "Izarra",
                 canTrack: false,

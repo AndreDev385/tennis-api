@@ -1,12 +1,15 @@
 import { MatchTracker } from "../../domain/matchTracker";
 import { TrackerMap } from "../../mappers/trackerMap";
+import { PlayerTrackerRepository } from "../playerTrackerRepo";
 import { TrackerRepository } from "../trackerRepo";
 
 export class SequelizeTrackerRepository implements TrackerRepository {
     private models: any;
+    private playerTracker: PlayerTrackerRepository;
 
-    constructor(models: any) {
+    constructor(models: any, playerTracker: PlayerTrackerRepository) {
         this.models = models;
+        this.playerTracker = playerTracker;
     }
 
     async save(tracker: MatchTracker): Promise<void> {
@@ -17,6 +20,12 @@ export class SequelizeTrackerRepository implements TrackerRepository {
         const exists = TrackerModel.findOne({
             where: { matchId: raw.matchId },
         });
+
+        await this.playerTracker.save(tracker.me);
+
+        if (!!tracker.partner === true) {
+            await this.playerTracker.save(tracker.partner);
+        }
 
         if (exists) {
             await TrackerModel.update(raw, { where: { matchId: raw.matchId } });
@@ -37,6 +46,13 @@ export class SequelizeTrackerRepository implements TrackerRepository {
             throw new Error("Tracker not found");
         }
 
-        return TrackerMap.toDomain(tracker);
+        const me = await this.playerTracker.getById(tracker.me);
+        let partner: any
+
+        if (!!tracker.partner == true) {
+            partner = await this.playerTracker.getById(tracker.partner);
+        }
+
+        return TrackerMap.toDomain({ ...tracker, me, partner });
     }
 }
