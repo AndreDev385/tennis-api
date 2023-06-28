@@ -9,6 +9,7 @@ import { CategoryModel } from "./Category";
 import { LeagueModel } from "./League";
 import { ClubModel } from "./Club";
 import { JourneyModel } from "./Journey";
+import { TeamModel } from "./Team";
 
 const models = {
     UserModel: UserModel,
@@ -22,6 +23,7 @@ const models = {
     LeagueModel: LeagueModel,
     ClubModel: ClubModel,
     JourneyModel: JourneyModel,
+    TeamModel: TeamModel,
 };
 
 export default models;

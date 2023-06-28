@@ -4,8 +4,8 @@ import { TrackerDto } from "./trackerDto";
 
 export interface MatchDto {
     mode: string;
-    setsQuantity: 1 | 3 | 5;
-    gamesPerSet: 4 | 6 | 9;
+    setsQuantity: number;
+    gamesPerSet: number;
     superTieBreak: boolean;
     address: string;
     sets: Array<SetDto>;

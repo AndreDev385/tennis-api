@@ -3,7 +3,10 @@ import { Mapper } from "../../../shared/infra/Mapper";
 import { ClashId } from "../domain/clashId";
 import { Match } from "../domain/match";
 import { Sets } from "../domain/sets";
+import { MatchDto } from "../dtos/matchDto";
+import { PlayerMap } from "./playerMap";
 import { SetMap } from "./setMap";
+import { TrackerMap } from "./trackerMap";
 
 export class MatchMap implements Mapper<Match> {
     public static toDomain(raw: any): Match {
@@ -56,5 +59,22 @@ export class MatchMap implements Mapper<Match> {
             player3: match.player3.playerId.id.toString() || null,
             player4: match.player4,
         };
+    }
+
+    public static toDto(match: Match): MatchDto {
+        return {
+            tracker: TrackerMap.toDto(match.tracker),
+            mode: match.mode.value,
+            setsQuantity: match.setsQuantity.value,
+            sets: match.sets.getItems().map((set) => SetMap.toDto(set)),
+            gamesPerSet: match.gamesPerSet.value,
+            superTieBreak: match.superTieBreak,
+            address: match.address,
+            surface: match.surface.value,
+            player1: PlayerMap.toDto(match.player1),
+            player2: match.player2,
+            player3: match.player3 ? PlayerMap.toDto(match.player1) : null,
+            player4: match.player4,
+        }
     }
 }

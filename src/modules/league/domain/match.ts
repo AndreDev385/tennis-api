@@ -87,6 +87,10 @@ export class Match extends Entity<MatchProps> {
         return this.props.player4;
     }
 
+    get tracker() {
+        return this.props.tracker;
+    }
+
     public addTracker(tracker: MatchTracker) {
         this.props.tracker = tracker;
     }

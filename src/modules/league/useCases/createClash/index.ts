@@ -1,15 +1,19 @@
 import { CreateClashUseCase } from "./createClash";
 import { CreateClashController } from "./createClashController";
-import { sequelizeClashRepo } from "../../repositories/";
-import { sequelizeClubRepo } from "../../repositories/";
-import { sequelizeCategoryRepo } from "../../repositories/";
-import { sequelizeSeasonRepo } from "../../repositories/";
+import {
+    sequelizeCategoryRepo,
+    sequelizeClashRepo,
+    sequelizeClubRepo,
+    sequelizeSeasonRepo,
+    sequelizeTeamRepo,
+} from "../../repositories/";
 
 const createClashUseCase = new CreateClashUseCase(
     sequelizeClashRepo,
     sequelizeClubRepo,
     sequelizeCategoryRepo,
-    sequelizeSeasonRepo
+    sequelizeSeasonRepo,
+    sequelizeTeamRepo
 );
 const createClashController = new CreateClashController(createClashUseCase);
 

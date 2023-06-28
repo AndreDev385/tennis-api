@@ -1,5 +1,5 @@
 export interface SetDto {
-    games: number;
+    myGames: number;
     rivalGames: number;
-    setWon: number;
+    setWon: boolean;
 }

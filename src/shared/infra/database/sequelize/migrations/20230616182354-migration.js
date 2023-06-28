@@ -236,21 +236,13 @@ module.exports = {
                         key: "categoryId",
                     },
                 },
-                club: {
+                team1: {
                     type: Sequelize.UUID,
                     allowNull: false,
-                    references: {
-                        model: "club",
-                        key: "clubId",
-                    },
                 },
-                rivalClub: {
+                team2: {
                     type: Sequelize.UUID,
                     allowNull: false,
-                    references: {
-                        model: "club",
-                        key: "clubId",
-                    },
                 },
                 journey: {
                     type: Sequelize.STRING,
@@ -265,12 +257,8 @@ module.exports = {
                     },
                 },
                 host: {
-                    type: Sequelize.UUID,
+                    type: Sequelize.STRING,
                     allowNull: false,
-                    references: {
-                        model: "club",
-                        key: "clubId",
-                    },
                 },
                 createdAt: {
                     type: Sequelize.DATE,
@@ -630,12 +618,45 @@ module.exports = {
                 },
             });
 
+        const CREATE_TEAM_TABLE = () =>
+            queryInterface.createTable("team", {
+                teamId: {
+                    type: Sequelize.UUID,
+                    defaultValue: Sequelize.UUIDV4,
+                    allowNull: false,
+                    primaryKey: true,
+                },
+                clubId: {
+                    type: Sequelize.UUID,
+                    allowNull: false,
+                    references: {
+                        model: "club",
+                        key: "clubId",
+                    },
+                },
+                name: {
+                    type: Sequelize.STRING,
+                    allowNull: false,
+                },
+                createdAt: {
+                    type: Sequelize.DATE,
+                    allowNull: false,
+                    defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+                },
+                updatedAt: {
+                    type: Sequelize.DATE,
+                    allowNull: false,
+                    defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+                },
+            });
+
         await CREATE_USER_TABLE();
         await CREATE_CLUB_TABLE();
         await CREATE_CATEGORY_TABLE();
         await CREATE_PLAYER_TABLE();
         await CREATE_LEAGUE_TABLE();
         await CREATE_SEASON_TABLE();
+        await CREATE_TEAM_TABLE();
         await CREATE_CLASH_TABLE();
         await CREATE_MATCH_TABLE();
         await CREATE_TRACKER_TABLE();
@@ -654,7 +675,8 @@ module.exports = {
         await queryInterface.dropTable("match");
         await queryInterface.dropTable("tracker");
         await queryInterface.dropTable("playerTracker");
-        await queryInterface.dropTable("journey")
+        await queryInterface.dropTable("journey");
+        await queryInterface.dropTable("team");
     },
 };
 //# sourceMappingURL=20230616182354-migration.js.map

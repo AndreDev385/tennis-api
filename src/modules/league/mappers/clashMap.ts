@@ -1,30 +1,27 @@
 import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
 import { Mapper } from "../../../shared/infra/Mapper";
-import { CategoryId } from "../domain/categoryId";
 import { Clash } from "../domain/clubClash";
-import { ClubId } from "../domain/clubId";
 import { Journey } from "../domain/journey";
 import { Matchs } from "../domain/matchs";
 import { SeasonId } from "../domain/seasonId";
+import { ClashDto } from "../dtos/clashDto";
+import { CategoryMap } from "./categoryMap";
+import { MatchMap } from "./matchMap";
+import { TeamMap } from "./teamMap";
 
 export class ClashMap implements Mapper<Clash> {
     public static toDomain(raw: any, matchs?: Matchs): Clash {
         const journeyOrError = Journey.create({ value: raw.journey });
-
-        const clubIdOrError = ClubId.create(new UniqueEntityID(raw.clubId))
-        const rivalClubIdOrError = ClubId.create(new UniqueEntityID(raw.rivalClubId))
-        const hostOrError = ClubId.create(new UniqueEntityID(raw.host))
-        const seasonIdOrError = SeasonId.create(new UniqueEntityID(raw.season))
-        const categoryIdOrError = CategoryId.create(new UniqueEntityID(raw.categoryId))
+        const seasonIdOrError = SeasonId.create(new UniqueEntityID(raw.season));
 
         const clashOrError = Clash.create(
             {
-                categoryId: categoryIdOrError.getValue(),
-                clubId: clubIdOrError.getValue(),
+                category: CategoryMap.toDomain(raw.category),
                 seasonId: seasonIdOrError.getValue(),
-                rivalClubId: rivalClubIdOrError.getValue(),
-                hostId: hostOrError.getValue(),
-                matchs,
+                team1: raw.team1,
+                team2: raw.team2,
+                host: raw.host,
+                matchs: matchs || Matchs.create(),
                 journey: journeyOrError.getValue() || null,
             },
             new UniqueEntityID(raw.clashId)
@@ -37,13 +34,26 @@ export class ClashMap implements Mapper<Clash> {
 
     public static toPersistance(clash: Clash) {
         return {
-            clashId: clash.clashId.id.toString(),
-            categoryId: clash.categoryId.id.toString(),
-            club: clash.clubId.id.toString(),
-            rivalClub: clash.rivalClubId.id.toString(),
-            journey: clash.journey.value,
-            host: clash.hostId.id.toString(),
             seasonId: clash.seasonId.id.toString(),
+            clashId: clash.clashId.id.toString(),
+            categoryId: clash.category.categoryId.id.toString(),
+            team1: clash.team1.teamId.id.toString(),
+            team2: clash.team2.teamId.id.toString(),
+            journey: clash.journey.value,
+            host: clash.host,
+        };
+    }
+
+    public static toDto(clash: Clash): ClashDto {
+        return {
+            seasonId: clash.seasonId.id.toString(),
+            clashId: clash.clashId.id.toString(),
+            category: clash.category.name,
+            team1: TeamMap.toDto(clash.team1),
+            team2: TeamMap.toDto(clash.team2),
+            journey: clash.journey.value,
+            host: clash.host,
+            matchs: clash.matchs.map(match => MatchMap.toDto(match))
         };
     }
 }

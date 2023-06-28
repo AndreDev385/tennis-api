@@ -1,7 +1,8 @@
 import { DataTypes, Sequelize } from "sequelize";
 import config from "../config/config";
 import { SeasonModel } from "./Season";
-import { MatchModel } from "./Match";
+import { CategoryModel } from "./Category";
+import { TeamModel } from "./Team";
 
 const sequelize: Sequelize = config.connection;
 
@@ -22,20 +23,20 @@ const ClashModel = sequelize.define(
                 key: "categoryId",
             },
         },
-        club: {
+        team1: {
             type: DataTypes.UUID,
             allowNull: false,
             references: {
-                model: "club",
-                key: "clubId",
+                model: "team",
+                key: "teamId",
             },
         },
-        rivalClub: {
+        team2: {
             type: DataTypes.UUID,
             allowNull: false,
             references: {
-                model: "club",
-                key: "clubId",
+                model: "team",
+                key: "teamId",
             },
         },
         journey: {
@@ -51,12 +52,8 @@ const ClashModel = sequelize.define(
             },
         },
         host: {
-            type: DataTypes.UUID,
+            type: DataTypes.STRING,
             allowNull: false,
-            references: {
-                model: "club",
-                key: "clubId",
-            },
         },
     },
     { tableName: "clash" }
@@ -67,5 +64,14 @@ ClashModel.belongsTo(SeasonModel, {
     targetKey: "seasonId",
     as: "season",
 });
+
+ClashModel.belongsTo(CategoryModel, {
+    foreignKey: "categoryId",
+    targetKey: "categoryId",
+    as: "category",
+});
+
+ClashModel.belongsToMany(TeamModel, { through: "clash_team" })
+
 
 export { ClashModel };

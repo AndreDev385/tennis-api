@@ -3,6 +3,7 @@ import { BaseController } from "../../../../shared/infra/http/models/BaseControl
 import { CreateClashUseCase } from "./createClash";
 import { CreateClashDto } from "./createClashDto";
 import { AppError } from "../../../../shared/core/AppError";
+import { CreateClashErrors } from "./createClashError";
 
 export class CreateClashController extends BaseController {
     usecase: CreateClashUseCase;
@@ -21,11 +22,29 @@ export class CreateClashController extends BaseController {
             const error = result.value;
             switch (error.constructor) {
                 case AppError.UnexpectedError:
-                    return this.fail(res, (error as AppError.UnexpectedError).getErrorValue().message);
+                    return this.fail(
+                        res,
+                        (error as AppError.UnexpectedError).getErrorValue()
+                            .message
+                    );
                 case AppError.NotFoundError:
-                    return this.notFound(res, (error as AppError.NotFoundError).getErrorValue().message)
+                    return this.notFound(
+                        res,
+                        (error as AppError.NotFoundError).getErrorValue()
+                            .message
+                    );
+                case CreateClashErrors.ClashAlreadyExistError:
+                    return this.conflict(
+                        res,
+                        (
+                            error as CreateClashErrors.ClashAlreadyExistError
+                        ).getErrorValue().message
+                    );
                 default:
-                    return this.clientError(res, (error.getErrorValue()) as string);
+                    return this.clientError(
+                        res,
+                        error.getErrorValue() as string
+                    );
             }
         }
 
