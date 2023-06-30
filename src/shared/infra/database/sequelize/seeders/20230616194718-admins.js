@@ -21,44 +21,6 @@ module.exports = {
                 canTrack: true,
                 isAdmin: true,
             },
-            // trackers
-            {
-                userId: v4(),
-                email: "andre1@tracker.com",
-                password,
-                firstName: "Andre",
-                lastName: "Izarra",
-                canTrack: true,
-                isAdmin: false,
-            },
-            {
-                userId: v4(),
-                email: "andre2@tracker.com",
-                password,
-                firstName: "Andre",
-                lastName: "Izarra",
-                canTrack: true,
-                isAdmin: false,
-            },
-            // players
-            {
-                userId: v4(),
-                email: "andre1@player.com",
-                password,
-                firstName: "Andre",
-                lastName: "Izarra",
-                canTrack: false,
-                isAdmin: false,
-            },
-            {
-                userId: v4(),
-                email: "andre2@player.com",
-                password,
-                firstName: "Andre",
-                lastName: "Izarra",
-                canTrack: false,
-                isAdmin: false,
-            },
         ]);
     },
 

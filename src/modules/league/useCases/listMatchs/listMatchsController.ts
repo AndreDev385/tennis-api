@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
 import { BaseController } from "../../../../shared/infra/http/models/BaseController";
-import { ListClash } from "./listClash";
+import { ListMatchs } from "./listMatchs";
 
-export class ListClashController extends BaseController {
-    private usecase: ListClash;
+export class ListMatchsController extends BaseController {
+    usecase: ListMatchs;
 
-    constructor(usecase: ListClash) {
+    constructor(usecase: ListMatchs) {
         super();
         this.usecase = usecase;
     }
@@ -14,7 +14,8 @@ export class ListClashController extends BaseController {
         const result = await this.usecase.execute(req.query);
 
         if (result.isLeft()) {
-            return this.fail(res, result.value.getErrorValue().message);
+            const error = result.value;
+            return this.fail(res, error.getErrorValue().message);
         }
 
         return this.ok(res, result.value.getValue());

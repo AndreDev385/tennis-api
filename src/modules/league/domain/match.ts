@@ -28,6 +28,8 @@ interface MatchProps {
     player3?: Player;
     player4?: string;
     tracker?: MatchTracker;
+    isLive?: boolean;
+    isFinish?: boolean;
 }
 
 export class Match extends Entity<MatchProps> {
@@ -91,8 +93,24 @@ export class Match extends Entity<MatchProps> {
         return this.props.tracker;
     }
 
+    get isLive(): boolean {
+        return this.props.isLive;
+    }
+
+    get isFinish(): boolean {
+        return this.props.isFinish;
+    }
+
     public addTracker(tracker: MatchTracker) {
         this.props.tracker = tracker;
+    }
+
+    public goLive() {
+        this.props.isLive = true;
+    }
+
+    public finishMatch() {
+        this.props.isFinish = true;
     }
 
     public static create(
@@ -116,7 +134,14 @@ export class Match extends Entity<MatchProps> {
             return Result.fail<Match>(guardResult.getErrorValue());
         }
 
-        const match = new Match(props, id);
+        const match = new Match(
+            {
+                ...props,
+                isLive: props.isLive || false,
+                isFinish: props.isFinish || false,
+            },
+            id
+        );
 
         return Result.ok<Match>(match);
     }

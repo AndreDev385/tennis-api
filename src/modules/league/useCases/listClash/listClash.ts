@@ -2,7 +2,7 @@ import { AppError } from "../../../../shared/core/AppError";
 import { Either, Result, left, right } from "../../../../shared/core/Result";
 import { UseCase } from "../../../../shared/core/UseCase";
 import { ClashMap } from "../../mappers/clashMap";
-import { ClashRepository } from "../../repositories/clashRepo";
+import { ClashQuery, ClashRepository } from "../../repositories/clashRepo";
 
 type Response = Either<AppError.UnexpectedError, Result<any>>;
 
@@ -15,8 +15,18 @@ export class ListClash implements UseCase<any, Promise<Response>> {
 
     async execute(request?: any): Promise<Response> {
         try {
-            const list = await this.clashRepo.list(request);
-            console.log(list);
+            const query: ClashQuery = {};
+
+            for (const [key, value] of Object.entries(request)) {
+                if (key == "categoryId") {
+                    query.categoryId = value as string;
+                }
+                if (key == "isFinish") {
+                    query.isFinish = value as boolean;
+                }
+            }
+
+            const list = await this.clashRepo.list(query);
 
             const dtoList = list.map((clash) => {
                 const obj = ClashMap.toDto(clash);

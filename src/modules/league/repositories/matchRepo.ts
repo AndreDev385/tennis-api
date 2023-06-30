@@ -1,7 +1,13 @@
 import { Match } from "../domain/match";
 
+export interface MatchQuery {
+    clashId?: string;
+    isFinish?: boolean;
+}
+
 export interface MatchRepository {
     save(match: Match): Promise<void>;
-    getMatchsByClashId(clashId: string): Promise<Array<Match>>;
+    list(query: MatchQuery): Promise<Array<Match>>;
     getMatchById(id: string): Promise<Match>;
+    getMatchsByClashId(clashId: string): Promise<Array<Match>>;
 }

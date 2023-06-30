@@ -3,7 +3,7 @@ import { listSeasonController } from "../../../useCases/listSeasons";
 
 const seasonRouter = express.Router();
 
-seasonRouter.get("/:leagueId", (req, res) =>
+seasonRouter.get("/", (req, res) =>
     listSeasonController.execute(req, res)
 );
 

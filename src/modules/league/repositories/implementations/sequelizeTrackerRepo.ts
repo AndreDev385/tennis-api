@@ -43,7 +43,7 @@ export class SequelizeTrackerRepository implements TrackerRepository {
         });
 
         if (!tracker) {
-            throw new Error("Tracker not found");
+            throw new Error("Estadisticas no encontradas.");
         }
 
         const me = await this.playerTracker.getById(tracker.me);

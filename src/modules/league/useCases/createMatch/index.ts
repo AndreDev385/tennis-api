@@ -1,5 +1,4 @@
 import {
-    sequelizeCategoryRepo,
     sequelizeClashRepo,
     sequelizePlayerRepo,
     sequelizeTrackerRepo,
@@ -12,12 +11,9 @@ const createMatch = new CreateMatch(
     sequelizeMatchRepo,
     sequelizePlayerRepo,
     sequelizeTrackerRepo,
-    sequelizeClashRepo,
-    sequelizeCategoryRepo
+    sequelizeClashRepo
 );
 
-const createMatchController = new CreateMatchController(createMatch)
+const createMatchController = new CreateMatchController(createMatch);
 
-export {
-    createMatchController,
-}
+export { createMatchController };

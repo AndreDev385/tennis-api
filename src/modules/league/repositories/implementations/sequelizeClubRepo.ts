@@ -16,18 +16,16 @@ export class SequelizeClubRepository implements ClubRepository {
         const club = await ClubModel.findOne({ where: { clubId } });
 
         if (!club) {
-            throw new Error("Club not found");
+            throw new Error("Club no encontrado");
         }
 
         return ClubMap.toDomain(club);
     }
 
-    async list(): Promise<ClubDto[]> {
+    async list(query: any = {}): Promise<ClubDto[]> {
         const ClubModel = this.models.ClubModel;
 
-        console.log(ClubModel);
-
-        const list = await ClubModel.findAll({});
+        const list = await ClubModel.findAll(query);
 
         return list;
     }

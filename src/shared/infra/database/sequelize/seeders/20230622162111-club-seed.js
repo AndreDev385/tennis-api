@@ -1,13 +1,16 @@
 "use strict";
 
 const { v4 } = require("uuid");
+const bcrypt = require("bcrypt");
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
     async up(queryInterface, Sequelize) {
+        const clubId = v4();
+
         await queryInterface.bulkInsert("club", [
             {
-                clubId: v4(),
+                clubId,
                 name: "Valle Arriba Athletic Club",
                 symbol: "VAT",
                 code: "Ax12sH",
@@ -123,6 +126,135 @@ module.exports = {
                 symbol: "VAG",
             },
         ]);
+
+        /* Players for test */
+        const userId1 = v4();
+        const userId2 = v4();
+        const userId3 = v4();
+        const userId4 = v4();
+        const userId5 = v4();
+        const userId6 = v4();
+        const userId7 = v4();
+        const userId8 = v4();
+        const userId9 = v4();
+
+        const SALT_ROUNDS = 5;
+        const password = await bcrypt.hash("12345678", SALT_ROUNDS);
+
+        await queryInterface.bulkInsert("users", [
+            {
+                userId: userId1,
+                email: "player1@player.com",
+                password,
+                firstName: "one",
+                lastName: "player",
+            },
+            {
+                userId: userId2,
+                email: "player2@player.com",
+                password,
+                firstName: "two",
+                lastName: "player",
+            },
+            {
+                userId: userId3,
+                email: "player3@player.com",
+                password,
+                firstName: "three",
+                lastName: "player",
+            },
+            {
+                userId: userId4,
+                email: "player4@player.com",
+                password,
+                firstName: "four",
+                lastName: "player",
+            },
+            {
+                userId: userId5,
+                email: "player5@player.com",
+                password,
+                firstName: "five",
+                lastName: "player",
+            },
+            {
+                userId: userId6,
+                email: "player6@player.com",
+                password,
+                firstName: "six",
+                lastName: "player",
+            },
+            {
+                userId: userId7,
+                email: "player7@player.com",
+                password,
+                firstName: "seven",
+                lastName: "player",
+            },
+            {
+                userId: userId8,
+                email: "player8@player.com",
+                password,
+                firstName: "eight",
+                lastName: "player",
+            },
+            {
+                userId: userId9,
+                email: "player9@player.com",
+                password,
+                firstName: "nine",
+                lastName: "player",
+            },
+        ]);
+
+        await queryInterface.bulkInsert("player", [
+            {
+                playerId: v4(),
+                clubId,
+                userId: userId1,
+            },
+            {
+                playerId: v4(),
+                clubId,
+                userId: userId2,
+            },
+            {
+                playerId: v4(),
+                clubId,
+                userId: userId3,
+            },
+            {
+                playerId: v4(),
+                clubId,
+                userId: userId4,
+            },
+            {
+                playerId: v4(),
+                clubId,
+                userId: userId5,
+            },
+            {
+                playerId: v4(),
+                clubId,
+                userId: userId6,
+            },
+            {
+                playerId: v4(),
+                clubId,
+                userId: userId7,
+            },
+            {
+                playerId: v4(),
+                clubId,
+                userId: userId8,
+            },
+            {
+                playerId: v4(),
+                clubId,
+                userId: userId9,
+            },
+        ]);
+        /* Players for test */
     },
 
     async down(queryInterface, Sequelize) {

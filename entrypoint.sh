@@ -8,7 +8,7 @@ done
 
 echo "Postgres started"
 
-npm run db:create:dev
-npm run migrate:dev
-npm run seed:dev
+npm run build
+npm run migrate
+npm run seed:prod
 npm run start

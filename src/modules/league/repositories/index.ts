@@ -23,15 +23,15 @@ const sequelizeLeagueRepo = new SequelizeLeagueRepository(models);
 const sequelizePlayerRepo = new SequelizePlayerRepository(models);
 const sequelizeMatchRepo = new SequelizeMatchRepository(
     models,
-    sequelizeTrackerRepo
+    sequelizeTrackerRepo,
+    sequelizePlayerRepo
 );
 
 const sequelizeTeamRepo = new SequelizeTeamRepository(models);
 const sequelizeClashRepo = new SequelizeClashRepo(
     models,
     sequelizeMatchRepo,
-    sequelizeTeamRepo,
-    sequelizeCategoryRepo
+    sequelizeTeamRepo
 );
 
 export {

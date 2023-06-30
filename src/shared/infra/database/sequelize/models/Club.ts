@@ -25,7 +25,11 @@ const ClubModel = sequelize.define(
             type: DataTypes.STRING,
             allowNull: true,
             unique: true,
-            defaultValue: null
+            defaultValue: null,
+        },
+        isSubscribed: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false,
         },
     },
     {

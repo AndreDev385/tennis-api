@@ -20,7 +20,6 @@ export class SetMap implements Mapper<Set> {
             setWon: object.setWon,
             myGames: object.myGames,
             rivalGames: object.rivalGames,
-            matchId: object.matchId,
         });
 
         setOrError.isFailure && console.log(setOrError.getErrorValue());

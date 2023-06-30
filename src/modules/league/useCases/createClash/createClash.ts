@@ -82,6 +82,7 @@ export class CreateClashUseCase implements UseCase<CreateClashDto, Response> {
                     request.team1.clubId
                 );
                 team1 = existTeam1;
+                console.log(team1);
             } catch (error) {
                 const teamOrError = Team.create({
                     name: request.team1.name,
@@ -92,6 +93,7 @@ export class CreateClashUseCase implements UseCase<CreateClashDto, Response> {
                 }
                 team1 = teamOrError.getValue();
                 await this.teamRepo.save(team1);
+                console.log(team1);
             }
 
             try {
@@ -100,6 +102,7 @@ export class CreateClashUseCase implements UseCase<CreateClashDto, Response> {
                     request.team2.clubId
                 );
                 team2 = existTeam2;
+                console.log(team2);
             } catch (error) {
                 const teamOrError = Team.create({
                     name: request.team2.name,
@@ -110,6 +113,7 @@ export class CreateClashUseCase implements UseCase<CreateClashDto, Response> {
                 }
                 team2 = teamOrError.getValue();
                 await this.teamRepo.save(team2);
+                console.log(team2);
             }
 
             const clashOrError = Clash.create({

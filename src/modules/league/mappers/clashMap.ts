@@ -12,7 +12,9 @@ import { TeamMap } from "./teamMap";
 export class ClashMap implements Mapper<Clash> {
     public static toDomain(raw: any, matchs?: Matchs): Clash {
         const journeyOrError = Journey.create({ value: raw.journey });
-        const seasonIdOrError = SeasonId.create(new UniqueEntityID(raw.season));
+        const seasonIdOrError = SeasonId.create(
+            new UniqueEntityID(raw.seasonId)
+        );
 
         const clashOrError = Clash.create(
             {
@@ -23,6 +25,7 @@ export class ClashMap implements Mapper<Clash> {
                 host: raw.host,
                 matchs: matchs || Matchs.create(),
                 journey: journeyOrError.getValue() || null,
+                isFinish: raw.isFinish,
             },
             new UniqueEntityID(raw.clashId)
         );
@@ -41,10 +44,12 @@ export class ClashMap implements Mapper<Clash> {
             team2: clash.team2.teamId.id.toString(),
             journey: clash.journey.value,
             host: clash.host,
+            isFinish: clash.isFinish,
         };
     }
 
     public static toDto(clash: Clash): ClashDto {
+        console.log(clash.matchs, "MATCHS IN CLASH")
         return {
             seasonId: clash.seasonId.id.toString(),
             clashId: clash.clashId.id.toString(),
@@ -53,7 +58,8 @@ export class ClashMap implements Mapper<Clash> {
             team2: TeamMap.toDto(clash.team2),
             journey: clash.journey.value,
             host: clash.host,
-            matchs: clash.matchs.map(match => MatchMap.toDto(match))
+            matchs: clash.matchs.map((match) => MatchMap.toDto(match)),
+            isFinish: clash.isFinish,
         };
     }
 }

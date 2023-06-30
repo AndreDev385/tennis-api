@@ -15,13 +15,6 @@ const databaseCredentials = {
     development: {
         username: DB_USER,
         password: DB_PASSWORD,
-        database: DB_NAME,
-        host: DB_HOST,
-        dialect: "postgres",
-    },
-    test: {
-        username: DB_USER,
-        password: DB_PASSWORD,
         database: DB_NAME_TEST,
         host: DB_HOST,
         dialect: "postgres",
@@ -40,7 +33,7 @@ const { username, password, database, host, dialect } =
 
 const mode = NODE_ENV == "production" ? "production" : "development";
 
-console.log(`[DB]: Connecting to db in ${mode} mode`);
+console.log(`[DB]: Connecting to db ${database} in ${mode} mode`);
 console.log(`[App]: ${host}`);
 
 module.exports = {

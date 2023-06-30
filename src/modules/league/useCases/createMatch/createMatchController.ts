@@ -1,9 +1,10 @@
 import { Request, Response } from "express";
 import { BaseController } from "../../../../shared/infra/http/models/BaseController";
-import { CreateMatchDto } from "./createMatchDto";
+import { CreateClashMatchsDto } from "./createMatchDto";
 import { CreateMatch } from "./createMatch";
 import { AppError } from "../../../../shared/core/AppError";
 import { Result } from "../../../../shared/core/Result";
+import { CreateMatchsError } from "./createMatchError";
 
 export class CreateMatchController extends BaseController {
     usecase: CreateMatch;
@@ -14,7 +15,7 @@ export class CreateMatchController extends BaseController {
     }
 
     async executeImpl(req: Request, res: Response) {
-        const dto: CreateMatchDto = req.body;
+        const dto: CreateClashMatchsDto = req.body;
 
         const result = await this.usecase.execute(dto);
 
@@ -32,6 +33,13 @@ export class CreateMatchController extends BaseController {
                         res,
                         (error as AppError.UnexpectedError).getErrorValue()
                             .message
+                    );
+                case CreateMatchsError.PlayerRepeated:
+                    return this.clientError(
+                        res,
+                        (
+                            error as CreateMatchsError.PlayerRepeated
+                        ).getErrorValue().message
                     );
                 default:
                     return this.clientError(

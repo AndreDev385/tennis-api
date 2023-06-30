@@ -4,6 +4,7 @@ import { Entity } from "../../../shared/domain/Entity";
 import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
 import { Category } from "./category";
 import { ClashId } from "./clashId";
+import { GameMode } from "./gameMode";
 import { Journey } from "./journey";
 import { Match } from "./match";
 import { Matchs } from "./matchs";
@@ -12,12 +13,13 @@ import { Team } from "./team";
 
 interface ClubClashProps {
     seasonId: SeasonId;
-    matchs: Matchs;
     team1: Team;
     team2: Team;
     category: Category;
     journey: Journey;
     host: string;
+    matchs: Matchs;
+    isFinish?: boolean;
 }
 
 export class Clash extends Entity<ClubClashProps> {
@@ -53,6 +55,37 @@ export class Clash extends Entity<ClubClashProps> {
         return this.props.host;
     }
 
+    get isFinish(): boolean {
+        return this.props.isFinish;
+    }
+
+    public createMatchs(matchs: Matchs) {
+        const playersIds = [];
+
+        for (const match of matchs.getItems()) {
+            if (playersIds.includes(match.player1.playerId.id.toString())) {
+                throw new Error(
+                    `El jugador ${match.player1.firstName.value} esta repetido`
+                );
+            }
+            if (
+                match.mode.value == GameMode.double &&
+                playersIds.includes(match.player3.playerId.id.toString())
+            ) {
+                throw new Error(
+                    `El jugador ${match.player1.firstName.value} esta repetido`
+                );
+            }
+
+            playersIds.push(match.player1.playerId.id.toString());
+            if (match.mode.value == GameMode.double) {
+                playersIds.push(match.player3.playerId.id.toString());
+            }
+        }
+
+        this.props.matchs = matchs;
+    }
+
     public static create(
         props: ClubClashProps,
         id?: UniqueEntityID
@@ -71,7 +104,10 @@ export class Clash extends Entity<ClubClashProps> {
             return Result.fail<Clash>(guardResult.getErrorValue());
         }
 
-        const clash = new Clash(props, id);
+        const clash = new Clash(
+            { ...props, isFinish: props.isFinish || false },
+            id
+        );
 
         return Result.ok<Clash>(clash);
     }

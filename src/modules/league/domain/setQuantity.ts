@@ -24,6 +24,10 @@ export class SetQuantity extends ValueObject<SetQuantityProps> {
         return true;
     }
 
+    public static createLeagueDefault(): SetQuantity {
+        return new SetQuantity({ value: 3 })
+    }
+
     public static create(props: SetQuantityProps): Result<SetQuantity> {
         const guardResult = Guard.againstNullOrUndefined(
             props.value,

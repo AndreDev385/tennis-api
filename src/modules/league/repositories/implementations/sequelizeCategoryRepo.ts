@@ -15,7 +15,7 @@ export class SequelizeCategoryRepository implements CategoryRepository {
 
         const category = await CategoryModel.findOne({ where: { categoryId } });
         if (!category) {
-            throw new Error("Category not found");
+            throw new Error("Categoria no encontrada.");
         }
 
         return CategoryMap.toDomain(category);

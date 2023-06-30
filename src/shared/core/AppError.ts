@@ -16,7 +16,7 @@ export namespace AppError {
     export class NotFoundError extends Result<UseCaseError> {
         public constructor(err: any) {
             super(false, {
-                message: `No encontrado.`,
+                message: err.message || err,
                 error: err,
             } as UseCaseError);
             console.log(`[AppError]: No encontrado`);

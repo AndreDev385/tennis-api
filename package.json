@@ -6,9 +6,10 @@
     "scripts": {
         "build": "npx tsc",
         "db:create:dev": "cross-env NODE_ENV=development node scripts/db/create",
-        "migrate:dev": "npm run build && npx sequelize-cli db:migrate",
-        "seed:dev": "npm run build && npx sequelize-cli db:seed:all",
-        "start:dev": "concurrently \"npx tsc --watch\" \"nodemon\"",
+        "migrate": "npx sequelize-cli db:migrate",
+        "seed:dev": "npx sequelize-cli db:seed:all",
+        "seed:prod": "npmx sequelize-cli db:seed",
+        "start:dev": "concurrently \"nodemon\"",
         "start": "node dist/index.js"
     },
     "keywords": [],
@@ -32,6 +33,7 @@
         "pg-hstore": "^2.3.4",
         "sequelize": "^6.31.1",
         "sequelize-cli": "^6.6.1",
+        "socket.io": "^4.7.1",
         "typescript": "^5.0.4",
         "uuid": "^9.0.0",
         "validator": "^13.9.0"

@@ -64,7 +64,7 @@ export class SequelizePlayerRepository implements PlayerRepository {
         const rawPlayer = await PlayerModel.findOne(query);
 
         if (!rawPlayer) {
-            throw new Error("Player not found");
+            throw new Error("Jugador no encontrado");
         }
 
         return PlayerMap.toDomain(rawPlayer);
@@ -76,7 +76,7 @@ export class SequelizePlayerRepository implements PlayerRepository {
         const exist = await this.exist(userId);
 
         if (!exist) {
-            throw new Error("Player not found");
+            throw new Error("Jugador no encontrado");
         }
 
         const query = this.baseQuery();

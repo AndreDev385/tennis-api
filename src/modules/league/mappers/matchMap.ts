@@ -4,7 +4,7 @@ import { ClashId } from "../domain/clashId";
 import { Match } from "../domain/match";
 import { Sets } from "../domain/sets";
 import { MatchDto } from "../dtos/matchDto";
-import { PlayerMap } from "./playerMap";
+import { CategoryMap } from "./categoryMap";
 import { SetMap } from "./setMap";
 import { TrackerMap } from "./trackerMap";
 
@@ -30,7 +30,9 @@ export class MatchMap implements Mapper<Match> {
                 address: raw.address,
                 player3: raw.player3,
                 player4: raw.player4,
-                category: raw.category,
+                category: CategoryMap.toDomain(raw.category),
+                isLive: raw.isLive,
+                isFinish: raw.isFinish,
             },
             new UniqueEntityID(raw.matchId)
         );
@@ -56,14 +58,17 @@ export class MatchMap implements Mapper<Match> {
             surface: match.surface.value,
             player1: match.player1.playerId.id.toString(),
             player2: match.player2,
-            player3: match.player3.playerId.id.toString() || null,
-            player4: match.player4,
+            player3: match.player3?.playerId?.id?.toString() || null,
+            player4: match.player4 || null,
+            isLive: match.isLive,
+            isFinish: match.isFinish,
         };
     }
 
     public static toDto(match: Match): MatchDto {
+        console.log(match);
         return {
-            tracker: TrackerMap.toDto(match.tracker),
+            clashId: match.clashId.id.toString(),
             mode: match.mode.value,
             setsQuantity: match.setsQuantity.value,
             sets: match.sets.getItems().map((set) => SetMap.toDto(set)),
@@ -71,10 +76,21 @@ export class MatchMap implements Mapper<Match> {
             superTieBreak: match.superTieBreak,
             address: match.address,
             surface: match.surface.value,
-            player1: PlayerMap.toDto(match.player1),
+            player1: {
+                playerId: match.player1.playerId.id.toString(),
+                firstName: match.player1.firstName.value,
+            },
             player2: match.player2,
-            player3: match.player3 ? PlayerMap.toDto(match.player1) : null,
-            player4: match.player4,
-        }
+            player3: match.player3
+                ? {
+                      playerId: match.player1.playerId.id.toString(),
+                      firstName: match.player1.firstName.value,
+                  }
+                : null,
+            player4: match.player4 || null,
+            tracker: match.tracker ? TrackerMap.toDto(match.tracker) : null,
+            isLive: match.isLive,
+            isFinish: match.isFinish,
+        };
     }
 }

@@ -55,6 +55,10 @@ const ClashModel = sequelize.define(
             type: DataTypes.STRING,
             allowNull: false,
         },
+        isFinish: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false,
+        },
     },
     { tableName: "clash" }
 );
@@ -70,8 +74,5 @@ ClashModel.belongsTo(CategoryModel, {
     targetKey: "categoryId",
     as: "category",
 });
-
-ClashModel.belongsToMany(TeamModel, { through: "clash_team" })
-
 
 export { ClashModel };

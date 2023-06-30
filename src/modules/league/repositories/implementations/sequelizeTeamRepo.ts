@@ -44,7 +44,7 @@ export class SequelizeTeamRepository implements TeamRepository {
         const rawTeam = await TeamModel.findOne(query);
 
         if (!!rawTeam == false) {
-            throw new Error("Team not found");
+            throw new Error("Equipo no encontrado");
         }
 
         return TeamMap.toDomain(rawTeam);
@@ -59,7 +59,7 @@ export class SequelizeTeamRepository implements TeamRepository {
         const rawTeam = await TeamModel.findOne(query);
 
         if (!!rawTeam == false) {
-            throw new Error("Team not found");
+            throw new Error("Equipo no encontrado");
         }
 
         return TeamMap.toDomain(rawTeam);

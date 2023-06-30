@@ -1,7 +1,7 @@
 import { AppError } from "../../../../shared/core/AppError";
 import { Either, Result, left, right } from "../../../../shared/core/Result";
 import { UseCase } from "../../../../shared/core/UseCase";
-import { SeasonRepository } from "../../repositories/seasonRepo";
+import { SeasonQuery, SeasonRepository } from "../../repositories/seasonRepo";
 
 type Response = Either<AppError.UnexpectedError | Result<string>, Result<any>>;
 
@@ -11,15 +11,9 @@ export class ListSeasons implements UseCase<any, any> {
     constructor(repo: SeasonRepository) {
         this.seasonRepo = repo;
     }
-    async execute(leagueId: string): Promise<Response> {
-        let list: Array<any>;
+    async execute(query: SeasonQuery): Promise<Response> {
         try {
-
-            if (!leagueId) {
-                return left(Result.fail<string>("leagueId es requerido"));
-            }
-
-            list = await this.seasonRepo.listSeasonsByLeague(leagueId);
+            const list = await this.seasonRepo.list(query);
 
             return right(Result.ok(list));
         } catch (error) {

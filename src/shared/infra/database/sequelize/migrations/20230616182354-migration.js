@@ -86,6 +86,10 @@ module.exports = {
                     allowNull: true,
                     defaultValue: null,
                 },
+                isSubscribed: {
+                    type: Sequelize.BOOLEAN,
+                    defaultValue: false,
+                },
                 createdAt: {
                     type: Sequelize.DATE,
                     allowNull: false,
@@ -260,6 +264,10 @@ module.exports = {
                     type: Sequelize.STRING,
                     allowNull: false,
                 },
+                isFinish: {
+                    type: Sequelize.BOOLEAN,
+                    defaultValue: false,
+                },
                 createdAt: {
                     type: Sequelize.DATE,
                     allowNull: false,
@@ -341,6 +349,14 @@ module.exports = {
                 player4: {
                     type: Sequelize.STRING,
                     allowNull: true,
+                },
+                isLive: {
+                    type: Sequelize.BOOLEAN,
+                    defaultValue: false,
+                },
+                isFinish: {
+                    type: Sequelize.BOOLEAN,
+                    defaultValue: false,
                 },
                 createdAt: {
                     type: Sequelize.DATE,

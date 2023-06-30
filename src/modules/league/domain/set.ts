@@ -1,13 +1,11 @@
 import { Guard } from "../../../shared/core/Guard";
 import { Result } from "../../../shared/core/Result";
 import { ValueObject } from "../../../shared/domain/ValueObject";
-import { MatchId } from "./matchId";
 
 interface SetProps {
-    matchId: MatchId;
     myGames: number;
     rivalGames: number;
-    setWon: boolean;
+    setWon: boolean | null;
 }
 
 export class Set extends ValueObject<SetProps> {
@@ -19,17 +17,16 @@ export class Set extends ValueObject<SetProps> {
         return this.props.rivalGames;
     }
 
-    get setWon(): boolean {
+    get setWon(): boolean | null {
         return this.props.setWon;
     }
 
-    get matchId(): MatchId {
-        return this.props.matchId;
+    public static createDefaultLeague(): Set {
+        return new Set({ myGames: 0, rivalGames: 0, setWon: null });
     }
 
     public static create(props: SetProps): Result<Set> {
         const guardResult = Guard.againstNullOrUndefinedBulk([
-            { argument: props.matchId, argumentName: "matchId" },
             { argument: props.myGames, argumentName: "games won" },
             { argument: props.rivalGames, argumentName: "games lost" },
         ]);

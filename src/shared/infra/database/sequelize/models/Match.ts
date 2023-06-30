@@ -1,6 +1,7 @@
 import { DataTypes, Sequelize } from "sequelize";
 import config from "../config/config";
 import { ClashModel } from "./ClubClash";
+import { CategoryModel } from "./Category";
 
 const sequelize: Sequelize = config.connection;
 
@@ -74,6 +75,14 @@ const MatchModel = sequelize.define(
             type: DataTypes.STRING,
             allowNull: true,
         },
+        isLive: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false,
+        },
+        isFinish: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false,
+        },
     },
     { tableName: "match" }
 );
@@ -82,6 +91,12 @@ MatchModel.belongsTo(ClashModel, {
     foreignKey: "clashId",
     targetKey: "clashId",
     as: "clash",
+});
+
+MatchModel.belongsTo(CategoryModel, {
+    foreignKey: "categoryId",
+    targetKey: "categoryId",
+    as: "category",
 });
 
 export { MatchModel };

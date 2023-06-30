@@ -12,8 +12,7 @@ export class ListSeasonsController extends BaseController {
     }
 
     async executeImpl(req: Request, res: Response) {
-        const { leagueId } = req.params;
-        const result = await this.useCase.execute(leagueId);
+        const result = await this.useCase.execute(req.query);
 
         if (result.isLeft()) {
             const error = result.value;

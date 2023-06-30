@@ -10,6 +10,7 @@ export class ClubMap implements Mapper<Club> {
                 name: raw.name,
                 code: raw.code,
                 symbol: raw.symbol,
+                isSubscribed: raw.isSubscribed,
             },
             new UniqueEntityID(raw.clubId)
         );
@@ -25,6 +26,7 @@ export class ClubMap implements Mapper<Club> {
             name: club.name,
             code: club.code,
             symbol: club.symbol,
+            isSubscribed: club.isSubscribed,
         };
     }
 
@@ -33,6 +35,7 @@ export class ClubMap implements Mapper<Club> {
             name: club.name,
             code: club.code,
             clubId: club.clubId.id.toString(),
+            isSubscribed: club.isSubscribed,
         };
     }
 }

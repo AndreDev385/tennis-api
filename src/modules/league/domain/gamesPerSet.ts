@@ -24,6 +24,10 @@ export class GamesPerSet extends ValueObject<GamesPerSetProps> {
         return true;
     }
 
+    public static createLeagueDefault(): GamesPerSet {
+        return new GamesPerSet({ value: 6 })
+    }
+
     public static create(props: GamesPerSetProps): Result<GamesPerSet> {
         const guardResult = Guard.againstNullOrUndefined(props.value, 'juegos por set')
 

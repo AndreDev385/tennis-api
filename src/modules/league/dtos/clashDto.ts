@@ -10,4 +10,5 @@ export interface ClashDto {
     journey: string;
     host: string;
     matchs: Array<MatchDto>
+    isFinish: boolean;
 }

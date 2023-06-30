@@ -1,6 +1,7 @@
 import { Season } from "../../domain/season";
+import { SeasonDto } from "../../dtos/seasonDto";
 import { SeasonMap } from "../../mappers/seasonMap";
-import { SeasonRepository } from "../seasonRepo";
+import { SeasonQuery, SeasonRepository } from "../seasonRepo";
 
 export class SequelizeSeasonRepository implements SeasonRepository {
     models: any;
@@ -28,10 +29,10 @@ export class SequelizeSeasonRepository implements SeasonRepository {
         }
     }
 
-    async listSeasonsByLeague(leagueId: string): Promise<any[]> {
+    async list(query: SeasonQuery): Promise<SeasonDto[]> {
         const SeasonModel = this.models.SeasonModel;
 
-        const list = await SeasonModel.findAll({ where: { leagueId } });
+        const list = await SeasonModel.findAll({ where: query });
 
         return list;
     }
@@ -41,7 +42,7 @@ export class SequelizeSeasonRepository implements SeasonRepository {
 
         const season = await SeasonModel.findOne({ where: { seasonId } });
         if (!season) {
-            throw new Error("Not found");
+            throw new Error("Temporada no encontrada");
         }
 
         return SeasonMap.toDomain(season);

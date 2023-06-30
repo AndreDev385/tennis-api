@@ -1,13 +1,13 @@
 import { Guard } from "../../../shared/core/Guard";
 import { Result } from "../../../shared/core/Result";
 import { Entity } from "../../../shared/domain/Entity";
-import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
-import { ClubId } from "./clubId";
+import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID"; import { ClubId } from "./clubId";
 
 interface ClubProps {
     name: string;
     symbol: string;
     code: string;
+    isSubscribed: boolean;
 }
 
 export class Club extends Entity<ClubProps> {
@@ -25,6 +25,10 @@ export class Club extends Entity<ClubProps> {
 
     get code(): string {
         return this.props.code;
+    }
+
+    get isSubscribed(): boolean {
+        return this.props.isSubscribed;
     }
 
     private generateCode() {
@@ -53,7 +57,10 @@ export class Club extends Entity<ClubProps> {
 
         const isNewClub = !!id == false;
 
-        const club = new Club(props, id);
+        const club = new Club(
+            { ...props, isSubscribed: props.isSubscribed || false },
+            id
+        );
 
         if (isNewClub) {
             club.generateCode();
