@@ -1,6 +1,8 @@
 import { GameMode } from "../../domain/gameMode";
 import { Match } from "../../domain/match";
+import { MatchTracker } from "../../domain/matchTracker";
 import { MatchMap } from "../../mappers/matchMap";
+import { TrackerMap } from "../../mappers/trackerMap";
 import { MatchQuery, MatchRepository } from "../matchRepo";
 import { PlayerRepository } from "../playerRepo";
 import { TrackerRepository } from "../trackerRepo";
@@ -29,6 +31,7 @@ export class SequelizeMatchRepository implements MatchRepository {
     }
 
     async save(match: Match): Promise<void> {
+        console.log("save match", match);
         const MatchModel = this.models.MatchModel;
 
         const raw = MatchMap.toPersistance(match);
@@ -47,20 +50,52 @@ export class SequelizeMatchRepository implements MatchRepository {
         }
     }
 
-    async getMatchById(id: string): Promise<Match> {
+    async getMatchById(matchId: string): Promise<Match> {
         const MatchModel = this.models.MatchModel;
 
-        const raw = await MatchModel.findOne({
-            where: { matchId: id },
-        });
+        const baseQuery = this.baseQuery();
+        baseQuery.where["matchId"] = matchId;
+
+        const raw = await MatchModel.findOne(baseQuery);
 
         if (!!raw === false) {
             throw new Error("Partido no encontrado");
         }
 
-        const match = MatchMap.toDomain(raw);
+        raw.player1Domain = await this.playerRepo.getPlayerById(raw.player1);
+        if (raw.mode == GameMode.double) {
+            raw.player3Domain = await this.playerRepo.getPlayerById(
+                raw.player3
+            );
+        }
 
-        return match;
+        let tracker: MatchTracker;
+        try {
+            tracker = await this.trackerRepo.findTrackerByMatchId(matchId);
+        } catch (e) {
+            console.log(e)
+            tracker = null
+        }
+
+        return MatchMap.toDomain({
+            matchId: raw.matchId,
+            clashId: raw.clashId,
+            sets: raw.sets,
+            setsQuantity: raw.setsQuantity,
+            tracker,
+            surface: raw.surface,
+            superTieBreak: raw.superTieBreak,
+            gamesPerSet: raw.gamesPerSet,
+            player2: raw.player2,
+            player1: raw.player1Domain,
+            mode: raw.mode,
+            address: raw.address,
+            player3: raw.player3Domain,
+            player4: raw.player4,
+            category: raw.category,
+            isLive: raw.isLive,
+            isFinish: raw.isFinish,
+        });
     }
 
     async getMatchsByClashId(clashId: string): Promise<Match[]> {
@@ -84,6 +119,7 @@ export class SequelizeMatchRepository implements MatchRepository {
 
         const matchs = raw.map((m: any) =>
             MatchMap.toDomain({
+                matchId: m.matchId,
                 sets: m.sets,
                 clashId: m.clashId,
                 tracker: m.tracker,
@@ -98,6 +134,8 @@ export class SequelizeMatchRepository implements MatchRepository {
                 player3: m.player3Domain,
                 player4: m.player4,
                 category: m.category,
+                isLive: raw.isLive,
+                isFinish: raw.isFinish,
             })
         );
 
@@ -127,6 +165,7 @@ export class SequelizeMatchRepository implements MatchRepository {
 
         const matchs = raw.map((m: any) =>
             MatchMap.toDomain({
+                matchId: m.matchId,
                 sets: m.sets,
                 clashId: m.clashId,
                 tracker: m.tracker,
@@ -141,6 +180,8 @@ export class SequelizeMatchRepository implements MatchRepository {
                 player3: m.player3Domain,
                 player4: m.player4,
                 category: m.category,
+                isLive: raw.isLive,
+                isFinish: raw.isFinish,
             })
         );
 

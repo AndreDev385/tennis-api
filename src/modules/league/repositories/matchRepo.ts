@@ -8,6 +8,6 @@ export interface MatchQuery {
 export interface MatchRepository {
     save(match: Match): Promise<void>;
     list(query: MatchQuery): Promise<Array<Match>>;
-    getMatchById(id: string): Promise<Match>;
+    getMatchById(matchId: string): Promise<Match>;
     getMatchsByClashId(clashId: string): Promise<Array<Match>>;
 }

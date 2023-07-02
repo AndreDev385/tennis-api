@@ -13,11 +13,11 @@ export class SequelizePlayerTrackerRepository
     async save(playerTracker: PlayerTracker): Promise<void> {
         const PlayerTrackerModel = this.models.PlayerTrackerModel;
 
-        const raw = PlayerTrackerMapper.toDto(playerTracker);
+        const raw = PlayerTrackerMapper.toPersistance(playerTracker);
 
         const exist = await PlayerTrackerModel.findOne({
             where: {
-                PlayerTrackerId: playerTracker.playerTrackerId.id.toString(),
+                playerTrackerId: playerTracker.playerTrackerId.id.toString(),
             },
         });
 
@@ -42,7 +42,7 @@ export class SequelizePlayerTrackerRepository
         });
 
         if (!!playerTracker == false) {
-            throw new Error("Estadisticas no encontradas.");
+            throw new Error("Estadisticas de jugador no encontradas.");
         }
 
         return PlayerTrackerMapper.toDomain(playerTracker);

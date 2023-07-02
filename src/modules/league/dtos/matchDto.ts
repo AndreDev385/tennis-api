@@ -2,6 +2,7 @@ import { SetDto } from "./setDto";
 import { TrackerDto } from "./trackerDto";
 
 export interface MatchDto {
+    matchId: string;
     clashId: string;
     mode: string;
     setsQuantity: number;

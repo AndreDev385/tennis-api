@@ -38,6 +38,10 @@ export class PlayerTracker extends Entity<PlayerTrackerProps> {
         return PlayerTrackerId.create(this._id).getValue();
     }
 
+    get playerId(): PlayerId {
+        return this.props.playerId;
+    }
+
     get pointsWon(): number {
         return this.props.pointsWon;
     }
@@ -124,19 +128,23 @@ export class PlayerTracker extends Entity<PlayerTrackerProps> {
             return Result.fail(guard.getErrorValue());
         }
 
-        const instance = new PlayerTracker({
+        const result = PlayerTracker.create({
             playerId,
-            pointsLostReturning: 0,
-            pointsLostServing: 0,
-            pointsLost: 0,
             pointsWon: 0,
+            pointsWonServing: 0,
             pointsWonReturning: 0,
+            pointsLost: 0,
+            pointsLostServing: 0,
+            pointsLostReturning: 0,
             saveBreakPtsChances: 0,
             breakPtsSaved: 0,
-            pointsWonServing: 0,
         });
 
-        return Result.ok(instance);
+        if (result.isFailure) {
+            return Result.fail<PlayerTracker>(`${result.getErrorValue()}`);
+        }
+
+        return Result.ok(result.getValue());
     }
 
     public static create(

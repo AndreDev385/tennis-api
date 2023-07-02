@@ -162,18 +162,15 @@ export class MatchTracker extends Entity<MatchTrackerProps> {
         }
 
         const instance = new MatchTracker({
-            me: meOrError.getErrorValue(),
             matchId: id,
+            me: meOrError.getValue(),
+            partner,
             gamesWonServing: 0,
-            partner: partner,
-            rivalAces: 0,
-            longRallyWon: 0,
-            rivalWinners: 0,
-            breakPtsWinned: 0,
-            gamesLostServing: 0,
             gamesWonReturning: 0,
+            gamesLostServing: 0,
             gamesLostReturning: 0,
             winBreakPtsChances: 0,
+            breakPtsWinned: 0,
         });
 
         return Result.ok(instance);

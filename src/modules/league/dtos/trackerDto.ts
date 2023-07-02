@@ -1,6 +1,7 @@
 import { PlayerTrackerDto } from "./playerTrackerDto";
 
 export interface TrackerDto {
+    trackerId: string;
     matchId: string;
 
     me: PlayerTrackerDto;

@@ -1,8 +1,12 @@
 import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
 import { Mapper } from "../../../shared/infra/Mapper";
 import { ClashId } from "../domain/clashId";
+import { Mode } from "../domain/gameMode";
+import { GamesPerSet } from "../domain/gamesPerSet";
 import { Match } from "../domain/match";
+import { SetQuantity } from "../domain/setQuantity";
 import { Sets } from "../domain/sets";
+import { Surface } from "../domain/surface";
 import { MatchDto } from "../dtos/matchDto";
 import { CategoryMap } from "./categoryMap";
 import { SetMap } from "./setMap";
@@ -13,21 +17,30 @@ export class MatchMap implements Mapper<Match> {
         const setsArr = raw.sets.map((s) => SetMap.toDomain(s));
         const clashIdOrError = ClashId.create(new UniqueEntityID(raw.clashId));
 
+        const modeOrError = Mode.create({ value: raw.mode });
+        const surfaceOrError = Surface.create({ value: raw.surface });
+        const setsQuantityOrError = SetQuantity.create({
+            value: raw.setsQuantity,
+        });
+        const gamesPerSetOrError = GamesPerSet.create({
+            value: raw.gamesPerSet,
+        });
+
         const sets = Sets.create(setsArr);
 
         const matchOrError = Match.create(
             {
                 clashId: clashIdOrError.getValue(),
                 tracker: raw.tracker,
-                surface: raw.surface,
+                surface: surfaceOrError.getValue(),
                 superTieBreak: raw.superTieBreak,
-                gamesPerSet: raw.gamesPerSet,
-                player2: raw.player2,
-                player1: raw.player1,
+                gamesPerSet: gamesPerSetOrError.getValue(),
                 sets: sets,
-                setsQuantity: raw.setsQuantity,
-                mode: raw.mode,
+                setsQuantity: setsQuantityOrError.getValue(),
+                mode: modeOrError.getValue(),
                 address: raw.address,
+                player1: raw.player1,
+                player2: raw.player2,
                 player3: raw.player3,
                 player4: raw.player4,
                 category: CategoryMap.toDomain(raw.category),
@@ -66,8 +79,8 @@ export class MatchMap implements Mapper<Match> {
     }
 
     public static toDto(match: Match): MatchDto {
-        console.log(match);
         return {
+            matchId: match.matchId.id.toString(),
             clashId: match.clashId.id.toString(),
             mode: match.mode.value,
             setsQuantity: match.setsQuantity.value,

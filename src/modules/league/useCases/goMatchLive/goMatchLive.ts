@@ -15,10 +15,7 @@ export class GoMatchLive
     matchRepo: MatchRepository;
     trackerRepo: TrackerRepository;
 
-    constructor(
-        matchRepo: MatchRepository,
-        trackerRepo: TrackerRepository,
-    ) {
+    constructor(matchRepo: MatchRepository, trackerRepo: TrackerRepository) {
         this.matchRepo = matchRepo;
         this.trackerRepo = trackerRepo;
     }

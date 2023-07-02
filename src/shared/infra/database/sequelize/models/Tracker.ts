@@ -139,7 +139,7 @@ TrackerModel.belongsTo(MatchModel, {
     as: "Match",
 });
 
-TrackerModel.hasOne(PlayerTrackerModel, {
+/*TrackerModel.hasOne(PlayerTrackerModel, {
     foreignKey: "playerTrackerId",
     sourceKey: 'me'
 })
@@ -147,6 +147,6 @@ TrackerModel.hasOne(PlayerTrackerModel, {
 TrackerModel.hasOne(PlayerTrackerModel, {
     foreignKey: "playerTrackerId",
     sourceKey: 'partner'
-})
+})*/
 
 export { TrackerModel };

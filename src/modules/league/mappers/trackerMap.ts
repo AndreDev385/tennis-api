@@ -1,52 +1,61 @@
+import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
 import { Mapper } from "../../../shared/infra/Mapper";
+import { MatchId } from "../domain/matchId";
 import { MatchTracker } from "../domain/matchTracker";
 import { TrackerDto } from "../dtos/trackerDto";
 import { PlayerTrackerMapper } from "./playerTrackerMap";
 
 export class TrackerMap implements Mapper<MatchTracker> {
     public static toDomain(raw: any): MatchTracker {
-        const trackerOrError = MatchTracker.create({
-            matchId: raw.matchId,
-            me: raw.me,
-            partner: raw.partner || null,
-            rivalAces: raw.rivalAces,
-            longRallyWon: raw.longRallyWon,
-            rivalWinners: raw.rivalWinners,
-            breakPtsWinned: raw.breakPtsWinned,
-            longRallyLost: raw.longRallyLost,
-            shortRallyWon: raw.shortRallyWon,
-            gamesWonServing: raw.gamesWonServing,
-            mediumRallyWon: raw.mediumRallyWon,
-            shortRallyLost: raw.shortRallyLost,
-            gamesLostServing: raw.gamesLostServing,
-            mediumRallyLost: raw.mediumRallyLost,
-            rivalDobleFault: raw.rivalDobleFault,
-            gamesWonReturning: raw.gamesWonReturning,
-            rivalFirstServIn: raw.rivalFirstServIn,
-            gamesLostReturning: raw.gamesLostReturning,
-            winBreakPtsChances: raw.winBreakPtsChances,
-            rivalSecondServIn: raw.rivalSecondServIn,
-            rivalFirstReturnIn: raw.rivalFirstReturnIn,
-            rivalNoForcedErrors: raw.rivalNoForcedErrors,
-            rivalSecondReturnIn: raw.rivalSecondReturnIn,
-            rivalPointsWinnedFirstServ: raw.rivalPointsWinnedFirstServ,
-            rivalPointsWinnedSecondServ: raw.rivalPointsWinnedSecondServ,
-            rivalPointsWinnedFirstReturn: raw.rivalPointsWinnedFirstReturn,
-            rivalPointsWinnedSecondReturn: raw.rivalPointsWinnedSecondReturn,
-        });
+        const matchIdOrError = MatchId.create(new UniqueEntityID(raw.matchId));
+        const trackerOrError = MatchTracker.create(
+            {
+                matchId: matchIdOrError.getValue(),
+                me: raw.me,
+                partner: raw?.partner || null,
+                rivalAces: raw.rivalAces,
+                longRallyWon: raw.longRallyWon,
+                rivalWinners: raw.rivalWinners,
+                breakPtsWinned: raw.breakPtsWinned,
+                longRallyLost: raw.longRallyLost,
+                shortRallyWon: raw.shortRallyWon,
+                gamesWonServing: raw.gamesWonServing,
+                mediumRallyWon: raw.mediumRallyWon,
+                shortRallyLost: raw.shortRallyLost,
+                gamesLostServing: raw.gamesLostServing,
+                mediumRallyLost: raw.mediumRallyLost,
+                rivalDobleFault: raw.rivalDobleFault,
+                gamesWonReturning: raw.gamesWonReturning,
+                rivalFirstServIn: raw.rivalFirstServIn,
+                gamesLostReturning: raw.gamesLostReturning,
+                winBreakPtsChances: raw.winBreakPtsChances,
+                rivalSecondServIn: raw.rivalSecondServIn,
+                rivalFirstReturnIn: raw.rivalFirstReturnIn,
+                rivalNoForcedErrors: raw.rivalNoForcedErrors,
+                rivalSecondReturnIn: raw.rivalSecondReturnIn,
+                rivalPointsWinnedFirstServ: raw.rivalPointsWinnedFirstServ,
+                rivalPointsWinnedSecondServ: raw.rivalPointsWinnedSecondServ,
+                rivalPointsWinnedFirstReturn: raw.rivalPointsWinnedFirstReturn,
+                rivalPointsWinnedSecondReturn:
+                    raw.rivalPointsWinnedSecondReturn,
+            },
+            new UniqueEntityID(raw.trackerId)
+        );
 
         trackerOrError.isFailure
-            ? console.log(trackerOrError.getErrorValue())
+            ? console.log(trackerOrError.getErrorValue(), "TRACKER OR ERROR")
             : "";
 
         return trackerOrError.isSuccess ? trackerOrError.getValue() : null;
     }
 
     public static toPersistance(tracker: MatchTracker) {
+        console.log(tracker);
         return {
+            trackerId: tracker.trackerId.id.toString(),
             matchId: tracker.matchId.id.toString(),
             me: tracker.me.playerTrackerId.id.toString(),
-            partner: tracker.partner.playerTrackerId.id.toString() || null,
+            partner: tracker.partner?.playerTrackerId.id.toString() || null,
             rivalAces: tracker.rivalAces,
             longRallyWon: tracker.longRallyWon,
             rivalWinners: tracker.rivalWinners,
@@ -77,6 +86,7 @@ export class TrackerMap implements Mapper<MatchTracker> {
 
     public static toDto(tracker: MatchTracker): TrackerDto {
         return {
+            trackerId: tracker.trackerId.id.toString(),
             matchId: tracker.matchId.id.toString(),
             me: PlayerTrackerMapper.toDto(tracker.me),
             partner: tracker.partner

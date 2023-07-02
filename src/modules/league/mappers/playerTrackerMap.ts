@@ -34,9 +34,39 @@ export class PlayerTrackerMapper implements Mapper<PlayerTracker> {
         };
     }
 
-    public static toDomain(raw: any): PlayerTracker {
+    public static toPersistance(playerTracker: PlayerTracker) {
+        return {
+            playerId: playerTracker.playerId.id.toString(),
+            playerTrackerId: playerTracker.playerTrackerId.id.toString(),
+            pointsWon: playerTracker.pointsWon,
+            pointsWonServing: playerTracker.pointsWonServing,
+            pointsWonReturning: playerTracker.pointsWonReturning,
+            pointsLost: playerTracker.pointsLost,
+            pointsLostReturning: playerTracker.pointsLostReturning,
+            pointsLostServing: playerTracker.pointsLostServing,
+            saveBreakPtsChances: playerTracker.saveBreakPtsChances,
+            breakPtsSaved: playerTracker.breakPtsSaved,
+            pointsWinnedFirstServ: playerTracker.pointsWinnedFirstServ,
+            pointsWinnedSecondServ: playerTracker.pointsWinnedSecondServ,
+            firstServIn: playerTracker.firstServIn,
+            secondServIn: playerTracker.secondServIn,
+            aces: playerTracker.aces,
+            dobleFaults: playerTracker.dobleFaults,
+            pointsWinnedFirstReturn: playerTracker.pointsWinnedFirstReturn,
+            pointsWinnedSecondReturn: playerTracker.pointsWinnedSecondReturn,
+            firstReturnIn: playerTracker.firstReturnIn,
+            secondReturnIn: playerTracker.secondReturnIn,
+            meshPointsWon: playerTracker.meshPointsWon,
+            meshPointsLost: playerTracker.meshPointsLost,
+            bckgPointsWon: playerTracker.bckgPointsWon,
+            bckgPointsLost: playerTracker.bckgPointsLost,
+            winners: playerTracker.winners,
+            noForcedErrors: playerTracker.noForcedErrors,
+        };
+    }
 
-        const playerId = PlayerId.create(new UniqueEntityID(raw.playerId))
+    public static toDomain(raw: any): PlayerTracker {
+        const playerId = PlayerId.create(new UniqueEntityID(raw.playerId));
 
         const playerTrackerOrError = PlayerTracker.create(
             {
@@ -69,8 +99,12 @@ export class PlayerTrackerMapper implements Mapper<PlayerTracker> {
             new UniqueEntityID(raw.playerTrackerId)
         );
 
-        playerTrackerOrError.isFailure ? console.log(playerTrackerOrError.getErrorValue()) : "";
+        playerTrackerOrError.isFailure
+            ? console.log(playerTrackerOrError.getErrorValue())
+            : "";
 
-        return playerTrackerOrError.isSuccess ? playerTrackerOrError.getValue() : null;
+        return playerTrackerOrError.isSuccess
+            ? playerTrackerOrError.getValue()
+            : null;
     }
 }

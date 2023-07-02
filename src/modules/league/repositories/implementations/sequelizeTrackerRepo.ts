@@ -15,19 +15,19 @@ export class SequelizeTrackerRepository implements TrackerRepository {
     async save(tracker: MatchTracker): Promise<void> {
         const TrackerModel = this.models.TrackerModel;
 
-        const raw = TrackerMap.toPersistance(tracker);
-
-        const exists = TrackerModel.findOne({
-            where: { matchId: raw.matchId },
-        });
-
         await this.playerTracker.save(tracker.me);
 
         if (!!tracker.partner === true) {
             await this.playerTracker.save(tracker.partner);
         }
 
-        if (exists) {
+        const raw = TrackerMap.toPersistance(tracker);
+
+        const exists = await TrackerModel.findOne({
+            where: { matchId: tracker.matchId.id.toString() },
+        });
+
+        if (!!exists == true) {
             await TrackerModel.update(raw, { where: { matchId: raw.matchId } });
         } else {
             const intance = await TrackerModel.create(raw);
@@ -38,21 +38,49 @@ export class SequelizeTrackerRepository implements TrackerRepository {
     async findTrackerByMatchId(matchId: string): Promise<MatchTracker> {
         const TrackerModel = this.models.TrackerModel;
 
-        const tracker = TrackerModel.findOne({
+        const raw = await TrackerModel.findOne({
             where: { matchId },
         });
 
-        if (!tracker) {
-            throw new Error("Estadisticas no encontradas.");
+        if (!raw) {
+            throw new Error("Estadisticas de partido no encontradas.");
         }
 
-        const me = await this.playerTracker.getById(tracker.me);
-        let partner: any
+        const me = await this.playerTracker.getById(raw.me);
+        let partner: any;
 
-        if (!!tracker.partner == true) {
-            partner = await this.playerTracker.getById(tracker.partner);
+        if (!!raw.partner == true) {
+            partner = await this.playerTracker.getById(raw.partner);
         }
 
-        return TrackerMap.toDomain({ ...tracker, me, partner });
+        return TrackerMap.toDomain({
+            matchId: raw.matchId,
+            me,
+            partner,
+            rivalAces: raw.rivalAces,
+            longRallyWon: raw.longRallyWon,
+            rivalWinners: raw.rivalWinners,
+            breakPtsWinned: raw.breakPtsWinned,
+            longRallyLost: raw.longRallyLost,
+            shortRallyWon: raw.shortRallyWon,
+            gamesWonServing: raw.gamesWonServing,
+            mediumRallyWon: raw.mediumRallyWon,
+            shortRallyLost: raw.shortRallyLost,
+            gamesLostServing: raw.gamesLostServing,
+            mediumRallyLost: raw.mediumRallyLost,
+            rivalDobleFault: raw.rivalDobleFault,
+            gamesWonReturning: raw.gamesWonReturning,
+            rivalFirstServIn: raw.rivalFirstServIn,
+            gamesLostReturning: raw.gamesLostReturning,
+            winBreakPtsChances: raw.winBreakPtsChances,
+            rivalSecondServIn: raw.rivalSecondServIn,
+            rivalFirstReturnIn: raw.rivalFirstReturnIn,
+            rivalNoForcedErrors: raw.rivalNoForcedErrors,
+            rivalSecondReturnIn: raw.rivalSecondReturnIn,
+            rivalPointsWinnedFirstServ: raw.rivalPointsWinnedFirstServ,
+            rivalPointsWinnedSecondServ: raw.rivalPointsWinnedSecondServ,
+            rivalPointsWinnedFirstReturn: raw.rivalPointsWinnedFirstReturn,
+            rivalPointsWinnedSecondReturn: raw.rivalPointsWinnedSecondReturn,
+        });
     }
 }

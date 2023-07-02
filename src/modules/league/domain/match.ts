@@ -101,6 +101,22 @@ export class Match extends Entity<MatchProps> {
         return this.props.isFinish;
     }
 
+    get matchWon(): boolean {
+        if (this.isFinish) {
+            let setsWon = 0
+            for (const set of this.sets.getItems()) {
+                if (set.setWon) {
+                    setsWon++;
+                }
+            }
+
+            if (setsWon > (Math.floor(this.setsQuantity.value / 2) + 1)) {
+                return true;
+            }
+            return false
+        }
+    }
+
     public addTracker(tracker: MatchTracker) {
         this.props.tracker = tracker;
     }
