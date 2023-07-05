@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { BaseController } from "../../../../shared/infra/http/models/BaseController";
 import { ListClubs } from "./listClubsUseCase";
-import { ListQueryDto } from "./requestListQueryDto";
 
 export class ListClubsController extends BaseController {
     useCase: ListClubs;
