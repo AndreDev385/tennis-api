@@ -39,7 +39,7 @@ export class LoginController extends BaseController {
                         (error.getErrorValue() as UseCaseError).message
                     );
                 default:
-                    return this.fail(
+                    return this.clientError(
                         res,
                         error.getErrorValue() as string
                     );

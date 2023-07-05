@@ -5,6 +5,7 @@ import { DecodedRequest } from "../../../users/infra/http/models/decodedRequest"
 import { CreatePlayerDto } from "./createPlayerDto";
 import { AppError } from "../../../../shared/core/AppError";
 import { CreatePlayerErrors } from "./createPlayerError";
+import { Result } from "../../../../shared/core/Result";
 
 export class CreatePlayerController extends BaseController {
     usecase: CreatePlayer;
@@ -26,19 +27,41 @@ export class CreatePlayerController extends BaseController {
             const error = result.value;
             switch (error.constructor) {
                 case AppError.UnexpectedError:
-                    return this.fail(res, error.getErrorValue().message);
+                    return this.fail(
+                        res,
+                        (error as AppError.UnexpectedError).getErrorValue()
+                            .message
+                    );
 
                 case CreatePlayerErrors.UserDoesNotExist:
-                    return this.clientError(res, error.getErrorValue().message);
+                    return this.clientError(
+                        res,
+                        (
+                            error as CreatePlayerErrors.UserDoesNotExist
+                        ).getErrorValue().message
+                    );
 
                 case CreatePlayerErrors.ClubDoesNotExist:
-                    return this.clientError(res, error.getErrorValue().message);
+                    return this.clientError(
+                        res,
+                        (
+                            error as CreatePlayerErrors.ClubDoesNotExist
+                        ).getErrorValue().message
+                    );
 
                 case CreatePlayerErrors.PlayerAlreadyExistError:
-                    return this.conflict(res, error.getErrorValue().message);
+                    return this.conflict(
+                        res,
+                        (
+                            error as CreatePlayerErrors.PlayerAlreadyExistError
+                        ).getErrorValue().message
+                    );
 
                 default:
-                    return this.clientError(res, error.getErrorValue());
+                    return this.clientError(
+                        res,
+                        (error as Result<string>).getErrorValue()
+                    );
             }
         }
 

@@ -28,6 +28,7 @@ export class LoginUseCase implements UseCase<LoginDto, Response> {
     }
 
     async execute(request: LoginDto): Promise<Response> {
+        console.log(request);
         const emailOrError = UserEmail.create(request.email);
         const passwordOrError = UserPassword.create({
             value: request.password,

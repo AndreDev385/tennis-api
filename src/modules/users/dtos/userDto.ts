@@ -5,4 +5,5 @@ export interface UserDto {
     lastName: string;
     isAdmin: boolean;
     canTrack: boolean;
+    isPlayer: boolean;
 }

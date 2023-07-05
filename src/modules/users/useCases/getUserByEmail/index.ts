@@ -1,11 +1,10 @@
 import { sequelizeUserRepo } from "../../repositories";
 import { GetUserByEmailUseCase } from "./getUserByEmail";
+import { GetUserByEmailWithToken } from "./getUserByEmailWithToken";
 import { GetUserByEmailController } from "./getUserController";
 
-const getUserByEmailUseCase = new GetUserByEmailUseCase(sequelizeUserRepo)
-const getUserByEmailController = new GetUserByEmailController(getUserByEmailUseCase);
+const getUserByEmail = new GetUserByEmailUseCase(sequelizeUserRepo);
+const getUserByEmailController = new GetUserByEmailController(getUserByEmail);
+const getUserByEmailWithToken = new GetUserByEmailWithToken(getUserByEmail);
 
-export {
-    getUserByEmailController
-}
-
+export { getUserByEmailController, getUserByEmailWithToken };

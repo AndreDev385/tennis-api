@@ -3,7 +3,7 @@ import config from "../config/config";
 
 const sequelize: Sequelize = config.connection;
 
-export class UserModel extends Model {}
+export class UserModel extends Model { }
 
 UserModel.init(
     {
@@ -41,6 +41,11 @@ UserModel.init(
             allowNull: true,
         },
         isAdmin: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false,
+            allowNull: true,
+        },
+        isPlayer: {
             type: DataTypes.BOOLEAN,
             defaultValue: false,
             allowNull: true,

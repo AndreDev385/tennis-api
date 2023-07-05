@@ -13,6 +13,7 @@ module.exports = {
                 clubId,
                 name: "Valle Arriba Athletic Club",
                 symbol: "VAT",
+                isSubscribed: true,
                 code: "Ax12sH",
             },
             {
@@ -148,6 +149,7 @@ module.exports = {
                 password,
                 firstName: "one",
                 lastName: "player",
+                isPlayer: true,
             },
             {
                 userId: userId2,
@@ -155,6 +157,7 @@ module.exports = {
                 password,
                 firstName: "two",
                 lastName: "player",
+                isPlayer: true,
             },
             {
                 userId: userId3,
@@ -162,6 +165,7 @@ module.exports = {
                 password,
                 firstName: "three",
                 lastName: "player",
+                isPlayer: true,
             },
             {
                 userId: userId4,
@@ -169,6 +173,7 @@ module.exports = {
                 password,
                 firstName: "four",
                 lastName: "player",
+                isPlayer: true,
             },
             {
                 userId: userId5,
@@ -176,6 +181,7 @@ module.exports = {
                 password,
                 firstName: "five",
                 lastName: "player",
+                isPlayer: true,
             },
             {
                 userId: userId6,
@@ -183,6 +189,7 @@ module.exports = {
                 password,
                 firstName: "six",
                 lastName: "player",
+                isPlayer: true,
             },
             {
                 userId: userId7,
@@ -190,6 +197,7 @@ module.exports = {
                 password,
                 firstName: "seven",
                 lastName: "player",
+                isPlayer: true,
             },
             {
                 userId: userId8,
@@ -197,6 +205,7 @@ module.exports = {
                 password,
                 firstName: "eight",
                 lastName: "player",
+                isPlayer: true,
             },
             {
                 userId: userId9,
@@ -204,6 +213,7 @@ module.exports = {
                 password,
                 firstName: "nine",
                 lastName: "player",
+                isPlayer: true,
             },
         ]);
 

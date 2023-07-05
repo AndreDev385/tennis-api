@@ -1,6 +1,7 @@
 import { Club } from "../../domain/club";
 import { ClubDto } from "../../dtos/clubDto";
 import { ClubMap } from "../../mappers/clubMap";
+import { ListQueryDto } from "../../useCases/listClubs/requestListQueryDto";
 import { ClubRepository } from "../clubRepo";
 
 export class SequelizeClubRepository implements ClubRepository {
@@ -22,10 +23,10 @@ export class SequelizeClubRepository implements ClubRepository {
         return ClubMap.toDomain(club);
     }
 
-    async list(query: any = {}): Promise<ClubDto[]> {
+    async list(query: ListQueryDto): Promise<ClubDto[]> {
         const ClubModel = this.models.ClubModel;
 
-        const list = await ClubModel.findAll(query);
+        const list = await ClubModel.findAll({ where: query });
 
         return list;
     }

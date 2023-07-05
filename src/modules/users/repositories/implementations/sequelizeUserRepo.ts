@@ -33,7 +33,6 @@ export class SequelizeUserRepo implements UserRepository {
         const user = await UserModel.findOne({
             where: { email: email.value },
         });
-        console.log(user);
         if (!!user == false) throw new Error("User not found");
 
         return UserMap.toDomain(user);

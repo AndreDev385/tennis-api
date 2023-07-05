@@ -3,24 +3,31 @@ import { UseCaseError } from "../../../../shared/core/UseCaseError";
 
 export namespace CreatePlayerErrors {
     export class PlayerAlreadyExistError extends Result<UseCaseError> {
-        constructor(userId: string) {
+        constructor(playerName: string) {
             super(false, {
-                message: `El usuario con id ${userId} ya existe`,
+                message: `El jugador ${playerName} ya se encuentra registrado.`,
             } as UseCaseError);
         }
     }
 
     export class UserDoesNotExist extends Result<UseCaseError> {
-        constructor(userId: string) {
+        constructor() {
             super(false, {
-                message: `El usuario con id ${userId} no existe o fue eliminado`,
+                message: `El usuario no existe o fue eliminado.`,
             } as UseCaseError);
         }
     }
     export class ClubDoesNotExist extends Result<UseCaseError> {
-        constructor(clubId: string) {
+        constructor(clubName: string) {
             super(false, {
-                message: `El club con id ${clubId} no existe o fue eliminado`,
+                message: `El club ${clubName} no existe o fue eliminado.`,
+            } as UseCaseError);
+        }
+    }
+    export class WrongCode extends Result<UseCaseError> {
+        constructor(code: string) {
+            super(false, {
+                message: `El codigo ${code} no es valido.`,
             } as UseCaseError);
         }
     }

@@ -66,7 +66,7 @@ export class FinishMatch implements UseCase<any, Response> {
             const result = Result.combine([meOrError]);
 
             if (result.isFailure) {
-                return left(Result.fail(result.getErrorValue()));
+                return left(Result.fail<string>(result.getErrorValue()));
             }
 
             const setsArr = request.sets.map((s) => SetMap.toDomain(s));

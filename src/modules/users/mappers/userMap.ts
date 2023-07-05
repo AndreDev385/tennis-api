@@ -8,7 +8,6 @@ import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
 
 export class UserMap implements Mapper<User> {
     public static async toPersistance(user: User) {
-
         let password: string = null;
         if (!!user.password === true) {
             if (user.password.isAlreadyHashed()) {
@@ -25,6 +24,7 @@ export class UserMap implements Mapper<User> {
             firstName: user.firstName.value,
             lastName: user.lastName.value,
             isAdmin: user.isAdmin,
+            isPlayer: user.isPlayer || false,
             canTrack: user.canTrack || false,
             accessToken: user.accessToken || null,
         };
@@ -39,15 +39,19 @@ export class UserMap implements Mapper<User> {
             hashed: true,
         });
 
-        const userOrError = User.create({
-            email: emailOrError.getValue(),
-            firstName: firstNameOrError.getValue(),
-            lastName: lastNameOrError.getValue(),
-            password: passwordOrError.getValue(),
-            accessToken: raw.accessToken,
-            canTrack: raw.canTrack,
-            isAdmin: raw.isAdmin,
-        }, new UniqueEntityID(raw.userId));
+        const userOrError = User.create(
+            {
+                email: emailOrError.getValue(),
+                firstName: firstNameOrError.getValue(),
+                lastName: lastNameOrError.getValue(),
+                password: passwordOrError.getValue(),
+                accessToken: raw.accessToken,
+                canTrack: raw.canTrack,
+                isAdmin: raw.isAdmin,
+                isPlayer: raw.isPlayer,
+            },
+            new UniqueEntityID(raw.userId)
+        );
 
         userOrError.isFailure && console.log(userOrError.getErrorValue());
 
@@ -62,6 +66,7 @@ export class UserMap implements Mapper<User> {
             lastName: user.lastName.value,
             canTrack: user.canTrack,
             isAdmin: user.isAdmin,
+            isPlayer: user.isPlayer,
         };
     }
 }

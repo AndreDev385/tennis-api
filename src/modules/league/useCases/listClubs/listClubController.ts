@@ -12,10 +12,7 @@ export class ListClubsController extends BaseController {
     }
 
     async executeImpl(req: Request, res: Response) {
-
-        const query: ListQueryDto = req.query;
-
-        const result = await this.useCase.execute(query);
+        const result = await this.useCase.execute(req.query);
 
         if (result.isLeft()) {
             return this.fail(res, "Ha ocurrido un error");

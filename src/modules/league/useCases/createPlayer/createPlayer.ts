@@ -16,7 +16,8 @@ type Response = Either<
     | CreatePlayerErrors.ClubDoesNotExist
     | CreatePlayerErrors.PlayerAlreadyExistError
     | CreatePlayerErrors.UserDoesNotExist
-    | Result<any>,
+    | CreatePlayerErrors.WrongCode
+    | Result<string>,
     Result<void>
 >;
 
@@ -46,9 +47,7 @@ export class CreatePlayer
             try {
                 user = await this.userRepo.getUserByUserId(request.userId);
             } catch (error) {
-                return left(
-                    new CreatePlayerErrors.UserDoesNotExist(request.userId)
-                );
+                return left(new CreatePlayerErrors.UserDoesNotExist());
             }
 
             try {
@@ -59,15 +58,18 @@ export class CreatePlayer
                 );
             }
 
+            if (club.code !== request.code) {
+                return left(new CreatePlayerErrors.WrongCode(request.code));
+            }
+
             try {
                 const alreadyExist = await this.playerRepo.exist(
                     request.userId
                 );
-                console.log(alreadyExist);
                 if (alreadyExist) {
                     return left(
                         new CreatePlayerErrors.PlayerAlreadyExistError(
-                            request.userId
+                            user.firstName.value
                         )
                     );
                 }
@@ -83,12 +85,16 @@ export class CreatePlayer
             });
 
             if (playerOrError.isFailure) {
-                return left(playerOrError);
+                return left(
+                    Result.fail<string>(`${playerOrError.getErrorValue()}`)
+                );
             }
 
             player = playerOrError.getValue();
 
+            user.becomePlayer();
             await this.playerRepo.save(player);
+            await this.userRepo.save(user);
 
             return right(Result.ok<void>());
         } catch (error) {

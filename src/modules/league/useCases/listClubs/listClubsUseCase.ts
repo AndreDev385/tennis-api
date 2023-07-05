@@ -7,19 +7,38 @@ import { ListQueryDto } from "./requestListQueryDto";
 
 type Response = Either<AppError.UnexpectedError, Result<Array<ClubDto>>>;
 
-export class ListClubs implements UseCase<ListQueryDto, Response> {
+export class ListClubs implements UseCase<any, Response> {
     private repo: ClubRepository;
 
     constructor(repo: ClubRepository) {
         this.repo = repo;
     }
 
-    async execute(request: ListQueryDto): Promise<Response> {
+    async execute(request: any): Promise<Response> {
         try {
-            const list = await this.repo.list(request);
+            const query: ListQueryDto = {};
+
+            for (const [key, value] of Object.entries(request)) {
+                if (key == "isSubscribed") {
+                    if (value == 'true') {
+                        query.isSubscribed = true;
+                    }
+                    if (value == 'false') {
+                        query.isSubscribed = false;
+                    }
+                }
+                if (key == "symbol") {
+                    query.symbol = value as string;
+                }
+            }
+
+            console.log(query, "QUERY");
+
+            const list = await this.repo.list(query);
+
             return right(Result.ok(list));
         } catch (error) {
-            console.log('error', error)
+            console.log("error", error);
             return left(new AppError.UnexpectedError(error));
         }
     }
