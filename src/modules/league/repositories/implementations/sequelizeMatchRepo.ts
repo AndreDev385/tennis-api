@@ -2,7 +2,6 @@ import { GameMode } from "../../domain/gameMode";
 import { Match } from "../../domain/match";
 import { MatchTracker } from "../../domain/matchTracker";
 import { MatchMap } from "../../mappers/matchMap";
-import { TrackerMap } from "../../mappers/trackerMap";
 import { MatchQuery, MatchRepository } from "../matchRepo";
 import { PlayerRepository } from "../playerRepo";
 import { TrackerRepository } from "../trackerRepo";
@@ -134,8 +133,8 @@ export class SequelizeMatchRepository implements MatchRepository {
                 player3: m.player3Domain,
                 player4: m.player4,
                 category: m.category,
-                isLive: raw.isLive,
-                isFinish: raw.isFinish,
+                isLive: m.isLive,
+                isFinish: m.isFinish,
             })
         );
 
@@ -180,8 +179,8 @@ export class SequelizeMatchRepository implements MatchRepository {
                 player3: m.player3Domain,
                 player4: m.player4,
                 category: m.category,
-                isLive: raw.isLive,
-                isFinish: raw.isFinish,
+                isLive: m.isLive,
+                isFinish: m.isFinish,
             })
         );
 

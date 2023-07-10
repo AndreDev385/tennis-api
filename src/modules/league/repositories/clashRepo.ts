@@ -3,6 +3,7 @@ import { Clash } from "../domain/clubClash";
 export interface ClashQuery {
     categoryId?: string;
     isFinish?: boolean;
+    journey?: string;
 }
 
 export interface ClashRepository {

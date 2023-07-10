@@ -24,6 +24,9 @@ export class ListClash implements UseCase<any, Promise<Response>> {
                 if (key == "isFinish") {
                     query.isFinish = value as boolean;
                 }
+                if (key == "journey") {
+                    query.journey = value as string;
+                }
             }
 
             const list = await this.clashRepo.list(query);

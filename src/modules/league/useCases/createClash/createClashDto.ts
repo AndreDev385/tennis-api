@@ -1,14 +1,10 @@
 export interface CreateClashDto {
     seasonId: string;
     categoryId: string;
-    team1: {
-        clubId: string,
-        name: string;
-    };
-    team2: {
-        clubId: string,
-        name: string;
-    };
+    team1Name: string;
+    team1ClubId: string;
+    team2Name: string;
+    team2ClubId: string;
     journey: string;
     host: string;
 }

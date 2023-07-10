@@ -2,6 +2,7 @@ import { AppError } from "../../../../shared/core/AppError";
 import { Either, Result, left, right } from "../../../../shared/core/Result";
 import { UseCase } from "../../../../shared/core/UseCase";
 import { Category } from "../../domain/category";
+import { ClashId } from "../../domain/clashId";
 import { Club } from "../../domain/club";
 import { Clash } from "../../domain/clubClash";
 import { Journey } from "../../domain/journey";
@@ -21,7 +22,7 @@ type Response = Either<
     | AppError.NotFoundError
     | CreateClashErrors.ClashAlreadyExistError
     | Result<string>,
-    Result<void>
+    Result<ClashId>
 >;
 
 export class CreateClashUseCase implements UseCase<CreateClashDto, Response> {
@@ -69,8 +70,8 @@ export class CreateClashUseCase implements UseCase<CreateClashDto, Response> {
                     this.clubRepo.findById(request.host),
                     this.categoryRepo.findById(request.categoryId),
                     this.seasonRepo.findById(request.seasonId),
-                    this.clubRepo.findById(request.team1.clubId),
-                    this.clubRepo.findById(request.team2.clubId),
+                    this.clubRepo.findById(request.team1ClubId),
+                    this.clubRepo.findById(request.team2ClubId),
                 ]);
             } catch (error) {
                 return left(new AppError.NotFoundError(error));
@@ -78,14 +79,14 @@ export class CreateClashUseCase implements UseCase<CreateClashDto, Response> {
 
             try {
                 const existTeam1 = await this.teamRepo.getTeam(
-                    request.team1.name,
-                    request.team1.clubId
+                    request.team1Name,
+                    request.team1ClubId
                 );
                 team1 = existTeam1;
                 console.log(team1);
             } catch (error) {
                 const teamOrError = Team.create({
-                    name: request.team1.name,
+                    name: request.team1Name,
                     club: club1,
                 });
                 if (teamOrError.isFailure) {
@@ -98,14 +99,14 @@ export class CreateClashUseCase implements UseCase<CreateClashDto, Response> {
 
             try {
                 const existTeam2 = await this.teamRepo.getTeam(
-                    request.team2.name,
-                    request.team2.clubId
+                    request.team2Name,
+                    request.team2ClubId
                 );
                 team2 = existTeam2;
                 console.log(team2);
             } catch (error) {
                 const teamOrError = Team.create({
-                    name: request.team2.name,
+                    name: request.team2Name,
                     club: club2,
                 });
                 if (teamOrError.isFailure) {
@@ -145,7 +146,7 @@ export class CreateClashUseCase implements UseCase<CreateClashDto, Response> {
 
             await this.clashRepo.save(clash);
 
-            return right(Result.ok<void>());
+            return right(Result.ok<ClashId>(clash.clashId));
         } catch (error) {
             return left(new AppError.UnexpectedError(error));
         }

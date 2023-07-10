@@ -14,6 +14,8 @@ export class CreateClashController extends BaseController {
     }
 
     async executeImpl(req: Request, res: Response) {
+        console.log("body: ", req.body);
+        console.log("req: ", req);
         const dto: CreateClashDto = req.body;
 
         const result = await this.usecase.execute(dto);
@@ -47,7 +49,6 @@ export class CreateClashController extends BaseController {
                     );
             }
         }
-
-        return this.created(res);
+        return this.ok(res, { matchId: result.value.getValue().id.toString() });
     }
 }

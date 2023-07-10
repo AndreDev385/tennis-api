@@ -96,8 +96,8 @@ export class MatchMap implements Mapper<Match> {
             player2: match.player2,
             player3: match.player3
                 ? {
-                      playerId: match.player1.playerId.id.toString(),
-                      firstName: match.player1.firstName.value,
+                      playerId: match.player3.playerId.id.toString(),
+                      firstName: match.player3.firstName.value,
                   }
                 : null,
             player4: match.player4 || null,
