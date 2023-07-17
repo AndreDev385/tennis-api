@@ -669,6 +669,16 @@ module.exports = {
                     type: Sequelize.STRING,
                     allowNull: false,
                 },
+                createdAt: {
+                    type: Sequelize.DATE,
+                    allowNull: true,
+                    defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+                },
+                updatedAt: {
+                    type: Sequelize.DATE,
+                    allowNull: true,
+                    defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+                },
             });
 
         const CREATE_TEAM_TABLE = () =>
