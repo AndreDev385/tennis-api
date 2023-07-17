@@ -43,10 +43,10 @@ module.exports = {
         dialect,
         port: 5432,
         dialectOptions: {
-            multipleStatements: true,
-        },
-        ssl: {
-            rejectUnauthorized: false,
+            ssl: {
+                require: true,
+                rejectUnauthorized: false
+            }
         },
         pool: {
             max: 5,
