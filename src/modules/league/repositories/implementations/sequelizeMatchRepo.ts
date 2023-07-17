@@ -30,7 +30,6 @@ export class SequelizeMatchRepository implements MatchRepository {
     }
 
     async save(match: Match): Promise<void> {
-        console.log("save match", match);
         const MatchModel = this.models.MatchModel;
 
         const raw = MatchMap.toPersistance(match);

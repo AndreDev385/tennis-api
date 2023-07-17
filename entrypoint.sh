@@ -10,5 +10,5 @@ echo "Postgres started"
 
 npm run build
 npm run migrate
-npm run seed:prod
+npm run seed
 npm run start

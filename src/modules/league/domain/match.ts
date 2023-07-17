@@ -1,9 +1,10 @@
 import { Guard } from "../../../shared/core/Guard";
 import { Result } from "../../../shared/core/Result";
-import { Entity } from "../../../shared/domain/Entity";
+import { AggregateRoot } from "../../../shared/domain/AggregateRoot";
 import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
 import { Category } from "./category";
 import { ClashId } from "./clashId";
+import { MatchFinished } from "./events/matchFinished";
 import { Mode } from "./gameMode";
 import { GamesPerSet } from "./gamesPerSet";
 import { MatchId } from "./matchId";
@@ -32,7 +33,7 @@ interface MatchProps {
     isFinish?: boolean;
 }
 
-export class Match extends Entity<MatchProps> {
+export class Match extends AggregateRoot<MatchProps> {
     get matchId(): MatchId {
         return MatchId.create(this._id).getValue();
     }
@@ -109,12 +110,16 @@ export class Match extends Entity<MatchProps> {
                     setsWon++;
                 }
             }
+            console.log("setsWon: ", setsWon);
+            if (setsWon >= (Math.floor(this.setsQuantity.value / 2) + 1)) {
 
-            if (setsWon > (Math.floor(this.setsQuantity.value / 2) + 1)) {
+                console.log("true")
                 return true;
             }
+            console.log("false")
             return false
         }
+        return null
     }
 
     public addTracker(tracker: MatchTracker) {
@@ -125,8 +130,12 @@ export class Match extends Entity<MatchProps> {
         this.props.isLive = true;
     }
 
-    public finishMatch() {
+    public finishMatch(sets: Sets, tracker: MatchTracker) {
         this.props.isFinish = true;
+        this.props.isLive = false;
+        this.props.tracker = tracker;
+        this.props.sets = sets;
+        this.addDomainEvent(new MatchFinished(this));
     }
 
     public static create(

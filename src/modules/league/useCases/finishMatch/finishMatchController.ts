@@ -13,6 +13,13 @@ export class FinishMatchController extends BaseController {
     }
 
     async executeImpl(req: Request, res: Response) {
+        try {
+            req.body['tracker'] = JSON.parse(req.body['tracker']);
+            req.body['sets'] = JSON.parse(req.body['sets']);
+        } catch (error) {
+            return this.clientError(res, "JSON invalido");
+        }
+
         const result = await this.usecase.execute(req.body);
 
         if (result.isLeft()) {

@@ -2,10 +2,12 @@ import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
 import { Mapper } from "../../../shared/infra/Mapper";
 import { PlayerId } from "../domain/playerId";
 import { PlayerTracker } from "../domain/playerTracker";
+import { PlayerTrackerDto } from "../dtos/playerTrackerDto";
 
 export class PlayerTrackerMapper implements Mapper<PlayerTracker> {
-    public static toDto(playerTracker: PlayerTracker) {
+    public static toDto(playerTracker: PlayerTracker): PlayerTrackerDto {
         return {
+            playerId: playerTracker.playerId.id.toString(),
             playerTrackerId: playerTracker.playerTrackerId.id.toString(),
             pointsWon: playerTracker.pointsWon,
             pointsWonServing: playerTracker.pointsWonServing,
@@ -35,6 +37,7 @@ export class PlayerTrackerMapper implements Mapper<PlayerTracker> {
     }
 
     public static toPersistance(playerTracker: PlayerTracker) {
+        console.log(playerTracker.playerId, "playerId")
         return {
             playerId: playerTracker.playerId.id.toString(),
             playerTrackerId: playerTracker.playerTrackerId.id.toString(),

@@ -5,7 +5,7 @@ const { v4 } = require("uuid");
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
     async up(queryInterface, Sequelize) {
-        queryInterface.bulkInsert("category", [
+        await queryInterface.bulkInsert("category", [
             {
                 categoryId: v4(),
                 name: "3F",
@@ -59,6 +59,6 @@ module.exports = {
     },
 
     async down(queryInterface, Sequelize) {
-        queryInterface.bulkDelete("category", {});
+        await queryInterface.bulkDelete("category", {});
     },
 };

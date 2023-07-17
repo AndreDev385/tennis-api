@@ -48,6 +48,9 @@ export class CreateMatch
     }
 
     async execute(request: CreateClashMatchsDto): Promise<Response> {
+
+        console.log("length :", request.matchs.length);
+
         let matchs: Array<Match> = [];
         let player1: Player;
         let player3: Player;

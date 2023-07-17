@@ -14,7 +14,12 @@ export class SetMap implements Mapper<Set> {
     }
 
     public static toDomain(raw: any): Set {
-        const object = JSON.parse(raw);
+        let object: any;
+        if (typeof raw == 'string') {
+            object = JSON.parse(raw);
+        } else {
+            object = raw;
+        }
 
         const setOrError = Set.create({
             setWon: object.setWon,

@@ -79,13 +79,12 @@ export class SequelizeClashRepo implements ClashRepository {
             throw new Error("El encuentro no existe.");
         }
 
-        const rawMatchs = await this.matchRepo.getMatchsByClashId(
+        const matchsArr = await this.matchRepo.getMatchsByClashId(
             clashRaw.clashId
         );
         const team1 = await this.teamRepo.getById(clashRaw.team1);
         const team2 = await this.teamRepo.getById(clashRaw.team2);
 
-        const matchsArr = rawMatchs.map((m) => MatchMap.toDomain(m));
         const matchs = Matchs.create(matchsArr);
 
         return ClashMap.toDomain(

@@ -67,50 +67,62 @@ const PlayerTrackerModel = sequelize.define(
         },
         aces: {
             type: DataTypes.INTEGER,
+            defaultValue: 0,
             allowNull: true,
         },
         dobleFaults: {
             type: DataTypes.INTEGER,
+            defaultValue: 0,
             allowNull: true,
         },
         pointsWinnedFirstReturn: {
             type: DataTypes.INTEGER,
+            defaultValue: 0,
             allowNull: true,
         },
         pointsWinnedSecondReturn: {
             type: DataTypes.INTEGER,
+            defaultValue: 0,
             allowNull: true,
         },
         firstReturnIn: {
             type: DataTypes.INTEGER,
+            defaultValue: 0,
             allowNull: true,
         },
         secondReturnIn: {
             type: DataTypes.INTEGER,
+            defaultValue: 0,
             allowNull: true,
         },
         meshPointsWon: {
             type: DataTypes.INTEGER,
+            defaultValue: 0,
             allowNull: true,
         },
         meshPointsLost: {
             type: DataTypes.INTEGER,
+            defaultValue: 0,
             allowNull: true,
         },
         bckgPointsWon: {
             type: DataTypes.INTEGER,
+            defaultValue: 0,
             allowNull: true,
         },
         bckgPointsLost: {
             type: DataTypes.INTEGER,
+            defaultValue: 0,
             allowNull: true,
         },
         winners: {
             type: DataTypes.INTEGER,
+            defaultValue: 0,
             allowNull: true,
         },
         noForcedErrors: {
             type: DataTypes.INTEGER,
+            defaultValue: 0,
             allowNull: true,
         },
     },

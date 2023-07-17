@@ -146,20 +146,24 @@ export class MatchTracker extends Entity<MatchTrackerProps> {
         }
 
         const meOrError = PlayerTracker.createNewPlayerTracker(playerId);
-        let partner: PlayerTracker;
 
         if (meOrError.isFailure) {
             return Result.fail(`${meOrError.getErrorValue()}`);
         }
 
+        let partner: PlayerTracker;
         if (!!partnerId === true) {
+            console.log("enter in if", partnerId);
             const partnerOrError =
                 PlayerTracker.createNewPlayerTracker(partnerId);
             if (partnerOrError.isFailure) {
+                console.log("Is failure", partnerOrError.getErrorValue());
                 return Result.fail(`${partnerOrError.getErrorValue()}`);
             }
-            partner = partnerOrError.getErrorValue();
+            partner = partnerOrError.getValue();
         }
+
+        console.log('partner', partner);
 
         const instance = new MatchTracker({
             matchId: id,
@@ -172,6 +176,8 @@ export class MatchTracker extends Entity<MatchTrackerProps> {
             winBreakPtsChances: 0,
             breakPtsWinned: 0,
         });
+
+        console.log(instance, "Instance created")
 
         return Result.ok(instance);
     }

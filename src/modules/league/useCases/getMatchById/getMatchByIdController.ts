@@ -4,7 +4,6 @@ import { GetMatchById } from "./getMatchById";
 import { AppError } from "../../../../shared/core/AppError";
 
 export class GetMatchByIdController extends BaseController {
-
     usecase: GetMatchById;
 
     constructor(usecase: GetMatchById) {
@@ -15,22 +14,20 @@ export class GetMatchByIdController extends BaseController {
     async executeImpl(req: Request, res: Response) {
         const matchId = req.params.matchId;
 
-        const result = await this.usecase.execute(matchId)
+        const result = await this.usecase.execute(matchId);
 
         if (result.isLeft()) {
-            const error = result.value
+            const error = result.value;
 
             switch (error.constructor) {
                 case AppError.UnexpectedError:
-                    return this.fail(res, error.getErrorValue().message)
+                    return this.fail(res, error.getErrorValue().message);
                 case AppError.NotFoundError:
-                    return this.notFound(res, error.getErrorValue().message)
+                    return this.notFound(res, error.getErrorValue().message);
                 default:
-                    return this.fail(res, error.getErrorValue().message)
+                    return this.fail(res, error.getErrorValue().message);
             }
-
         }
-
-        return this.ok(res, result.value.getValue())
+        return this.ok(res, result.value.getValue());
     }
 }

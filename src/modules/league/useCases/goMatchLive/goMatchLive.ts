@@ -45,6 +45,8 @@ export class GoMatchLive
 
             tracker = trackerOrError.getValue();
 
+            console.log(tracker, "TRACKER DOMAIN AFTER GO LIVE");
+
             match.addTracker(tracker);
             match.goLive();
 

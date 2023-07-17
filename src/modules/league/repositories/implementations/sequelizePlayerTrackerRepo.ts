@@ -24,7 +24,7 @@ export class SequelizePlayerTrackerRepository
         if (exist) {
             await PlayerTrackerModel.update(raw, {
                 where: {
-                    PlayerTrackerId:
+                    playerTrackerId:
                         playerTracker.playerTrackerId.id.toString(),
                 },
             });

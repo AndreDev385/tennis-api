@@ -58,75 +58,93 @@ const TrackerModel = sequelize.define(
 
         rivalPointsWinnedFirstServ: {
             type: DataTypes.INTEGER,
+            defaultValue: 0,
             allowNull: true,
         },
         rivalPointsWinnedSecondServ: {
             type: DataTypes.INTEGER,
+            defaultValue: 0,
             allowNull: true,
         },
         rivalFirstServIn: {
             type: DataTypes.INTEGER,
+            defaultValue: 0,
             allowNull: true,
         },
         rivalSecondServIn: {
             type: DataTypes.INTEGER,
+            defaultValue: 0,
             allowNull: true,
         },
         rivalPointsWinnedFirstReturn: {
             type: DataTypes.INTEGER,
+            defaultValue: 0,
             allowNull: true,
         },
         rivalPointsWinnedSecondReturn: {
             type: DataTypes.INTEGER,
+            defaultValue: 0,
             allowNull: true,
         },
         rivalFirstReturnIn: {
             type: DataTypes.INTEGER,
+            defaultValue: 0,
             allowNull: true,
         },
         rivalSecondReturnIn: {
             type: DataTypes.INTEGER,
+            defaultValue: 0,
             allowNull: true,
         },
 
         rivalAces: {
             type: DataTypes.INTEGER,
+            defaultValue: 0,
             allowNull: true,
         },
         rivalDobleFault: {
             type: DataTypes.INTEGER,
+            defaultValue: 0,
             allowNull: true,
         },
         rivalNoForcedErrors: {
             type: DataTypes.INTEGER,
+            defaultValue: 0,
             allowNull: true,
         },
         rivalWinners: {
             type: DataTypes.INTEGER,
+            defaultValue: 0,
             allowNull: true,
         },
         shortRallyWon: {
             type: DataTypes.INTEGER,
+            defaultValue: 0,
             allowNull: true,
         },
         mediumRallyWon: {
             type: DataTypes.INTEGER,
+            defaultValue: 0,
             allowNull: true,
         },
         longRallyWon: {
             type: DataTypes.INTEGER,
+            defaultValue: 0,
             allowNull: true,
         },
         shortRallyLost: {
             type: DataTypes.INTEGER,
+            defaultValue: 0,
             allowNull: true,
         },
         mediumRallyLost: {
             type: DataTypes.INTEGER,
+            defaultValue: 0,
             allowNull: true,
         },
         longRallyLost: {
             type: DataTypes.INTEGER,
+            defaultValue: 0,
             allowNull: true,
         },
     },

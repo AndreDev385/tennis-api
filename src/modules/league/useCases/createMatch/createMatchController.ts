@@ -17,6 +17,10 @@ export class CreateMatchController extends BaseController {
     async executeImpl(req: Request, res: Response) {
         const dto: CreateClashMatchsDto = req.body;
 
+        if (typeof dto.matchs == 'string') {
+            dto.matchs = JSON.parse(dto.matchs);
+        }
+
         const result = await this.usecase.execute(dto);
 
         if (result.isLeft()) {

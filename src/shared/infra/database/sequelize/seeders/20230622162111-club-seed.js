@@ -290,6 +290,6 @@ module.exports = {
     },
 
     async down(queryInterface, Sequelize) {
-        queryInterface.bulkDelete("club", {});
+        await queryInterface.bulkDelete("club", {});
     },
 };

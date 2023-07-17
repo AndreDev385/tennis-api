@@ -6,6 +6,7 @@ import { Match } from "../../domain/match";
 import { MatchTracker } from "../../domain/matchTracker";
 import { PlayerTracker } from "../../domain/playerTracker";
 import { Sets } from "../../domain/sets";
+import { PlayerTrackerMapper } from "../../mappers/playerTrackerMap";
 import { SetMap } from "../../mappers/setMap";
 import { MatchRepository } from "../../repositories/matchRepo";
 import { TrackerRepository } from "../../repositories/trackerRepo";
@@ -33,26 +34,19 @@ export class FinishMatch implements UseCase<any, Response> {
         let sets: Sets;
         let tracker: MatchTracker;
 
-        let updatedMatch: Match;
-
         try {
-            const meOrError = PlayerTracker.create(
-                { ...(request.tracker.me as any) },
-                new UniqueEntityID(request.tracker.me.playerTrackerId)
-            );
+            me = PlayerTrackerMapper.toDomain(request.tracker.me);
+            if (me == null) {
+                return left(Result.fail<string>("Estadisticas de jugador invalidas"))
+            }
             if (request.tracker.partner) {
-                const partnerOrError = PlayerTracker.create(
-                    { ...(request.tracker.me as any) },
-                    new UniqueEntityID(request.tracker.me.playerTrackerId)
-                );
+                partner = PlayerTrackerMapper.toDomain(request.tracker.partner)
 
-                if (partnerOrError.isFailure) {
+                if (partner == null) {
                     return left(
-                        Result.fail<string>(`${partnerOrError.getErrorValue()}`)
+                        Result.fail<string>(`Estadisticas de jugador invalidas`)
                     );
                 }
-
-                partner = partnerOrError.getValue();
             }
 
             try {
@@ -61,12 +55,6 @@ export class FinishMatch implements UseCase<any, Response> {
                 );
             } catch (error) {
                 return left(new AppError.NotFoundError(error));
-            }
-
-            const result = Result.combine([meOrError]);
-
-            if (result.isFailure) {
-                return left(Result.fail<string>(result.getErrorValue()));
             }
 
             const setsArr = request.sets.map((s) => SetMap.toDomain(s));
@@ -78,7 +66,6 @@ export class FinishMatch implements UseCase<any, Response> {
             }
 
             sets = Sets.create(setsArr);
-            me = meOrError.getValue();
 
             const trackerOrError = MatchTracker.create(
                 {
@@ -98,30 +85,10 @@ export class FinishMatch implements UseCase<any, Response> {
 
             tracker = trackerOrError.getValue();
 
-            updatedMatch = Match.create(
-                {
-                    setsQuantity: match.setsQuantity,
-                    player1: match.player1,
-                    gamesPerSet: match.gamesPerSet,
-                    surface: match.surface,
-                    mode: match.mode,
-                    clashId: match.clashId,
-                    player2: match.player2,
-                    category: match.category,
-                    address: match.address,
-                    player3: match.player3,
-                    player4: match.player4,
-                    superTieBreak: match.superTieBreak,
-                    sets,
-                    tracker,
-                    isLive: false,
-                    isFinish: true,
-                },
-                match.matchId.id
-            ).getValue();
+            match.finishMatch(sets, tracker);
 
-            await this.trackerRepo.save(tracker);
-            await this.matchRepo.save(updatedMatch);
+            await this.trackerRepo.save(match.tracker);
+            await this.matchRepo.save(match);
 
             return right(Result.ok<void>());
         } catch (error) {

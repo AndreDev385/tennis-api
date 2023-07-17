@@ -18,6 +18,7 @@ export class SequelizeTrackerRepository implements TrackerRepository {
         await this.playerTracker.save(tracker.me);
 
         if (!!tracker.partner === true) {
+            console.log("partner exist in domain object")
             await this.playerTracker.save(tracker.partner);
         }
 
@@ -30,6 +31,7 @@ export class SequelizeTrackerRepository implements TrackerRepository {
         if (!!exists == true) {
             await TrackerModel.update(raw, { where: { matchId: raw.matchId } });
         } else {
+            console.log("raw tracker to save", raw);
             const intance = await TrackerModel.create(raw);
             await intance.save();
         }
@@ -45,6 +47,8 @@ export class SequelizeTrackerRepository implements TrackerRepository {
         if (!raw) {
             throw new Error("Estadisticas de partido no encontradas.");
         }
+
+        console.log(raw.partner, "RAW PARTNER ID");
 
         const me = await this.playerTracker.getById(raw.me);
         let partner: any;

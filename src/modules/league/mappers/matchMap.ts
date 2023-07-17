@@ -83,6 +83,7 @@ export class MatchMap implements Mapper<Match> {
             matchId: match.matchId.id.toString(),
             clashId: match.clashId.id.toString(),
             mode: match.mode.value,
+            category: match.category.name,
             setsQuantity: match.setsQuantity.value,
             sets: match.sets.getItems().map((set) => SetMap.toDto(set)),
             gamesPerSet: match.gamesPerSet.value,
@@ -91,19 +92,20 @@ export class MatchMap implements Mapper<Match> {
             surface: match.surface.value,
             player1: {
                 playerId: match.player1.playerId.id.toString(),
-                firstName: match.player1.firstName.value,
+                name: `${match.player1.firstName.value} ${match.player1.lastName.value}`,
             },
             player2: match.player2,
             player3: match.player3
                 ? {
-                      playerId: match.player3.playerId.id.toString(),
-                      firstName: match.player3.firstName.value,
-                  }
+                    playerId: match.player3.playerId.id.toString(),
+                    name: `${match.player3.firstName.value} ${match.player3.lastName.value}`,
+                }
                 : null,
             player4: match.player4 || null,
             tracker: match.tracker ? TrackerMap.toDto(match.tracker) : null,
             isLive: match.isLive,
             isFinish: match.isFinish,
+            matchWon: match.matchWon,
         };
     }
 }
