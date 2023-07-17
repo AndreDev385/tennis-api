@@ -51,7 +51,7 @@ module.exports = {
                     allowNull: true,
                 },
                 accessToken: {
-                    type: Sequelize.STRING(500),
+                    type: Sequelize.STRING(1000),
                     allowNull: true,
                     defaultValue: null,
                 },

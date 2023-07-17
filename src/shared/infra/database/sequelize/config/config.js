@@ -48,12 +48,12 @@ module.exports = {
         host,
         dialect,
         port: 5432,
-        dialectOptions: {
+        dialectOptions: mode == "production" ? {
             ssl: {
                 require: true,
                 rejectUnauthorized: false
             }
-        },
+        }: {},
         pool: {
             max: 5,
             min: 0,
