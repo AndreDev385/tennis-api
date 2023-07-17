@@ -45,6 +45,9 @@ module.exports = {
         dialectOptions: {
             multipleStatements: true,
         },
+        ssl: {
+            rejectUnauthorized: false,
+        },
         pool: {
             max: 5,
             min: 0,
