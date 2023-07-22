@@ -85,10 +85,10 @@ export class FinishMatch implements UseCase<any, Response> {
 
             tracker = trackerOrError.getValue();
 
-            match.finishMatch(sets, tracker);
+            match.finishMatch(sets, tracker, request.superTieBreak);
 
-            await this.trackerRepo.save(match.tracker);
             await this.matchRepo.save(match);
+            await this.trackerRepo.save(match.tracker);
 
             return right(Result.ok<void>());
         } catch (error) {

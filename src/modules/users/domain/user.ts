@@ -7,6 +7,8 @@ import { Guard } from "../../../shared/core/Guard";
 import { AggregateRoot } from "../../../shared/domain/AggregateRoot";
 import { FirstName, LastName } from "./names";
 import { JWTToken } from "./jwt";
+import { UserLoggedIn } from "./events/userLoggedIn";
+import { UserCreated } from "./events/userCreated";
 
 interface UserProps {
     firstName: FirstName;
@@ -80,7 +82,7 @@ export class User extends AggregateRoot<UserProps> {
     }
 
     public setAccessToken(token: JWTToken): void {
-        //this.addDomainEvent(new UserLoggedIn(this));
+        this.addDomainEvent(new UserLoggedIn(this));
         this.props.accessToken = token;
         this.props.lastLogin = new Date();
     }
@@ -101,6 +103,7 @@ export class User extends AggregateRoot<UserProps> {
     }
 
     public static create(props: UserProps, id?: UniqueEntityID): Result<User> {
+        console.log(id, "user constructor\n\n")
         const guardResult = Guard.againstNullOrUndefinedBulk([
             { argument: props.email, argumentName: "firstName" },
             { argument: props.email, argumentName: "lastName" },
@@ -111,6 +114,7 @@ export class User extends AggregateRoot<UserProps> {
             return Result.fail<User>(guardResult.getErrorValue());
         }
 
+        const isNew = !!id == false;
         const user = new User(
             {
                 ...props,
@@ -122,6 +126,10 @@ export class User extends AggregateRoot<UserProps> {
             },
             id
         );
+
+        if (isNew) {
+            user.addDomainEvent(new UserCreated(user));
+        }
 
         return Result.ok<User>(user);
     }

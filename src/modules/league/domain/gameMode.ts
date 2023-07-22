@@ -24,6 +24,10 @@ export class Mode extends ValueObject<ModeProps> {
         return true;
     }
 
+    private constructor(props: ModeProps) {
+        super(props);
+    }
+
     public static create(props: ModeProps): Result<Mode> {
         const guard = Guard.againstNullOrUndefined(props.value, "modo");
 

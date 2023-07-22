@@ -1,11 +1,12 @@
 import { UserId } from "../../users/domain/userId";
-import { Entity } from "../../../shared/domain/Entity";
 import { PlayerId } from "./playerId";
 import { ClubId } from "./clubId";
 import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
 import { Guard } from "../../../shared/core/Guard";
 import { Result } from "../../../shared/core/Result";
 import { FirstName, LastName } from "../../users/domain/names";
+import { AggregateRoot } from "../../../shared/domain/AggregateRoot";
+import { PlayerCreated } from "./events/playerCreated";
 
 interface PlayerProps {
     userId: UserId;
@@ -14,7 +15,7 @@ interface PlayerProps {
     lastName: LastName,
 }
 
-export class Player extends Entity<PlayerProps> {
+export class Player extends AggregateRoot<PlayerProps> {
     get playerId(): PlayerId {
         return PlayerId.create(this._id).getValue();
     }
@@ -35,6 +36,10 @@ export class Player extends Entity<PlayerProps> {
         return this.props.lastName;
     }
 
+    private constructor(props: PlayerProps, id?: UniqueEntityID) {
+        super(props, id);
+    }
+
     public static create(
         props: PlayerProps,
         id?: UniqueEntityID
@@ -50,7 +55,13 @@ export class Player extends Entity<PlayerProps> {
             return Result.fail<Player>(guardResult.getErrorValue());
         }
 
+        const isNew = !!id == false
+
         const player = new Player(props, id);
+
+        if (isNew) {
+            player.addDomainEvent(new PlayerCreated(player))
+        }
 
         return Result.ok<Player>(player);
     }

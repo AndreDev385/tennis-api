@@ -31,7 +31,6 @@ export class TeamMap implements Mapper<Team> {
     }
 
     public static toDto(team: Team): TeamDto {
-        console.log(team)
         return {
             clubName: team.club.name,
             clubSymbol: team.club.symbol,

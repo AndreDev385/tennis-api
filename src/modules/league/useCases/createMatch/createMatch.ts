@@ -110,7 +110,7 @@ export class CreateMatch
                     clashId: clash.clashId,
                     player2: matchData.player2,
                     category: clash.category,
-                    address: clash.host,
+                    address: clash.host.name,
                     player4:
                         matchData.mode == GameMode.double
                             ? matchData.player4

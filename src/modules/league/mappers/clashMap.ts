@@ -43,13 +43,12 @@ export class ClashMap implements Mapper<Clash> {
             team1: clash.team1.teamId.id.toString(),
             team2: clash.team2.teamId.id.toString(),
             journey: clash.journey.value,
-            host: clash.host,
+            host: clash.host.clubId.id.toString(),
             isFinish: clash.isFinish,
         };
     }
 
     public static toDto(clash: Clash): ClashDto {
-        console.log(clash.matchs, "MATCHS IN CLASH")
         return {
             seasonId: clash.seasonId.id.toString(),
             clashId: clash.clashId.id.toString(),
@@ -57,7 +56,7 @@ export class ClashMap implements Mapper<Clash> {
             team1: TeamMap.toDto(clash.team1),
             team2: TeamMap.toDto(clash.team2),
             journey: clash.journey.value,
-            host: clash.host,
+            host: clash.host.name,
             matchs: clash.matchs.map((match) => MatchMap.toDto(match)),
             isFinish: clash.isFinish,
         };

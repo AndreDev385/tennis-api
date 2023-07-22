@@ -120,7 +120,7 @@ export class CreateClashUseCase implements UseCase<CreateClashDto, Response> {
             const clashOrError = Clash.create({
                 team1,
                 team2,
-                host: host.name,
+                host,
                 matchs: Matchs.create(),
                 journey: journey,
                 category: category,
@@ -138,8 +138,10 @@ export class CreateClashUseCase implements UseCase<CreateClashDto, Response> {
             const alreadyCreated = await this.clashRepo.clashExist(
                 team1.teamId.id.toString(),
                 team2.teamId.id.toString(),
-                journey.value
+                journey.value,
+                category.categoryId.id.toString(),
             );
+
             if (alreadyCreated) {
                 return left(new CreateClashErrors.ClashAlreadyExistError());
             }

@@ -4,7 +4,10 @@ import { AggregateRoot } from "../../../shared/domain/AggregateRoot";
 import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
 import { Category } from "./category";
 import { ClashId } from "./clashId";
+import { MatchCreated } from "./events/matchCreated";
 import { MatchFinished } from "./events/matchFinished";
+import { MatchGoesLive } from "./events/matchGoesLive";
+import { MatchPaused } from "./events/matchPaused";
 import { Mode } from "./gameMode";
 import { GamesPerSet } from "./gamesPerSet";
 import { MatchId } from "./matchId";
@@ -104,22 +107,18 @@ export class Match extends AggregateRoot<MatchProps> {
 
     get matchWon(): boolean {
         if (this.isFinish) {
-            let setsWon = 0
-            for (const set of this.sets.getItems()) {
-                if (set.setWon) {
-                    setsWon++;
-                }
-            }
+            let setsWon = this.sets
+                .getItems()
+                .filter((set) => set.setWon == true);
             console.log("setsWon: ", setsWon);
-            if (setsWon >= (Math.floor(this.setsQuantity.value / 2) + 1)) {
-
-                console.log("true")
+            if (setsWon.length >= Math.floor(this.setsQuantity.value / 2) + 1) {
+                console.log("true");
                 return true;
             }
-            console.log("false")
-            return false
+            console.log("false");
+            return false;
         }
-        return null
+        return null;
     }
 
     public addTracker(tracker: MatchTracker) {
@@ -128,14 +127,27 @@ export class Match extends AggregateRoot<MatchProps> {
 
     public goLive() {
         this.props.isLive = true;
+        this.addDomainEvent(new MatchGoesLive(this));
     }
 
-    public finishMatch(sets: Sets, tracker: MatchTracker) {
+    public pauseMatch(sets: Sets, tracker: MatchTracker) {
+        this.props.sets = sets;
+        this.props.tracker = tracker;
+        this.props.isLive = false;
+        this.addDomainEvent(new MatchPaused(this));
+    }
+
+    public finishMatch(sets: Sets, tracker: MatchTracker, superTieBreak: boolean) {
+        this.props.superTieBreak = superTieBreak;
         this.props.isFinish = true;
         this.props.isLive = false;
         this.props.tracker = tracker;
         this.props.sets = sets;
         this.addDomainEvent(new MatchFinished(this));
+    }
+
+    private constructor(props: MatchProps, id?: UniqueEntityID) {
+        super(props, id);
     }
 
     public static create(
@@ -159,6 +171,8 @@ export class Match extends AggregateRoot<MatchProps> {
             return Result.fail<Match>(guardResult.getErrorValue());
         }
 
+        const isNewMatch = !!id == false;
+
         const match = new Match(
             {
                 ...props,
@@ -167,6 +181,10 @@ export class Match extends AggregateRoot<MatchProps> {
             },
             id
         );
+
+        if (isNewMatch) {
+            match.addDomainEvent(new MatchCreated(match));
+        }
 
         return Result.ok<Match>(match);
     }

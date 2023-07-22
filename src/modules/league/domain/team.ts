@@ -29,6 +29,10 @@ export class Team extends Entity<TeamProps> {
         return validTeams.indexOf(value) >= 0;
     }
 
+    private constructor(props: TeamProps, id?: UniqueEntityID) {
+        super(props, id);
+    }
+
     public static create(props: TeamProps, id?: UniqueEntityID): Result<Team> {
         const guard = Guard.againstNullOrUndefinedBulk([
             { argument: props.name, argumentName: "equipo" },

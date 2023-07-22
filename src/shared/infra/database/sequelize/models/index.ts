@@ -10,6 +10,7 @@ import { LeagueModel } from "./League";
 import { ClubModel } from "./Club";
 import { JourneyModel } from "./Journey";
 import { TeamModel } from "./Team";
+import { TeamStatsModel } from "./TeamStats";
 
 const models = {
     UserModel: UserModel,
@@ -24,6 +25,7 @@ const models = {
     ClubModel: ClubModel,
     JourneyModel: JourneyModel,
     TeamModel: TeamModel,
+    TeamStatsModel: TeamStatsModel,
 };
 
 export default models;

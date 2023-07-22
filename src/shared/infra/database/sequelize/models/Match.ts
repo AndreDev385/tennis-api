@@ -2,6 +2,7 @@ import { DataTypes, Sequelize } from "sequelize";
 import config from "../config/config";
 import { ClashModel } from "./ClubClash";
 import { CategoryModel } from "./Category";
+import { dispatchEventsCallback } from "../hooks";
 
 const sequelize: Sequelize = config.connection;
 
@@ -86,6 +87,8 @@ const MatchModel = sequelize.define(
     },
     { tableName: "match" }
 );
+
+//MatchModel.afterUpdate(() => dispatchEventsCallback(MatchModel, 'matchId'))
 
 MatchModel.belongsTo(ClashModel, {
     foreignKey: "clashId",

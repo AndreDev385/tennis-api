@@ -17,6 +17,10 @@ export class Category extends Entity<CategoryProps> {
         return this.props.name;
     }
 
+    private constructor(props: CategoryProps, id?: UniqueEntityID) {
+        super(props, id);
+    }
+
     public static create(
         props: CategoryProps,
         id?: UniqueEntityID,

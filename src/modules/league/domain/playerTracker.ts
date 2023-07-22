@@ -4,9 +4,12 @@ import { Entity } from "../../../shared/domain/Entity";
 import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
 import { PlayerId } from "./playerId";
 import { PlayerTrackerId } from "./playerTrackerId";
+import { SeasonId } from "./seasonId";
 
 interface PlayerTrackerProps {
     playerId: PlayerId;
+    seasonId: SeasonId;
+
     pointsWon: number;
     pointsWonServing: number;
     pointsWonReturning: number;
@@ -36,6 +39,10 @@ interface PlayerTrackerProps {
 export class PlayerTracker extends Entity<PlayerTrackerProps> {
     get playerTrackerId(): PlayerTrackerId {
         return PlayerTrackerId.create(this._id).getValue();
+    }
+
+    get seasonId(): SeasonId {
+        return this.props.seasonId;
     }
 
     get playerId(): PlayerId {
@@ -117,11 +124,17 @@ export class PlayerTracker extends Entity<PlayerTrackerProps> {
         return this.props.pointsWonReturning;
     }
 
+    private constructor(props: PlayerTrackerProps, id?: UniqueEntityID) {
+        super(props, id);
+    }
+
     public static createNewPlayerTracker(
-        playerId: PlayerId
+        playerId: PlayerId,
+        seasonId: SeasonId,
     ): Result<PlayerTracker> {
         const guard = Guard.againstNullOrUndefinedBulk([
-            { argument: playerId, argumentName: "player id" },
+            { argument: playerId, argumentName: "id de jugador" },
+            { argument: seasonId, argumentName: "id de temporada" },
         ]);
 
         if (guard.isFailure) {
@@ -129,6 +142,7 @@ export class PlayerTracker extends Entity<PlayerTrackerProps> {
         }
 
         const result = PlayerTracker.create({
+            seasonId,
             playerId,
             pointsWon: 0,
             pointsWonServing: 0,
@@ -152,7 +166,8 @@ export class PlayerTracker extends Entity<PlayerTrackerProps> {
         id?: UniqueEntityID
     ): Result<PlayerTracker> {
         const guardResult = Guard.againstNullOrUndefinedBulk([
-            { argument: props.playerId, argumentName: "player id" },
+            { argument: props.playerId, argumentName: "id de jugador" },
+            { argument: props.seasonId, argumentName: "id de temporada" },
             { argument: props.pointsWon, argumentName: "puntos ganados" },
             {
                 argument: props.pointsWonServing,

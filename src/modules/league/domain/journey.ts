@@ -31,6 +31,10 @@ export class Journey extends ValueObject<JourneyProps> {
         return validValues.indexOf(value) >= 0;
     }
 
+    private constructor(props: JourneyProps) {
+        super(props);
+    }
+
     public static create(props: JourneyProps): Result<Journey> {
         console.log(props, 'props')
         const guarResult = Guard.againstNullOrUndefined(props.value, "Jornada");

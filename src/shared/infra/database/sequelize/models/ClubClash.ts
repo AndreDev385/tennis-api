@@ -2,7 +2,6 @@ import { DataTypes, Sequelize } from "sequelize";
 import config from "../config/config";
 import { SeasonModel } from "./Season";
 import { CategoryModel } from "./Category";
-import { TeamModel } from "./Team";
 
 const sequelize: Sequelize = config.connection;
 

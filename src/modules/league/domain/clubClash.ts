@@ -1,9 +1,12 @@
 import { Guard } from "../../../shared/core/Guard";
 import { Result } from "../../../shared/core/Result";
-import { Entity } from "../../../shared/domain/Entity";
+import { AggregateRoot } from "../../../shared/domain/AggregateRoot";
 import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
 import { Category } from "./category";
 import { ClashId } from "./clashId";
+import { Club } from "./club";
+import { ClashCreated } from "./events/clashCreated";
+import { ClashFinished } from "./events/clashFinished";
 import { GameMode } from "./gameMode";
 import { Journey } from "./journey";
 import { Match } from "./match";
@@ -17,12 +20,12 @@ interface ClubClashProps {
     team2: Team;
     category: Category;
     journey: Journey;
-    host: string;
+    host: Club;
     matchs: Matchs;
     isFinish?: boolean;
 }
 
-export class Clash extends Entity<ClubClashProps> {
+export class Clash extends AggregateRoot<ClubClashProps> {
     get clashId(): ClashId {
         return ClashId.create(this._id).getValue();
     }
@@ -51,12 +54,26 @@ export class Clash extends Entity<ClubClashProps> {
         return this.props.journey;
     }
 
-    get host(): string {
+    get host(): Club {
         return this.props.host;
     }
 
     get isFinish(): boolean {
         return this.props.isFinish;
+    }
+
+    get isLocal(): boolean {
+        return this.props.team1.club.clubId == this.props.host.clubId;
+    }
+
+    get wonClash(): boolean {
+        const result = this.matchs.filter((match) => match.matchWon == true);
+        return result.length > 2;
+    }
+
+    public finishClash() {
+        this.props.isFinish = true;
+        this.addDomainEvent(new ClashFinished(this));
     }
 
     public createMatchs(matchs: Matchs) {
@@ -86,6 +103,10 @@ export class Clash extends Entity<ClubClashProps> {
         this.props.matchs = matchs;
     }
 
+    private constructor(props: ClubClashProps, id?: UniqueEntityID) {
+        super(props, id);
+    }
+
     public static create(
         props: ClubClashProps,
         id?: UniqueEntityID
@@ -104,10 +125,16 @@ export class Clash extends Entity<ClubClashProps> {
             return Result.fail<Clash>(guardResult.getErrorValue());
         }
 
+        const isNew = !!id == false;
+
         const clash = new Clash(
             { ...props, isFinish: props.isFinish || false },
             id
         );
+
+        if (isNew) {
+            clash.addDomainEvent(new ClashCreated(clash));
+        }
 
         return Result.ok<Clash>(clash);
     }

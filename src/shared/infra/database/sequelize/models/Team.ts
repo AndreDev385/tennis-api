@@ -1,7 +1,6 @@
 import { DataTypes, Sequelize } from "sequelize";
 import config from "../config/config";
 import { ClubModel } from "./Club";
-import { ClashModel } from "./ClubClash";
 
 const sequelize: Sequelize = config.connection;
 

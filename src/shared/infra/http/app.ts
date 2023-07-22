@@ -1,3 +1,4 @@
+import path from "path";
 import http from "http";
 import express from "express";
 import morgan from "morgan";
@@ -5,6 +6,7 @@ import cors from "cors";
 import helmet from "helmet";
 import compression from "compression";
 import { Server } from "socket.io";
+import history from 'connect-history-api-fallback';
 
 import { v1Router } from "./api/v1";
 import { environment } from "../../../config";
@@ -29,7 +31,11 @@ app.use(compression());
 app.use(helmet());
 app.use(morgan("combined"));
 
+
 app.use("/api/v1", v1Router);
+
+app.use(history())
+app.use("/", express.static(path.resolve(__dirname, "../../../../public/admin/dist")))
 
 
 server.listen(environment.port, () => {

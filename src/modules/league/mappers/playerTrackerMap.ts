@@ -2,13 +2,15 @@ import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
 import { Mapper } from "../../../shared/infra/Mapper";
 import { PlayerId } from "../domain/playerId";
 import { PlayerTracker } from "../domain/playerTracker";
+import { SeasonId } from "../domain/seasonId";
 import { PlayerTrackerDto } from "../dtos/playerTrackerDto";
 
 export class PlayerTrackerMapper implements Mapper<PlayerTracker> {
     public static toDto(playerTracker: PlayerTracker): PlayerTrackerDto {
         return {
-            playerId: playerTracker.playerId.id.toString(),
             playerTrackerId: playerTracker.playerTrackerId.id.toString(),
+            playerId: playerTracker.playerId.id.toString(),
+            seasonId: playerTracker.seasonId.id.toString(),
             pointsWon: playerTracker.pointsWon,
             pointsWonServing: playerTracker.pointsWonServing,
             pointsWonReturning: playerTracker.pointsWonReturning,
@@ -37,9 +39,9 @@ export class PlayerTrackerMapper implements Mapper<PlayerTracker> {
     }
 
     public static toPersistance(playerTracker: PlayerTracker) {
-        console.log(playerTracker.playerId, "playerId")
         return {
             playerId: playerTracker.playerId.id.toString(),
+            seasonId: playerTracker.seasonId.id.toString(),
             playerTrackerId: playerTracker.playerTrackerId.id.toString(),
             pointsWon: playerTracker.pointsWon,
             pointsWonServing: playerTracker.pointsWonServing,
@@ -70,9 +72,11 @@ export class PlayerTrackerMapper implements Mapper<PlayerTracker> {
 
     public static toDomain(raw: any): PlayerTracker {
         const playerId = PlayerId.create(new UniqueEntityID(raw.playerId));
+        const seasonId = SeasonId.create(new UniqueEntityID(raw.seasonId));
 
         const playerTrackerOrError = PlayerTracker.create(
             {
+                seasonId: seasonId.getValue(),
                 playerId: playerId.getValue(),
                 pointsWon: raw.pointsWon,
                 pointsWonServing: raw.pointsWonServing,

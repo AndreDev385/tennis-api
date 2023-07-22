@@ -46,6 +46,7 @@ export class SequelizeMatchRepository implements MatchRepository {
             const instance = await MatchModel.create(raw);
             await instance.save();
         }
+        //dispatchEventsCallback(MatchModel, "matchId");
     }
 
     async getMatchById(matchId: string): Promise<Match> {
@@ -71,8 +72,7 @@ export class SequelizeMatchRepository implements MatchRepository {
         try {
             tracker = await this.trackerRepo.findTrackerByMatchId(matchId);
         } catch (e) {
-            console.log(e)
-            tracker = null
+            tracker = null;
         }
 
         return MatchMap.toDomain({

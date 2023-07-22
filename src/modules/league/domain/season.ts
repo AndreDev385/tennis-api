@@ -17,6 +17,10 @@ export class Season extends Entity<SeasonProps> {
         return this.props.name;
     }
 
+    private constructor(props: SeasonProps, id?: UniqueEntityID) {
+        super(props, id);
+    }
+
     public static create(
         props: SeasonProps,
         id?: UniqueEntityID,

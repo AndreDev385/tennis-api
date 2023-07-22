@@ -1,4 +1,6 @@
+import path from "path";
 import { AuthService } from "../../../../modules/users/services/auth/authService";
+import multer from 'multer';
 
 export class Middleware {
     private authService: AuthService;
@@ -41,4 +43,13 @@ export class Middleware {
             }
         };
     }
+
+    public uploadImageHandler = multer({
+        storage: multer.diskStorage({}),
+        fileFilter: (req, file, cb) => {
+            const ext = path.extname(file.originalname)
+            console.log("Extension", ext)
+            cb(null, true);
+        }
+    })
 }

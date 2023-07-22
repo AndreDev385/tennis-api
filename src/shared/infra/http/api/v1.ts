@@ -9,8 +9,10 @@ import {
     clashRouter,
     playerRoute,
     matchRouter,
+    eventRouter,
 } from "../../../../modules/league/infra/http/routes";
 import { utilsRouter } from "../../../../modules/league/infra/http/routes/utils";
+import { teamRouter } from "../../../../modules/league/infra/http/routes/team";
 
 const v1Router = express.Router();
 
@@ -28,5 +30,7 @@ v1Router.use("/season", seasonRouter);
 v1Router.use("/clash", clashRouter);
 v1Router.use("/player", playerRoute);
 v1Router.use("/utils", utilsRouter);
+v1Router.use("/event", eventRouter);
+v1Router.use("/team", teamRouter);
 
 export { v1Router };

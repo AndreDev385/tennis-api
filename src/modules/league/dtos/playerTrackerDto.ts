@@ -1,5 +1,6 @@
 export interface PlayerTrackerDto {
     playerId: string;
+    seasonId: string;
     playerTrackerId: string;
     pointsWon: number;
     pointsWonServing: number;
