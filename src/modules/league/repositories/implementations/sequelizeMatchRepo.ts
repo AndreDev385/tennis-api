@@ -34,6 +34,8 @@ export class SequelizeMatchRepository implements MatchRepository {
 
         const raw = MatchMap.toPersistance(match);
 
+        console.log(raw.isCancelled, "[IS CANCELLED IN SAVE]");
+
         const exist = await MatchModel.findOne({
             where: { matchId: match.matchId.id.toString() },
         });
@@ -46,7 +48,6 @@ export class SequelizeMatchRepository implements MatchRepository {
             const instance = await MatchModel.create(raw);
             await instance.save();
         }
-        //dispatchEventsCallback(MatchModel, "matchId");
     }
 
     async getMatchById(matchId: string): Promise<Match> {
@@ -93,6 +94,7 @@ export class SequelizeMatchRepository implements MatchRepository {
             category: raw.category,
             isLive: raw.isLive,
             isFinish: raw.isFinish,
+            isCancelled: raw.isCancelled,
         });
     }
 
@@ -134,6 +136,7 @@ export class SequelizeMatchRepository implements MatchRepository {
                 category: m.category,
                 isLive: m.isLive,
                 isFinish: m.isFinish,
+                isCancelled: m.isCancelled,
             })
         );
 
@@ -180,6 +183,7 @@ export class SequelizeMatchRepository implements MatchRepository {
                 category: m.category,
                 isLive: m.isLive,
                 isFinish: m.isFinish,
+                isCancelled: m.isCancelled,
             })
         );
 

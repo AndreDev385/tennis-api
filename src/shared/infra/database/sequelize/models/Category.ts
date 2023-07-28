@@ -16,6 +16,10 @@ const CategoryModel = sequelize.define(
             type: DataTypes.STRING,
             allowNull: false,
         },
+        fullName: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
     },
     { tableName: "category" }
 );

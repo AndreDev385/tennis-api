@@ -3,6 +3,8 @@ import { SeasonDto } from "../dtos/seasonDto";
 
 export interface SeasonQuery {
     league?: string;
+    isCurrentSeason?: boolean;
+    isFinish?: boolean;
 }
 
 export interface SeasonRepository {

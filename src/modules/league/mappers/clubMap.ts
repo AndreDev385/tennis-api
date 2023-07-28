@@ -30,12 +30,13 @@ export class ClubMap implements Mapper<Club> {
         };
     }
 
-    public static toDto(club: Club): ClubDto {
+    public static toDto(club: Club, sendCode: boolean): ClubDto {
         return {
             name: club.name,
-            code: club.code,
+            symbol: club.symbol,
             clubId: club.clubId.id.toString(),
             isSubscribed: club.isSubscribed,
+            code: sendCode ? club.code : undefined
         };
     }
 }

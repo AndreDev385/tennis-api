@@ -8,12 +8,15 @@ import {
     getUserByEmailWithToken,
 } from "../../../useCases/getUserByEmail";
 import { middleware } from "../../../../../shared/infra/http";
+import { adminLoginController } from "../../../useCases/adminLogin";
 
 const userRouter = express.Router();
 
 userRouter.post("/", (req, res) => createUserController.execute(req, res));
 
 userRouter.post("/login", (req, res) => loginController.execute(req, res));
+
+userRouter.post("/admin/login", (req, res) => adminLoginController.execute(req, res));
 
 userRouter.post("/forget-password", (req, res) =>
     forgetPasswordController.execute(req, res)

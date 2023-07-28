@@ -5,8 +5,9 @@ import { CategoryDto } from "../dtos/categoryDto";
 
 export class CategoryMap implements Mapper<Category> {
     public static toDomain(raw: CategoryDto): Category {
+
         const categoryOrError = Category.create(
-            { name: raw.name },
+            { name: raw.name, fullName: raw.fullName },
             new UniqueEntityID(raw.categoryId)
         );
 
@@ -18,6 +19,7 @@ export class CategoryMap implements Mapper<Category> {
     public static toDto(category: Category): CategoryDto {
         return {
             name: category.name,
+            fullName: category.fullName,
             categoryId: category.categoryId.id.toString(),
         };
     }

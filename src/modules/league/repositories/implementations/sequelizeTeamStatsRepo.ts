@@ -1,4 +1,3 @@
-import { throws } from "assert";
 import { TeamStats } from "../../domain/teamStats";
 import { TeamStatsMap } from "../../mappers/teamStatsMap";
 import { TeamStatsQuery, TeamStatsRepository } from "../teamStatsRepo";
@@ -17,7 +16,8 @@ export class SequelizeTeamStatsRepository implements TeamStatsRepository {
             where: { teamStatsId: teamStats.teamStatsId.id.toString() },
         });
 
-        const raw = TeamStatsMap.toDto(teamStats);
+        const raw = TeamStatsMap.toPersistance(teamStats);
+
         if (!!exist == true) {
             await TeamStatsModel.update(raw, {
                 where: { teamStatsId: raw.teamStatsId },

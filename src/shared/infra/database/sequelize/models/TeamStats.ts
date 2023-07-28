@@ -32,6 +32,7 @@ const TeamStatsModel = sequelize.define(
             type: DataTypes.STRING,
             allowNull: false,
         },
+        //games
         gamesWonAsLocal: {
             type: DataTypes.INTEGER,
             allowNull: false,
@@ -81,6 +82,31 @@ const TeamStatsModel = sequelize.define(
         superTieBreaksPlayedAsVisitor: {
             type: DataTypes.INTEGER,
             allowNull: false,
+        },
+        // matchs
+        matchWonAsLocal: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
+        matchLostAsLocal: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
+        matchPlayedAsLocal: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
+        matchWonAsVisitor: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
+        matchLostAsVisitor: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
+        matchPlayedAsVisitor: {
+            type: DataTypes.INTEGER,
+            allowNull: false
         },
         // match won with first set won
         matchsWonWithFirstSetWonAsLocal: {

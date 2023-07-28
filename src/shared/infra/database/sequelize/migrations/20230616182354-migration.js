@@ -1,6 +1,6 @@
 "use strict";
 
-const { DataTypes } = require("sequelize");
+const { Sequelize } = require("sequelize");
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -117,6 +117,10 @@ module.exports = {
                     type: Sequelize.STRING,
                     allowNull: false,
                 },
+                fullName: {
+                    type: Sequelize.STRING,
+                    allowNull: false,
+                },
                 createdAt: {
                     type: Sequelize.DATE,
                     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
@@ -207,6 +211,14 @@ module.exports = {
                 },
                 name: {
                     type: Sequelize.STRING,
+                    allowNull: false,
+                },
+                isFinish: {
+                    type: Sequelize.BOOLEAN,
+                    allowNull: false,
+                },
+                isCurrentSeason: {
+                    type: Sequelize.BOOLEAN,
                     allowNull: false,
                 },
                 createdAt: {
@@ -346,6 +358,10 @@ module.exports = {
                     defaultValue: false,
                 },
                 isFinish: {
+                    type: Sequelize.BOOLEAN,
+                    defaultValue: false,
+                },
+                isCancelled: {
                     type: Sequelize.BOOLEAN,
                     defaultValue: false,
                 },
@@ -679,6 +695,14 @@ module.exports = {
                         key: "clubId",
                     },
                 },
+                categoryId: {
+                    type: Sequelize.UUID,
+                    allowNull: false,
+                    references: {
+                        model: "category",
+                        key: "categoryId",
+                    }
+                },
                 name: {
                     type: Sequelize.STRING,
                     allowNull: false,
@@ -697,13 +721,13 @@ module.exports = {
             "teamStats",
             {
                 teamStatsId: {
-                    type: DataTypes.UUID,
-                    defaultValue: DataTypes.UUIDV4,
+                    type: Sequelize.UUID,
+                    defaultValue: Sequelize.UUIDV4,
                     allowNull: false,
                     primaryKey: true,
                 },
                 teamId: {
-                    type: DataTypes.UUID,
+                    type: Sequelize.UUID,
                     allowNull: false,
                     references: {
                         model: "team",
@@ -711,7 +735,7 @@ module.exports = {
                     },
                 },
                 seasonId: {
-                    type: DataTypes.UUID,
+                    type: Sequelize.UUID,
                     allowNull: false,
                     references: {
                         model: "season",
@@ -719,91 +743,116 @@ module.exports = {
                     },
                 },
                 journey: {
-                    type: DataTypes.STRING,
+                    type: Sequelize.STRING,
                     allowNull: false,
                 },
                 gamesWonAsLocal: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 gamesPlayedAsLocal: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 gamesWonAsVisitor: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 gamesPlayedAsVisitor: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 //sets
                 setsWonAsLocal: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 setsPlayedAsLocal: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 setsWonAsVisitor: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 setsPlayedAsVisitor: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 // super tie-break
                 superTieBreaksWonAsLocal: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 superTieBreaksPlayedAsLocal: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 superTieBreaksWonAsVisitor: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 superTieBreaksPlayedAsVisitor: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
+                },
+                // matchs
+                matchWonAsLocal: {
+                    type: Sequelize.INTEGER,
+                    allowNull: false
+                },
+                matchLostAsLocal: {
+                    type: Sequelize.INTEGER,
+                    allowNull: false
+                },
+                matchPlayedAsLocal: {
+                    type: Sequelize.INTEGER,
+                    allowNull: false
+                },
+                matchWonAsVisitor: {
+                    type: Sequelize.INTEGER,
+                    allowNull: false
+                },
+                matchLostAsVisitor: {
+                    type: Sequelize.INTEGER,
+                    allowNull: false
+                },
+                matchPlayedAsVisitor: {
+                    type: Sequelize.INTEGER,
+                    allowNull: false
                 },
                 // match won with first set won
                 matchsWonWithFirstSetWonAsLocal: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 matchsPlayedWithFirstSetWonAsLocal: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 matchsWonWithFirstSetWonAsVisitor: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 matchsPlayedWithFirstSetWonAsVisitor: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 // clash won
                 clashWonAsLocal: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 clashPlayedAsLocal: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 clashWonAsVisitor: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 clashPlayedAsVisitor: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 createdAt: {

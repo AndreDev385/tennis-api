@@ -24,6 +24,15 @@ export interface StatsDto {
     superTieBreaksPlayedAsVisitor: number;
     totalSuperTieBreaksWon: number;
     totalSuperTieBreaksPlayed: number;
+    // Match
+    matchWonAsLocal: number;
+    matchLostAsLocal: number;
+    matchPlayedAsLocal: number;
+    matchWonAsVisitor: number;
+    matchLostAsVisitor: number;
+    matchPlayedAsVisitor: number;
+    totalMatchWon: number;
+    totalMatchPlayed: number;
     // match won with first set won
     matchsWonWithFirstSetWonAsLocal: number;
     matchsPlayedWithFirstSetWonAsLocal: number;

@@ -19,6 +19,8 @@ module.exports = {
                 seasonId,
                 leagueId,
                 name: "Temporada 2 2023",
+                isCurrentSeason: true,
+                isFinish: false,
             },
         ]);
 

@@ -1,5 +1,9 @@
+import { CategoryDto } from "./categoryDto";
+import { ClubDto } from "./clubDto";
+
 export interface TeamDto {
+    teamId: string;
     name: string;
-    clubName: string;
-    clubSymbol: string;
+    club: ClubDto;
+    category: CategoryDto
 }

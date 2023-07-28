@@ -72,6 +72,7 @@ export class LoginUseCase implements UseCase<LoginDto, Response> {
                     email: user.email.value,
                     canTrack: user.canTrack,
                     isAdmin: user.isAdmin,
+                    isPlayer: user.isPlayer,
                 });
 
                 user.setAccessToken(accessToken);
