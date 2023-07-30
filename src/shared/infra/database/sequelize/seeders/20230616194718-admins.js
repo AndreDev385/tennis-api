@@ -21,6 +21,24 @@ module.exports = {
                 canTrack: true,
                 isAdmin: true,
             },
+            {
+                userId: v4(),
+                email: "joseraul333@gmail.com",
+                password,
+                firstName: "Raul",
+                lastName: "Peña",
+                canTrack: true,
+                isAdmin: true,
+            },
+            {
+                userId: v4(),
+                email: "onthecourt.academy@gmail.com",
+                password,
+                firstName: "Riccardo",
+                lastName: "Gonzales",
+                canTrack: true,
+                isAdmin: true,
+            },
         ]);
     },
 

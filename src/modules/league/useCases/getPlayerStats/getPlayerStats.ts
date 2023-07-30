@@ -56,6 +56,8 @@ export class GetPlayerStats
                 query.season ?? ""
             );
 
+            console.log("LIST", list);
+
             if (list.length === 0) {
                 return left(new AppError.NotFoundError("No cuentas con estadisticas registradas"))
             }
