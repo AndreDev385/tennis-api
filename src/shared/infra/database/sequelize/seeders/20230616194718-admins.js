@@ -20,6 +20,8 @@ module.exports = {
                 lastName: "Izarra",
                 canTrack: true,
                 isAdmin: true,
+                createdAt: new Date(),
+                updatedAt: new Date(),
             },
             {
                 userId: v4(),
@@ -29,6 +31,8 @@ module.exports = {
                 lastName: "Peña",
                 canTrack: true,
                 isAdmin: true,
+                createdAt: new Date(),
+                updatedAt: new Date(),
             },
             {
                 userId: v4(),
@@ -38,6 +42,8 @@ module.exports = {
                 lastName: "Gonzales",
                 canTrack: true,
                 isAdmin: true,
+                createdAt: new Date(),
+                updatedAt: new Date(),
             },
         ]);
     },
