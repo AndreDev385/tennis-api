@@ -61,10 +61,12 @@ module.exports = {
                 },
                 createdAt: {
                     type: Sequelize.DATE,
+                    allowNull: true,
                     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
                 updatedAt: {
                     type: Sequelize.DATE,
+                    allowNull: true,
                     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
             });
@@ -96,10 +98,12 @@ module.exports = {
                     defaultValue: false,
                 },
                 createdAt: {
+                    allowNull: true,
                     type: Sequelize.DATE,
                     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
                 updatedAt: {
+                    allowNull: true,
                     type: Sequelize.DATE,
                     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
@@ -122,10 +126,12 @@ module.exports = {
                     allowNull: false,
                 },
                 createdAt: {
+                    allowNull: true,
                     type: Sequelize.DATE,
                     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
                 updatedAt: {
+                    allowNull: true,
                     type: Sequelize.DATE,
                     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
@@ -161,9 +167,11 @@ module.exports = {
                 },
                 createdAt: {
                     type: Sequelize.DATE,
+                    allowNull: true,
                     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
                 updatedAt: {
+                    allowNull: true,
                     type: Sequelize.DATE,
                     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
@@ -182,10 +190,12 @@ module.exports = {
                     allowNull: false,
                 },
                 createdAt: {
+                    allowNull: true,
                     type: Sequelize.DATE,
                     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
                 updatedAt: {
+                    allowNull: true,
                     type: Sequelize.DATE,
                     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
@@ -222,10 +232,12 @@ module.exports = {
                     allowNull: false,
                 },
                 createdAt: {
+                    allowNull: true,
                     type: Sequelize.DATE,
                     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
                 updatedAt: {
+                    allowNull: true,
                     type: Sequelize.DATE,
                     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
@@ -276,10 +288,12 @@ module.exports = {
                     defaultValue: false,
                 },
                 createdAt: {
+                    allowNull: true,
                     type: Sequelize.DATE,
                     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
                 updatedAt: {
+                    allowNull: true,
                     type: Sequelize.DATE,
                     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
@@ -366,10 +380,12 @@ module.exports = {
                     defaultValue: false,
                 },
                 createdAt: {
+                    allowNull: true,
                     type: Sequelize.DATE,
                     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
                 updatedAt: {
+                    allowNull: true,
                     type: Sequelize.DATE,
                     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
@@ -518,10 +534,12 @@ module.exports = {
                     allowNull: true,
                 },
                 createdAt: {
+                    allowNull: true,
                     type: Sequelize.DATE,
                     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
                 updatedAt: {
+                    allowNull: true,
                     type: Sequelize.DATE,
                     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
@@ -654,10 +672,12 @@ module.exports = {
                     allowNull: true,
                 },
                 createdAt: {
+                    allowNull: true,
                     type: Sequelize.DATE,
                     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
                 updatedAt: {
+                    allowNull: true,
                     type: Sequelize.DATE,
                     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
@@ -670,10 +690,12 @@ module.exports = {
                     allowNull: false,
                 },
                 createdAt: {
+                    allowNull: true,
                     type: Sequelize.DATE,
                     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
                 updatedAt: {
+                    allowNull: true,
                     type: Sequelize.DATE,
                     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
@@ -708,10 +730,12 @@ module.exports = {
                     allowNull: false,
                 },
                 createdAt: {
+                    allowNull: true,
                     type: Sequelize.DATE,
                     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
                 updatedAt: {
+                    allowNull: true,
                     type: Sequelize.DATE,
                     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
@@ -856,10 +880,12 @@ module.exports = {
                     allowNull: false,
                 },
                 createdAt: {
+                    allowNull: true,
                     type: Sequelize.DATE,
                     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
                 updatedAt: {
+                    allowNull: true,
                     type: Sequelize.DATE,
                     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
