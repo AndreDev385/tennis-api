@@ -1,0 +1,31 @@
+.row{
+    margin-right: 0rem !important;
+    height: 100vh;
+}
+
+.login-container{
+    padding: 5rem !important;
+}
+
+.login-img-wrap{
+    background: linear-gradient(0deg, rgba(47, 47, 47, 0.3), rgba(0, 0, 0, 0.3)), url("src/assets/img/tennis-login.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    h1{
+        color: #fff;
+        position: absolute;
+        bottom: 3rem;
+        right: 3rem;
+    }
+}
+
+// mobiles
+@media only screen and (max-width: 576px){
+    
+    .login-img-wrap{
+        background: none;
+        h1{
+            display: none;
+        }
+    }
+}

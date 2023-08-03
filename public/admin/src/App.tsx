@@ -1,14 +1,18 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import Login from './components/login/Login'
+// import Footer from './layouts/footer/Footer'
 
 const router = createBrowserRouter([
     {
-        path: "/",
-        element: <h1>Hello World</h1>
-    },
-    {
-        path: "/dashboard",
-        element: <h1>DashBoard</h1>
-    },
+        path: '/',
+        // element: <Footer />,
+        children: [
+            {
+                path: '/',
+                element: <Login />
+            }
+        ]
+    }
 ])
 
 
