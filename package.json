@@ -6,7 +6,7 @@
     "scripts": {
         "build:server": "npx tsc",
         "build:public": "cd ./public/admin && npm i && npm run build",
-        "build": "npm run build:server",
+        "build": "npm run build:server && npm run build:public",
         "db:create:dev": "cross-env NODE_ENV=development node scripts/db/create",
         "migrate": "npx sequelize-cli db:migrate",
         "seed": "npx sequelize-cli db:seed:all",
