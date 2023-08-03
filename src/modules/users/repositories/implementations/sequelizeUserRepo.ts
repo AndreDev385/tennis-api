@@ -1,7 +1,7 @@
 import { UserEmail } from "../../domain/email";
 import { User } from "../../domain/user.js";
 import { UserMap } from "../../mappers/userMap";
-import { UserRepository } from "../userRepo";
+import { UserQuery, UserRepository } from "../userRepo";
 
 export class SequelizeUserRepo implements UserRepository {
     private models: any;
@@ -56,6 +56,15 @@ export class SequelizeUserRepo implements UserRepository {
             await user.save();
             return;
         }
+    }
+
+    async list(query: UserQuery): Promise<User[]> {
+        const UserModel = this.models.UserModel;
+        const rawList = await UserModel.findAll({
+            where: query
+        });
+
+        return rawList.map((raw: any) => UserMap.toDomain(raw))
     }
 
     async getUserByRecoveryPasswordCode(code: string): Promise<User> {

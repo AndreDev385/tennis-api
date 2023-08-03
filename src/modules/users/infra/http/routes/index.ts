@@ -1,6 +1,9 @@
 import express from "express";
 
-import { createUserController } from "../../../useCases/createUser";
+import {
+    createTrackerController,
+    createUserController,
+} from "../../../useCases/createUser";
 import { loginController } from "../../../useCases/login";
 import { forgetPasswordController } from "../../../useCases/forget-password";
 import {
@@ -13,10 +16,17 @@ import {
     changeForgottenPasswordController,
     changePasswordController,
 } from "../../../useCases/changePassword";
+import { listUserController } from "../../../useCases/listUsers";
 
 const userRouter = express.Router();
 
+userRouter.get("/", middleware.ensureAuthenticated(), (req, res) => listUserController.execute(req, res));
+
 userRouter.post("/", (req, res) => createUserController.execute(req, res));
+
+userRouter.post("/tracker", middleware.adminAuthenticated(), (req, res) =>
+    createTrackerController.execute(req, res)
+);
 
 userRouter.post("/login", (req, res) => loginController.execute(req, res));
 
@@ -32,8 +42,10 @@ userRouter.post("/change-forgotten-password", (req, res) =>
     changeForgottenPasswordController.execute(req, res)
 );
 
-userRouter.post("/change-password", middleware.ensureAuthenticated(), (req, res) =>
-    changePasswordController.execute(req, res)
+userRouter.post(
+    "/change-password",
+    middleware.ensureAuthenticated(),
+    (req, res) => changePasswordController.execute(req, res)
 );
 
 userRouter.get("/me", middleware.ensureAuthenticated(), (req, res) =>

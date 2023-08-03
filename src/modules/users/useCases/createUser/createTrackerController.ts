@@ -1,21 +1,23 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 import { BaseController } from "../../../../shared/infra/http/models/BaseController";
+import { DecodedRequest } from "../../infra/http/models/decodedRequest";
 import { CreateUserUseCase } from "./createUserUseCase";
+import { AppError } from "../../../../shared/core/AppError";
 import { CreateUserDto } from "./createUserDto";
 import { TextUtils } from "../../../../shared/utils/TextUtils";
 import { CreateUserErrors } from "./createUserErrors";
-import { AppError } from "../../../../shared/core/AppError";
 import { Result } from "../../../../shared/core/Result";
 
-export class CreateUserController extends BaseController {
-    private useCase: CreateUserUseCase;
+export class CreateTrackerController extends BaseController {
 
-    constructor(useCase: CreateUserUseCase) {
+    private usecase: CreateUserUseCase;
+
+    constructor(usecase: CreateUserUseCase) {
         super();
-        this.useCase = useCase;
+        this.usecase = usecase;
     }
 
-    async executeImpl(req: Request, res: Response): Promise<any> {
+    async executeImpl(req: DecodedRequest, res: Response) {
         let dto: CreateUserDto = req.body as CreateUserDto;
 
         dto = {
@@ -23,9 +25,10 @@ export class CreateUserController extends BaseController {
             lastName: dto.lastName,
             email: TextUtils.sanitize(dto.email),
             password: dto.password,
+            canTrack: true,
         };
 
-        const result = await this.useCase.execute(dto);
+        const result = await this.usecase.execute(dto);
 
         if (result.isLeft()) {
             const error = result.value;
