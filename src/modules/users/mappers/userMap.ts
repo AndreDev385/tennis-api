@@ -23,10 +23,12 @@ export class UserMap implements Mapper<User> {
             password: password,
             firstName: user.firstName.value,
             lastName: user.lastName.value,
-            isAdmin: user.isAdmin,
-            isPlayer: user.isPlayer || false,
+            recoverPasswordCode: user.recoverPasswordCode || null,
             canTrack: user.canTrack || false,
+            isAdmin: user.isAdmin || false,
+            isPlayer: user.isPlayer || false,
             accessToken: user.accessToken || null,
+            isDeleted: user.isDeleted,
         };
     }
 
@@ -45,6 +47,9 @@ export class UserMap implements Mapper<User> {
                 firstName: firstNameOrError.getValue(),
                 lastName: lastNameOrError.getValue(),
                 password: passwordOrError.getValue(),
+                recoverPasswordCode: raw.recoverPasswordCode,
+                isDeleted: raw.isDeleted,
+                lastLogin: raw.lastLogin,
                 accessToken: raw.accessToken,
                 canTrack: raw.canTrack,
                 isAdmin: raw.isAdmin,

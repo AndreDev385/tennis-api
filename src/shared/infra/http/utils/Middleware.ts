@@ -42,6 +42,7 @@ export class Middleware {
     public adminAuthenticated() {
         return async (req, res, next) => {
             const token = req.headers["authorization"];
+            console.log(token, "TOKEN");
             // Confirm that the token was signed with our signature.
             if (token) {
                 const decoded = await this.authService.decodeJWT(token);

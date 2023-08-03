@@ -42,7 +42,7 @@ export class ForgetPasswordUseCase implements UseCase<ForgetPasswordDto, any> {
 
 			this.mailer.sendEmail({
 				email: request.email,
-				subject: 'Cambiar contrase#a',
+				subject: 'Cambiar contraseña',
 				text: `Codigo: ${user.recoverPasswordCode}`,
 			});
 

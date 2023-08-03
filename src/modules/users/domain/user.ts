@@ -15,7 +15,7 @@ interface UserProps {
     lastName: LastName;
     email: UserEmail;
     password: UserPassword;
-    recoverPasswordCode?: number;
+    recoverPasswordCode?: string;
     isAdmin?: boolean;
     isPlayer?: boolean;
     canTrack?: boolean;
@@ -61,7 +61,7 @@ export class User extends AggregateRoot<UserProps> {
         return !!this.props.canTrack;
     }
 
-    get recoverPasswordCode(): number {
+    get recoverPasswordCode(): string {
         return this.props.recoverPasswordCode;
     }
 
@@ -95,7 +95,13 @@ export class User extends AggregateRoot<UserProps> {
     }
 
     public generateCode(): void {
-        this.props.recoverPasswordCode = Math.floor(Math.random() * 1000000);
+        this.props.recoverPasswordCode = `${Math.floor(Math.random() * 1000000)}`;
+    }
+
+    public changePassword(password: UserPassword) {
+        this.props.password = password;
+        this.props.recoverPasswordCode = null;
+        // this.addDomainEvent();
     }
 
     private constructor(props: UserProps, id?: UniqueEntityID) {
