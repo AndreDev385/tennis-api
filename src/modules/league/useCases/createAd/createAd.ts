@@ -24,7 +24,9 @@ export class CreateAd implements UseCase<any, any> {
         try {
             try {
                 imgUrl = await this.uploadImgService.upload(request.file.path);
+                console.log(imgUrl);
             } catch (error) {
+                console.log(error)
                 return left(
                     Result.fail<string>(
                         "Ha ocurrido un error al subir el archivo"

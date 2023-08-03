@@ -1,6 +1,6 @@
 import { Ad } from "../../domain/ad";
 import { AdMap } from "../../mappers/adMap";
-import { AdRepository } from "../adRepo";
+import { AdQuery, AdRepository } from "../adRepo";
 
 export class SequelizeAdRepository implements AdRepository {
 
@@ -10,10 +10,10 @@ export class SequelizeAdRepository implements AdRepository {
         this.models = models;
     }
 
-    async list(): Promise<Ad[]> {
+    async list(query: AdQuery = {}): Promise<Ad[]> {
         const AdModel = this.models.AdModel
 
-        const list = await AdModel.findAll({});
+        const list = await AdModel.findAll({ where: query });
 
         return list.map((ad: any) => AdMap.toDomain(ad));
     }

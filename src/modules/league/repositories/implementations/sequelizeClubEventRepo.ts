@@ -1,6 +1,6 @@
 import { ClubEvent } from "../../domain/clubEvent";
 import { ClubEventMap } from "../../mappers/clubEventMap";
-import { ClubEventRepository } from "../clubEventRepo";
+import { ClubEventQuery, ClubEventRepository } from "../clubEventRepo";
 
 export class SequelizeClubEventRepository implements ClubEventRepository {
     private models: any;
@@ -9,10 +9,10 @@ export class SequelizeClubEventRepository implements ClubEventRepository {
         this.models = models;
     }
 
-    async list(): Promise<ClubEvent[]> {
+    async list(query: ClubEventQuery): Promise<ClubEvent[]> {
         const ClubEventModel = this.models.ClubEventModel;
 
-        const list = await ClubEventModel.findAll({});
+        const list = await ClubEventModel.findAll({ where: query });
 
         return list.map((event: any) => ClubEventMap.toDomain(event));
     }

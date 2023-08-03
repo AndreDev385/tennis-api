@@ -14,6 +14,7 @@ export class UploadImageCloudinary implements UploadImageServices {
 
     async upload(path: string): Promise<string> {
         const result = await Cloudinary.uploader.upload(path);
+        console.log(result)
         return result.secure_url;
     }
 
