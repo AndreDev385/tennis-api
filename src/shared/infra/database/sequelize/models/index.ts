@@ -11,6 +11,8 @@ import { ClubModel } from "./Club";
 import { JourneyModel } from "./Journey";
 import { TeamModel } from "./Team";
 import { TeamStatsModel } from "./TeamStats";
+import { ClubEventModel } from "./ClubEvent";
+import { AdModel } from "./Ad";
 
 const models = {
     UserModel: UserModel,
@@ -26,6 +28,8 @@ const models = {
     JourneyModel: JourneyModel,
     TeamModel: TeamModel,
     TeamStatsModel: TeamStatsModel,
+    ClubEventModel: ClubEventModel,
+    AdModel: AdModel,
 };
 
 export default models;

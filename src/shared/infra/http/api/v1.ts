@@ -13,6 +13,7 @@ import {
 } from "../../../../modules/league/infra/http/routes";
 import { utilsRouter } from "../../../../modules/league/infra/http/routes/utils";
 import { teamRouter } from "../../../../modules/league/infra/http/routes/team";
+import { adsRouter } from "../../../../modules/league/infra/http/routes/ad";
 
 const v1Router = express.Router();
 
@@ -22,6 +23,7 @@ v1Router.get("/", (req, res) => {
 
 v1Router.use("/users", userRouter);
 
+v1Router.use("/ads", adsRouter);
 v1Router.use("/match", matchRouter);
 v1Router.use("/categories", categoryRouter);
 v1Router.use("/club", clubRouter);
