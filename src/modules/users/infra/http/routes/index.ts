@@ -17,6 +17,7 @@ import {
     changePasswordController,
 } from "../../../useCases/changePassword";
 import { listUserController } from "../../../useCases/listUsers";
+import { validatePasswordCodeController } from "../../../useCases/validatePasswordCode";
 
 const userRouter = express.Router();
 
@@ -40,6 +41,10 @@ userRouter.post("/forget-password", (req, res) =>
 
 userRouter.post("/change-forgotten-password", (req, res) =>
     changeForgottenPasswordController.execute(req, res)
+);
+
+userRouter.post("/validate-password-code", (req, res) =>
+    validatePasswordCodeController.execute(req, res)
 );
 
 userRouter.post(
