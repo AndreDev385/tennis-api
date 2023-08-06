@@ -1,0 +1,26 @@
+.forgot-pwd-container{
+    padding: 3rem;
+    display: grid;
+    grid-template-columns: 50% 50%;
+
+    h6{
+        margin: 1.5rem 0 2rem 0;
+        font-weight: 300;
+    }
+
+    img{
+        width: 80%;
+        margin: 0 auto;
+    }
+}
+
+@media only screen and (max-width: 876px){
+    .forgot-pwd-container{
+        grid-template-columns: 100%;
+        
+        img{
+            margin-bottom: 3rem;
+            width: 60%;
+        }
+    }
+}
