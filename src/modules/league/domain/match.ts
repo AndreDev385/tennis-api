@@ -4,6 +4,7 @@ import { AggregateRoot } from "../../../shared/domain/AggregateRoot";
 import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
 import { Category } from "./category";
 import { ClashId } from "./clashId";
+import { MatchCancelled } from "./events/matchCancelled";
 import { MatchCreated } from "./events/matchCreated";
 import { MatchFinished } from "./events/matchFinished";
 import { MatchGoesLive } from "./events/matchGoesLive";
@@ -34,6 +35,7 @@ interface MatchProps {
     tracker?: MatchTracker;
     isLive?: boolean;
     isFinish?: boolean;
+    isCancelled?: boolean;
 }
 
 export class Match extends AggregateRoot<MatchProps> {
@@ -105,20 +107,18 @@ export class Match extends AggregateRoot<MatchProps> {
         return this.props.isFinish;
     }
 
+    get isCancelled(): boolean {
+        return this.props.isCancelled;
+    }
+
     get matchWon(): boolean {
-        if (this.isFinish) {
-            let setsWon = this.sets
-                .getItems()
-                .filter((set) => set.setWon == true);
-            console.log("setsWon: ", setsWon);
-            if (setsWon.length >= Math.floor(this.setsQuantity.value / 2) + 1) {
-                console.log("true");
-                return true;
-            }
-            console.log("false");
-            return false;
+        let setsWon = this.sets
+            .getItems()
+            .filter((set) => set.setWon == true);
+        if (setsWon.length >= Math.floor(this.setsQuantity.value / 2) + 1) {
+            return true;
         }
-        return null;
+        return false;
     }
 
     public addTracker(tracker: MatchTracker) {
@@ -144,6 +144,16 @@ export class Match extends AggregateRoot<MatchProps> {
         this.props.tracker = tracker;
         this.props.sets = sets;
         this.addDomainEvent(new MatchFinished(this));
+    }
+
+    public cancelMatch(sets: Sets, tracker: MatchTracker, superTieBreak?: boolean) {
+        this.props.superTieBreak = superTieBreak || false;
+        this.props.isFinish = true;
+        this.props.isLive = false;
+        this.props.tracker = tracker;
+        this.props.sets = sets;
+        this.props.isCancelled = true;
+        this.addDomainEvent(new MatchCancelled(this))
     }
 
     private constructor(props: MatchProps, id?: UniqueEntityID) {
@@ -178,6 +188,7 @@ export class Match extends AggregateRoot<MatchProps> {
                 ...props,
                 isLive: props.isLive || false,
                 isFinish: props.isFinish || false,
+                isCancelled: props.isCancelled || false,
             },
             id
         );

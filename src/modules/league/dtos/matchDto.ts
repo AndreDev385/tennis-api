@@ -25,5 +25,6 @@ export interface MatchDto {
     tracker: TrackerDto;
     isLive: boolean;
     isFinish: boolean;
+    isCancelled: boolean;
     matchWon: boolean
 }

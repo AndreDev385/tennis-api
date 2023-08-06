@@ -8,6 +8,47 @@ import { StatsDto } from "../dtos/statsTeamDto";
 
 export class TeamStatsMap implements Mapper<TeamStats> {
 
+    public static toPersistance(stats: TeamStats) {
+        return {
+            teamStatsId: stats.teamStatsId.id.toString(),
+            seasonId: stats.seasonId.id.toString(),
+            journey: stats.journey.value,
+            teamId: stats.teamId.id.toString(),
+            //games
+            gamesWonAsLocal: stats.gamesWonAsLocal,
+            gamesPlayedAsLocal: stats.gamesPlayedAsLocal,
+            gamesWonAsVisitor: stats.gamesWonAsVisitor,
+            gamesPlayedAsVisitor: stats.gamesPlayedAsVisitor,
+            //sets
+            setsWonAsLocal: stats.setsWonAsLocal,
+            setsPlayedAsLocal: stats.setsPlayedAsLocal,
+            setsWonAsVisitor: stats.setsWonAsVisitor,
+            setsPlayedAsVisitor: stats.setsPlayedAsVisitor,
+            // super tie-break
+            superTieBreaksWonAsLocal: stats.superTieBreaksWonAsLocal,
+            superTieBreaksPlayedAsLocal: stats.superTieBreaksPlayedAsLocal,
+            superTieBreaksWonAsVisitor: stats.superTieBreaksWonAsVisitor,
+            superTieBreaksPlayedAsVisitor: stats.superTieBreaksPlayedAsVisitor,
+            // match
+            matchWonAsLocal: stats.matchWonAsLocal,
+            matchLostAsLocal: stats.matchLostAsLocal,
+            matchPlayedAsLocal: stats.matchPlayedAsLocal,
+            matchWonAsVisitor: stats.matchWonAsVisitor,
+            matchLostAsVisitor: stats.matchLostAsVisitor,
+            matchPlayedAsVisitor: stats.matchPlayedAsVisitor,
+            // match won with first set won
+            matchsWonWithFirstSetWonAsLocal: stats.matchsWonWithFirstSetWonAsLocal,
+            matchsPlayedWithFirstSetWonAsLocal: stats.matchsPlayedWithFirstSetWonAsLocal,
+            matchsWonWithFirstSetWonAsVisitor: stats.matchsWonWithFirstSetWonAsVisitor,
+            matchsPlayedWithFirstSetWonAsVisitor: stats.matchsPlayedWithFirstSetWonAsVisitor,
+            // clash won
+            clashWonAsLocal: stats.clashWonAsLocal,
+            clashPlayedAsLocal: stats.clashPlayedAsLocal,
+            clashWonAsVisitor: stats.clashWonAsVisitor,
+            clashPlayedAsVisitor: stats.clashPlayedAsVisitor,
+        }
+    }
+
 
     public static toDto(stats: TeamStats): StatsDto {
         return {
@@ -36,6 +77,15 @@ export class TeamStatsMap implements Mapper<TeamStats> {
             superTieBreaksPlayedAsVisitor: stats.superTieBreaksPlayedAsVisitor,
             totalSuperTieBreaksWon: stats.totalSuperTieBreaksWon,
             totalSuperTieBreaksPlayed: stats.totalSuperTieBreaksPlayed,
+            // match
+            matchWonAsLocal: stats.matchWonAsLocal,
+            matchLostAsLocal: stats.matchLostAsLocal,
+            matchPlayedAsLocal: stats.matchPlayedAsLocal,
+            matchWonAsVisitor: stats.matchWonAsVisitor,
+            matchLostAsVisitor: stats.matchLostAsVisitor,
+            matchPlayedAsVisitor: stats.matchPlayedAsVisitor,
+            totalMatchWon: stats.totalMatchWon,
+            totalMatchPlayed: stats.totalMatchPlayed,
             // match won with first set won
             matchsWonWithFirstSetWonAsLocal: stats.matchsWonWithFirstSetWonAsLocal,
             matchsPlayedWithFirstSetWonAsLocal: stats.matchsPlayedWithFirstSetWonAsLocal,
@@ -78,6 +128,12 @@ export class TeamStatsMap implements Mapper<TeamStats> {
             superTieBreaksPlayedAsVisitor: raw.superTieBreaksPlayedAsVisitor,
             superTieBreaksPlayedAsLocal: raw.superTieBreaksPlayedAsLocal,
             superTieBreaksWonAsVisitor: raw.superTieBreaksWonAsVisitor,
+            matchPlayedAsVisitor: raw.matchPlayedAsVisitor,
+            matchLostAsVisitor: raw.matchLostAsVisitor,
+            matchWonAsVisitor: raw.matchWonAsVisitor,
+            matchPlayedAsLocal: raw.matchPlayedAsLocal,
+            matchLostAsLocal: raw.matchLostAsLocal,
+            matchWonAsLocal: raw.matchWonAsLocal,
             matchsWonWithFirstSetWonAsVisitor: raw.matchsWonWithFirstSetWonAsVisitor,
             matchsWonWithFirstSetWonAsLocal: raw.matchsWonWithFirstSetWonAsLocal,
             matchsPlayedWithFirstSetWonAsLocal: raw.matchsPlayedWithFirstSetWonAsLocal,

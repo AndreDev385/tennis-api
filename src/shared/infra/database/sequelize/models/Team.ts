@@ -1,6 +1,7 @@
 import { DataTypes, Sequelize } from "sequelize";
 import config from "../config/config";
 import { ClubModel } from "./Club";
+import { CategoryModel } from "./Category";
 
 const sequelize: Sequelize = config.connection;
 
@@ -21,6 +22,14 @@ const TeamModel = sequelize.define(
                 key: "clubId",
             },
         },
+        categoryId: {
+            type: DataTypes.UUID,
+            allowNull: false,
+            references: {
+                model: "category",
+                key: "categoryId",
+            }
+        },
         name: {
             type: DataTypes.STRING,
             allowNull: false,
@@ -33,6 +42,12 @@ TeamModel.belongsTo(ClubModel, {
     foreignKey: "clubId",
     targetKey: "clubId",
     as: "club",
+});
+
+TeamModel.belongsTo(CategoryModel, {
+    foreignKey: "categoryId",
+    targetKey: "categoryId",
+    as: "category",
 });
 
 export { TeamModel };

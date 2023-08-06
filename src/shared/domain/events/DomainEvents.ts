@@ -35,7 +35,6 @@ export class DomainEvents {
     private static findMarkedAggregateByID(id: UniqueEntityID): AggregateRoot<any> {
         let found: AggregateRoot<any> = null;
         for (let aggregate of this.markedAggregates) {
-            console.log("saved aggregate", aggregate.id, "db id", id)
             if (aggregate.id.equals(id)) {
                 found = aggregate;
             }
@@ -45,11 +44,7 @@ export class DomainEvents {
     }
 
     public static dispatchEventsForAggregate(id: UniqueEntityID): void {
-        console.log(`markedAggregates `, this.markedAggregates)
         const aggregate = this.findMarkedAggregateByID(id);
-
-        console.log(`dispatch events for aggreagate`, aggregate)
-        console.log(`handlersMap `, this.handlersMap)
 
         if (aggregate) {
             this.dispatchAggregateEvents(aggregate);

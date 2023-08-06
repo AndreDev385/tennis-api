@@ -3,8 +3,7 @@ import { PlayerTrackerMapper } from "../../mappers/playerTrackerMap";
 import { PlayerTrackerRepository } from "../playerTrackerRepo";
 
 export class SequelizePlayerTrackerRepository
-    implements PlayerTrackerRepository
-{
+    implements PlayerTrackerRepository {
     models: any;
 
     constructor(models: any) {
@@ -48,10 +47,20 @@ export class SequelizePlayerTrackerRepository
         return PlayerTrackerMapper.toDomain(playerTracker);
     }
 
-    async getByPlayerId(playerId: string): Promise<PlayerTracker[]> {
+    async getByPlayerId(playerId: string, seasonId?: string): Promise<PlayerTracker[]> {
         const PlayerTrackerModel = this.models.PlayerTrackerModel;
 
-        const list = await PlayerTrackerModel.findAll({ where: { playerId } });
+        let query: any = { playerId };
+        if (seasonId) {
+            query.seasonId = seasonId;
+        }
+
+        const list = await PlayerTrackerModel.findAll(
+            {
+                where: query,
+                order: [['createdAt', "DESC"]],
+            }
+        );
 
         return list.map((t) => PlayerTrackerMapper.toDomain(t));
     }

@@ -5,6 +5,7 @@ export type JWTData = {
     lastName: string;
     canTrack: boolean;
     isAdmin: boolean;
+    isPlayer: boolean;
 }
 
 export type JWTToken = string;

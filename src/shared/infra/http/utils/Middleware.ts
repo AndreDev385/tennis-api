@@ -20,9 +20,6 @@ export class Middleware {
     public ensureAuthenticated() {
         return async (req, res, next) => {
             const token = req.headers["authorization"];
-
-            console.log(token, "TOKEN");
-            // Confirm that the token was signed with our signature.
             if (token) {
                 const decoded = await this.authService.decodeJWT(token);
                 const signatureFailed = !!decoded === false;
@@ -34,8 +31,35 @@ export class Middleware {
                         res
                     );
                 }
+                req.decoded = decoded;
+                return next();
+            } else {
+                return this.endRequest(403, "No autorizado.", res);
+            }
+        };
+    }
 
-                // if the token was found, just continue the request.
+    public adminAuthenticated() {
+        return async (req, res, next) => {
+            const token = req.headers["authorization"];
+            // Confirm that the token was signed with our signature.
+            if (token) {
+                const decoded = await this.authService.decodeJWT(token);
+                const signatureFailed = !!decoded === false;
+                if (signatureFailed) {
+                    return this.endRequest(
+                        403,
+                        "No autorizado.",
+                        res
+                    );
+                }
+                if (!decoded.isAdmin) {
+                    return this.endRequest(
+                        403,
+                        "No autorizado.",
+                        res
+                    );
+                }
                 req.decoded = decoded;
                 return next();
             } else {

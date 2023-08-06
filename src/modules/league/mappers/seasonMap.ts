@@ -8,6 +8,8 @@ export class SeasonMap implements Mapper<Season> {
         const seasonOrError = Season.create(
             {
                 name: raw.name,
+                isCurrentSeason: raw.isCurrentSeason,
+                isFinish: raw.isFinish,
             },
             new UniqueEntityID(raw.seasonId)
         );
@@ -22,6 +24,8 @@ export class SeasonMap implements Mapper<Season> {
         return {
             seasonId: season.seasonId.id.toString(),
             name: season.name,
+            isFinish: season.isFinish,
+            isCurrentSeason: season.isCurrentSeason,
         };
     }
 }

@@ -32,6 +32,7 @@ export class GoMatchLive
         try {
             try {
                 match = await this.matchRepo.getMatchById(request.matchId);
+                console.log(match.tracker, 'Tracker')
             } catch (error) {
                 return left(new AppError.NotFoundError(error));
             }
@@ -40,6 +41,10 @@ export class GoMatchLive
                 clash = await this.clashRepo.getClashById(match.clashId.id.toString())
             } catch (error) {
                 return left(new AppError.NotFoundError(error));
+            }
+
+            if (match.isLive) {
+                return left(Result.fail<string>("El partido ya se encuentra en vivo"))
             }
 
             if (match.tracker === null) {
@@ -56,12 +61,12 @@ export class GoMatchLive
                     );
                 }
                 tracker = trackerOrError.getValue();
+                match.addTracker(tracker);
             }
 
-            match.addTracker(tracker);
             match.goLive();
 
-            await this.trackerRepo.save(tracker);
+            await this.trackerRepo.save(match.tracker);
             await this.matchRepo.save(match);
 
             return right(Result.ok<void>());

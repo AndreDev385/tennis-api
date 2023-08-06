@@ -11,8 +11,21 @@ export class ListSeasons implements UseCase<any, any> {
     constructor(repo: SeasonRepository) {
         this.seasonRepo = repo;
     }
-    async execute(query: SeasonQuery): Promise<Response> {
+    async execute(request: any): Promise<Response> {
         try {
+            const query: SeasonQuery = {};
+
+            for (const [key, value] of Object.entries(request)) {
+                if (key == "isCurrentSeason") {
+                    query[key] = true;
+                }
+                if (key == "isFinish") {
+                    query[key] = true;
+                }
+                if (key == "league") {
+                    query[key] = value as string;
+                }
+            }
             const list = await this.seasonRepo.list(query);
 
             return right(Result.ok(list));

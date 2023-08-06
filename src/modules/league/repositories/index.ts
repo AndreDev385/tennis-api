@@ -51,4 +51,5 @@ export {
     sequelizeTeamRepo,
     sequelizeJourneyRepo,
     sequelizeTeamStatsRepo,
+    sequelizePlayerTrackerRepo,
 };

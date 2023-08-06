@@ -1,6 +1,6 @@
 import { Team } from "../../domain/team";
 import { TeamMap } from "../../mappers/teamMap";
-import { TeamRepository } from "../teamRepo";
+import { TeamQuery, TeamRepository } from "../teamRepo";
 
 export class SequelizeTeamRepository implements TeamRepository {
     models: any;
@@ -13,7 +13,10 @@ export class SequelizeTeamRepository implements TeamRepository {
         const models = this.models;
         return {
             where: {},
-            include: [{ model: models.ClubModel, as: "club" }],
+            include: [
+                { model: models.ClubModel, as: "club" },
+                { model: models.CategoryModel, as: "category" },
+            ],
         };
     }
 
@@ -34,12 +37,15 @@ export class SequelizeTeamRepository implements TeamRepository {
         }
     }
 
-    async getTeam(name: string, clubId: string): Promise<Team> {
+    async getTeam(name: string, clubId: string, categoryId: string): Promise<Team> {
         const TeamModel = this.models.TeamModel;
 
         const query = this.baseQuery();
-        query.where["name"] = name;
-        query.where["clubId"] = clubId;
+        query.where = {
+            name,
+            clubId,
+            categoryId,
+        }
 
         const rawTeam = await TeamModel.findOne(query);
 
@@ -75,4 +81,18 @@ export class SequelizeTeamRepository implements TeamRepository {
 
         return rawList.map((team: any) => TeamMap.toDomain(team));
     }
+
+    async list(query: TeamQuery = {}): Promise<Team[]> {
+        const TeamModel = this.models.TeamModel;
+
+        const baseQuery = this.baseQuery();
+        baseQuery.where = query;
+
+        console.log(baseQuery);
+
+        const rawList = await TeamModel.findAll(baseQuery);
+
+        return rawList.map((team: any) => TeamMap.toDomain(team));
+    }
+
 }

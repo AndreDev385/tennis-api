@@ -46,6 +46,7 @@ export class MatchMap implements Mapper<Match> {
                 category: CategoryMap.toDomain(raw.category),
                 isLive: raw.isLive,
                 isFinish: raw.isFinish,
+                isCancelled: raw.isCancelled,
             },
             new UniqueEntityID(raw.matchId)
         );
@@ -75,6 +76,7 @@ export class MatchMap implements Mapper<Match> {
             player4: match.player4 || null,
             isLive: match.isLive,
             isFinish: match.isFinish,
+            isCancelled: match.isCancelled,
         };
     }
 
@@ -106,6 +108,7 @@ export class MatchMap implements Mapper<Match> {
             isLive: match.isLive,
             isFinish: match.isFinish,
             matchWon: match.matchWon,
+            isCancelled: match.isCancelled,
         };
     }
 }
