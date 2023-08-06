@@ -7,10 +7,19 @@
     padding: 5rem !important;
 }
 
+.text-error{
+    color: #d10909
+}
+
+.primary{
+    width: 50%;
+}
+
 .login-img-wrap{
     background: linear-gradient(0deg, rgba(47, 47, 47, 0.3), rgba(0, 0, 0, 0.3)), url("src/assets/img/tennis-login.jpg");
     background-repeat: no-repeat;
     background-position: center;
+    background-size: cover;
     h1{
         color: #fff;
         position: absolute;
