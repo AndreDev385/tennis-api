@@ -47,7 +47,7 @@ userRouter.post("/validate-password-code", (req, res) =>
     validatePasswordCodeController.execute(req, res)
 );
 
-userRouter.post(
+userRouter.put(
     "/change-password",
     middleware.ensureAuthenticated(),
     (req, res) => changePasswordController.execute(req, res)
