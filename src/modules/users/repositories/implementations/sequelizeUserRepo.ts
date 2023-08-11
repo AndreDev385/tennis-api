@@ -44,9 +44,6 @@ export class SequelizeUserRepo implements UserRepository {
 
         const rawUser = await UserMap.toPersistance(user);
 
-        console.log(rawUser.recoverPasswordCode, "code");
-        console.log(rawUser, "user to update");
-
         if (exists) {
             await UserModel.update(rawUser, {
                 where: { userId: user.userId.id.toString() },

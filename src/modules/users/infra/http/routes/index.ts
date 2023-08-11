@@ -18,12 +18,15 @@ import {
 } from "../../../useCases/changePassword";
 import { listUserController } from "../../../useCases/listUsers";
 import { validatePasswordCodeController } from "../../../useCases/validatePasswordCode";
+import { editUserController } from "../../../useCases/editUser";
 
 const userRouter = express.Router();
 
 userRouter.get("/", middleware.ensureAuthenticated(), (req, res) => listUserController.execute(req, res));
 
 userRouter.post("/", (req, res) => createUserController.execute(req, res));
+
+userRouter.put("/", middleware.ensureAuthenticated(), (req, res) => editUserController.execute(req, res))
 
 userRouter.post("/tracker", middleware.adminAuthenticated(), (req, res) =>
     createTrackerController.execute(req, res)

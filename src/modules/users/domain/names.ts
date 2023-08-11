@@ -29,10 +29,10 @@ export class FirstName extends ValueObject<NameProps> {
             return Result.fail<FirstName>(result.getErrorValue());
         }
         if (typeof props.value !== "string") {
-            return Result.fail<FirstName>("nombre debe ser un string");
+            return Result.fail<FirstName>("Nombre debe ser un texto");
         }
         if (!this.validate(props.value)) {
-            return Result.fail<FirstName>("ingresa un nombre");
+            return Result.fail<FirstName>("Ingresa tu nombre");
         }
         return Result.ok<FirstName>(new FirstName(props));
     }
@@ -56,15 +56,15 @@ export class LastName extends ValueObject<NameProps> {
     }
 
     public static create(props: NameProps): Result<LastName> {
-        const result = Guard.againstNullOrUndefined(props.value, "apellido");
+        const result = Guard.againstNullOrUndefined(props.value, "Apellido");
         if (result.isFailure) {
             return Result.fail<LastName>(result.getErrorValue());
         }
         if (typeof props.value !== "string") {
-            return Result.fail<LastName>("apellido debe ser un string");
+            return Result.fail<LastName>("Apellido debe ser un texto");
         }
         if (!this.validate(props.value)) {
-            return Result.fail<LastName>("ingresa un nombre");
+            return Result.fail<LastName>("Ingresa tu apellido");
         }
 
         return Result.ok<LastName>(new LastName(props));

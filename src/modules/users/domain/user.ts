@@ -73,6 +73,12 @@ export class User extends AggregateRoot<UserProps> {
         return this.props.lastLogin;
     }
 
+    public editUser(firstName: FirstName, lastName: LastName, email: UserEmail) {
+        this.props.firstName = firstName;
+        this.props.lastName = lastName;
+        this.props.email = email;
+    }
+
     public becomePlayer(): void {
         this.props.isPlayer = true;
     }
@@ -109,7 +115,6 @@ export class User extends AggregateRoot<UserProps> {
     }
 
     public static create(props: UserProps, id?: UniqueEntityID): Result<User> {
-        console.log(id, "user constructor\n\n")
         const guardResult = Guard.againstNullOrUndefinedBulk([
             { argument: props.email, argumentName: "firstName" },
             { argument: props.email, argumentName: "lastName" },
