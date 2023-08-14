@@ -69,7 +69,7 @@ export class CreateClashUseCase implements UseCase<CreateClashDto, Response> {
                 [host, category, season, club1, club2] = await Promise.all([
                     this.clubRepo.findById(request.host),
                     this.categoryRepo.findById(request.categoryId),
-                    this.seasonRepo.findById(request.seasonId),
+                    this.seasonRepo.currentSeason(),
                     this.clubRepo.findById(request.team1ClubId),
                     this.clubRepo.findById(request.team2ClubId),
                 ]);
