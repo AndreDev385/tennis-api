@@ -27,6 +27,9 @@ export class ListClash implements UseCase<any, Promise<Response>> {
                 if (key == "journey") {
                     query.journey = value as string;
                 }
+                if (key == "seasonId") {
+                    query.seasonId = value as string;
+                }
             }
 
             const list = await this.clashRepo.list(query);

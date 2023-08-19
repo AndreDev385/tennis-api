@@ -15,6 +15,8 @@ export class SequelizeTrackerRepository implements TrackerRepository {
     async save(tracker: MatchTracker): Promise<void> {
         const TrackerModel = this.models.TrackerModel;
 
+        console.log("Me in TRepo", tracker.me);
+
         await this.playerTracker.save(tracker.me);
 
         if (!!tracker.partner === true) {

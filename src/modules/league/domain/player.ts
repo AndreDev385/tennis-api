@@ -13,6 +13,7 @@ interface PlayerProps {
     clubId: ClubId;
     firstName: FirstName,
     lastName: LastName,
+    avatar?: string;
 }
 
 export class Player extends AggregateRoot<PlayerProps> {
@@ -36,8 +37,16 @@ export class Player extends AggregateRoot<PlayerProps> {
         return this.props.lastName;
     }
 
+    get avatar(): string {
+        return this.props.avatar;
+    }
+
     private constructor(props: PlayerProps, id?: UniqueEntityID) {
         super(props, id);
+    }
+
+    public addAvatar(path: string) {
+        this.props.avatar = path;
     }
 
     public static create(

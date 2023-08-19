@@ -6,27 +6,29 @@ interface JourneyProps {
     value: string;
 }
 
+export const journeyValues = {
+    J1: "J1",
+    J2: "J2",
+    J3: "J3",
+    J4: "J4",
+    J5: "J5",
+    J6: "J6",
+    J7: "J7",
+    J8: "J8",
+    J9: "J9",
+    RoundOf16: "8vos",
+    CuarterFinals: "4tos",
+    Semifinals: "Semi final",
+    Final: "Final",
+}
+
 export class Journey extends ValueObject<JourneyProps> {
     get value(): string {
         return this.props.value;
     }
 
     private static validate(value: string): boolean {
-        const validValues = [
-            "J1",
-            "J2",
-            "J3",
-            "J4",
-            "J5",
-            "J6",
-            "J7",
-            "J8",
-            "J9",
-            "8vos",
-            "4tos",
-            "Semi final",
-            "Final",
-        ];
+        const validValues = Object.values(journeyValues);
 
         return validValues.indexOf(value) >= 0;
     }
