@@ -3,6 +3,10 @@
     "version": "1.0.0",
     "description": "",
     "main": "index.js",
+    "engines": {
+        "node": "18.x",
+        "npm": "9.x"
+    },
     "resolutions": {
         "engine.io": "6.5.1"
     },
