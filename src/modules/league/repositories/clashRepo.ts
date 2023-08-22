@@ -4,6 +4,7 @@ export interface ClashQuery {
     categoryId?: string;
     isFinish?: boolean;
     journey?: string;
+    seasonId?: string;
 }
 
 export interface ClashRepository {

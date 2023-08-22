@@ -1,3 +1,4 @@
+import { argv0 } from "process";
 import { Guard } from "../../../shared/core/Guard";
 import { Result } from "../../../shared/core/Result";
 import { Entity } from "../../../shared/domain/Entity";
@@ -61,67 +62,67 @@ export class PlayerTracker extends Entity<PlayerTrackerProps> {
         return this.props.pointsWonReturning;
     }
     get pointsLost(): number {
-        return this.props.pointsWonReturning;
+        return this.props.pointsLost;
     }
     get pointsLostReturning(): number {
-        return this.props.pointsWonReturning;
+        return this.props.pointsLostReturning;
     }
     get pointsLostServing(): number {
-        return this.props.pointsWonReturning;
+        return this.props.pointsLostServing;
     }
     get saveBreakPtsChances(): number {
-        return this.props.pointsWonReturning;
+        return this.props.saveBreakPtsChances;
     }
     get breakPtsSaved(): number {
-        return this.props.pointsWonReturning;
+        return this.props.breakPtsSaved;
     }
     get pointsWinnedFirstServ(): number {
-        return this.props.pointsWonReturning;
+        return this.props.pointsWinnedFirstServ;
     }
     get pointsWinnedSecondServ(): number {
-        return this.props.pointsWonReturning;
+        return this.props.pointsWinnedSecondServ;
     }
     get firstServIn(): number {
-        return this.props.pointsWonReturning;
+        return this.props.firstServIn;
     }
     get secondServIn(): number {
-        return this.props.pointsWonReturning;
+        return this.props.secondServIn;
     }
     get aces(): number {
-        return this.props.pointsWonReturning;
+        return this.props.aces;
     }
     get dobleFaults(): number {
-        return this.props.pointsWonReturning;
+        return this.props.dobleFaults;
     }
     get pointsWinnedFirstReturn(): number {
-        return this.props.pointsWonReturning;
+        return this.props.pointsWinnedFirstReturn;
     }
     get pointsWinnedSecondReturn(): number {
-        return this.props.pointsWonReturning;
+        return this.props.pointsWinnedSecondReturn;
     }
     get firstReturnIn(): number {
-        return this.props.pointsWonReturning;
+        return this.props.firstReturnIn;
     }
     get secondReturnIn(): number {
-        return this.props.pointsWonReturning;
+        return this.props.secondReturnIn;
     }
     get meshPointsWon(): number {
-        return this.props.pointsWonReturning;
+        return this.props.meshPointsWon;
     }
     get meshPointsLost(): number {
-        return this.props.pointsWonReturning;
+        return this.props.meshPointsLost;
     }
     get bckgPointsWon(): number {
-        return this.props.pointsWonReturning;
+        return this.props.bckgPointsWon;
     }
     get bckgPointsLost(): number {
-        return this.props.pointsWonReturning;
+        return this.props.bckgPointsLost;
     }
     get winners(): number {
-        return this.props.pointsWonReturning;
+        return this.props.winners;
     }
     get noForcedErrors(): number {
-        return this.props.pointsWonReturning;
+        return this.props.noForcedErrors;
     }
 
     private constructor(props: PlayerTrackerProps, id?: UniqueEntityID) {
@@ -130,7 +131,7 @@ export class PlayerTracker extends Entity<PlayerTrackerProps> {
 
     public static createNewPlayerTracker(
         playerId: PlayerId,
-        seasonId: SeasonId,
+        seasonId: SeasonId
     ): Result<PlayerTracker> {
         const guard = Guard.againstNullOrUndefinedBulk([
             { argument: playerId, argumentName: "id de jugador" },
@@ -200,7 +201,25 @@ export class PlayerTracker extends Entity<PlayerTrackerProps> {
             return Result.fail<PlayerTracker>(guardResult.getErrorValue());
         }
 
-        const playerTracker = new PlayerTracker(props, id);
+        const playerTracker = new PlayerTracker({
+            ...props,
+            pointsWinnedFirstServ: props.pointsWinnedFirstServ ?? 0,
+            pointsWinnedSecondReturn: props.pointsWinnedSecondReturn ?? 0,
+            pointsWinnedSecondServ: props.pointsWinnedSecondServ ?? 0,
+            firstServIn: props.firstServIn ?? 0,
+            secondServIn: props.secondServIn ?? 0,
+            aces: props.aces ?? 0,
+            dobleFaults: props.dobleFaults ?? 0,
+            pointsWinnedFirstReturn: props.pointsWinnedFirstReturn ?? 0,
+            firstReturnIn: props.firstReturnIn ?? 0,
+            secondReturnIn: props.secondReturnIn ?? 0,
+            meshPointsWon: props.meshPointsLost ?? 0,
+            bckgPointsWon: props.bckgPointsWon ?? 0,
+            meshPointsLost: props.meshPointsLost ?? 0,
+            bckgPointsLost: props.bckgPointsLost ?? 0,
+            winners: props.winners ?? 0,
+            noForcedErrors: props.noForcedErrors ?? 0,
+        }, id);
 
         return Result.ok<PlayerTracker>(playerTracker);
     }

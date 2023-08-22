@@ -10,6 +10,20 @@ export class SequelizeSeasonRepository implements SeasonRepository {
         this.models = models;
     }
 
+    async currentSeason(): Promise<Season> {
+        const SeasonModel = this.models.SeasonModel;
+
+        const currentSeason = await SeasonModel.findOne({
+            where: { isCurrentSeason: true },
+        });
+
+        if (!!currentSeason == false) {
+            throw new Error("No hay una temporada en curso");
+        }
+
+        return SeasonMap.toDomain(currentSeason);
+    }
+
     async save(season: Season): Promise<void> {
         const SeasonModel = this.models.SeasonModel;
 

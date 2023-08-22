@@ -1,21 +1,17 @@
-import express from 'express';
-import { middleware } from '../../../../../shared/infra/http';
-import { uploadImageCloudinary } from '../../../services';
+import express from "express";
+import { middleware } from "../../../../../shared/infra/http";
+import { createClubEventController } from "../../../useCases/createClubEvent";
+import { listClubEventsController } from "../../../useCases/listClubEvents";
 
 const eventRouter = express.Router();
 
-eventRouter.post("/", middleware.uploadImageHandler.single('image'), async (req, res) => {
-    try {
-        console.log("FILE", req.file);
+eventRouter.get("/", (req, res) => listClubEventsController.execute(req, res))
 
-        const result = await uploadImageCloudinary.upload(req.file?.path)
-
-        console.log("Result", result);
-
-        res.send("Ok");
-    } catch (error) {
-        console.log(error)
-    }
-})
+eventRouter.post(
+    "/",
+    middleware.adminAuthenticated(),
+    middleware.uploadImageHandler.single("image"),
+    (req, res) => createClubEventController.execute(req, res)
+);
 
 export { eventRouter };

@@ -4,4 +4,5 @@ export interface CreateUserDto {
     email: string;
     password: string;
     clubCode?: string;
+    canTrack?: boolean;
 }
