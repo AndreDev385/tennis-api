@@ -3,8 +3,8 @@
     "version": "1.0.0",
     "description": "",
     "main": "index.js",
-    "engines": {
-        "npm": "9.5.1"
+    "resolutions": {
+        "engine.io": "6.5.1"
     },
     "scripts": {
         "build:server": "npx tsc",
