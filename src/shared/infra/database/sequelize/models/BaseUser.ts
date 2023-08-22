@@ -51,7 +51,7 @@ UserModel.init(
             allowNull: true,
         },
         accessToken: {
-            type: DataTypes.STRING,
+            type: DataTypes.STRING(1000),
             allowNull: true,
             defaultValue: null,
         },

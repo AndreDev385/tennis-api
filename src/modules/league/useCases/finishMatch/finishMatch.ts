@@ -5,10 +5,13 @@ import { UniqueEntityID } from "../../../../shared/domain/UniqueEntityID";
 import { Match } from "../../domain/match";
 import { MatchTracker } from "../../domain/matchTracker";
 import { PlayerTracker } from "../../domain/playerTracker";
+import { Season } from "../../domain/season";
 import { Sets } from "../../domain/sets";
 import { PlayerTrackerMapper } from "../../mappers/playerTrackerMap";
+import { SeasonMap } from "../../mappers/seasonMap";
 import { SetMap } from "../../mappers/setMap";
 import { MatchRepository } from "../../repositories/matchRepo";
+import { SeasonRepository } from "../../repositories/seasonRepo";
 import { TrackerRepository } from "../../repositories/trackerRepo";
 import { FinishMatchRequest } from "./finishMatchRequest";
 
@@ -20,13 +23,20 @@ type Response = Either<
 export class FinishMatch implements UseCase<any, Response> {
     private matchRepo: MatchRepository;
     private trackerRepo: TrackerRepository;
+    private seasonRepo: SeasonRepository;
 
-    constructor(matchRepo: MatchRepository, trackerRepo: TrackerRepository) {
+    constructor(
+        matchRepo: MatchRepository,
+        trackerRepo: TrackerRepository,
+        seasonRepo: SeasonRepository
+    ) {
         this.matchRepo = matchRepo;
         this.trackerRepo = trackerRepo;
+        this.seasonRepo = seasonRepo;
     }
 
     async execute(request: FinishMatchRequest): Promise<Response> {
+        let currentSeason: Season;
         let me: PlayerTracker;
         let partner: PlayerTracker;
         let match: Match;
@@ -34,13 +44,40 @@ export class FinishMatch implements UseCase<any, Response> {
         let sets: Sets;
         let tracker: MatchTracker;
 
+        console.log("Request me", request.tracker.me);
+
         try {
-            me = PlayerTrackerMapper.toDomain(request.tracker.me);
+            try {
+                const seasons = await this.seasonRepo.list({
+                    isCurrentSeason: true,
+                });
+                if (seasons.length === 0) {
+                    return left(
+                        Result.fail<string>("No hay una temporada en curso")
+                    );
+                }
+                currentSeason = SeasonMap.toDomain(seasons[0]);
+            } catch (error) {
+                return left(new AppError.NotFoundError(error));
+            }
+
+            me = PlayerTrackerMapper.toDomain({
+                ...request.tracker.me,
+                seasonId: currentSeason.id.toString(),
+            });
+
+            console.log("to domain me", me);
+
             if (me == null) {
-                return left(Result.fail<string>("Estadisticas de jugador invalidas"))
+                return left(
+                    Result.fail<string>("Estadisticas de jugador invalidas")
+                );
             }
             if (request.tracker.partner) {
-                partner = PlayerTrackerMapper.toDomain(request.tracker.partner)
+                partner = PlayerTrackerMapper.toDomain({
+                    ...request.tracker.partner,
+                    seasonId: currentSeason.id.toString(),
+                });
 
                 if (partner == null) {
                     return left(
@@ -85,10 +122,17 @@ export class FinishMatch implements UseCase<any, Response> {
 
             tracker = trackerOrError.getValue();
 
-            match.finishMatch(sets, tracker);
+            console.log("ME AFTER CREATE TRACKER", tracker.me);
+
+            match.finishMatch(sets, tracker, request.superTieBreak);
+
+            console.log("ME AFTER match FINISH", match.tracker.me);
+
+            await this.matchRepo.save(match);
+
+            console.log("ME AFRER MATCH REPO SAVE", match.tracker.me);
 
             await this.trackerRepo.save(match.tracker);
-            await this.matchRepo.save(match);
 
             return right(Result.ok<void>());
         } catch (error) {

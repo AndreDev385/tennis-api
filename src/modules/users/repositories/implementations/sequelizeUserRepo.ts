@@ -1,7 +1,7 @@
 import { UserEmail } from "../../domain/email";
 import { User } from "../../domain/user.js";
 import { UserMap } from "../../mappers/userMap";
-import { UserRepository } from "../userRepo";
+import { UserQuery, UserRepository } from "../userRepo";
 
 export class SequelizeUserRepo implements UserRepository {
     private models: any;
@@ -43,6 +43,7 @@ export class SequelizeUserRepo implements UserRepository {
         const exists = await this.exists(user.email);
 
         const rawUser = await UserMap.toPersistance(user);
+
         if (exists) {
             await UserModel.update(rawUser, {
                 where: { userId: user.userId.id.toString() },
@@ -52,5 +53,28 @@ export class SequelizeUserRepo implements UserRepository {
             await user.save();
             return;
         }
+    }
+
+    async list(query: UserQuery): Promise<User[]> {
+        const UserModel = this.models.UserModel;
+        const rawList = await UserModel.findAll({
+            where: query
+        });
+
+        return rawList.map((raw: any) => UserMap.toDomain(raw))
+    }
+
+    async getUserByRecoveryPasswordCode(code: string): Promise<User> {
+        const UserModel = this.models.UserModel;
+
+        const user = await UserModel.findOne({
+            where: { recoverPasswordCode: code },
+        });
+
+        console.log(user, "found");
+
+        if (!!user == false) throw new Error("User not found");
+
+        return UserMap.toDomain(user);
     }
 }

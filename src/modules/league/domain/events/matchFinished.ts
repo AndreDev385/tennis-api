@@ -12,7 +12,6 @@ export class MatchFinished implements IDomainEvent {
     }
 
     getAggregateId(): UniqueEntityID {
-        return this.match.matchId.id;
+        return this.match.id
     }
-
 }

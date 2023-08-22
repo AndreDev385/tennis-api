@@ -27,6 +27,14 @@ const SeasonModel = sequelize.define(
             type: DataTypes.STRING,
             allowNull: false,
         },
+        isFinish: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+        },
+        isCurrentSeason: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+        }
     },
     { tableName: "season" }
 );

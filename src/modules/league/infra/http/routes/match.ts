@@ -5,6 +5,8 @@ import { listMatchsController } from "../../../useCases/listMatchs";
 import { goMatchLiveController } from "../../../useCases/goMatchLive";
 import { getMatchByIdController } from "../../../useCases/getMatchById";
 import { finishMatchController } from "../../../useCases/finishMatch";
+import { pauseMatchController } from "../../../useCases/pauseMatch";
+import { cancelMatchController } from "../../../useCases/cancelMatch";
 
 const matchRouter = express.Router();
 
@@ -20,6 +22,14 @@ matchRouter.get("/:matchId", (req, res) =>
 
 matchRouter.put("/go-live", (req, res) =>
     goMatchLiveController.execute(req, res)
+);
+
+matchRouter.put("/pause", (req, res) =>
+    pauseMatchController.execute(req, res)
+);
+
+matchRouter.put("/cancel", (req, res) =>
+    cancelMatchController.execute(req, res)
 );
 
 matchRouter.put("/finish", (req, res) =>

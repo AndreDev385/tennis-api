@@ -24,6 +24,10 @@ export class League extends Entity<LeagueProps> {
         return this.props.seasons.getItems();
     }
 
+    private constructor(props: LeagueProps, id?: UniqueEntityID) {
+        super(props, id);
+    }
+
     public static create(
         props: LeagueProps,
         id: UniqueEntityID,

@@ -71,8 +71,7 @@ export class SequelizeMatchRepository implements MatchRepository {
         try {
             tracker = await this.trackerRepo.findTrackerByMatchId(matchId);
         } catch (e) {
-            console.log(e)
-            tracker = null
+            tracker = null;
         }
 
         return MatchMap.toDomain({
@@ -93,6 +92,7 @@ export class SequelizeMatchRepository implements MatchRepository {
             category: raw.category,
             isLive: raw.isLive,
             isFinish: raw.isFinish,
+            isCancelled: raw.isCancelled,
         });
     }
 
@@ -134,6 +134,7 @@ export class SequelizeMatchRepository implements MatchRepository {
                 category: m.category,
                 isLive: m.isLive,
                 isFinish: m.isFinish,
+                isCancelled: m.isCancelled,
             })
         );
 
@@ -180,6 +181,7 @@ export class SequelizeMatchRepository implements MatchRepository {
                 category: m.category,
                 isLive: m.isLive,
                 isFinish: m.isFinish,
+                isCancelled: m.isCancelled,
             })
         );
 

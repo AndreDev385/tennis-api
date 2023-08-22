@@ -16,5 +16,10 @@ export default async (io: Server) => {
             const room = `match:${matchId}`;
             socket.to(room).emit("server:update_match", data);
         });
+
+        socket.on("client:match_finish", (data) => {
+            const room = `match:${data.message}`;
+            socket.to(room).emit("server:match_finish");
+        })
     });
 };

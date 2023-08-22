@@ -1,5 +1,5 @@
 import { AppError } from '../../../../shared/core/AppError';
-import { Result, left, right } from '../../../../shared/core/Result';
+import { Either, Result, left, right } from '../../../../shared/core/Result';
 import { UseCase } from '../../../../shared/core/UseCase';
 import { UserEmail } from '../../domain/email';
 import { UserRepository } from '../../repositories/userRepo';
@@ -7,48 +7,61 @@ import { Mailer } from '../../services/mailer/mailer';
 import { ForgetPasswordDto } from './forgetPasswordDto';
 import { ForgetPasswordErrors } from './forgetPasswordErrors';
 
-export class ForgetPasswordUseCase implements UseCase<ForgetPasswordDto, any> {
-	private mailer: Mailer;
-	private repository: UserRepository;
+type Response = Either<AppError.UnexpectedError | Result<string>, Result<void>>;
 
-	constructor(mailer: Mailer, repository: UserRepository) {
-		this.mailer = mailer;
-		this.repository = repository;
-	}
+export class ForgetPasswordUseCase implements UseCase<ForgetPasswordDto, Response> {
+    private mailer: Mailer;
+    private repository: UserRepository;
 
-	async execute(request: ForgetPasswordDto) {
-		const emailOrError = UserEmail.create(request.email);
+    constructor(mailer: Mailer, repository: UserRepository) {
+        this.mailer = mailer;
+        this.repository = repository;
+    }
 
-		if (emailOrError.isFailure) {
-			return left(
-				Result.fail<UserEmail>(emailOrError.getErrorValue().value)
-			);
-		}
+    async execute(request: ForgetPasswordDto): Promise<Response> {
+        const emailOrError = UserEmail.create(request.email);
 
-		const email: UserEmail = emailOrError.getValue();
+        if (emailOrError.isFailure) {
+            return left(
+                Result.fail<string>(`${emailOrError.getErrorValue().value}`)
+            );
+        }
 
-		try {
-			const user = await this.repository.getUserByEmail(email);
+        const email: UserEmail = emailOrError.getValue();
 
-			if (!user) {
-				return left(
-					new ForgetPasswordErrors.EmailDoesNotExist(request.email)
-				);
-			}
+        try {
+            const user = await this.repository.getUserByEmail(email);
 
-			user.generateCode();
+            if (!user) {
+                return left(
+                    new ForgetPasswordErrors.EmailDoesNotExist(request.email)
+                );
+            }
 
-			await this.repository.save(user);
+            user.generateCode();
 
-			this.mailer.sendEmail({
-				email: request.email,
-				subject: 'Cambiar contrase#a',
-				text: `Codigo: ${user.recoverPasswordCode}`,
-			});
+            await this.repository.save(user);
 
-			return right(Result.ok<void>());
-		} catch (e) {
-			return left(new AppError.UnexpectedError(e));
-		}
-	}
+            this.mailer.sendEmail({
+                email: request.email,
+                subject: 'Cambiar contraseña',
+                text: `Estimado ${user.firstName.value} ${user.lastName.value},
+
+Le informamos que ha recibido este correo debido a la solicitud de cambio de contraseña que usted ha solicitado en GameMind. Para asegurarnos de que su cuenta está protegida y que solo usted tiene acceso a ella, hemos generado un código de verificación único.
+
+Codigo: ${user.recoverPasswordCode}
+
+Para completar el proceso de cambio de contraseña y asegurar la seguridad de su cuenta, le pedimos que ingrese el código de verificación proporcionado en su cuenta de GameMind. Si no ha solicitado este cambio de clave, ignore este correo.
+
+En GameMind, nos comprometemos a garantizar la privacidad y seguridad de nuestros usuarios. Agradecemos su confianza en nosotros y nos esforzamos por ofrecerle la mejor experiencia posible.
+
+Saludos cordiales,
+El equipo de GameMind`,
+            });
+
+            return right(Result.ok<void>());
+        } catch (e) {
+            return left(new AppError.UnexpectedError(e));
+        }
+    }
 }

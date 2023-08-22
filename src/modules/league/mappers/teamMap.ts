@@ -2,6 +2,7 @@ import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
 import { Mapper } from "../../../shared/infra/Mapper";
 import { Team } from "../domain/team";
 import { TeamDto } from "../dtos/teamDto";
+import { CategoryMap } from "./categoryMap";
 import { ClubMap } from "./clubMap";
 
 export class TeamMap implements Mapper<Team> {
@@ -9,17 +10,20 @@ export class TeamMap implements Mapper<Team> {
         return {
             teamId: team.teamId.id.toString(),
             clubId: team.club.clubId.id.toString(),
+            categoryId: team.category.categoryId.id.toString(),
             name: team.name,
         };
     }
 
     public static toDomain(raw: any): Team {
         const club = ClubMap.toDomain(raw.club);
+        const category = CategoryMap.toDomain(raw.category);
 
         const teamOrError = Team.create(
             {
                 club,
                 name: raw.name,
+                category,
             },
             new UniqueEntityID(raw.teamId)
         );
@@ -31,11 +35,11 @@ export class TeamMap implements Mapper<Team> {
     }
 
     public static toDto(team: Team): TeamDto {
-        console.log(team)
         return {
-            clubName: team.club.name,
-            clubSymbol: team.club.symbol,
+            teamId: team.teamId.id.toString(),
             name: team.name,
+            club: ClubMap.toDto(team.club, false),
+            category: CategoryMap.toDto(team.category)
         };
     }
 }

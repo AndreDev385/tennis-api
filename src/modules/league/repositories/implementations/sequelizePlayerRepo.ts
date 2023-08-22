@@ -34,8 +34,6 @@ export class SequelizePlayerRepository implements PlayerRepository {
 
         const rawList = await PlayerModel.findAll(baseQuery);
 
-        console.log(rawList)
-
         const list = rawList.map((p) => PlayerMap.toDomain(p));
 
         return list;

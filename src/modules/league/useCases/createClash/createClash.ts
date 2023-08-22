@@ -69,7 +69,7 @@ export class CreateClashUseCase implements UseCase<CreateClashDto, Response> {
                 [host, category, season, club1, club2] = await Promise.all([
                     this.clubRepo.findById(request.host),
                     this.categoryRepo.findById(request.categoryId),
-                    this.seasonRepo.findById(request.seasonId),
+                    this.seasonRepo.currentSeason(),
                     this.clubRepo.findById(request.team1ClubId),
                     this.clubRepo.findById(request.team2ClubId),
                 ]);
@@ -80,47 +80,47 @@ export class CreateClashUseCase implements UseCase<CreateClashDto, Response> {
             try {
                 const existTeam1 = await this.teamRepo.getTeam(
                     request.team1Name,
-                    request.team1ClubId
+                    request.team1ClubId,
+                    request.categoryId,
                 );
                 team1 = existTeam1;
-                console.log(team1);
             } catch (error) {
                 const teamOrError = Team.create({
                     name: request.team1Name,
                     club: club1,
+                    category,
                 });
                 if (teamOrError.isFailure) {
                     return left(Result.fail<string>("Equipo 1 invalido"));
                 }
                 team1 = teamOrError.getValue();
                 await this.teamRepo.save(team1);
-                console.log(team1);
             }
 
             try {
                 const existTeam2 = await this.teamRepo.getTeam(
                     request.team2Name,
-                    request.team2ClubId
+                    request.team2ClubId,
+                    request.categoryId,
                 );
                 team2 = existTeam2;
-                console.log(team2);
             } catch (error) {
                 const teamOrError = Team.create({
                     name: request.team2Name,
                     club: club2,
+                    category,
                 });
                 if (teamOrError.isFailure) {
                     return left(Result.fail<string>("Equipo 1 invalido"));
                 }
                 team2 = teamOrError.getValue();
                 await this.teamRepo.save(team2);
-                console.log(team2);
             }
 
             const clashOrError = Clash.create({
                 team1,
                 team2,
-                host: host.name,
+                host,
                 matchs: Matchs.create(),
                 journey: journey,
                 category: category,
@@ -138,8 +138,10 @@ export class CreateClashUseCase implements UseCase<CreateClashDto, Response> {
             const alreadyCreated = await this.clashRepo.clashExist(
                 team1.teamId.id.toString(),
                 team2.teamId.id.toString(),
-                journey.value
+                journey.value,
+                category.categoryId.id.toString(),
             );
+
             if (alreadyCreated) {
                 return left(new CreateClashErrors.ClashAlreadyExistError());
             }

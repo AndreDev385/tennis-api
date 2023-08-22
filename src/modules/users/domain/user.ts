@@ -7,13 +7,15 @@ import { Guard } from "../../../shared/core/Guard";
 import { AggregateRoot } from "../../../shared/domain/AggregateRoot";
 import { FirstName, LastName } from "./names";
 import { JWTToken } from "./jwt";
+import { UserLoggedIn } from "./events/userLoggedIn";
+import { UserCreated } from "./events/userCreated";
 
 interface UserProps {
     firstName: FirstName;
     lastName: LastName;
     email: UserEmail;
     password: UserPassword;
-    recoverPasswordCode?: number;
+    recoverPasswordCode?: string;
     isAdmin?: boolean;
     isPlayer?: boolean;
     canTrack?: boolean;
@@ -59,7 +61,7 @@ export class User extends AggregateRoot<UserProps> {
         return !!this.props.canTrack;
     }
 
-    get recoverPasswordCode(): number {
+    get recoverPasswordCode(): string {
         return this.props.recoverPasswordCode;
     }
 
@@ -71,6 +73,12 @@ export class User extends AggregateRoot<UserProps> {
         return this.props.lastLogin;
     }
 
+    public editUser(firstName: FirstName, lastName: LastName, email: UserEmail) {
+        this.props.firstName = firstName;
+        this.props.lastName = lastName;
+        this.props.email = email;
+    }
+
     public becomePlayer(): void {
         this.props.isPlayer = true;
     }
@@ -80,7 +88,7 @@ export class User extends AggregateRoot<UserProps> {
     }
 
     public setAccessToken(token: JWTToken): void {
-        //this.addDomainEvent(new UserLoggedIn(this));
+        this.addDomainEvent(new UserLoggedIn(this));
         this.props.accessToken = token;
         this.props.lastLogin = new Date();
     }
@@ -93,7 +101,13 @@ export class User extends AggregateRoot<UserProps> {
     }
 
     public generateCode(): void {
-        this.props.recoverPasswordCode = Math.floor(Math.random() * 1000000);
+        this.props.recoverPasswordCode = `${Math.floor(Math.random() * 1000000)}`;
+    }
+
+    public changePassword(password: UserPassword) {
+        this.props.password = password;
+        this.props.recoverPasswordCode = null;
+        // this.addDomainEvent();
     }
 
     private constructor(props: UserProps, id?: UniqueEntityID) {
@@ -111,6 +125,7 @@ export class User extends AggregateRoot<UserProps> {
             return Result.fail<User>(guardResult.getErrorValue());
         }
 
+        const isNew = !!id == false;
         const user = new User(
             {
                 ...props,
@@ -122,6 +137,10 @@ export class User extends AggregateRoot<UserProps> {
             },
             id
         );
+
+        if (isNew) {
+            user.addDomainEvent(new UserCreated(user));
+        }
 
         return Result.ok<User>(user);
     }

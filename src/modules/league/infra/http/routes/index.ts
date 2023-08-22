@@ -1,6 +1,7 @@
 import { categoryRouter } from "./category"
 import { clashRouter } from "./clash"
 import { clubRouter } from "./club"
+import { eventRouter } from "./events"
 import { leagueRouter } from "./league"
 import { matchRouter } from "./match"
 import { playerRoute } from "./player"
@@ -14,4 +15,5 @@ export {
     matchRouter,
     playerRoute,
     seasonRouter,
+    eventRouter,
 }

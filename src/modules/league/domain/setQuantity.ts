@@ -24,6 +24,10 @@ export class SetQuantity extends ValueObject<SetQuantityProps> {
         return true;
     }
 
+    private constructor(props: SetQuantityProps) {
+        super(props);
+    }
+
     public static createLeagueDefault(): SetQuantity {
         return new SetQuantity({ value: 3 })
     }

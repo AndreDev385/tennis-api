@@ -21,6 +21,10 @@ export class Set extends ValueObject<SetProps> {
         return this.props.setWon;
     }
 
+    private constructor(props: SetProps) {
+        super(props);
+    }
+
     public static createDefaultLeague(): Set {
         return new Set({ myGames: 0, rivalGames: 0, setWon: null });
     }

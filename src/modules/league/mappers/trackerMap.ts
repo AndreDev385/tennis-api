@@ -50,7 +50,6 @@ export class TrackerMap implements Mapper<MatchTracker> {
     }
 
     public static toPersistance(tracker: MatchTracker) {
-        console.log(tracker);
         return {
             trackerId: tracker.trackerId.id.toString(),
             matchId: tracker.matchId.id.toString(),
@@ -85,7 +84,6 @@ export class TrackerMap implements Mapper<MatchTracker> {
     }
 
     public static toDto(tracker: MatchTracker): TrackerDto {
-        console.log(tracker.partner, 'partner');
         return {
             trackerId: tracker.trackerId.id.toString(),
             matchId: tracker.matchId.id.toString(),

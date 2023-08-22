@@ -45,6 +45,10 @@ export class Club extends Entity<ClubProps> {
         this.props.code = code;
     }
 
+    private constructor(props: ClubProps, id?: UniqueEntityID) {
+        super(props, id);
+    }
+
     public static create(props: ClubProps, id?: UniqueEntityID): Result<Club> {
         const guardResult = Guard.againstNullOrUndefinedBulk([
             { argument: props.name, argumentName: "name" },

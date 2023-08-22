@@ -25,6 +25,12 @@ const databaseCredentials = {
         database: DB_NAME,
         host: DB_HOST,
         dialect: "postgres",
+        dialectOptions: {
+            ssl: {
+                require: true,
+                rejectUnauthorized: false
+            }
+        },
     },
 };
 
@@ -42,9 +48,12 @@ module.exports = {
         host,
         dialect,
         port: 5432,
-        dialectOptions: {
-            multipleStatements: true,
-        },
+        dialectOptions: mode == "production" ? {
+            ssl: {
+                require: true,
+                rejectUnauthorized: false
+            }
+        }: {},
         pool: {
             max: 5,
             min: 0,

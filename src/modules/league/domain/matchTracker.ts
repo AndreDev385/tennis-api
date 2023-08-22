@@ -6,6 +6,7 @@ import { MatchId } from "./matchId";
 import { TrackerId } from "./matchTrackerId";
 import { PlayerId } from "./playerId";
 import { PlayerTracker } from "./playerTracker";
+import { SeasonId } from "./seasonId";
 
 interface MatchTrackerProps {
     matchId: MatchId;
@@ -134,8 +135,13 @@ export class MatchTracker extends Entity<MatchTrackerProps> {
         return this.props.longRallyLost;
     }
 
+    private constructor(props: MatchTrackerProps, id?: UniqueEntityID) {
+        super(props, id);
+    }
+
     public static createNewTracker(
         id: MatchId,
+        seasonId: SeasonId,
         playerId: PlayerId,
         partnerId?: PlayerId
     ): Result<MatchTracker> {
@@ -145,7 +151,7 @@ export class MatchTracker extends Entity<MatchTrackerProps> {
             return Result.fail<MatchTracker>(guard.getErrorValue());
         }
 
-        const meOrError = PlayerTracker.createNewPlayerTracker(playerId);
+        const meOrError = PlayerTracker.createNewPlayerTracker(playerId, seasonId);
 
         if (meOrError.isFailure) {
             return Result.fail(`${meOrError.getErrorValue()}`);
@@ -153,17 +159,13 @@ export class MatchTracker extends Entity<MatchTrackerProps> {
 
         let partner: PlayerTracker;
         if (!!partnerId === true) {
-            console.log("enter in if", partnerId);
             const partnerOrError =
-                PlayerTracker.createNewPlayerTracker(partnerId);
+                PlayerTracker.createNewPlayerTracker(partnerId, seasonId);
             if (partnerOrError.isFailure) {
-                console.log("Is failure", partnerOrError.getErrorValue());
                 return Result.fail(`${partnerOrError.getErrorValue()}`);
             }
             partner = partnerOrError.getValue();
         }
-
-        console.log('partner', partner);
 
         const instance = new MatchTracker({
             matchId: id,
@@ -176,8 +178,6 @@ export class MatchTracker extends Entity<MatchTrackerProps> {
             winBreakPtsChances: 0,
             breakPtsWinned: 0,
         });
-
-        console.log(instance, "Instance created")
 
         return Result.ok(instance);
     }

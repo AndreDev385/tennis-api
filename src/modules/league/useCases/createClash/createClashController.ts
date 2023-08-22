@@ -14,8 +14,6 @@ export class CreateClashController extends BaseController {
     }
 
     async executeImpl(req: Request, res: Response) {
-        console.log("body: ", req.body);
-        console.log("req: ", req);
         const dto: CreateClashDto = req.body;
 
         const result = await this.usecase.execute(dto);
@@ -30,7 +28,7 @@ export class CreateClashController extends BaseController {
                             .message
                     );
                 case AppError.NotFoundError:
-                    return this.notFound(
+                    return this.clientError(
                         res,
                         (error as AppError.NotFoundError).getErrorValue()
                             .message

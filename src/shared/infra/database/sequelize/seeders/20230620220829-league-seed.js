@@ -10,6 +10,8 @@ module.exports = {
             {
                 leagueId,
                 name: "CTA",
+                createdAt: new Date(),
+                updatedAt: new Date(),
             },
         ]);
 
@@ -19,6 +21,10 @@ module.exports = {
                 seasonId,
                 leagueId,
                 name: "Temporada 2 2023",
+                isCurrentSeason: true,
+                isFinish: false,
+                createdAt: new Date(),
+                updatedAt: new Date(),
             },
         ]);
 

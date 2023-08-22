@@ -6,6 +6,7 @@ import { CategoryId } from "./categoryId";
 
 interface CategoryProps {
     name: string;
+    fullName: string;
 }
 
 export class Category extends Entity<CategoryProps> {
@@ -17,11 +18,22 @@ export class Category extends Entity<CategoryProps> {
         return this.props.name;
     }
 
+    get fullName(): string {
+        return this.props.fullName;
+    }
+
+    private constructor(props: CategoryProps, id?: UniqueEntityID) {
+        super(props, id);
+    }
+
     public static create(
         props: CategoryProps,
         id?: UniqueEntityID,
     ): Result<Category> {
-        const guardResult = Guard.againstNullOrUndefined(props.name, "name");
+        const guardResult = Guard.againstNullOrUndefinedBulk([
+            { argument: props.name, argumentName: "nombre" },
+            { argument: props.name, argumentName: "nombre completo" },
+        ]);
 
         if (guardResult.isFailure) {
             return Result.fail<Category>(guardResult.getErrorValue());

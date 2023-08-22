@@ -19,8 +19,8 @@ export class FinishClash implements UseCase<any, Response> {
 
     async execute(request: FinishClashRequest): Promise<Response> {
         let clash: Clash;
-
         const MATCH_PER_CLASH = 5;
+
         try {
             try {
                 clash = await this.clashRepo.getClashById(request.clashId);
@@ -28,27 +28,25 @@ export class FinishClash implements UseCase<any, Response> {
                 return left(new AppError.NotFoundError(error));
             }
 
-            let matchFinishCount = 0;
-            for (const match of clash.matchs) {
-                if (
-                    match.isFinish &&
-                    match.matchId.id.toString() != request.matchId
-                ) {
-                    matchFinishCount += 1;
-                }
-            }
+            let matchFinished = clash.matchs.filter((m) => m.isFinish == true);
 
-            if (matchFinishCount < MATCH_PER_CLASH) {
+            if (matchFinished.length < MATCH_PER_CLASH) {
+                console.log(`Aun quedan partidos por terminar (${MATCH_PER_CLASH - matchFinished.length})`)
                 return left(
                     Result.fail<string>(
-                        `Aun quedan partidos por terminar (${MATCH_PER_CLASH - matchFinishCount
+                        `Aun quedan partidos por terminar (${MATCH_PER_CLASH - matchFinished.length
                         })`
                     )
                 );
             }
+
+            clash.finishClash();
+
+            await this.clashRepo.save(clash);
+
             return right(Result.ok<void>());
         } catch (error) {
-            return left(new AppError.UnexpectedError(error))
+            return left(new AppError.UnexpectedError(error));
         }
     }
 }

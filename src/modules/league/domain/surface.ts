@@ -24,6 +24,10 @@ export class Surface extends ValueObject<SurfaceProps> {
         return true;
     }
 
+    private constructor(props: SurfaceProps) {
+        super(props);
+    }
+
     public static create(props: SurfaceProps): Result<Surface> {
         const guard = Guard.againstNullOrUndefined(props.value, "superficie");
 

@@ -17,6 +17,10 @@ const PlayerTrackerModel = sequelize.define(
             type: DataTypes.UUID,
             allowNull: false,
         },
+        seasonId: {
+            type: DataTypes.UUID,
+            allowNull: false,
+        },
         pointsWon: {
             type: DataTypes.INTEGER,
             allowNull: false,

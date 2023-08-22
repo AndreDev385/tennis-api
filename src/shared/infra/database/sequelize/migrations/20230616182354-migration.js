@@ -1,6 +1,6 @@
 "use strict";
 
-const { DataTypes } = require("sequelize");
+const { Sequelize } = require("sequelize");
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -51,7 +51,7 @@ module.exports = {
                     allowNull: true,
                 },
                 accessToken: {
-                    type: Sequelize.STRING(500),
+                    type: Sequelize.STRING(1000),
                     allowNull: true,
                     defaultValue: null,
                 },
@@ -61,12 +61,12 @@ module.exports = {
                 },
                 createdAt: {
                     type: Sequelize.DATE,
-                    allowNull: false,
+                    allowNull: true,
                     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
                 updatedAt: {
                     type: Sequelize.DATE,
-                    allowNull: false,
+                    allowNull: true,
                     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
             });
@@ -98,13 +98,13 @@ module.exports = {
                     defaultValue: false,
                 },
                 createdAt: {
+                    allowNull: true,
                     type: Sequelize.DATE,
-                    allowNull: false,
                     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
                 updatedAt: {
+                    allowNull: true,
                     type: Sequelize.DATE,
-                    allowNull: false,
                     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
             });
@@ -121,14 +121,18 @@ module.exports = {
                     type: Sequelize.STRING,
                     allowNull: false,
                 },
-                createdAt: {
-                    type: Sequelize.DATE,
+                fullName: {
+                    type: Sequelize.STRING,
                     allowNull: false,
+                },
+                createdAt: {
+                    allowNull: true,
+                    type: Sequelize.DATE,
                     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
                 updatedAt: {
+                    allowNull: true,
                     type: Sequelize.DATE,
-                    allowNull: false,
                     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
             });
@@ -161,14 +165,19 @@ module.exports = {
                     onDelete: "cascade",
                     onUpdate: "cascade",
                 },
+                avatar: {
+                    type: Sequelize.STRING,
+                    allowNull: true,
+                    defaultValue: null,
+                },
                 createdAt: {
                     type: Sequelize.DATE,
-                    allowNull: false,
+                    allowNull: true,
                     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
                 updatedAt: {
+                    allowNull: true,
                     type: Sequelize.DATE,
-                    allowNull: false,
                     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
             });
@@ -186,13 +195,13 @@ module.exports = {
                     allowNull: false,
                 },
                 createdAt: {
+                    allowNull: true,
                     type: Sequelize.DATE,
-                    allowNull: false,
                     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
                 updatedAt: {
+                    allowNull: true,
                     type: Sequelize.DATE,
-                    allowNull: false,
                     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
             });
@@ -219,14 +228,22 @@ module.exports = {
                     type: Sequelize.STRING,
                     allowNull: false,
                 },
-                createdAt: {
-                    type: Sequelize.DATE,
+                isFinish: {
+                    type: Sequelize.BOOLEAN,
                     allowNull: false,
+                },
+                isCurrentSeason: {
+                    type: Sequelize.BOOLEAN,
+                    allowNull: false,
+                },
+                createdAt: {
+                    allowNull: true,
+                    type: Sequelize.DATE,
                     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
                 updatedAt: {
+                    allowNull: true,
                     type: Sequelize.DATE,
-                    allowNull: false,
                     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
             });
@@ -276,13 +293,13 @@ module.exports = {
                     defaultValue: false,
                 },
                 createdAt: {
+                    allowNull: true,
                     type: Sequelize.DATE,
-                    allowNull: false,
                     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
                 updatedAt: {
+                    allowNull: true,
                     type: Sequelize.DATE,
-                    allowNull: false,
                     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
             });
@@ -363,14 +380,18 @@ module.exports = {
                     type: Sequelize.BOOLEAN,
                     defaultValue: false,
                 },
+                isCancelled: {
+                    type: Sequelize.BOOLEAN,
+                    defaultValue: false,
+                },
                 createdAt: {
+                    allowNull: true,
                     type: Sequelize.DATE,
-                    allowNull: false,
                     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
                 updatedAt: {
+                    allowNull: true,
                     type: Sequelize.DATE,
-                    allowNull: false,
                     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
             });
@@ -518,13 +539,13 @@ module.exports = {
                     allowNull: true,
                 },
                 createdAt: {
+                    allowNull: true,
                     type: Sequelize.DATE,
-                    allowNull: false,
                     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
                 updatedAt: {
+                    allowNull: true,
                     type: Sequelize.DATE,
-                    allowNull: false,
                     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
             });
@@ -538,6 +559,10 @@ module.exports = {
                     primaryKey: true,
                 },
                 playerId: {
+                    type: Sequelize.UUID,
+                    allowNull: false,
+                },
+                seasonId: {
                     type: Sequelize.UUID,
                     allowNull: false,
                 },
@@ -652,13 +677,13 @@ module.exports = {
                     allowNull: true,
                 },
                 createdAt: {
+                    allowNull: true,
                     type: Sequelize.DATE,
-                    allowNull: false,
                     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
                 updatedAt: {
+                    allowNull: true,
                     type: Sequelize.DATE,
-                    allowNull: false,
                     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
             });
@@ -668,6 +693,16 @@ module.exports = {
                 name: {
                     type: Sequelize.STRING,
                     allowNull: false,
+                },
+                createdAt: {
+                    allowNull: true,
+                    type: Sequelize.DATE,
+                    defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+                },
+                updatedAt: {
+                    allowNull: true,
+                    type: Sequelize.DATE,
+                    defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
             });
 
@@ -687,21 +722,226 @@ module.exports = {
                         key: "clubId",
                     },
                 },
+                categoryId: {
+                    type: Sequelize.UUID,
+                    allowNull: false,
+                    references: {
+                        model: "category",
+                        key: "categoryId",
+                    },
+                },
                 name: {
                     type: Sequelize.STRING,
                     allowNull: false,
                 },
                 createdAt: {
+                    allowNull: true,
                     type: Sequelize.DATE,
-                    allowNull: false,
                     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
                 updatedAt: {
+                    allowNull: true,
                     type: Sequelize.DATE,
-                    allowNull: false,
                     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
             });
+
+        const CREATE_TEAM_STATS_TABLE = () =>
+            queryInterface.createTable(
+                "teamStats",
+                {
+                    teamStatsId: {
+                        type: Sequelize.UUID,
+                        defaultValue: Sequelize.UUIDV4,
+                        allowNull: false,
+                        primaryKey: true,
+                    },
+                    teamId: {
+                        type: Sequelize.UUID,
+                        allowNull: false,
+                        references: {
+                            model: "team",
+                            key: "teamId",
+                        },
+                    },
+                    seasonId: {
+                        type: Sequelize.UUID,
+                        allowNull: false,
+                        references: {
+                            model: "season",
+                            key: "seasonId",
+                        },
+                    },
+                    journey: {
+                        type: Sequelize.STRING,
+                        allowNull: false,
+                    },
+                    gamesWonAsLocal: {
+                        type: Sequelize.INTEGER,
+                        allowNull: false,
+                    },
+                    gamesPlayedAsLocal: {
+                        type: Sequelize.INTEGER,
+                        allowNull: false,
+                    },
+                    gamesWonAsVisitor: {
+                        type: Sequelize.INTEGER,
+                        allowNull: false,
+                    },
+                    gamesPlayedAsVisitor: {
+                        type: Sequelize.INTEGER,
+                        allowNull: false,
+                    },
+                    //sets
+                    setsWonAsLocal: {
+                        type: Sequelize.INTEGER,
+                        allowNull: false,
+                    },
+                    setsPlayedAsLocal: {
+                        type: Sequelize.INTEGER,
+                        allowNull: false,
+                    },
+                    setsWonAsVisitor: {
+                        type: Sequelize.INTEGER,
+                        allowNull: false,
+                    },
+                    setsPlayedAsVisitor: {
+                        type: Sequelize.INTEGER,
+                        allowNull: false,
+                    },
+                    // super tie-break
+                    superTieBreaksWonAsLocal: {
+                        type: Sequelize.INTEGER,
+                        allowNull: false,
+                    },
+                    superTieBreaksPlayedAsLocal: {
+                        type: Sequelize.INTEGER,
+                        allowNull: false,
+                    },
+                    superTieBreaksWonAsVisitor: {
+                        type: Sequelize.INTEGER,
+                        allowNull: false,
+                    },
+                    superTieBreaksPlayedAsVisitor: {
+                        type: Sequelize.INTEGER,
+                        allowNull: false,
+                    },
+                    // matchs
+                    matchWonAsLocal: {
+                        type: Sequelize.INTEGER,
+                        allowNull: false,
+                    },
+                    matchLostAsLocal: {
+                        type: Sequelize.INTEGER,
+                        allowNull: false,
+                    },
+                    matchPlayedAsLocal: {
+                        type: Sequelize.INTEGER,
+                        allowNull: false,
+                    },
+                    matchWonAsVisitor: {
+                        type: Sequelize.INTEGER,
+                        allowNull: false,
+                    },
+                    matchLostAsVisitor: {
+                        type: Sequelize.INTEGER,
+                        allowNull: false,
+                    },
+                    matchPlayedAsVisitor: {
+                        type: Sequelize.INTEGER,
+                        allowNull: false,
+                    },
+                    // match won with first set won
+                    matchsWonWithFirstSetWonAsLocal: {
+                        type: Sequelize.INTEGER,
+                        allowNull: false,
+                    },
+                    matchsPlayedWithFirstSetWonAsLocal: {
+                        type: Sequelize.INTEGER,
+                        allowNull: false,
+                    },
+                    matchsWonWithFirstSetWonAsVisitor: {
+                        type: Sequelize.INTEGER,
+                        allowNull: false,
+                    },
+                    matchsPlayedWithFirstSetWonAsVisitor: {
+                        type: Sequelize.INTEGER,
+                        allowNull: false,
+                    },
+                    // clash won
+                    clashWonAsLocal: {
+                        type: Sequelize.INTEGER,
+                        allowNull: false,
+                    },
+                    clashPlayedAsLocal: {
+                        type: Sequelize.INTEGER,
+                        allowNull: false,
+                    },
+                    clashWonAsVisitor: {
+                        type: Sequelize.INTEGER,
+                        allowNull: false,
+                    },
+                    clashPlayedAsVisitor: {
+                        type: Sequelize.INTEGER,
+                        allowNull: false,
+                    },
+                    createdAt: {
+                        allowNull: true,
+                        type: Sequelize.DATE,
+                        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+                    },
+                    updatedAt: {
+                        allowNull: true,
+                        type: Sequelize.DATE,
+                        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+                    },
+                },
+                { tableName: "teamStats" }
+            );
+
+        const CREATE_RANKING_TABLE = () =>
+            queryInterface.createTable(
+                "ranking",
+                {
+                    rankingId: {
+                        type: Sequelize.UUID,
+                        defaultValue: Sequelize.UUIDV4,
+                        allowNull: false,
+                        primaryKey: true,
+                    },
+                    position: {
+                        type: Sequelize.STRING,
+                        allowNull: false,
+                    },
+                    teamId: {
+                        type: Sequelize.UUID,
+                        allowNull: false,
+                        references: {
+                            model: "team",
+                            key: "teamId",
+                        },
+                    },
+                    seasonId: {
+                        type: Sequelize.UUID,
+                        allowNull: false,
+                        references: {
+                            model: "season",
+                            key: "seasonId",
+                        },
+                    },
+                    createdAt: {
+                        allowNull: true,
+                        type: Sequelize.DATE,
+                        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+                    },
+                    updatedAt: {
+                        allowNull: true,
+                        type: Sequelize.DATE,
+                        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+                    },
+                },
+                { tableName: "ranking" }
+            );
 
         await CREATE_USER_TABLE();
         await CREATE_CLUB_TABLE();
@@ -715,6 +955,8 @@ module.exports = {
         await CREATE_TRACKER_TABLE();
         await CREATE_PLAYER_TRACKER_TABLE();
         await CREATE_JOURNEY_TABLE();
+        await CREATE_TEAM_STATS_TABLE();
+        await CREATE_RANKING_TABLE();
     },
 
     async down(queryInterface, Sequelize) {
@@ -730,6 +972,8 @@ module.exports = {
         await queryInterface.dropTable("playerTracker");
         await queryInterface.dropTable("journey");
         await queryInterface.dropTable("team");
+        await queryInterface.dropTable("teamStats");
+        await queryInterface.dropTable("ranking");
     },
 };
 //# sourceMappingURL=20230616182354-migration.js.map

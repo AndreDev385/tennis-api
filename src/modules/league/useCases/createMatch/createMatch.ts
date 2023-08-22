@@ -49,8 +49,6 @@ export class CreateMatch
 
     async execute(request: CreateClashMatchsDto): Promise<Response> {
 
-        console.log("length :", request.matchs.length);
-
         let matchs: Array<Match> = [];
         let player1: Player;
         let player3: Player;
@@ -110,7 +108,7 @@ export class CreateMatch
                     clashId: clash.clashId,
                     player2: matchData.player2,
                     category: clash.category,
-                    address: clash.host,
+                    address: clash.host.name,
                     player4:
                         matchData.mode == GameMode.double
                             ? matchData.player4
