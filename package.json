@@ -3,6 +3,9 @@
     "version": "1.0.0",
     "description": "",
     "main": "index.js",
+    "engines": {
+        "npm": "9.x"
+    },
     "scripts": {
         "build:server": "npx tsc",
         "build:public": "cd ./public/admin && npm i && npm run build",
