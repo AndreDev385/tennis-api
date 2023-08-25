@@ -3,10 +3,17 @@
     "version": "1.0.0",
     "description": "",
     "main": "index.js",
+    "engines": {
+        "node": "18.x",
+        "npm": "9.x"
+    },
+    "resolutions": {
+        "engine.io": "6.5.1"
+    },
     "scripts": {
         "build:server": "npx tsc",
         "build:public": "cd ./public/admin && npm i && npm run build",
-        "build": "npm run build:server",
+        "build": "npm run build:server && npm run build:public",
         "db:create:dev": "cross-env NODE_ENV=development node scripts/db/create",
         "migrate": "npx sequelize-cli db:migrate",
         "seed": "npx sequelize-cli db:seed:all",
@@ -27,6 +34,7 @@
         "cross-env": "^7.0.3",
         "dompurify": "^3.0.1",
         "dotenv": "^16.0.3",
+        "engine.io-parser": "^5.2.1",
         "express": "^4.18.2",
         "helmet": "^6.1.5",
         "jsdom": "^21.1.1",
@@ -40,7 +48,7 @@
         "sequelize": "^6.31.1",
         "sequelize-cli": "^6.6.1",
         "socket.io": "^4.7.1",
-        "typescript": "^5.0.4",
+        "typescript": "^5.1.6",
         "uuid": "^9.0.0",
         "validator": "^13.9.0"
     },
