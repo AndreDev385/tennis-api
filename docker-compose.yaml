@@ -28,7 +28,7 @@ services:
     container_name: app
     build:
       context: ./
-      target: dev
+      target: production
     volumes:
       - .:/src
     ports:
