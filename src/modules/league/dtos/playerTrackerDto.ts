@@ -10,6 +10,8 @@ export interface PlayerTrackerDto {
     pointsLostServing: number;
     saveBreakPtsChances: number;
     breakPtsSaved: number;
+    gamesWonServing: number;
+    gamesLostServing: number;
     pointsWinnedFirstServ?: number;
     pointsWinnedSecondServ?: number;
     firstServIn?: number;

@@ -44,8 +44,9 @@ export class FinishMatch implements UseCase<any, Response> {
         let sets: Sets;
         let tracker: MatchTracker;
 
-        console.log("Request me", request.tracker.me);
+        console.log("TRACKER", request.tracker);
 
+        console.log("Request me", request.tracker.me);
         try {
             try {
                 const seasons = await this.seasonRepo.list({

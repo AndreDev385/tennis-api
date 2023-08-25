@@ -1,4 +1,3 @@
-import { argv0 } from "process";
 import { Guard } from "../../../shared/core/Guard";
 import { Result } from "../../../shared/core/Result";
 import { Entity } from "../../../shared/domain/Entity";
@@ -19,6 +18,8 @@ interface PlayerTrackerProps {
     pointsLostServing: number;
     saveBreakPtsChances: number;
     breakPtsSaved: number;
+    gamesWonServing: number;
+    gamesLostServing: number;
     pointsWinnedFirstServ?: number;
     pointsWinnedSecondServ?: number;
     firstServIn?: number;
@@ -56,6 +57,14 @@ export class PlayerTracker extends Entity<PlayerTrackerProps> {
 
     get pointsWonServing(): number {
         return this.props.pointsWonServing;
+    }
+
+    get gamesWonServing(): number {
+        return this.props.gamesWonServing;
+    }
+
+    get gamesLostServing(): number {
+        return this.props.gamesLostServing;
     }
 
     get pointsWonReturning(): number {
@@ -145,6 +154,8 @@ export class PlayerTracker extends Entity<PlayerTrackerProps> {
         const result = PlayerTracker.create({
             seasonId,
             playerId,
+            gamesLostServing: 0,
+            gamesWonServing: 0,
             pointsWon: 0,
             pointsWonServing: 0,
             pointsWonReturning: 0,
