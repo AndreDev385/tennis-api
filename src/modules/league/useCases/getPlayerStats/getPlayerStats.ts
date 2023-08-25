@@ -1,5 +1,5 @@
 import { AppError } from "../../../../shared/core/AppError";
-import { Either, Left, Result, left, right } from "../../../../shared/core/Result";
+import { Either, Result, left, right } from "../../../../shared/core/Result";
 import { UseCase } from "../../../../shared/core/UseCase";
 import { Player } from "../../domain/player";
 import { PlayerTracker } from "../../domain/playerTracker";
@@ -92,6 +92,8 @@ function calculatePlayerStats(stats: Array<PlayerTracker>) {
         pointsLostServing: 0,
         saveBreakPtsChances: 0,
         breakPtsSaved: 0,
+        gamesWonServing: 0,
+        gamesLostServing: 0,
         pointsWinnedFirstServ: 0,
         pointsWinnedSecondServ: 0,
         firstServIn: 0,
@@ -135,6 +137,8 @@ function calculatePlayerStats(stats: Array<PlayerTracker>) {
         totalStats.bckgPointsLost += matchStats.bckgPointsLost;
         totalStats.winners += matchStats.winners;
         totalStats.noForcedErrors += matchStats.noForcedErrors;
+        totalStats.gamesWonServing += matchStats.gamesWonServing
+        totalStats.gamesLostServing += matchStats.gamesLostServing
     }
 
     return totalStats;

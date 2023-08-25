@@ -14,9 +14,7 @@ interface MatchTrackerProps {
     me: PlayerTracker;
     partner?: PlayerTracker;
 
-    gamesWonServing: number;
     gamesWonReturning: number;
-    gamesLostServing: number;
     gamesLostReturning: number;
     winBreakPtsChances: number;
     breakPtsWinned: number;
@@ -59,16 +57,8 @@ export class MatchTracker extends Entity<MatchTrackerProps> {
         return this.props.partner;
     }
 
-    get gamesWonServing(): number {
-        return this.props.gamesWonServing;
-    }
-
     get gamesWonReturning(): number {
         return this.props.gamesWonReturning;
-    }
-
-    get gamesLostServing(): number {
-        return this.props.gamesLostServing;
     }
 
     get gamesLostReturning(): number {
@@ -151,7 +141,10 @@ export class MatchTracker extends Entity<MatchTrackerProps> {
             return Result.fail<MatchTracker>(guard.getErrorValue());
         }
 
-        const meOrError = PlayerTracker.createNewPlayerTracker(playerId, seasonId);
+        const meOrError = PlayerTracker.createNewPlayerTracker(
+            playerId,
+            seasonId
+        );
 
         if (meOrError.isFailure) {
             return Result.fail(`${meOrError.getErrorValue()}`);
@@ -159,8 +152,10 @@ export class MatchTracker extends Entity<MatchTrackerProps> {
 
         let partner: PlayerTracker;
         if (!!partnerId === true) {
-            const partnerOrError =
-                PlayerTracker.createNewPlayerTracker(partnerId, seasonId);
+            const partnerOrError = PlayerTracker.createNewPlayerTracker(
+                partnerId,
+                seasonId
+            );
             if (partnerOrError.isFailure) {
                 return Result.fail(`${partnerOrError.getErrorValue()}`);
             }
@@ -171,9 +166,7 @@ export class MatchTracker extends Entity<MatchTrackerProps> {
             matchId: id,
             me: meOrError.getValue(),
             partner,
-            gamesWonServing: 0,
             gamesWonReturning: 0,
-            gamesLostServing: 0,
             gamesLostReturning: 0,
             winBreakPtsChances: 0,
             breakPtsWinned: 0,
@@ -190,16 +183,8 @@ export class MatchTracker extends Entity<MatchTrackerProps> {
             { argument: props.matchId, argumentName: "match id" },
             { argument: props.me, argumentName: "my statistics" },
             {
-                argument: props.gamesWonServing,
-                argumentName: "games won serving",
-            },
-            {
                 argument: props.gamesWonReturning,
                 argumentName: "games won returning",
-            },
-            {
-                argument: props.gamesLostServing,
-                argumentName: "games lost serving",
             },
             {
                 argument: props.gamesLostReturning,

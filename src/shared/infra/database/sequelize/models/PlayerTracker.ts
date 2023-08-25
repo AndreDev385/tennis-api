@@ -53,6 +53,14 @@ const PlayerTrackerModel = sequelize.define(
             type: DataTypes.INTEGER,
             allowNull: false,
         },
+        gamesWonServing: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        gamesLostServing: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
         pointsWinnedFirstServ: {
             type: DataTypes.INTEGER,
             allowNull: false,

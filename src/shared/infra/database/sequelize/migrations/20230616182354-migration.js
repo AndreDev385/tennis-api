@@ -421,16 +421,7 @@ module.exports = {
                         key: "matchId",
                     },
                 },
-
-                gamesWonServing: {
-                    type: Sequelize.INTEGER,
-                    allowNull: false,
-                },
                 gamesWonReturning: {
-                    type: Sequelize.INTEGER,
-                    allowNull: false,
-                },
-                gamesLostServing: {
                     type: Sequelize.INTEGER,
                     allowNull: false,
                 },
@@ -595,6 +586,14 @@ module.exports = {
                     allowNull: false,
                 },
                 breakPtsSaved: {
+                    type: Sequelize.INTEGER,
+                    allowNull: false,
+                },
+                gamesWonServing: {
+                    type: Sequelize.INTEGER,
+                    allowNull: false,
+                },
+                gamesLostServing: {
                     type: Sequelize.INTEGER,
                     allowNull: false,
                 },
