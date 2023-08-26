@@ -1,3 +1,16 @@
+.overlay {
+    position: fixed; 
+    width: 100%; 
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 4; 
+    cursor: pointer;
+}
+  
 .dashboard-container{
     display: grid;
     grid-template-columns: 20% 80%;
@@ -7,14 +20,29 @@
 
         img{
             width: 5rem;
-            margin-top: 1.5rem;
+            margin: 0 auto;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .wrap-option, .wrap-logout{
+            padding: .8rem;
+            border-radius: 1rem;
+            cursor: pointer;
+            margin-left: 1rem;
+            margin-bottom: .5rem;
+
+            span{
+                margin-left: .5rem;
+            }
+
+            svg{
+                width: 2rem;
+                font-size: 1.5rem;
+            }
         }
 
         .wrap-option{
-            padding: 1rem 1rem 1rem 1rem;
-            border-radius: 1rem;
-            margin: 1.5rem;
-            cursor: pointer;
             transition-property: background-color;
             transition-duration: 0.2s;
             transition-timing-function: ease-in;
@@ -29,18 +57,11 @@
 
             }
 
-            span{
-                margin-left: .5rem;
-                font-size: 1.2rem;
-            }
-
             svg{
                 transition-property: color;
                 transition-duration: 0.2s;
                 transition-timing-function: ease-in;
                 transition-delay: 0.2s;
-                width: 2rem;
-                font-size: 1.5rem;
                 color: #bdbdbd;
             }
         }
@@ -50,6 +71,14 @@
             
             svg{
                 color: #F5CD2E;
+            }
+        }
+
+        .wrap-logout{
+            margin-top: 2rem;
+
+            &:hover{
+                background-color: #edededa1;
             }
         }
 
