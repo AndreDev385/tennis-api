@@ -26,7 +26,7 @@ const Login = () => {
     setSubmitted(true)
     if(validEmail && validPassword){
       setLoading(true)
-      console.log(form)
+      navigate("/home")
     }
     event.preventDefault();
     event.stopPropagation();
@@ -52,7 +52,7 @@ const Login = () => {
   return ( 
     <Row >
       <Col xs={12} sm={7} lg={6} className='login-container center'>
-        <img className='center' src='/GameMind.svg' alt='GameMind' />
+        <img className='center' src='/gameMindLogo.svg' alt='GameMind' />
         <small className='center text-center mt-3'>
           Admin Dashboard
         </small>

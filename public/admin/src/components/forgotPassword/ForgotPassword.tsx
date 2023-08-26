@@ -17,7 +17,7 @@ const ForgotPassword = () => {
       case 1:
         return <EmailForm onSubmit={incrementStep} />
       case 2:
-        return <CodeForm />
+        return <CodeForm onSubmit={incrementStep} />
       case 3:
         return <ResetPasswordForm />
       default:
