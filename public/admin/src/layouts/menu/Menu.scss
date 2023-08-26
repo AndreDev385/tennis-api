@@ -1,0 +1,57 @@
+.dashboard-container{
+    display: grid;
+    grid-template-columns: 20% 80%;
+
+    .menu-wrap{
+        height: 100vh;  
+
+        img{
+            width: 5rem;
+            margin-top: 1.5rem;
+        }
+
+        .wrap-option{
+            padding: 1rem 1rem 1rem 1rem;
+            border-radius: 1rem;
+            margin: 1.5rem;
+            cursor: pointer;
+            transition-property: background-color;
+            transition-duration: 0.2s;
+            transition-timing-function: ease-in;
+            transition-delay: 0.2s;
+
+            &:hover{
+                background-color: #fff3c2;
+
+                svg{
+                    color: #F5CD2E;
+                }
+
+            }
+
+            span{
+                margin-left: .5rem;
+                font-size: 1.2rem;
+            }
+
+            svg{
+                transition-property: color;
+                transition-duration: 0.2s;
+                transition-timing-function: ease-in;
+                transition-delay: 0.2s;
+                width: 2rem;
+                font-size: 1.5rem;
+                color: #bdbdbd;
+            }
+        }
+
+        .menu-selected{
+            background-color: #fff3c2;
+            
+            svg{
+                color: #F5CD2E;
+            }
+        }
+
+    }
+}

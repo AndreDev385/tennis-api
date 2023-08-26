@@ -1,8 +1,8 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Login from './components/login/Login'
 import ForgotPassword from './components/forgotPassword/ForgotPassword'
-import Home from './components/home/Home'
-// import Footer from './layouts/footer/Footer'
+import Menu from './layouts/menu/Menu'
+import Clubs from './components/clubs/Clubs'
 
 const router = createBrowserRouter([
     {
@@ -14,8 +14,13 @@ const router = createBrowserRouter([
         element: <ForgotPassword />
     },
     {
-        path: '/home',
-        element: <Home />
+        element: <Menu />,
+        children: [
+            {
+                path: "/clubs",
+                element: <Clubs />
+            }
+        ]
     }
 ])
 

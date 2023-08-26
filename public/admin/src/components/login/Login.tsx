@@ -26,7 +26,7 @@ const Login = () => {
     setSubmitted(true)
     if(validEmail && validPassword){
       setLoading(true)
-      navigate("/home")
+      navigate("/clubs")
     }
     event.preventDefault();
     event.stopPropagation();
