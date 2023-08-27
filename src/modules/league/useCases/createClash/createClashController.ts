@@ -28,7 +28,7 @@ export class CreateClashController extends BaseController {
                             .message
                     );
                 case AppError.NotFoundError:
-                    return this.notFound(
+                    return this.clientError(
                         res,
                         (error as AppError.NotFoundError).getErrorValue()
                             .message

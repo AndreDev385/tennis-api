@@ -34,8 +34,6 @@ export class SequelizeMatchRepository implements MatchRepository {
 
         const raw = MatchMap.toPersistance(match);
 
-        console.log(raw.isCancelled, "[IS CANCELLED IN SAVE]");
-
         const exist = await MatchModel.findOne({
             where: { matchId: match.matchId.id.toString() },
         });

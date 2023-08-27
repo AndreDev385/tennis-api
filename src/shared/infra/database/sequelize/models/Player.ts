@@ -33,6 +33,11 @@ const PlayerModel = sequelize.define(
             onDelete: "cascade",
             onUpdate: "cascade",
         },
+        avatar: {
+            type: DataTypes.STRING,
+            allowNull: true,
+            defaultValue: null,
+        }
     },
     { tableName: "player" }
 );

@@ -13,7 +13,7 @@ export abstract class ValueObject<T extends ValueObjectProps> {
 
   constructor (props: T) {
     let baseProps: any = {
-      ...props, 
+      ...props,
     }
 
     this.props = baseProps;

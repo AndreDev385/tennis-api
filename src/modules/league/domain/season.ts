@@ -3,10 +3,12 @@ import { Result } from "../../../shared/core/Result";
 import { AggregateRoot } from "../../../shared/domain/AggregateRoot";
 import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
 import { FinishSeason } from "./events/finishSeason";
+import { LeagueId } from "./leagueId";
 import { SeasonId } from "./seasonId";
 
 interface SeasonProps {
     name: string;
+    leagueId: LeagueId;
     isCurrentSeason?: boolean;
     isFinish?: boolean;
 }
@@ -16,16 +18,20 @@ export class Season extends AggregateRoot<SeasonProps> {
         return SeasonId.create(this._id).getValue();
     }
 
+    get leagueId(): LeagueId {
+        return this.props.leagueId;
+    }
+
     get name(): string {
         return this.props.name;
     }
 
     get isCurrentSeason(): boolean {
-        return this.isCurrentSeason;
+        return this.props.isCurrentSeason;
     }
 
     get isFinish(): boolean {
-        return this.isFinish;
+        return this.props.isFinish;
     }
 
     public finishSeason() {
@@ -43,7 +49,8 @@ export class Season extends AggregateRoot<SeasonProps> {
         id?: UniqueEntityID
     ): Result<Season> {
         const guardResult = Guard.againstNullOrUndefinedBulk([
-            { argument: props.name, argumentName: "name" },
+            { argument: props.leagueId, argumentName: "liga" },
+            { argument: props.name, argumentName: "nombre" },
         ]);
 
         if (guardResult.isFailure) {

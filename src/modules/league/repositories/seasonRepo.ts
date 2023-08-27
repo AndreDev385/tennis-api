@@ -11,4 +11,5 @@ export interface SeasonRepository {
     save(season: Season): Promise<void>;
     list(query: SeasonQuery): Promise<Array<SeasonDto>>
     findById(seasonId: string): Promise<Season>
+    currentSeason(): Promise<Season>
 }

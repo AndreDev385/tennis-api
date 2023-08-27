@@ -7,9 +7,7 @@ export interface TrackerDto {
     me: PlayerTrackerDto;
     partner?: PlayerTrackerDto;
 
-    gamesWonServing: number;
     gamesWonReturning: number;
-    gamesLostServing: number;
     gamesLostReturning: number;
     winBreakPtsChances: number;
     breakPtsWinned: number;

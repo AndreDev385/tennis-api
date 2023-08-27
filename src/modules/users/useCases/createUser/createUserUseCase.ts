@@ -12,14 +12,14 @@ import { CreateUserErrors } from "./createUserErrors";
 type Response = Either<
     | CreateUserErrors.EmailAlreadyExistsError
     | AppError.UnexpectedError
-    | Result<any>,
+    | Result<string>,
     Result<void>
 >;
 
 export class CreateUserUseCase
     implements UseCase<CreateUserDto, Promise<Response>>
 {
-    repository: UserRepository;
+    private repository: UserRepository;
 
     constructor(userRepository: UserRepository) {
         this.repository = userRepository;
@@ -42,7 +42,7 @@ export class CreateUserUseCase
 
         if (dtoResult.isFailure) {
             return left(
-                Result.fail<void>(dtoResult.getErrorValue())
+                Result.fail<string>(dtoResult.getErrorValue())
             ) as Response;
         }
 
@@ -65,11 +65,12 @@ export class CreateUserUseCase
                 lastName,
                 email,
                 password,
+                canTrack: request.canTrack ?? false,
             });
 
             if (userOrError.isFailure) {
                 return left(
-                    Result.fail<User>(userOrError.getErrorValue().toString())
+                    Result.fail<string>(`${userOrError.getErrorValue()}`)
                 ) as Response;
             }
 
