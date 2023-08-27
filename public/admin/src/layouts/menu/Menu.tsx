@@ -3,7 +3,7 @@ import "./Menu.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAd, faAddressBook, faAddressCard, faCalendar, faChartBar, faNewspaper, faSignOutAlt, faTableTennis } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
-import LogOutModal from "../../components/logOutModal/LogOutModal";
+import ModalQuestion from "../../components/modalQuestion/ModalQuestion";
 
 const Menu = () => {
     const [showLogOutModal, setShowLogOutModal] = useState(false);
@@ -19,20 +19,20 @@ const Menu = () => {
     const statsClassName = location.pathname === "/stats"? "wrap-option menu-selected": "wrap-option"
     const adminsClassName = location.pathname === "/admins"? "wrap-option menu-selected": "wrap-option"
     
-    const overlayClassName = showLogOutModal? "overlay": ""
-
     const navigateTo = (path: string): void => {
         navigate(path)
     }
 
-    const handleModal = (): void => {
-        setShowLogOutModal(!showLogOutModal)
+    const dismissModal = (): void => {
+        setShowLogOutModal(false)
+    }
+
+    const logOut = (): void => {
+        navigate("/")
     }
 
     return (
         <>
-            <div className={overlayClassName} />
-            
             <div className="dashboard-container">
                 <div className="menu-wrap">
                     <img className='center' 
@@ -108,7 +108,13 @@ const Menu = () => {
                 <Outlet />
             </div>
 
-            {showLogOutModal && <LogOutModal dismiss={handleModal} />}
+            {showLogOutModal && 
+                <ModalQuestion 
+                    title="Cerrar sesión"
+                    question="¿Estás seguro que quieres cerrar sesión?"
+                    dismiss={dismissModal} 
+                    accept={logOut}
+                />}
         </>
     )
 }

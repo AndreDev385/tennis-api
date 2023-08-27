@@ -1,0 +1,46 @@
+.seasons-container{
+    .title-wrap{
+        display: grid;
+        grid-template-columns: 40% 60%;
+
+        h1{
+            margin: 2rem;
+        }
+
+        button{
+            margin-top: 2.5rem;
+        }
+    }
+
+    table{
+        margin-left: 2rem;
+    }
+
+    table th{
+        --bs-table-bg: #f2f7fe;
+    }
+
+    table tr{
+        --bs-table-bg: #ffffff;
+        height: 3rem;
+        &:hover{
+            --bs-table-bg: #fafafa;
+        }
+    }
+
+    svg{
+        margin-right: .5rem;
+    }
+
+    .finish{
+        color: #0fb85b;
+    }
+
+    .current{
+        color:#6abaf7
+    }
+
+    button{
+        width: 12rem;
+    }
+}

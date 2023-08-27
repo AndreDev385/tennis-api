@@ -5,6 +5,8 @@ import { ToastContainer, toast } from 'react-toastify';
 
 import "./Clubs.scss";
 import 'react-toastify/dist/ReactToastify.css';
+import { useState } from 'react';
+import ModalQuestion from '../modalQuestion/ModalQuestion';
 
 interface Club {
   id: string,
@@ -14,6 +16,10 @@ interface Club {
 }
 
 const Clubs = () => {
+  const [showModalQuestion, setShowModalQuestion] = useState(false)
+  const [modalTitle, setModalTitle] = useState("")
+  const [modalQuestion, setModalQuestion] = useState("")
+  const [id, setId] = useState("")
   
   const clubs : Club[] = [
     {
@@ -35,6 +41,28 @@ const Clubs = () => {
       isSubscribed: true
     },
   ]
+
+  const onClickCancelSubscription = (item: Club): void => {
+    setModalTitle("Cancelar suscripción")
+    setModalQuestion(`¿Estás seguro que quieres cancelar suscripción de ${item.name}?`)
+    openModal(item.id)
+  }
+
+  const onClickSubscription = (item: Club): void => {
+    setModalTitle("Suscribir")
+    setModalQuestion(`¿Estás seguro que quieres suscribir a ${item.name}?`)
+    openModal(item.id)
+  }
+
+  const openModal = (id: string): void => {
+    setId(id)
+    setShowModalQuestion(true)
+  }
+
+  const handleModalAccept = () => {
+    // do something 
+    setShowModalQuestion(false)
+  }
 
   const copyClipboard = (code: string): void => {
     navigator.clipboard.writeText(code)
@@ -62,10 +90,10 @@ const Clubs = () => {
         </td>
         <td className='text-center'>
           {item.isSubscribed? 
-            <Button variant="dark">
+            <Button variant="dark" onClick={() => onClickCancelSubscription(item)}>
               Cancelar suscripción
             </Button>: 
-            <Button variant="warning">
+            <Button variant="warning" onClick={() => onClickSubscription(item)}>
               Suscribir
             </Button>
           }
@@ -75,47 +103,58 @@ const Clubs = () => {
   })
 
   return (
-    <div className='clubs-container'>
-      <h1>
-        Clubes
-      </h1>
+    <>
+      <div className='clubs-container'>
+        <h1>
+          Clubes
+        </h1>
 
-      <Table responsive="sm">
-        <thead>
-          <tr>
-            <th>
-              Nombre
-            </th>
-            <th className='text-center'>
-              Código
-            </th>
-            <th className='text-center'>
-              Suscripción
-            </th>
-            <th className='text-center'>
-              Menejar suscripción
-            </th>
-          </tr>
-        </thead>
+        <Table responsive="sm">
+          <thead>
+            <tr>
+              <th>
+                Nombre
+              </th>
+              <th className='text-center'>
+                Código
+              </th>
+              <th className='text-center'>
+                Suscripción
+              </th>
+              <th className='text-center'>
+                Manejar suscripción
+              </th>
+            </tr>
+          </thead>
 
-        <tbody>
-          {clubTable}
-        </tbody>
-      </Table>
+          <tbody>
+            {clubTable}
+          </tbody>
+        </Table>
 
-      <ToastContainer 
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
-    </div>
+        <ToastContainer 
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
+
+      </div>
+
+      {showModalQuestion && 
+        <ModalQuestion 
+            title={modalTitle}
+            question={modalQuestion}
+            dismiss={() => setShowModalQuestion(false)} 
+            accept={() => handleModalAccept()}
+        />}
+    </>
   )
 }
 
