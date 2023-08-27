@@ -1,0 +1,39 @@
+.clubs-container{
+    h1{
+        margin: 2rem;
+    }
+
+    table{
+        margin-left: 2rem;
+    }
+
+    table th{
+        --bs-table-bg: #f2f7fe;
+    }
+
+    table tr{
+        --bs-table-bg: #ffffff;
+        height: 3rem;
+        &:hover{
+            --bs-table-bg: #fafafa;
+        }
+    }
+
+    .copy{
+        color: #3e3e3e;
+        margin-left: .5rem;
+        cursor: pointer;
+    }
+
+    .check-circle{
+        color: #0fb85b;
+    }
+
+    .circle{
+        color:#fb7676
+    }
+
+    button{
+        width: 12rem;
+    }
+}
