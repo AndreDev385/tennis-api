@@ -13,7 +13,7 @@ export class NodeMailer implements Mailer {
 
     public sendEmail({ email, subject, text }) {
         const transporter = createTransport({
-            host: "gmail",
+            host: "smtp.gmail.com",
             port: 465,
             auth: {
                 user: this.appEmail,
