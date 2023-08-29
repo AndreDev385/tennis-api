@@ -1,7 +1,6 @@
 import { createTransport } from "nodemailer";
-import { EmailData, Mailer } from "./mailer";
+import { Mailer } from "./mailer";
 import { environment } from "../../../../config";
-import { Result } from "../../../../shared/core/Result";
 
 export class NodeMailer implements Mailer {
     appEmail: string;
@@ -12,7 +11,7 @@ export class NodeMailer implements Mailer {
         this.emailPassword = environment.mailer.email_password;
     }
 
-    public sendEmail({ email, subject, text }: EmailData): Result<string> {
+    public sendEmail({ email, subject, text }) {
         const transporter = createTransport({
             host: "gmail",
             port: 465,
@@ -28,18 +27,14 @@ export class NodeMailer implements Mailer {
             text: text,
         };
 
-        let result: Result<string>;
-
         transporter.sendMail(options, (err, info) => {
             if (err) {
-                result = Result.fail(err.message)
+                console.log(err)
             } else {
-                result = Result.ok(info.response)
+                console.log(info.response)
             }
         });
 
         transporter.close();
-
-        return result;
     }
 }
