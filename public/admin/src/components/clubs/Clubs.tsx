@@ -20,6 +20,7 @@ const Clubs = () => {
   const [modalTitle, setModalTitle] = useState("")
   const [modalQuestion, setModalQuestion] = useState("")
   const [id, setId] = useState("")
+  console.log(id)
   
   const clubs : Club[] = [
     {

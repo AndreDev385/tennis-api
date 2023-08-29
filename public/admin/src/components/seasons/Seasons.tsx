@@ -1,7 +1,7 @@
 import { faCircle, faPlus } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Button, Table } from "react-bootstrap"
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 
 import "./Seasons.scss";
 import 'react-toastify/dist/ReactToastify.css';
@@ -22,6 +22,7 @@ const Seasons = () => {
   const [showModalCreate, setShowModalCreate] = useState(false)
   const [modalQuestion, setModalQuestion] = useState("")
   const [seasonId, setSeasonId] = useState("")
+  console.log(seasonId)
 
   const seasons : Season[] = [
     {

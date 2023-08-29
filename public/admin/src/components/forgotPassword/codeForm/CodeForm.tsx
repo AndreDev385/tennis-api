@@ -1,7 +1,4 @@
-import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react"
-import { Button } from "react-bootstrap"
 import ReactCodeInput from "react-code-input";
 import './CodeForm.scss'
 

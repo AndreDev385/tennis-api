@@ -1,10 +1,8 @@
-import { faCircle, faPlus } from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { Button, Table } from "react-bootstrap"
-import { ToastContainer } from 'react-toastify';
-import { useState } from "react";
-
-import ModalQuestion from "../modalQuestion/ModalQuestion";
+// import { faPlus } from "@fortawesome/free-solid-svg-icons"
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+// import { Button, Table } from "react-bootstrap"
+// import { ToastContainer } from 'react-toastify';
+// import { useState } from "react";
 
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -15,32 +13,32 @@ interface News {
 }
 
 const News = () => {
-  const [showModalQuestion, setShowModalQuestion] = useState(false)
-  const [showModalCreate, setShowModalCreate] = useState(false)
-  const [modalQuestion, setModalQuestion] = useState("")
-  const [clubEventId, setClubEventId] = useState("")
+  // const [showModalQuestion, setShowModalQuestion] = useState(false)
+  // const [showModalCreate, setShowModalCreate] = useState(false)
+  // const [modalQuestion, setModalQuestion] = useState("")
+  // const [clubEventId, setClubEventId] = useState("")
 
-  const news : News[] = [
-    {
-      clubEventId: "1234",
-      clubId: "club1234",
-      link: "url"
-    },
-    {
-      clubEventId: "1234",
-      clubId: "club1234",
-      link: "url"
-    },
-  ]
+  // const news : News[] = [
+  //   {
+  //     clubEventId: "1234",
+  //     clubId: "club1234",
+  //     link: "url"
+  //   },
+  //   {
+  //     clubEventId: "1234",
+  //     clubId: "club1234",
+  //     link: "url"
+  //   },
+  // ]
 
-  const showDeleteModal = (id: string) => {
-    setClubEventId(id)
-  }
+  // const showDeleteModal = (id: string) => {
+  //   setClubEventId(id)
+  // }
   
-  const handleDeleteNews = (event: boolean) => {
-    // TODO delete
-    setShowModalQuestion(false)
-  }
+  // const handleDeleteNews = (event: boolean) => {
+  //   // TODO delete
+  //   setShowModalQuestion(false)
+  // }
 
   // const seasonTable = seasons.map( (item) => {
   //   return (
@@ -77,7 +75,7 @@ const News = () => {
 
   return (
     <>
-      <div className='news-container'>
+      {/* <div className='news-container'>
         <div className="title-wrap">
           <h1>
             Novedades
@@ -107,11 +105,11 @@ const News = () => {
         </thead>
 
         <tbody>
-          {/* {seasonTable} */}
+          {seasonTable}
         </tbody>
-      </Table>
+      </Table> */}
 
-      <ToastContainer 
+      {/* <ToastContainer 
         position="top-right"
         autoClose={5000}
         hideProgressBar={false}
@@ -123,7 +121,7 @@ const News = () => {
         pauseOnHover
         theme="light"
       />
-      </div>
+      </div> */}
 
       {/* {showModalQuestion && 
         <ModalQuestion 
