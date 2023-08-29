@@ -1,6 +1,7 @@
 import { createTransport } from "nodemailer";
 import { EmailData, Mailer } from "./mailer";
 import { environment } from "../../../../config";
+import { Result } from "../../../../shared/core/Result";
 
 export class NodeMailer implements Mailer {
     appEmail: string;
@@ -11,10 +12,10 @@ export class NodeMailer implements Mailer {
         this.emailPassword = environment.mailer.email_password;
     }
 
-    public async sendEmail({ email, subject, text }: EmailData) {
+    public async sendEmail({ email, subject, text }: EmailData): Promise<Result<string>> {
         const transporter = createTransport({
             host: "gmail",
-            port: 587,
+            port: 465,
             auth: {
                 user: this.appEmail,
                 pass: this.emailPassword,
@@ -27,8 +28,18 @@ export class NodeMailer implements Mailer {
             text: text,
         };
 
-        await transporter.sendMail(options);
-        
+        let result: Result<string>;
+
+        transporter.sendMail(options, (err, info) => {
+            if (err) {
+                result = Result.fail(err.message)
+            } else {
+                result = Result.ok(info.response)
+            }
+        });
+
         transporter.close();
+
+        return result;
     }
 }

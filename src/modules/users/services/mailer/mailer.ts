@@ -1,3 +1,5 @@
+import { Result } from "../../../../shared/core/Result";
+
 export interface EmailData {
     email: string;
     subject: string;
@@ -5,5 +7,5 @@ export interface EmailData {
 }
 
 export interface Mailer {
-    sendEmail(props: EmailData): void
+    sendEmail(props: EmailData): Result<string>
 }
