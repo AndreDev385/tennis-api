@@ -13,4 +13,5 @@ export interface UserRepository {
     save(user: User): Promise<void>;
     getUserByRecoveryPasswordCode(code: string): Promise<User>;
     list(query: UserQuery): Promise<Array<User>>;
+    delete(userId: string): Promise<void>;
 }

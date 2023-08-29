@@ -21,7 +21,8 @@
         ],
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
-        "esModuleInterop": true
+        "esModuleInterop": true,
+        "skipLibCheck":true
     },
     "include": [
         "./src/*.ts",

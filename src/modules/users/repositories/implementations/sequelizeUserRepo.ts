@@ -71,10 +71,16 @@ export class SequelizeUserRepo implements UserRepository {
             where: { recoverPasswordCode: code },
         });
 
-        console.log(user, "found");
-
         if (!!user == false) throw new Error("User not found");
 
         return UserMap.toDomain(user);
+    }
+
+    async delete(userId: string): Promise<void> {
+        const UserModel = this.models.UserModel;
+
+        await UserModel.destroy({
+            where: { userId }
+        })
     }
 }

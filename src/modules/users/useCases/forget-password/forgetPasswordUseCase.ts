@@ -40,9 +40,7 @@ export class ForgetPasswordUseCase implements UseCase<ForgetPasswordDto, Respons
 
             user.generateCode();
 
-            await this.repository.save(user);
-
-            this.mailer.sendEmail({
+            const mailOptions = {
                 email: request.email,
                 subject: 'Cambiar contraseña',
                 text: `Estimado ${user.firstName.value} ${user.lastName.value},
@@ -57,7 +55,11 @@ En GameMind, nos comprometemos a garantizar la privacidad y seguridad de nuestro
 
 Saludos cordiales,
 El equipo de GameMind`,
-            });
+            }
+
+            this.mailer.sendEmail(mailOptions);
+
+            await this.repository.save(user);
 
             return right(Result.ok<void>());
         } catch (e) {
