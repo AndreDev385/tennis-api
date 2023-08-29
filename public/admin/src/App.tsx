@@ -9,11 +9,16 @@ import Ads from './components/ads/Ads'
 import Measurers from './components/measurers/Measurers'
 import Stats from './components/stats/Stats'
 import Admins from './components/admins/Admins'
+import DeleteAccount from './components/deleteAccount/DeleteAccount'
 
 const router = createBrowserRouter([
     {
         path: '/',
         element: <Login />
+    },
+    {
+        path: '/delete/account',
+        element: <DeleteAccount />
     },
     {
         path: '/forgot/password',

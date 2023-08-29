@@ -71,7 +71,7 @@ const Clubs = () => {
 
   const clubTable = clubs.map( (item) => {
     return (
-      <tr>
+      <tr key={item.id}>
         <td>
           {item.name}
         </td>
