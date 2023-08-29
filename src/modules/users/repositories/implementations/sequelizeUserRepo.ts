@@ -71,8 +71,6 @@ export class SequelizeUserRepo implements UserRepository {
             where: { recoverPasswordCode: code },
         });
 
-        console.log(user, "found");
-
         if (!!user == false) throw new Error("User not found");
 
         return UserMap.toDomain(user);
