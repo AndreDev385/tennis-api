@@ -12,7 +12,7 @@ export class NodeMailer implements Mailer {
         this.emailPassword = environment.mailer.email_password;
     }
 
-    public async sendEmail({ email, subject, text }: EmailData): Promise<Result<string>> {
+    public sendEmail({ email, subject, text }: EmailData): Result<string> {
         const transporter = createTransport({
             host: "gmail",
             port: 465,
