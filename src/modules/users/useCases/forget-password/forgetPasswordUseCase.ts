@@ -57,11 +57,7 @@ Saludos cordiales,
 El equipo de GameMind`,
             }
 
-            let result = this.mailer.sendEmail(mailOptions);
-
-            if (result.isFailure) {
-                return left(result)
-            }
+            this.mailer.sendEmail(mailOptions);
 
             await this.repository.save(user);
 
