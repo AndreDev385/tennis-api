@@ -1,18 +1,19 @@
 import { createTransport } from "nodemailer";
 import { EmailData, Mailer } from "./mailer";
+import { environment } from "../../../../config";
 
 export class NodeMailer implements Mailer {
     appEmail: string;
     emailPassword: string;
 
     constructor() {
-        this.appEmail = "luismar_banezca@hotmail.com";
-        this.emailPassword = "04267577239";
+        this.appEmail = environment.mailer.app_email;
+        this.emailPassword = environment.mailer.email_password;
     }
 
     public async sendEmail({ email, subject, text }: EmailData) {
         const transporter = createTransport({
-            host: "smtp.office365.com",
+            host: "gmail",
             port: 587,
             auth: {
                 user: this.appEmail,
@@ -26,11 +27,8 @@ export class NodeMailer implements Mailer {
             text: text,
         };
 
-        try {
-            await transporter.sendMail(options);
-        } catch (e) {
-            throw e;
-        }
+        await transporter.sendMail(options);
+        
         transporter.close();
     }
 }

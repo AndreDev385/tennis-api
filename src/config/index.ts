@@ -11,4 +11,8 @@ export const environment = {
         api_key: process.env.API_KEY,
         api_secret: process.env.API_SECRET,
     },
+    mailer: {
+        app_email: process.env.APP_EMAIL,
+        email_password: process.env.EMAIL_PASSWORD,
+    }
 }
