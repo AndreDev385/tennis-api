@@ -9,6 +9,7 @@ import { FirstName, LastName } from "./names";
 import { JWTToken } from "./jwt";
 import { UserLoggedIn } from "./events/userLoggedIn";
 import { UserCreated } from "./events/userCreated";
+import { UserDeleted } from "./events/userDeleted";
 
 interface UserProps {
     firstName: FirstName;
@@ -95,7 +96,7 @@ export class User extends AggregateRoot<UserProps> {
 
     public delete(): void {
         if (!this.props.isDeleted) {
-            //this.addDomainEvent(new UserDeleted(this));
+            this.addDomainEvent(new UserDeleted(this));
             this.props.isDeleted = true;
         }
     }

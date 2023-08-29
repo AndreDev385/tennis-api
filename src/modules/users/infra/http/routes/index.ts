@@ -19,6 +19,7 @@ import {
 import { listUserController } from "../../../useCases/listUsers";
 import { validatePasswordCodeController } from "../../../useCases/validatePasswordCode";
 import { editUserController } from "../../../useCases/editUser";
+import { deleteUserController } from "../../../useCases/deleteUser";
 
 const userRouter = express.Router();
 
@@ -63,5 +64,7 @@ userRouter.get("/me", middleware.ensureAuthenticated(), (req, res) =>
 userRouter.get("/:email", (req, res) =>
     getUserByEmailController.execute(req, res)
 );
+
+userRouter.put("/delete", middleware.ensureAuthenticated(), (req, res) => deleteUserController.execute(req, res))
 
 export { userRouter };

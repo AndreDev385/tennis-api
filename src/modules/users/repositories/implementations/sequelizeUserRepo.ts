@@ -75,4 +75,12 @@ export class SequelizeUserRepo implements UserRepository {
 
         return UserMap.toDomain(user);
     }
+
+    async delete(userId: string): Promise<void> {
+        const UserModel = this.models.UserModel;
+
+        await UserModel.destroy({
+            where: { userId }
+        })
+    }
 }
