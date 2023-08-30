@@ -21,14 +21,21 @@ export class CreateSeason implements UseCase<any, any> {
 
         try {
             try {
-                const currentSeason = this.seasonRepo.currentSeason();
+                const currentSeason = await this.seasonRepo.currentSeason();
 
                 if (!!currentSeason == true) {
-                    return left(
-                        Result.fail<string>("Existe una temporada en curso")
-                    );
+                    if (currentSeason.isFinish) {
+                        currentSeason.changeSeason();
+                        await this.seasonRepo.save((currentSeason));
+                    } else {
+                        return left(
+                            Result.fail<string>("Existe una temporada en curso")
+                        );
+                    }
                 }
-            } catch (error) {}
+
+
+            } catch (error) { }
 
             const seasonOrError = Season.create({
                 leagueId: LeagueId.create(

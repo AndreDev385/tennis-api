@@ -37,9 +37,8 @@ export class UpdateTeamRanking
                     clash.seasonId.id.toString()
                 );
             } catch (error) {
-                console.log(error);
                 const rankingOrError = Ranking.create({
-                    teamId: clash.team1.teamId,
+                    team: clash.team1,
                     seasonId: clash.seasonId,
                     position: positions.groups,
                 });
@@ -50,11 +49,7 @@ export class UpdateTeamRanking
                 ranking = rankingOrError.getValue();
             }
 
-            console.log("RANKING", ranking)
-
             ranking.updateRankingPosition(clash);
-
-            console.log("AFTER UPDATE RANKING", ranking)
 
             await this.rankingRepo.save(ranking);
 

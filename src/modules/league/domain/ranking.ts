@@ -6,11 +6,12 @@ import { Clash } from "./clubClash";
 import { journeyValues } from "./journey";
 import { RankingId } from "./rankingId";
 import { SeasonId } from "./seasonId";
+import { Team } from "./team";
 import { TeamId } from "./teamId";
 
 interface RankingProps {
     position: string;
-    teamId: TeamId;
+    team: Team;
     seasonId: SeasonId;
 }
 
@@ -32,8 +33,8 @@ export class Ranking extends Entity<RankingProps> {
         return this.props.position;
     }
 
-    get teamId(): TeamId {
-        return this.props.teamId;
+    get team(): Team {
+        return this.props.team;
     }
 
     get seasonId(): TeamId {
