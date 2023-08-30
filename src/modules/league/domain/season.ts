@@ -36,8 +36,11 @@ export class Season extends AggregateRoot<SeasonProps> {
 
     public finishSeason() {
         this.props.isFinish = true;
-        this.props.isCurrentSeason = false;
         this.addDomainEvent(new FinishSeason(this));
+    }
+
+    public changeSeason() {
+        this.props.isCurrentSeason = false;
     }
 
     private constructor(props: SeasonProps, id?: UniqueEntityID) {

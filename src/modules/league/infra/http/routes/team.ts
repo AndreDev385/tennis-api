@@ -4,12 +4,15 @@ import { listTeamsController } from "../../../useCases/listTeams";
 import { listTeamsByClubController } from "../../../useCases/listTeamByClub";
 import { listRankingsController } from "../../../useCases/listRankings";
 import { updateTeamRanking } from "../../../useCases/updateTeamRanking";
+import { getTeamRankingController } from "../../../useCases/getTeamRanking";
 
 const teamRouter = express.Router();
 
 teamRouter.get("/stats", (req, res) =>
     listTeamStatsController.execute(req, res)
 );
+
+teamRouter.get("/rankings/:teamId", (req, res) => getTeamRankingController.execute(req, res))
 
 teamRouter.get("/rankings", (req, res) => listRankingsController.execute(req, res))
 
