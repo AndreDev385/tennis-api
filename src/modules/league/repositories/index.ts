@@ -44,7 +44,7 @@ const sequelizeTeamStatsRepo = new SequelizeTeamStatsRepository(models);
 
 const sequelizeClubEventRepo = new SequelizeClubEventRepository(models);
 const sequelizeAdRepo = new SequelizeAdRepository(models);
-const sequelizeRankingRepo = new SequelizeRankingRepository(models);
+const sequelizeRankingRepo = new SequelizeRankingRepository(models, sequelizeTeamRepo);
 
 export {
     sequelizeLeagueRepo,
