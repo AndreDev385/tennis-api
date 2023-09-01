@@ -5,4 +5,5 @@ export interface RankingDto {
     position: string;
     team: TeamDto;
     seasonId: string;
+    symbol: string;
 }

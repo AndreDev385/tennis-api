@@ -912,6 +912,10 @@ module.exports = {
                         type: Sequelize.STRING,
                         allowNull: false,
                     },
+                    symbol: {
+                        type: Sequelize.STRING,
+                        allowNull: false,
+                    },
                     teamId: {
                         type: Sequelize.UUID,
                         allowNull: false,

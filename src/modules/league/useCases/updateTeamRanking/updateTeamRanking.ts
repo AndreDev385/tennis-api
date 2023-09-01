@@ -2,7 +2,7 @@ import { AppError } from "../../../../shared/core/AppError";
 import { Either, Result, left, right } from "../../../../shared/core/Result";
 import { UseCase } from "../../../../shared/core/UseCase";
 import { Clash } from "../../domain/clubClash";
-import { Ranking, positions } from "../../domain/ranking";
+import { Ranking, positions, symbols } from "../../domain/ranking";
 import { ClashRepository } from "../../repositories/clashRepo";
 import { RankingRepository } from "../../repositories/rankingRepo";
 import { UpdateTeamRankingRequest } from "./dto";
@@ -41,6 +41,7 @@ export class UpdateTeamRanking
                     team: clash.team1,
                     seasonId: clash.seasonId,
                     position: positions.groups,
+                    symbol: symbols.groups,
                 });
 
                 if (rankingOrError.isFailure) {
