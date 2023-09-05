@@ -16,6 +16,10 @@ const RankingModel = sequelize.define(
             type: DataTypes.STRING,
             allowNull: false,
         },
+        symbol: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
         teamId: {
             type: DataTypes.UUID,
             allowNull: false,

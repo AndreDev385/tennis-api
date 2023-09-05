@@ -11,14 +11,16 @@ export interface toDomainRanking {
     position: string;
     seasonId: string;
     rankingId: string;
+    symbol: string;
 }
 
 export class RankingMap implements Mapper<Ranking> {
 
     public static toDto(ranking: Ranking): RankingDto {
         return {
-            rankingId: ranking.rankindId.id.toString(),
+            rankingId: ranking.rankingId.id.toString(),
             position: ranking.position,
+            symbol: ranking.symbol,
             team: TeamMap.toDto(ranking.team),
             seasonId: ranking.seasonId.id.toString(),
         }
@@ -30,6 +32,7 @@ export class RankingMap implements Mapper<Ranking> {
         const rankingOrError = Ranking.create({
             position: raw.position,
             team: raw.team,
+            symbol: raw.symbol,
             seasonId: seasonIdOrErrorId.getValue(),
         }, new UniqueEntityID(raw.rankingId))
 
@@ -40,10 +43,11 @@ export class RankingMap implements Mapper<Ranking> {
 
     public static toPersistance(ranking: Ranking) {
         return {
-            rankingId: ranking.rankindId.id.toString(),
+            rankingId: ranking.rankingId.id.toString(),
             position: ranking.position,
             teamId: ranking.team.teamId.id.toString(),
             seasonId: ranking.seasonId.id.toString(),
+            symbol: ranking.symbol,
         }
     }
 }

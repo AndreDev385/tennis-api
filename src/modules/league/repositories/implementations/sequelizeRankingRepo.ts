@@ -18,6 +18,7 @@ export class SequelizeRankingRepository implements RankingRepository {
             rankingId: dbRow.rankingId,
             seasonId: dbRow.seasonId,
             position: dbRow.position,
+            symbol: dbRow.symbol,
         }
     }
 
