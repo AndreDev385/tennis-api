@@ -72,6 +72,12 @@ export class CreateMatch
                 return left(new AppError.NotFoundError(error));
             }
 
+            if (clash.matchs.length != 0) {
+                return left(
+                    Result.fail<string>("Ya se han creado los partidos de este encuentro.")
+                );
+            }
+
             if (request.matchs.length !== 5) {
                 return left(
                     Result.fail<string>("Numero de partidos invalido.")

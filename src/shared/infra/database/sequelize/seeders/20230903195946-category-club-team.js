@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 const { v4 } = require("uuid");
 const bcrypt = require("bcrypt");
@@ -6,11 +6,11 @@ const bcrypt = require("bcrypt");
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
     async up(queryInterface, Sequelize) {
-        const clubId = v4();
+        const clubIdVAT = v4();
 
         await queryInterface.bulkInsert("club", [
             {
-                clubId,
+                clubId: clubIdVAT,
                 name: "Valle Arriba Athletic Club",
                 symbol: "VAT",
                 isSubscribed: true,
@@ -196,6 +196,170 @@ module.exports = {
             },
         ]);
 
+
+        const id5MM = v4();
+        const id6M = v4();
+        const id6MM = v4();
+        const id4F = v4();
+        const id5F = v4();
+        const id6F = v4();
+
+        await queryInterface.bulkInsert("category", [
+            {
+                categoryId: v4(),
+                name: "3F",
+                fullName: "3ra Femenina",
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            },
+            {
+                categoryId: v4(),
+                name: "3M",
+                fullName: "3ra Masculina",
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            },
+            {
+                categoryId: id4F,
+                name: "4F",
+                fullName: "4ta Femenina",
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            },
+            {
+                categoryId: v4(),
+                name: "4M",
+                fullName: "4ta Masculina",
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            },
+
+            {
+                categoryId: id5F,
+                name: "5F",
+                fullName: "5ta Femenina",
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            },
+            {
+                categoryId: v4(),
+                name: "5M",
+                fullName: "5ta Masculina",
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            },
+            {
+                categoryId: id5MM,
+                name: "5MM",
+                fullName: "5ta Masculina Master",
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            },
+            {
+                categoryId: id6F,
+                name: "6F",
+                fullName: "6ta Femenina",
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            },
+            {
+                categoryId: id6M,
+                name: "6M",
+                fullName: "6ta Masculina",
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            },
+            {
+                categoryId: id6MM,
+                name: "6MM",
+                fullName: "6ta Masculina Master",
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            },
+            {
+                categoryId: v4(),
+                name: "DM",
+                fullName: "Mixto",
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            },
+            {
+                categoryId: v4(),
+                name: "FEM-MM",
+                fullName: "Femenina Master",
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            },
+        ]);
+        
+        /*
+        5MM
+        6MA
+        6MB
+        6MC
+        6MM
+        4F
+        5F
+        6FA
+        6FB
+        */
+        await queryInterface.bulkInsert("team", [
+            {
+                teamId: v4(),
+                clubId: clubIdVAT,
+                categoryId: id5MM,
+                name: "A",
+            },
+            {
+                teamId: v4(),
+                clubId: clubIdVAT,
+                categoryId: id6M,
+                name: "A",
+            },
+            {
+                teamId: v4(),
+                clubId: clubIdVAT,
+                categoryId: id6M,
+                name: "B",
+            },
+            {
+                teamId: v4(),
+                clubId: clubIdVAT,
+                categoryId: id6M,
+                name: "C",
+            },
+            {
+                teamId: v4(),
+                clubId: clubIdVAT,
+                categoryId: id6MM,
+                name: "A",
+            },
+            {
+                teamId: v4(),
+                clubId: clubIdVAT,
+                categoryId: id4F,
+                name: "A",
+            },
+            {
+                teamId: v4(),
+                clubId: clubIdVAT,
+                categoryId: id5F,
+                name: "A",
+            },
+            {
+                teamId: v4(),
+                clubId: clubIdVAT,
+                categoryId: id6F,
+                name: "A",
+            },
+            {
+                teamId: v4(),
+                clubId: clubIdVAT,
+                categoryId: id6F,
+                name: "B",
+            },
+        ])
+
         /* Players for test */
         const userId1 = v4();
         const userId2 = v4();
@@ -306,63 +470,63 @@ module.exports = {
         await queryInterface.bulkInsert("player", [
             {
                 playerId: v4(),
-                clubId,
+                clubId: clubIdVAT,
                 userId: userId1,
                 createdAt: new Date(),
                 updatedAt: new Date(),
             },
             {
                 playerId: v4(),
-                clubId,
+                clubId: clubIdVAT,
                 userId: userId2,
                 createdAt: new Date(),
                 updatedAt: new Date(),
             },
             {
                 playerId: v4(),
-                clubId,
+                clubId: clubIdVAT,
                 userId: userId3,
                 createdAt: new Date(),
                 updatedAt: new Date(),
             },
             {
                 playerId: v4(),
-                clubId,
+                clubId: clubIdVAT,
                 userId: userId4,
                 createdAt: new Date(),
                 updatedAt: new Date(),
             },
             {
                 playerId: v4(),
-                clubId,
+                clubId: clubIdVAT,
                 userId: userId5,
                 createdAt: new Date(),
                 updatedAt: new Date(),
             },
             {
                 playerId: v4(),
-                clubId,
+                clubId: clubIdVAT,
                 userId: userId6,
                 createdAt: new Date(),
                 updatedAt: new Date(),
             },
             {
                 playerId: v4(),
-                clubId,
+                clubId: clubIdVAT,
                 userId: userId7,
                 createdAt: new Date(),
                 updatedAt: new Date(),
             },
             {
                 playerId: v4(),
-                clubId,
+                clubId: clubIdVAT,
                 userId: userId8,
                 createdAt: new Date(),
                 updatedAt: new Date(),
             },
             {
                 playerId: v4(),
-                clubId,
+                clubId: clubIdVAT,
                 userId: userId9,
                 createdAt: new Date(),
                 updatedAt: new Date(),
@@ -372,6 +536,8 @@ module.exports = {
     },
 
     async down(queryInterface, Sequelize) {
-        await queryInterface.bulkDelete("club", {});
-    },
+        await queryInterface.bulkDelete('club', null, {});
+        await queryInterface.bulkDelete('category', null, {});
+        await queryInterface.bulkDelete('team', null, {});
+    }
 };
