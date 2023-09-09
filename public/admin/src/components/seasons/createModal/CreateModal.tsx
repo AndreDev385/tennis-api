@@ -3,11 +3,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap'
 
-interface CreateModalProps {
+interface ICreateModalProps {
     dismiss: (event: boolean) => void;
 }
 
-const CreateModal = ({dismiss}: CreateModalProps ) => {
+const CreateModal = ({dismiss}: ICreateModalProps ) => {
 
     const [ form, setForm ] = useState({ name: "" })
     const [ validName, setValidName ] = useState(false)

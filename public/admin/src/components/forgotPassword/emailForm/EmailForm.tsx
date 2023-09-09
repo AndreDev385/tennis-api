@@ -5,11 +5,11 @@ import { Button, Form } from "react-bootstrap"
 import validator from "validator";
 import './EmailForm.scss'
 
-interface EmailFormProps {
+interface IEmailFormProps {
     onSubmit: () => void;
 }
 
-const EmailForm = ( { onSubmit }: EmailFormProps ) => {
+const EmailForm = ( { onSubmit }: IEmailFormProps ) => {
     const [ email, setEmail ] = useState('')
     const [ submitted, setSubmitted ] = useState(false)
     const [ validEmail, setValidEmail ] = useState(false)

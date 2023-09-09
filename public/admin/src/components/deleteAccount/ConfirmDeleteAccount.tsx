@@ -4,11 +4,11 @@ import { useState } from 'react';
 import { Button } from 'react-bootstrap'
 import { ToastContainer, toast } from 'react-toastify';
 
-interface DeleteAccountProps {
+interface IDeleteAccountProps {
     token: string   
 }
 
-const ConfirmDeleteAccount = ({token}: DeleteAccountProps) => {
+const ConfirmDeleteAccount = ({token}: IDeleteAccountProps) => {
     const [loading, setLoading] = useState(false);
     
     const deleteAccount = async () => {

@@ -1,6 +1,6 @@
 import { faCircle, faPlus } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { Button, Table } from "react-bootstrap"
+import { Button, Card, Table } from "react-bootstrap"
 import { ToastContainer } from 'react-toastify';
 
 import "./Seasons.scss";
@@ -9,7 +9,7 @@ import { useState } from "react";
 import ModalQuestion from "../modalQuestion/ModalQuestion";
 import CreateModal from "./createModal/CreateModal";
 
-interface Season {
+interface ISeason {
   seasonId: string,
   leagueId: string,
   name: string,
@@ -24,7 +24,7 @@ const Seasons = () => {
   const [seasonId, setSeasonId] = useState("")
   console.log(seasonId)
 
-  const seasons : Season[] = [
+  const seasons : ISeason[] = [
     {
       seasonId: "1234",
       leagueId: "4567",
@@ -41,7 +41,7 @@ const Seasons = () => {
     }
   ]
 
-  const onClickEndSeason = (item: Season): void => {
+  const onClickEndSeason = (item: ISeason): void => {
     setModalQuestion(`¿Estás seguro que quieres finalizar temporada ${item.name}?`)
     setSeasonId(item.seasonId)
     setShowModalQuestion(true)
@@ -107,25 +107,27 @@ const Seasons = () => {
           </div>
         </div>
 
-      <Table responsive="sm">
-        <thead>
-          <tr>
-            <th>
-              Nombre
-            </th>
-            <th className='text-center'>
-              Estatus
-            </th>
-            <th className='text-center'>
-              Manejar temporada
-            </th>
-          </tr>
-        </thead>
+      <Card>
+        <Table responsive="sm">
+          <thead>
+            <tr>
+              <th>
+                Nombre
+              </th>
+              <th className='text-center'>
+                Estatus
+              </th>
+              <th className='text-center'>
+                Manejar temporada
+              </th>
+            </tr>
+          </thead>
 
-        <tbody>
-          {seasonTable}
-        </tbody>
-      </Table>
+          <tbody>
+            {seasonTable}
+          </tbody>
+        </Table>
+      </Card>
 
       <ToastContainer 
         position="top-right"

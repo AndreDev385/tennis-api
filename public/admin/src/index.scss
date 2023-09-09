@@ -5,6 +5,10 @@
   font-family: Poppins sans-serif;
 }
 
+body{
+  overflow-x: hidden;
+}
+
 .btn-primary{
   --bs-btn-bg: #001242 !important;
   --bs-btn-border-color: #001242 !important;
@@ -34,5 +38,29 @@
   margin-top: 10rem;
   button{
     width: 13rem;
+  }
+}
+
+.wrap-modal, .overlay{
+  overflow-y: hidden;
+}
+
+.card{
+  margin: 0 2rem;
+  padding: 1rem;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  border-radius: 1rem;
+  border: none;
+
+  table tr{
+      --bs-table-bg: #ffffff;
+      height: 3rem;
+      &:hover{
+          --bs-table-bg: #fafafa;
+      }
+  }
+  table tbody tr {
+      border: transparent;
+
   }
 }

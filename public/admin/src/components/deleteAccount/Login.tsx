@@ -5,12 +5,12 @@ import { Button, Form } from "react-bootstrap"
 import { ToastContainer, toast } from "react-toastify";
 import validator from "validator";
 
-interface LoginProps {
+interface ILoginProps {
     setVerified: Dispatch<SetStateAction<boolean>>;
     setToken: Dispatch<SetStateAction<string>>;
 }
 
-const Login = ({setVerified, setToken}: LoginProps) => {
+const Login = ({setVerified, setToken}: ILoginProps) => {
     const [form, setForm] = useState({
         email: '',
         password: ''

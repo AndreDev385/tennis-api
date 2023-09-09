@@ -1,4 +1,4 @@
-import { Button, Table } from 'react-bootstrap'
+import { Button, Card, Table } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faCircle, faCopy } from '@fortawesome/free-solid-svg-icons';
 import { ToastContainer, toast } from 'react-toastify';
@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useState } from 'react';
 import ModalQuestion from '../modalQuestion/ModalQuestion';
 
-interface Club {
+export interface IClub {
   id: string,
   name: string,
   code: string,
@@ -22,7 +22,7 @@ const Clubs = () => {
   const [id, setId] = useState("")
   console.log(id)
   
-  const clubs : Club[] = [
+  const clubs : IClub[] = [
     {
       id: "1",
       name: "Club A",
@@ -43,13 +43,13 @@ const Clubs = () => {
     },
   ]
 
-  const onClickCancelSubscription = (item: Club): void => {
+  const onClickCancelSubscription = (item: IClub): void => {
     setModalTitle("Cancelar suscripción")
     setModalQuestion(`¿Estás seguro que quieres cancelar suscripción de ${item.name}?`)
     openModal(item.id)
   }
 
-  const onClickSubscription = (item: Club): void => {
+  const onClickSubscription = (item: IClub): void => {
     setModalTitle("Suscribir")
     setModalQuestion(`¿Estás seguro que quieres suscribir a ${item.name}?`)
     openModal(item.id)
@@ -110,28 +110,31 @@ const Clubs = () => {
           Clubes
         </h1>
 
-        <Table responsive="sm">
-          <thead>
-            <tr>
-              <th>
-                Nombre
-              </th>
-              <th className='text-center'>
-                Código
-              </th>
-              <th className='text-center'>
-                Suscripción
-              </th>
-              <th className='text-center'>
-                Manejar suscripción
-              </th>
-            </tr>
-          </thead>
+        <Card>
+          <Table responsive="sm">
+            <thead>
+              <tr>
+                <th>
+                  Nombre
+                </th>
+                <th className='text-center'>
+                  Código
+                </th>
+                <th className='text-center'>
+                  Suscripción
+                </th>
+                <th className='text-center'>
+                  Manejar suscripción
+                </th>
+              </tr>
+            </thead>
 
-          <tbody>
-            {clubTable}
-          </tbody>
-        </Table>
+            <tbody>
+              {clubTable}
+            </tbody>
+          </Table>
+        </Card>
+
 
         <ToastContainer 
           position="top-right"

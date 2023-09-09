@@ -1,81 +1,100 @@
-// import { faPlus } from "@fortawesome/free-solid-svg-icons"
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-// import { Button, Table } from "react-bootstrap"
-// import { ToastContainer } from 'react-toastify';
-// import { useState } from "react";
+import { faPencil, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useState } from 'react';
+import { Button, Card, Table } from 'react-bootstrap';
+import { ToastContainer } from 'react-toastify';
+import { IClub } from '../clubs/Clubs';
 
+import './News.scss';
 import 'react-toastify/dist/ReactToastify.css';
 
-interface News {
-  clubEventId: string,
+interface INews {
+  adId: string,
   clubId: string,
-  link: string
+  link: string,
+  image: string
 }
 
 const News = () => {
-  // const [showModalQuestion, setShowModalQuestion] = useState(false)
-  // const [showModalCreate, setShowModalCreate] = useState(false)
-  // const [modalQuestion, setModalQuestion] = useState("")
-  // const [clubEventId, setClubEventId] = useState("")
+  const [newsId, setNewsId] = useState("")
+  const [showModalDelete, setShowModalDelete] = useState(false)
+  const [showModalCreate, setShowModalCreate] = useState(false)
+  const [showModalEdit, setShowModalEdit] = useState(false)
 
-  // const news : News[] = [
-  //   {
-  //     clubEventId: "1234",
-  //     clubId: "club1234",
-  //     link: "url"
-  //   },
-  //   {
-  //     clubEventId: "1234",
-  //     clubId: "club1234",
-  //     link: "url"
-  //   },
-  // ]
+  const news : INews[] = [
+    {
+      adId: "1234",
+      clubId: "club1234",
+      link: "url",
+      image: "image"
+    },
+    {
+      adId: "12345",
+      clubId: "club1234",
+      link: "url",
+      image: "image"
+    },
+  ]
 
-  // const showDeleteModal = (id: string) => {
-  //   setClubEventId(id)
-  // }
+  const clubs : IClub[] = [
+    {
+      id: "1",
+      name: "Club A",
+      code: "ABCDEF",
+      isSubscribed: false
+    },
+    {
+      id: "2",
+      name: "Club B",
+      code: "JFOXMX",
+      isSubscribed: true
+    },
+    {
+      id: "3",
+      name: "Club C",
+      code: "PWEOKD",
+      isSubscribed: true
+    },
+  ]
+
+  const showDeleteModal = (id: string) => {
+    setNewsId(id)
+    setShowModalDelete(true)
+  }
   
-  // const handleDeleteNews = (event: boolean) => {
-  //   // TODO delete
-  //   setShowModalQuestion(false)
-  // }
+  const handleDeleteNews = (event: boolean) => {
+    // TODO delete
+    setShowModalDelete(false)
+  }
 
-  // const seasonTable = seasons.map( (item) => {
-  //   return (
-  //     <tr key={item.seasonId}>
-  //       <td>
-  //         {item.name}
-  //       </td>
-  //       <td className='text-center'>
-  //         {item.isFinish && 
-  //           <span>
-  //             <FontAwesomeIcon className='finish' icon={faCircle} />
-  //             Finalizada
-  //           </span>
-  //         }
-
-  //         {item.isCurrentSeason && 
-  //           <span>
-  //             <FontAwesomeIcon className='current' icon={faCircle} />
-  //             En curso
-  //           </span>
-  //         }
-  //       </td>
-  //       {/* <td className='text-center'>
-  //         {item.isCurrentSeason?
-  //           <Button variant="warning" onClick={() => onClickEndSeason(item)}>
-  //             Finalizar temporada
-  //           </Button>:
-  //           <span>-</span>
-  //         }
-  //       </td> */}
-  //     </tr>
-  //   )
-  // })
+  const newsTable = news.map( (item) => {
+    return (
+      <tr key={item.adId}>
+        <td>
+          {item.link}
+        </td>
+        <td>
+          <img src={item.image} />
+        </td>
+        <td className='text-center'>
+          <Button variant="warning" onClick={() => showDeleteModal(item.adId)}>
+            <FontAwesomeIcon icon={faPencil} />
+            Editar
+          </Button>
+        </td>
+        <td className='text-center'>
+          <Button variant="danger" onClick={() => showDeleteModal(item.adId)}>
+            <FontAwesomeIcon icon={faTrash} />
+            Eliminar
+          </Button>
+        </td>
+      </tr>
+    )
+  })
 
   return (
     <>
-      {/* <div className='news-container'>
+      <div className='news-container'>
         <div className="title-wrap">
           <h1>
             Novedades
@@ -89,39 +108,45 @@ const News = () => {
           </div>
         </div>
 
-      <Table responsive="sm">
-        <thead>
-          <tr>
-            <th>
-              Nombre
-            </th>
-            <th className='text-center'>
-              Estatus
-            </th>
-            <th className='text-center'>
-              Manejar temporada
-            </th>
-          </tr>
-        </thead>
+        <Card>
+          <Table responsive="sm">
+            <thead>
+              <tr>
+                <th>
+                  Link
+                </th>
+                <th className='text-center'>
+                  Imagen
+                </th>
+                <th className='text-center'>
+                  Editar
+                </th>
+                <th className='text-center'>
+                  Eliminar
+                </th>
+              </tr>
+            </thead>
 
-        <tbody>
-          {seasonTable}
-        </tbody>
-      </Table> */}
+            <tbody>
+              {newsTable}
+            </tbody>
+          </Table>
+        </Card>
 
-      {/* <ToastContainer 
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
-      </div> */}
+
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
+      </div>
 
       {/* {showModalQuestion && 
         <ModalQuestion 
@@ -131,7 +156,7 @@ const News = () => {
         />
       }  */}
 
-      {/* {showModalCreate && <CreateModal dismiss={dismissCreateModal} />}  */}
+      {/* {/* {showModalCreate && <CreateModal dismiss={dismissCreateModal} />}  */}
     </>
   )
 }

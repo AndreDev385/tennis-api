@@ -2,11 +2,11 @@ import { useState } from "react"
 import ReactCodeInput from "react-code-input";
 import './CodeForm.scss'
 
-interface CodeFormProps {
+interface ICodeFormProps {
     onSubmit: () => void;
 }
 
-export const CodeForm = ({ onSubmit }: CodeFormProps) => {
+export const CodeForm = ({ onSubmit }: ICodeFormProps) => {
     
     const [ loading, setLoading ] = useState(false)
 
