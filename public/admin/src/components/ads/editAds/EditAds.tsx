@@ -3,15 +3,15 @@ import { Button, Form, Modal } from "react-bootstrap";
 import { IClub } from "../../clubs/Clubs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleNotch, faPencil} from "@fortawesome/free-solid-svg-icons";
-import'../News.scss';
+import'../Ads.scss';
 
-interface IEditNewsProps {
+interface IEditAdsProps {
     id: string;
     dismiss: (event: boolean) => void;
 }
 
-const editNews = ({id, dismiss}: IEditNewsProps) => {
-    const [news, setNews] = useState({
+const EditAds = ({id, dismiss}: IEditAdsProps) => {
+    const [ads, setAds] = useState({
         adId: "",
         clubId: "",
         link: "",
@@ -44,7 +44,7 @@ const editNews = ({id, dismiss}: IEditNewsProps) => {
 
     const handleChangeClub = (event: React.ChangeEvent<HTMLSelectElement>):void => {
         const value = event.target.value;
-        setNews((prev) => ({
+        setAds((prev) => ({
           ...prev,
           clubId: value
         }))
@@ -52,7 +52,7 @@ const editNews = ({id, dismiss}: IEditNewsProps) => {
 
     const handleChangeLink = (event: React.ChangeEvent<HTMLInputElement>):void => {
         const value = event.target.value;
-        setNews((prev) => ({
+        setAds((prev) => ({
           ...prev,
           link: value
         }))
@@ -63,7 +63,7 @@ const editNews = ({id, dismiss}: IEditNewsProps) => {
         if(files && files[0]){
             const value = files[0]
             const objectUrl = URL.createObjectURL(value)
-            setNews((prev) => ({
+            setAds((prev) => ({
               ...prev,
               image: event.target.value
             }))
@@ -74,7 +74,7 @@ const editNews = ({id, dismiss}: IEditNewsProps) => {
 
     const handleSubmit = () => {
         setSubmitted(true);
-        if (!news.clubId || !news.link || !news.image) return;
+        if (!ads.clubId || !ads.link || !ads.image) return;
         setLoading(true)
         // TODO fetch data
         dismiss(true)
@@ -84,12 +84,12 @@ const editNews = ({id, dismiss}: IEditNewsProps) => {
         <>
             <div className="overlay" />
 
-            <div className="modal show wrap-modal edit-news">
+            <div className="modal show wrap-modal edit-ads">
                 <Modal.Dialog>
                     <Modal.Header>
                         <Modal.Title>
                             <FontAwesomeIcon className='me-2' icon={faPencil} />
-                            Editar novedades
+                            Editar anuncio
                         </Modal.Title>
                     </Modal.Header>
 
@@ -102,7 +102,7 @@ const editNews = ({id, dismiss}: IEditNewsProps) => {
 
                                 <Form.Select 
                                     required 
-                                    value={news.clubId}
+                                    value={ads.clubId}
                                     placeholder='Club asociado' 
                                     onChange={handleChangeClub}
                                 >
@@ -111,7 +111,7 @@ const editNews = ({id, dismiss}: IEditNewsProps) => {
                                         return <option key={item.id} value={item.id}>{item.name}</option>
                                     })}
                                 </Form.Select>
-                                { submitted && !news.clubId &&
+                                { submitted && !ads.clubId &&
                                     <span className='ms-2 text-error'>
                                         Club requerido
                                     </span>
@@ -126,11 +126,11 @@ const editNews = ({id, dismiss}: IEditNewsProps) => {
                                 <Form.Control 
                                     required 
                                     type="url"
-                                    value={news.link}
+                                    value={ads.link}
                                     placeholder='Link' 
                                     onChange={handleChangeLink}
                                 />
-                                { submitted && !news.link &&
+                                { submitted && !ads.link &&
                                     <span className='ms-2 text-error'>
                                         Link requerido
                                     </span>
@@ -146,11 +146,11 @@ const editNews = ({id, dismiss}: IEditNewsProps) => {
                                     required 
                                     type="file"
                                     accept="image/png, image/jpeg"
-                                    // value={news.image}
+                                    value={ads.image}
                                     placeholder='Imagen' 
                                     onChange={handleChangeImage}
                                 />
-                                { submitted && !news.image &&
+                                { submitted && !ads.image &&
                                     <span className='ms-2 text-error'>
                                         Imagen requerida
                                     </span>
@@ -169,7 +169,7 @@ const editNews = ({id, dismiss}: IEditNewsProps) => {
                                 <FontAwesomeIcon icon={faCircleNotch} spin />:
                                 <span>
                                     <FontAwesomeIcon className='me-2' icon={faPencil} />
-                                    Editar novedades
+                                    Editar anuncio
                                 </span>
                             }
                         </Button>
@@ -180,4 +180,4 @@ const editNews = ({id, dismiss}: IEditNewsProps) => {
     )
 }
 
-export default editNews
+export default EditAds

@@ -9,7 +9,7 @@ import './News.scss';
 import 'react-toastify/dist/ReactToastify.css';
 import ModalQuestion from '../modalQuestion/ModalQuestion';
 import CreateNews from './createNews/CreateNews';
-import EditNews from './editNews/editNews';
+import EditNews from './editNews/EditNews';
 
 export interface INews {
   adId: string,

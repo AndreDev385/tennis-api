@@ -1,0 +1,45 @@
+.ads-container{
+    .title-wrap{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        h1{
+            margin: 2rem;
+        }
+        button{
+            margin-right: 5rem;
+        }
+    }
+
+    button{
+        color:#ffffff;
+        svg{
+            margin-right: .5rem;
+        }
+    }
+
+    .ads-filter-container{
+        display: flex;
+        margin: 1rem;
+        svg, span{
+            align-self: center;
+        }
+
+        svg{
+            margin-right: .5rem;
+            color: #ffc107;
+        }
+        select{
+            width: 25%;
+            margin-left: 1rem;
+        }
+    }
+}
+
+.edit-ads{
+    img{
+        width: 20rem;
+        margin-top: 1rem;
+    }
+}
