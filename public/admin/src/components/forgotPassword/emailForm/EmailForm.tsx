@@ -1,16 +1,18 @@
 import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react"
+import { Dispatch, SetStateAction, useState } from "react"
 import { Button, Form } from "react-bootstrap"
 import validator from "validator";
 import './EmailForm.scss'
+import { toast } from "react-toastify";
 
 interface IEmailFormProps {
     onSubmit: () => void;
+    email: string,
+    setEmail: Dispatch<SetStateAction<string>>;
 }
 
-const EmailForm = ( { onSubmit }: IEmailFormProps ) => {
-    const [ email, setEmail ] = useState('')
+const EmailForm = ( { onSubmit, email, setEmail }: IEmailFormProps ) => {
     const [ submitted, setSubmitted ] = useState(false)
     const [ validEmail, setValidEmail ] = useState(false)
     const [ loading, setLoading ] = useState(false)
@@ -23,9 +25,36 @@ const EmailForm = ( { onSubmit }: IEmailFormProps ) => {
     const handleSubmit = () => {
         setSubmitted(true)
         if(validEmail){
-            //send code
             setLoading(true)
+            sendVerificationCode()
+        }
+    }
+
+    const sendVerificationCode = async () => {
+        const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/users/forget-password`
+        const requestOptions = {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({email: email})
+        };
+    
+        try{
+          const response = await fetch(url, requestOptions)
+          
+          const data = await response.json()
+    
+          if (response.status === 200){
+            if(data.message) toast.success(data.message)
+            setLoading(false)
             onSubmit()
+          } else {
+            if(data.message) toast.error(data.message)
+            setLoading(false)
+          }
+        } catch (error) {
+            toast.error('Ha ocurrido un error, intente nuevamente')
+            console.error(error)
+            setLoading(false)
         }
     }
 

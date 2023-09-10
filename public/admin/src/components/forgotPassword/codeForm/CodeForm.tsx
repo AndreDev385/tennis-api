@@ -1,12 +1,15 @@
-import { useState } from "react"
+import { Dispatch, SetStateAction, useState } from "react"
 import ReactCodeInput from "react-code-input";
+import { toast } from "react-toastify";
 import './CodeForm.scss'
 
 interface ICodeFormProps {
     onSubmit: () => void;
+    email: string;
+    setCode: Dispatch<SetStateAction<string>>;
 }
 
-export const CodeForm = ({ onSubmit }: ICodeFormProps) => {
+export const CodeForm = ({ email, onSubmit, setCode }: ICodeFormProps) => {
     
     const [ loading, setLoading ] = useState(false)
 
@@ -15,9 +18,40 @@ export const CodeForm = ({ onSubmit }: ICodeFormProps) => {
     }
 
     const handleSubmit = (code: string) => {
-        console.log(code)
         setLoading(true)
-        onSubmit()
+        setCode(code)
+        validateVerificationCode(code)
+    }
+
+    const validateVerificationCode = async (code: string) => {
+        const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/users/validate-password-code`
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                email: email,
+                code: code
+            })
+        };
+    
+        try{
+          const response = await fetch(url, requestOptions)
+          
+          const data = await response.json()
+    
+          if (response.status === 200){
+            if(data.message) toast.success(data.message)
+            setLoading(false)
+            onSubmit()
+          } else {
+            if(data.message) toast.error(data.message)
+            setLoading(false)
+          }
+        } catch (error) {
+            toast.error('Ha ocurrido un error, intente nuevamente')
+            console.error(error)
+            setLoading(false)
+        }
     }
 
     return (
