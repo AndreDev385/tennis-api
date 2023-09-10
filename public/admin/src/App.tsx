@@ -6,7 +6,7 @@ import Clubs from './components/clubs/Clubs'
 import Seasons from './components/seasons/Seasons'
 import News from './components/news/News'
 import Ads from './components/ads/Ads'
-import Measurers from './components/measurers/Measurers'
+import Trackers from './components/trackers/Trackers'
 import Stats from './components/stats/Stats'
 import Admins from './components/admins/Admins'
 import DeleteAccount from './components/deleteAccount/DeleteAccount'
@@ -44,8 +44,8 @@ const router = createBrowserRouter([
                 element: <Ads />
             },
             {
-                path: "/measurers",
-                element: <Measurers />
+                path: "/trackers",
+                element: <Trackers />
             },
             {
                 path: "/stats",

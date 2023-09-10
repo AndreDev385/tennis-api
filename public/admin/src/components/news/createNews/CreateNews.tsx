@@ -10,7 +10,6 @@ interface ICreateNewsProps {
 
 const CreateNews = ({dismiss}: ICreateNewsProps) => {
     const [form, setForm] = useState({
-        adId: "",
         clubId: "",
         link: "",
         image: ""

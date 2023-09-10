@@ -15,7 +15,7 @@ const Menu = () => {
     const seasonsClassName = location.pathname === "/seasons"? "wrap-option menu-selected": "wrap-option"
     const newsClassName = location.pathname === "/news"? "wrap-option menu-selected": "wrap-option"
     const adsClassName = location.pathname === "/ads"? "wrap-option menu-selected": "wrap-option"
-    const measurersClassName = location.pathname === "/measurers"? "wrap-option menu-selected": "wrap-option"
+    const trackersClassName = location.pathname === "/trackers"? "wrap-option menu-selected": "wrap-option"
     const statsClassName = location.pathname === "/stats"? "wrap-option menu-selected": "wrap-option"
     const adminsClassName = location.pathname === "/admins"? "wrap-option menu-selected": "wrap-option"
     
@@ -72,8 +72,8 @@ const Menu = () => {
                         </span>
                     </div>
 
-                    <div className={measurersClassName}
-                        onClick={() => navigateTo("/measurers")}>
+                    <div className={trackersClassName}
+                        onClick={() => navigateTo("/trackers")}>
                         <FontAwesomeIcon icon={faAddressBook} />
                         <span>
                             Medidores
