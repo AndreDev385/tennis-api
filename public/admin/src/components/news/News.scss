@@ -18,4 +18,28 @@
             margin-right: .5rem;
         }
     }
+
+    .news-filter-container{
+        display: flex;
+        margin: 1rem;
+        svg, span{
+            align-self: center;
+        }
+
+        svg{
+            margin-right: .5rem;
+            color: #ffc107;
+        }
+        select{
+            width: 25%;
+            margin-left: 1rem;
+        }
+    }
+}
+
+.edit-news{
+    img{
+        width: 20rem;
+        margin-top: 1rem;
+    }
 }

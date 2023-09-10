@@ -35,14 +35,9 @@ body{
 .wrap-modal{
   display: block !important;
   position: absolute;
-  margin-top: 10rem;
   button{
     width: 13rem;
   }
-}
-
-.wrap-modal, .overlay{
-  overflow-y: hidden;
 }
 
 .card{
