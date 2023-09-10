@@ -50,7 +50,7 @@ const Login = ({setVerified, setToken}: ILoginProps) => {
 
     const login = async () => {
         try{
-            const url = "https://gamemind-app-7ce0a0ff4c64.herokuapp.com/api/v1/users/login"
+            const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/users/login`
             
             const response = await fetch(url,{
                 method: "POST",

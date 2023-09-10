@@ -7,7 +7,7 @@ import './Trackers.scss';
 import 'react-toastify/dist/ReactToastify.css';
 import CreateTrackers from './createTrackers/CreateTrackers';
 
-export interface ITrackers {
+export interface ITracker {
   userId: string,
   email: string,
   firstName: string,
@@ -17,7 +17,7 @@ export interface ITrackers {
 const Trackers = () => {
   const [showModalCreate, setShowModalCreate] = useState(false)
 
-  const trackers : ITrackers[] = [
+  const trackers : ITracker[] = [
     {
       userId: '1',
       email: 'tracker1@gmail.com',

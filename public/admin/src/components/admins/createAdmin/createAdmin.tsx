@@ -4,11 +4,11 @@ import { useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import validator from "validator";
 
-interface ICreateTrackersProps {
+interface ICreateAdminProps {
     dismiss: (event: boolean) => void;
 }
 
-const CreateTrackers = ({dismiss}: ICreateTrackersProps) => {
+const createAdmin = ({dismiss}: ICreateAdminProps) => {
     const [form, setForm] = useState({
         firstName: "",
         lastName: "",
@@ -86,7 +86,7 @@ const CreateTrackers = ({dismiss}: ICreateTrackersProps) => {
                 <Modal.Dialog>
                     <Modal.Header>
                         <Modal.Title>
-                            Crear medidor
+                            Crear administrador
                         </Modal.Title>
                     </Modal.Header>
 
@@ -207,4 +207,4 @@ const CreateTrackers = ({dismiss}: ICreateTrackersProps) => {
     )
 }
 
-export default CreateTrackers
+export default createAdmin

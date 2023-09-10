@@ -15,7 +15,7 @@ const ConfirmDeleteAccount = ({token}: IDeleteAccountProps) => {
         setLoading(true)
 
         try{
-            const url = "https://gamemind-app-7ce0a0ff4c64.herokuapp.com/api/v1/users/delete"
+            const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/users/delete`;
             
             const response = await fetch(url,{
                 method: "PUT",

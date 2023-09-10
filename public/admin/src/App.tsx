@@ -10,6 +10,7 @@ import Trackers from './components/trackers/Trackers'
 import Stats from './components/stats/Stats'
 import Admins from './components/admins/Admins'
 import DeleteAccount from './components/deleteAccount/DeleteAccount'
+import { ToastContainer } from 'react-toastify'
 
 const router = createBrowserRouter([
     {
@@ -61,7 +62,23 @@ const router = createBrowserRouter([
 
 
 function App() {
-    return <RouterProvider router={router} />
+    return (
+    <>
+        <RouterProvider router={router} />
+        <ToastContainer 
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+    </>
+    )
 }
 
 export default App

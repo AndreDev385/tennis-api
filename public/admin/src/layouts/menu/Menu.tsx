@@ -2,14 +2,18 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom"
 import "./Menu.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAd, faAddressBook, faAddressCard, faCalendar, faChartBar, faNewspaper, faSignOutAlt, faTableTennis } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ModalQuestion from "../../components/modalQuestion/ModalQuestion";
 
 const Menu = () => {
     const [showLogOutModal, setShowLogOutModal] = useState(false);
-    
     const location = useLocation();
     const navigate = useNavigate();
+    
+    useEffect(() => {
+        const authorization = localStorage.getItem('authorization');
+        if(!authorization) logOut();
+    })
 
     const clubsClassName = location.pathname === "/clubs"? "wrap-option menu-selected": "wrap-option"
     const seasonsClassName = location.pathname === "/seasons"? "wrap-option menu-selected": "wrap-option"
@@ -28,6 +32,7 @@ const Menu = () => {
     }
 
     const logOut = (): void => {
+        localStorage.clear()
         navigate("/")
     }
 
