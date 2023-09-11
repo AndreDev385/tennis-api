@@ -64,7 +64,7 @@ export class SequelizeRankingRepository implements RankingRepository {
             throw Error("ranking no encontrado");
         }
 
-        const team = await this.teamRepo.getById(exist.tamId);
+        const team = await this.teamRepo.getById(exist.teamId);
 
         exist.team = team;
 

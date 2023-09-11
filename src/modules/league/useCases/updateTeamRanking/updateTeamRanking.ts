@@ -7,7 +7,7 @@ import { ClashRepository } from "../../repositories/clashRepo";
 import { RankingRepository } from "../../repositories/rankingRepo";
 import { UpdateTeamRankingRequest } from "./dto";
 
-type Response = Either<AppError.UnexpectedError | Result<string>, Result<void>>;
+type Response = Either<AppError.UnexpectedError | AppError.NotFoundError | Result<string>, Result<void>>;
 
 export class UpdateTeamRanking
     implements UseCase<UpdateTeamRankingRequest, Response>
