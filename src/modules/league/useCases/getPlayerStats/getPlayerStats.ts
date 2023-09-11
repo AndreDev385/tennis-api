@@ -36,6 +36,9 @@ export class GetPlayerStats
                 if (key == "season") {
                     query.season = value as string;
                 }
+                if (key == "last") {
+                    query.last = true;
+                }
                 if (key == "last3" && !!value == true) {
                     query.last3 = true;
                 }
@@ -60,6 +63,10 @@ export class GetPlayerStats
 
             if (list.length === 0) {
                 return left(new AppError.NotFoundError("No cuentas con estadisticas registradas"))
+            }
+
+            if (query.last == true) {
+                return right(Result.ok(calculatePlayerStats([list[0]])));
             }
 
             if (query.last3 == true) {

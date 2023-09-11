@@ -12,11 +12,7 @@ export class SequelizePlayerTrackerRepository
     async save(playerTracker: PlayerTracker): Promise<void> {
         const PlayerTrackerModel = this.models.PlayerTrackerModel;
 
-        console.log("SAVE PTR ", playerTracker);
-
         const raw = PlayerTrackerMapper.toPersistance(playerTracker);
-
-        console.log("SAVE PTR to persistance", raw);
 
         const exist = await PlayerTrackerModel.findOne({
             where: {
