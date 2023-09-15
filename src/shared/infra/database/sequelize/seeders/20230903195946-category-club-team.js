@@ -291,18 +291,7 @@ module.exports = {
                 updatedAt: new Date(),
             },
         ]);
-        
-        /*
-        5MM
-        6MA
-        6MB
-        6MC
-        6MM
-        4F
-        5F
-        6FA
-        6FB
-        */
+
         await queryInterface.bulkInsert("team", [
             {
                 teamId: v4(),
@@ -362,14 +351,6 @@ module.exports = {
 
         /* Players for test */
         const userId1 = v4();
-        const userId2 = v4();
-        const userId3 = v4();
-        const userId4 = v4();
-        const userId5 = v4();
-        const userId6 = v4();
-        const userId7 = v4();
-        const userId8 = v4();
-        const userId9 = v4();
 
         const SALT_ROUNDS = 5;
         const password = await bcrypt.hash("12345678", SALT_ROUNDS);
@@ -377,89 +358,9 @@ module.exports = {
         await queryInterface.bulkInsert("users", [
             {
                 userId: userId1,
-                email: "player1@player.com",
+                email: "test@player.com",
                 password,
-                firstName: "one",
-                lastName: "player",
-                isPlayer: true,
-                createdAt: new Date(),
-                updatedAt: new Date(),
-            },
-            {
-                userId: userId2,
-                email: "player2@player.com",
-                password,
-                firstName: "two",
-                lastName: "player",
-                isPlayer: true,
-                createdAt: new Date(),
-                updatedAt: new Date(),
-            },
-            {
-                userId: userId3,
-                email: "player3@player.com",
-                password,
-                firstName: "three",
-                lastName: "player",
-                isPlayer: true,
-                createdAt: new Date(),
-                updatedAt: new Date(),
-            },
-            {
-                userId: userId4,
-                email: "player4@player.com",
-                password,
-                firstName: "four",
-                lastName: "player",
-                isPlayer: true,
-                createdAt: new Date(),
-                updatedAt: new Date(),
-            },
-            {
-                userId: userId5,
-                email: "player5@player.com",
-                password,
-                firstName: "five",
-                lastName: "player",
-                isPlayer: true,
-                createdAt: new Date(),
-                updatedAt: new Date(),
-            },
-            {
-                userId: userId6,
-                email: "player6@player.com",
-                password,
-                firstName: "six",
-                lastName: "player",
-                isPlayer: true,
-                createdAt: new Date(),
-                updatedAt: new Date(),
-            },
-            {
-                userId: userId7,
-                email: "player7@player.com",
-                password,
-                firstName: "seven",
-                lastName: "player",
-                isPlayer: true,
-                createdAt: new Date(),
-                updatedAt: new Date(),
-            },
-            {
-                userId: userId8,
-                email: "player8@player.com",
-                password,
-                firstName: "eight",
-                lastName: "player",
-                isPlayer: true,
-                createdAt: new Date(),
-                updatedAt: new Date(),
-            },
-            {
-                userId: userId9,
-                email: "player9@player.com",
-                password,
-                firstName: "nine",
+                firstName: "test",
                 lastName: "player",
                 isPlayer: true,
                 createdAt: new Date(),
@@ -472,62 +373,6 @@ module.exports = {
                 playerId: v4(),
                 clubId: clubIdVAT,
                 userId: userId1,
-                createdAt: new Date(),
-                updatedAt: new Date(),
-            },
-            {
-                playerId: v4(),
-                clubId: clubIdVAT,
-                userId: userId2,
-                createdAt: new Date(),
-                updatedAt: new Date(),
-            },
-            {
-                playerId: v4(),
-                clubId: clubIdVAT,
-                userId: userId3,
-                createdAt: new Date(),
-                updatedAt: new Date(),
-            },
-            {
-                playerId: v4(),
-                clubId: clubIdVAT,
-                userId: userId4,
-                createdAt: new Date(),
-                updatedAt: new Date(),
-            },
-            {
-                playerId: v4(),
-                clubId: clubIdVAT,
-                userId: userId5,
-                createdAt: new Date(),
-                updatedAt: new Date(),
-            },
-            {
-                playerId: v4(),
-                clubId: clubIdVAT,
-                userId: userId6,
-                createdAt: new Date(),
-                updatedAt: new Date(),
-            },
-            {
-                playerId: v4(),
-                clubId: clubIdVAT,
-                userId: userId7,
-                createdAt: new Date(),
-                updatedAt: new Date(),
-            },
-            {
-                playerId: v4(),
-                clubId: clubIdVAT,
-                userId: userId8,
-                createdAt: new Date(),
-                updatedAt: new Date(),
-            },
-            {
-                playerId: v4(),
-                clubId: clubIdVAT,
-                userId: userId9,
                 createdAt: new Date(),
                 updatedAt: new Date(),
             },
