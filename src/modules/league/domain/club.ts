@@ -6,8 +6,8 @@ import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID"; import {
 interface ClubProps {
     name: string;
     symbol: string;
-    code: string;
-    isSubscribed: boolean;
+    code?: string;
+    isSubscribed?: boolean;
 }
 
 export class Club extends Entity<ClubProps> {
@@ -29,6 +29,12 @@ export class Club extends Entity<ClubProps> {
 
     get isSubscribed(): boolean {
         return this.props.isSubscribed;
+    }
+
+    public subscribe() {
+        this.props.isSubscribed = true;
+        this.generateCode();
+        // subscribe event
     }
 
     private generateCode() {
@@ -62,12 +68,17 @@ export class Club extends Entity<ClubProps> {
         const isNewClub = !!id == false;
 
         const club = new Club(
-            { ...props, isSubscribed: props.isSubscribed || false },
+            {
+                ...props,
+                isSubscribed: props.isSubscribed || false,
+                code: props.code ?? null,
+            },
             id
         );
 
         if (isNewClub) {
-            club.generateCode();
+            // new club event
+            //club.generateCode();
         }
 
         return Result.ok<Club>(club);

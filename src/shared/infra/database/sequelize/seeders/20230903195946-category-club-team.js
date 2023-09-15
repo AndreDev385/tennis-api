@@ -84,6 +84,14 @@ module.exports = {
             },
             {
                 clubId: v4(),
+                name: "Centro Italiano Venezolano",
+                symbol: "CIV",
+                isSubscribed: false,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            },
+            {
+                clubId: v4(),
                 name: "Centro Portugues",
                 symbol: "POR",
                 isSubscribed: false,
