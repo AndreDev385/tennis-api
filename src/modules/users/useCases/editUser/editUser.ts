@@ -30,7 +30,7 @@ export class EditUser implements UseCase<EditUserRequest, Response> {
             try {
                 userToEdit = await this.userRepo.getUserByUserId(request.userId);
             } catch (error) {
-                return left(new AppError.UnexpectedError(error));
+                return left(new AppError.NotFoundError(error));
             }
 
             const firstNameOrError = FirstName.create({

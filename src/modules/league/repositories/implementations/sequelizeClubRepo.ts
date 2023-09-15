@@ -26,8 +26,28 @@ export class SequelizeClubRepository implements ClubRepository {
     async list(query: ListQueryDto): Promise<ClubDto[]> {
         const ClubModel = this.models.ClubModel;
 
-        const list = await ClubModel.findAll({ where: query });
+        const list = await ClubModel.findAll({
+            where: query,
+            order: [['name', "ASC"]],
+        });
 
         return list;
+    }
+
+    async save(club: Club): Promise<void> {
+        const ClubModel = this.models.ClubModel;
+
+        const raw = ClubMap.toPersistance(club);
+
+        const exist = await ClubModel.findOne({ where: { clubId: raw.clubId } })
+
+        if (!!exist == true) {
+            await ClubModel.update(raw, {
+                where: { clubId: raw.clubId },
+            })
+        } else {
+            const instance = await ClubModel.create(raw);
+            await instance.save();
+        }
     }
 }
