@@ -5,11 +5,11 @@ import { ToastContainer, toast } from 'react-toastify';
 
 import "./Clubs.scss";
 import 'react-toastify/dist/ReactToastify.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ModalQuestion from '../modalQuestion/ModalQuestion';
 
 export interface IClub {
-  id: string,
+  clubId: string,
   name: string,
   code: string,
   isSubscribed: boolean
@@ -20,39 +20,45 @@ const Clubs = () => {
   const [modalTitle, setModalTitle] = useState("")
   const [modalQuestion, setModalQuestion] = useState("")
   const [id, setId] = useState("")
-  console.log(id)
-  
-  const clubs : IClub[] = [
-    {
-      id: "1",
-      name: "Club A",
-      code: "ABCDEF",
-      isSubscribed: false
-    },
-    {
-      id: "2",
-      name: "Club B",
-      code: "JFOXMX",
-      isSubscribed: true
-    },
-    {
-      id: "3",
-      name: "Club C",
-      code: "PWEOKD",
-      isSubscribed: true
-    },
-  ]
+  const [clubs, setClubs] = useState<IClub[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    getClubs()
+  }, []);
+
+  const getClubs = async () => {
+    setLoading(true)
+    const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/club`
+    const requestOptions = {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' }
+    };
+
+    try{
+      const response = await fetch(url, requestOptions)
+      
+      const data = await response.json()
+
+      if (response.status === 200){
+        setClubs(data)
+        setLoading(false)
+      } 
+    } catch (error) {
+        setLoading(false)
+    }
+  }
 
   const onClickCancelSubscription = (item: IClub): void => {
     setModalTitle("Cancelar suscripción")
     setModalQuestion(`¿Estás seguro que quieres cancelar suscripción de ${item.name}?`)
-    openModal(item.id)
+    openModal(item.clubId)
   }
 
   const onClickSubscription = (item: IClub): void => {
     setModalTitle("Suscribir")
     setModalQuestion(`¿Estás seguro que quieres suscribir a ${item.name}?`)
-    openModal(item.id)
+    openModal(item.clubId)
   }
 
   const openModal = (id: string): void => {
@@ -72,16 +78,23 @@ const Clubs = () => {
 
   const clubTable = clubs.map( (item) => {
     return (
-      <tr key={item.id}>
+      <tr key={item.clubId}>
         <td>
           {item.name}
         </td>
         <td className='text-center'>
-          {item.code}
-          <FontAwesomeIcon 
-            onClick={() => copyClipboard(item.code)}
-            className='copy' 
-            icon={faCopy} />
+          {item.code?
+            <>
+              {item.code} 
+              <FontAwesomeIcon 
+                onClick={() => copyClipboard(item.code)}
+                className='copy' 
+                icon={faCopy} />
+            </>:
+            <span>
+              Sin código asignado
+            </span> 
+          }
         </td>
         <td className='text-center'>
           {item.isSubscribed? 
@@ -112,7 +125,7 @@ const Clubs = () => {
 
         <Card>
           <Table responsive="sm">
-            <thead>
+            <thead className='fixed'>
               <tr>
                 <th>
                   Nombre
@@ -134,21 +147,6 @@ const Clubs = () => {
             </tbody>
           </Table>
         </Card>
-
-
-        <ToastContainer 
-          position="top-right"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="light"
-        />
-
       </div>
 
       {showModalQuestion && 

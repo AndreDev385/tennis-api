@@ -46,16 +46,54 @@ body{
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
   border-radius: 1rem;
   border: none;
+  max-height: 30rem;
+  // overflow-y: hidden;
 
   table tr{
-      --bs-table-bg: #ffffff;
-      height: 3rem;
-      &:hover{
-          --bs-table-bg: #fafafa;
-      }
+    --bs-table-bg: #ffffff;
+    height: 3rem;
+    &:hover{
+        --bs-table-bg: #fafafa;
+    }
   }
-  table tbody tr {
-      border: transparent;
 
+  table tbody tr {
+    border: transparent;
+  }
+
+  tbody {
+    display: block;
+    height: 26rem;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  thead, tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;/* even columns width , fix width of table too*/
+  }
+
+  thead {
+    width: calc( 100% - 1em )/* scrollbar is average 1em/16px width, remove it from thead width */
+  }
+
+  // scrollbar
+  &:hover{
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #c1c1c1;
+    }
+  }
+  ::-webkit-scrollbar {
+    width: 5px;
+  }
+  ::-webkit-scrollbar-track, ::-webkit-scrollbar-thumb{
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #a6a5a5;
   }
 }
