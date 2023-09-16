@@ -6,6 +6,7 @@ import ModalQuestion from "../modalQuestion/ModalQuestion";
 import CreateModal from "./createModal/CreateModal";
 import "./Seasons.scss";
 import 'react-toastify/dist/ReactToastify.css';
+import { toast } from "react-toastify";
 
 interface ISeason {
   seasonId: string,
@@ -22,6 +23,7 @@ const Seasons = () => {
   const [seasonId, setSeasonId] = useState("")
   const [seasons, setSeasons] = useState<ISeason[]>([])
   const [loading, setLoading] = useState(false)
+  const token: string = localStorage.getItem('authorization') || '';
 
   useEffect(() => {
     getSeasons()
@@ -31,7 +33,10 @@ const Seasons = () => {
     const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/season`
     const requestOptions = {
       method: 'GET',
-      headers: { 'Content-Type': 'application/json' }
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': token
+      }
     };
 
     try{
@@ -54,9 +59,36 @@ const Seasons = () => {
     setShowModalQuestion(true)
   }
 
-  const handleEndSeason = () => {
+  const handleEndSeason = async () => {
     //TODO
-    setShowModalQuestion(false)
+    // setShowModalQuestion(false)
+    const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/season/finish`
+    const requestOptions = {
+        method: 'PUT',
+        headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': token
+        }
+    };
+
+    try{
+      const response = await fetch(url, requestOptions);
+      
+      const data = await response.json();
+
+      if (response.status === 200){
+        if(data.message) toast.success(data.message);
+        setLoading(false);
+        setShowModalQuestion(false)
+        getSeasons()
+      } else {
+        setLoading(false);
+        if(data.message) toast.error(data.message);
+      }
+    } catch (error) {
+        setLoading(false);
+        console.error(error);
+    }
   }
 
   // TODO
@@ -71,11 +103,11 @@ const Seasons = () => {
         <td>
           {item.name}
         </td>
-        <td className='text-center'>
+        <td>
           {item.isFinish && 
             <span>
               <FontAwesomeIcon className='finish' icon={faCircle} />
-              Finalizada
+              Finalizada<br />
             </span>
           }
 
@@ -121,7 +153,7 @@ const Seasons = () => {
                 <th>
                   Nombre
                 </th>
-                <th className='text-center'>
+                <th>
                   Estatus
                 </th>
                 <th className='text-center'>
