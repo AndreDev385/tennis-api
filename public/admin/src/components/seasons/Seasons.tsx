@@ -1,13 +1,11 @@
 import { faCircle, faPlus } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Button, Card, Table } from "react-bootstrap"
-import { ToastContainer } from 'react-toastify';
-
-import "./Seasons.scss";
-import 'react-toastify/dist/ReactToastify.css';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ModalQuestion from "../modalQuestion/ModalQuestion";
 import CreateModal from "./createModal/CreateModal";
+import "./Seasons.scss";
+import 'react-toastify/dist/ReactToastify.css';
 
 interface ISeason {
   seasonId: string,
@@ -22,24 +20,33 @@ const Seasons = () => {
   const [showModalCreate, setShowModalCreate] = useState(false)
   const [modalQuestion, setModalQuestion] = useState("")
   const [seasonId, setSeasonId] = useState("")
-  console.log(seasonId)
+  const [seasons, setSeasons] = useState<ISeason[]>([])
+  const [loading, setLoading] = useState(false)
 
-  const seasons : ISeason[] = [
-    {
-      seasonId: "1234",
-      leagueId: "4567",
-      name: "Temporada A",
-      isFinish: false,
-      isCurrentSeason: true
-    },
-    {
-      seasonId: "12994",
-      leagueId: "4567",
-      name: "Temporada A",
-      isFinish: true,
-      isCurrentSeason: false
+  useEffect(() => {
+    getSeasons()
+  }, []);
+
+  const getSeasons = async () => {
+    const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/season`
+    const requestOptions = {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' }
+    };
+
+    try{
+      const response = await fetch(url, requestOptions)
+      
+      const data = await response.json()
+
+      if (response.status === 200){
+        setSeasons(data)
+        setLoading(false)
+      } 
+    } catch (error) {
+        setLoading(false)
     }
-  ]
+  }
 
   const onClickEndSeason = (item: ISeason): void => {
     setModalQuestion(`¿Estás seguro que quieres finalizar temporada ${item.name}?`)
@@ -48,13 +55,13 @@ const Seasons = () => {
   }
 
   const handleEndSeason = () => {
-    // do something 
+    //TODO
     setShowModalQuestion(false)
   }
 
+  // TODO
   const dismissCreateModal = (event: boolean) => {
-    if(event)
-      console.log("TODO refresh")
+    if(event) getSeasons();
     setShowModalCreate(false)
   }
 
@@ -107,40 +114,27 @@ const Seasons = () => {
           </div>
         </div>
 
-      <Card>
-        <Table responsive="sm">
-          <thead>
-            <tr>
-              <th>
-                Nombre
-              </th>
-              <th className='text-center'>
-                Estatus
-              </th>
-              <th className='text-center'>
-                Manejar temporada
-              </th>
-            </tr>
-          </thead>
+        <Card>
+          <Table responsive="sm">
+            <thead>
+              <tr>
+                <th>
+                  Nombre
+                </th>
+                <th className='text-center'>
+                  Estatus
+                </th>
+                <th className='text-center'>
+                  Manejar temporada
+                </th>
+              </tr>
+            </thead>
 
-          <tbody>
-            {seasonTable}
-          </tbody>
-        </Table>
-      </Card>
-
-      <ToastContainer 
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
+            <tbody>
+              {seasonTable}
+            </tbody>
+          </Table>
+        </Card>
       </div>
 
       {showModalQuestion && 

@@ -67,9 +67,13 @@ const Clubs = () => {
   }
 
   const handleModalAccept = () => {
-    // do something 
+    // TODO
     setShowModalQuestion(false)
   }
+
+  // const handleSuscription = () => {
+
+  // }
 
   const copyClipboard = (code: string): void => {
     navigator.clipboard.writeText(code)

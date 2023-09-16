@@ -2,6 +2,7 @@ import { faCircleNotch, faPlus } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap'
+import { toast } from 'react-toastify';
 
 interface ICreateModalProps {
     dismiss: (event: boolean) => void;
@@ -13,6 +14,7 @@ const CreateModal = ({dismiss}: ICreateModalProps ) => {
     const [ validName, setValidName ] = useState(false)
     const [ submitted, setSubmitted ] = useState(false)
     const [ loading, setLoading ] = useState(false)
+    const token: string = localStorage.getItem('authorization') || '';
     
     const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const value = event.target.value;
@@ -27,9 +29,38 @@ const CreateModal = ({dismiss}: ICreateModalProps ) => {
     const handleSubmit = (): void =>{
         setSubmitted(true)
         if (!validName) return;
-        // TODO create season
         setLoading(true)
-        dismiss(true)
+        createSeason()
+    }
+
+    const createSeason = async () => {
+        const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/season`
+        const requestOptions = {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': token
+            },
+            body: JSON.stringify(form)
+        };
+    
+        try{
+          const response = await fetch(url, requestOptions);
+          
+          const data = await response.json();
+    
+          if (response.status === 200){
+            if(data.message) toast.success(data.message);
+            setLoading(false);
+            dismiss(true);
+          } else {
+            setLoading(false);
+            if(data.message) toast.error(data.message);
+          }
+        } catch (error) {
+            setLoading(false);
+            console.error(error);
+        }
     }
 
     return (
