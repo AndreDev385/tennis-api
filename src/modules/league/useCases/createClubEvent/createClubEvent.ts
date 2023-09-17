@@ -48,7 +48,7 @@ export class CreateClubEvent implements UseCase<any, any> {
 
             const event = eventOrError.getValue();
 
-            await this.clubEventRepo.create(event);
+            await this.clubEventRepo.save(event);
 
             return right(Result.ok<void>());
         } catch (error) {

@@ -2,6 +2,7 @@ import { Player } from "../domain/player";
 
 export interface PlayerQuery {
     clubId?: string;
+    includeDeleted?: boolean;
 }
 
 export interface PlayerRepository {

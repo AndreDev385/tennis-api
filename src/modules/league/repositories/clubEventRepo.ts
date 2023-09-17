@@ -6,5 +6,6 @@ export interface ClubEventQuery {
 
 export interface ClubEventRepository {
     list(query: ClubEventQuery): Promise<Array<ClubEvent>>
-    create(event: ClubEvent): Promise<void>
+    save(event: ClubEvent): Promise<void>
+    delete(eventId: string): Promise<void>
 }
