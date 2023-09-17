@@ -9,6 +9,26 @@ export class SequelizeClubEventRepository implements ClubEventRepository {
         this.models = models;
     }
 
+    async delete(eventId: string): Promise<void> {
+        const ClubEventModel = this.models.ClubEventModel;
+
+        await this.findById(eventId);
+
+        await ClubEventModel.destroy({ where: { eventId } })
+    }
+
+    async findById(eventId: string): Promise<ClubEvent> {
+        const ClubEventModel = this.models.ClubEventModel;
+
+        const event = await ClubEventModel.findOne({ where: { eventId } })
+
+        if (!!event == false) {
+            throw new Error("Evento no encontrado");
+        }
+
+        return ClubEventMap.toDomain(event);
+    }
+
     async list(query: ClubEventQuery): Promise<ClubEvent[]> {
         const ClubEventModel = this.models.ClubEventModel;
 
@@ -17,7 +37,7 @@ export class SequelizeClubEventRepository implements ClubEventRepository {
         return list.map((event: any) => ClubEventMap.toDomain(event));
     }
 
-    async create(event: ClubEvent): Promise<void> {
+    async save(event: ClubEvent): Promise<void> {
         const ClubEventModel = this.models.ClubEventModel;
 
         const exist = await ClubEventModel.findOne({
