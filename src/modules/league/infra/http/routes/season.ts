@@ -3,6 +3,7 @@ import { listSeasonController } from "../../../useCases/listSeasons";
 import { createSeasonController } from "../../../useCases/createSeason";
 import { middleware } from "../../../../../shared/infra/http";
 import { finishSeasonController } from "../../../useCases/finishSeason";
+import { resumeSeasonController } from "../../../useCases/resumeSeason";
 
 const seasonRouter = express.Router();
 
@@ -17,5 +18,11 @@ seasonRouter.post("/", middleware.adminAuthenticated(), (req, res) =>
 seasonRouter.put("/finish", middleware.adminAuthenticated(), (req, res) =>
     finishSeasonController.execute(req, res)
 );
+
+seasonRouter.put(
+    "/resume",
+    middleware.adminAuthenticated(),
+    (req, res) => resumeSeasonController.execute(req, res)
+)
 
 export { seasonRouter };
