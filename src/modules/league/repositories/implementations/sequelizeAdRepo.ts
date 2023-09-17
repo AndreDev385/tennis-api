@@ -10,6 +10,26 @@ export class SequelizeAdRepository implements AdRepository {
         this.models = models;
     }
 
+    async findById(adId: string): Promise<Ad> {
+        const AdModel = this.models.AdModel;
+
+        const ad = await AdModel.findOne({ where: { adId } });
+
+        if (!!ad == false) {
+            throw new Error("Ad no encontrada");
+        }
+
+        return AdMap.toDomain(ad);
+    }
+
+    async delete(adId: string): Promise<void> {
+        const AdModel = this.models.AdModel;
+
+        await this.findById(adId);
+
+        await AdModel.destroy({ where: { adId } });
+    }
+
     async list(query: AdQuery = {}): Promise<Ad[]> {
         const AdModel = this.models.AdModel
 
