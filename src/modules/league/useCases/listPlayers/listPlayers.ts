@@ -18,8 +18,13 @@ export class ListPlayers implements UseCase<any, Promise<Response>> {
     async execute(request?: any): Promise<Response> {
         const query: PlayerQuery = {};
 
-        if (!!request == true) {
-            query["clubId"] = request["clubId"];
+        for (const [key, value] of Object.keys(request)) {
+            if (key == "clubId") {
+                query.clubId = value;
+            }
+            if (key == "includeDeleted") {
+                query.includeDeleted = true;
+            }
         }
 
         try {
