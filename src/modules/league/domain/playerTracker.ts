@@ -224,7 +224,7 @@ export class PlayerTracker extends Entity<PlayerTrackerProps> {
             pointsWinnedFirstReturn: props.pointsWinnedFirstReturn ?? 0,
             firstReturnIn: props.firstReturnIn ?? 0,
             secondReturnIn: props.secondReturnIn ?? 0,
-            meshPointsWon: props.meshPointsLost ?? 0,
+            meshPointsWon: props.meshPointsWon ?? 0,
             bckgPointsWon: props.bckgPointsWon ?? 0,
             meshPointsLost: props.meshPointsLost ?? 0,
             bckgPointsLost: props.bckgPointsLost ?? 0,
