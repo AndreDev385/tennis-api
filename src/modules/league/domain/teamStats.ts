@@ -283,7 +283,6 @@ export class TeamStats extends Entity<TeamStatsProps> {
                     if (set.setWon) {
                         this.props.setsWonAsVisitor += 1
                     }
-                    this.props.setsWonAsVisitor += 1
                 }
             }
         }
