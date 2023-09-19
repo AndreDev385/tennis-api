@@ -105,6 +105,17 @@ export class SequelizeMatchRepository implements MatchRepository {
         const raw = await MatchModel.findAll(baseQuery);
 
         for (const match of raw) {
+
+            let tracker: MatchTracker;
+
+            try {
+                tracker = await this.trackerRepo.findTrackerByMatchId(match.matchId);
+            } catch (e) {
+                tracker = null;
+            }
+
+            match.tracker = tracker;
+
             match.player1Domain = await this.playerRepo.getPlayerById(
                 match.player1
             );
