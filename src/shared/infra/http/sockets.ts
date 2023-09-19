@@ -6,7 +6,7 @@ export default async (io: Server) => {
         socket.on("client:join_room", (data) => {
             const room = `match:${data.message}`;
             socket.join(room);
-            socket.emit("server:join_room", { message: `${socket.id} user joined room: ${room}` });
+            socket.to(room).emit("server:join_room", { message: `${socket.id} user joined room: ${room}` });
         });
 
         // notify actualization
