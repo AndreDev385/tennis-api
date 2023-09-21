@@ -49,6 +49,9 @@ interface TeamStatsProps {
 }
 
 export class TeamStats extends Entity<TeamStatsProps> {
+
+    private SUPER_TIE_BREAK_POINTS = 10;
+
     get teamStatsId(): TeamStatsId {
         return TeamStatsId.create(this._id).getValue();
     }
@@ -290,6 +293,9 @@ export class TeamStats extends Entity<TeamStatsProps> {
 
     private addGamesStats(sets: Set[], isLocal: boolean) {
         for (const set of sets) {
+            if (set.myGames >= this.SUPER_TIE_BREAK_POINTS || set.rivalGames >= this.SUPER_TIE_BREAK_POINTS) {
+                return;
+            }
             if (isLocal) {
                 this.props.gamesPlayedAsLocal += (set.myGames + set.rivalGames)
                 this.props.gamesWonAsLocal += set.myGames;

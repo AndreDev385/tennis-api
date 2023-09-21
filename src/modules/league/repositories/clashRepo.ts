@@ -5,6 +5,8 @@ export interface ClashQuery {
     isFinish?: boolean;
     journey?: string;
     seasonId?: string;
+    team1?: string;
+    team2?: string;
 }
 
 export interface ClashRepository {

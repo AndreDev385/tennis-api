@@ -57,6 +57,55 @@ export class MatchTracker extends Entity<MatchTrackerProps> {
         return this.props.partner;
     }
 
+    get firstServIn(): number {
+        if (this.partner != null) {
+            return this.me.firstServIn + this.partner.firstServIn;
+        }
+        return this.me.firstServIn
+    }
+
+    get secondServIn(): number {
+        if (this.partner != null) {
+            return this.me.secondServIn + this.partner.secondServIn;
+        }
+        return this.me.secondServIn
+    }
+
+    get dobleFaults(): number {
+        if (this.partner != null) {
+            return this.me.dobleFaults + this.partner.dobleFaults;
+        }
+        return this.me.dobleFaults
+    }
+
+    get pointsWinnedFirstServ(): number {
+        if (this.partner != null) {
+            return this.me.pointsWinnedFirstServ + this.partner.pointsWinnedFirstServ;
+        }
+        return this.me.pointsWinnedFirstServ
+    }
+
+    get pointsWinnedSecondServ(): number {
+        if (this.partner != null) {
+            return this.me.pointsWinnedSecondServ + this.partner.pointsWinnedSecondServ;
+        }
+        return this.me.pointsWinnedSecondServ
+    }
+
+    get meshPointsWon(): number {
+        if (this.partner != null) {
+            return this.me.meshPointsWon + this.partner.meshPointsWon;
+        }
+        return this.me.meshPointsWon;
+    }
+
+    get meshPointsLost(): number {
+        if (this.partner != null) {
+            return this.me.meshPointsLost + this.partner.meshPointsLost;
+        }
+        return this.me.meshPointsLost;
+    }
+
     get gamesWonReturning(): number {
         return this.props.gamesWonReturning;
     }

@@ -22,6 +22,8 @@ export interface PlayerTrackerDto {
     pointsWinnedSecondReturn?: number;
     firstReturnIn?: number;
     secondReturnIn?: number;
+    firstReturnOut?: number;
+    secondReturnOut?: number;
     meshPointsWon?: number;
     meshPointsLost?: number;
     bckgPointsWon?: number;
