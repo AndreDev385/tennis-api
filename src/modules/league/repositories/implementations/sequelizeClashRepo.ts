@@ -113,6 +113,8 @@ export class SequelizeClashRepo implements ClashRepository {
 
         query.where = filters;
 
+        query.order = [['createdAt', "DESC"]];
+
         const list = await ClashModel.findAll(query);
 
         for (const clash of list) {

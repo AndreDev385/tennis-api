@@ -49,6 +49,9 @@ interface TeamStatsProps {
 }
 
 export class TeamStats extends Entity<TeamStatsProps> {
+
+    private SUPER_TIE_BREAK_POINTS = 10;
+
     get teamStatsId(): TeamStatsId {
         return TeamStatsId.create(this._id).getValue();
     }
@@ -166,7 +169,7 @@ export class TeamStats extends Entity<TeamStatsProps> {
     }
 
     get totalMatchsWonWithFirstSetWon(): number {
-        return this.props.matchsWonWithFirstSetWonAsLocal + this.props.matchsPlayedWithFirstSetWonAsVisitor;
+        return this.props.matchsWonWithFirstSetWonAsLocal + this.props.matchsWonWithFirstSetWonAsVisitor;
     }
 
     get totalMatchsPlayedWithFirstSetWon(): number {
@@ -260,9 +263,9 @@ export class TeamStats extends Entity<TeamStatsProps> {
                     this.props.matchsWonWithFirstSetWonAsLocal += 1;
                 }
             } else {
-                this.props.matchsPlayedWithFirstSetWonAsLocal += 1;
+                this.props.matchsPlayedWithFirstSetWonAsVisitor += 1;
                 if (match.matchWon) {
-                    this.props.matchsWonWithFirstSetWonAsLocal += 1;
+                    this.props.matchsWonWithFirstSetWonAsVisitor += 1;
                 }
             }
         }
@@ -272,18 +275,17 @@ export class TeamStats extends Entity<TeamStatsProps> {
         for (const set of sets) {
             if (isLocal) {
                 if (set.setWon !== null) {
-                    this.props.setsPlayedAsLocal += sets.length;
+                    this.props.setsPlayedAsLocal += 1;
                     if (set.setWon) {
                         this.props.setsWonAsLocal += 1
                     }
                 }
             } else {
                 if (set.setWon !== null) {
-                    this.props.setsPlayedAsVisitor += sets.length;
+                    this.props.setsPlayedAsVisitor += 1;
                     if (set.setWon) {
                         this.props.setsWonAsVisitor += 1
                     }
-                    this.props.setsWonAsVisitor += 1
                 }
             }
         }
@@ -291,6 +293,9 @@ export class TeamStats extends Entity<TeamStatsProps> {
 
     private addGamesStats(sets: Set[], isLocal: boolean) {
         for (const set of sets) {
+            if (set.myGames >= this.SUPER_TIE_BREAK_POINTS || set.rivalGames >= this.SUPER_TIE_BREAK_POINTS) {
+                return;
+            }
             if (isLocal) {
                 this.props.gamesPlayedAsLocal += (set.myGames + set.rivalGames)
                 this.props.gamesWonAsLocal += set.myGames;

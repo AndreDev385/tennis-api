@@ -63,7 +63,7 @@ export class Clash extends AggregateRoot<ClubClashProps> {
     }
 
     get isLocal(): boolean {
-        return this.props.team1.club.clubId == this.props.host.clubId;
+        return this.props.team1.club.clubId.equals(this.props.host.clubId);
     }
 
     get wonClash(): boolean {

@@ -44,9 +44,6 @@ export class FinishMatch implements UseCase<any, Response> {
         let sets: Sets;
         let tracker: MatchTracker;
 
-        console.log("TRACKER", request.tracker);
-
-        console.log("Request me", request.tracker.me);
         try {
             try {
                 const seasons = await this.seasonRepo.list({
@@ -66,8 +63,6 @@ export class FinishMatch implements UseCase<any, Response> {
                 ...request.tracker.me,
                 seasonId: currentSeason.id.toString(),
             });
-
-            console.log("to domain me", me);
 
             if (me == null) {
                 return left(
@@ -123,15 +118,9 @@ export class FinishMatch implements UseCase<any, Response> {
 
             tracker = trackerOrError.getValue();
 
-            console.log("ME AFTER CREATE TRACKER", tracker.me);
-
             match.finishMatch(sets, tracker, request.superTieBreak);
 
-            console.log("ME AFTER match FINISH", match.tracker.me);
-
             await this.matchRepo.save(match);
-
-            console.log("ME AFRER MATCH REPO SAVE", match.tracker.me);
 
             await this.trackerRepo.save(match.tracker);
 
