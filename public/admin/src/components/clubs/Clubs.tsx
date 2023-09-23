@@ -1,7 +1,7 @@
 import { Button, Card, Table } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faCircle, faCopy } from '@fortawesome/free-solid-svg-icons';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 import "./Clubs.scss";
 import 'react-toastify/dist/ReactToastify.css';

@@ -4,43 +4,26 @@ import { IClub } from "../../clubs/Clubs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleNotch, faPencil} from "@fortawesome/free-solid-svg-icons";
 import'../News.scss';
+import { INews } from "../News";
+import { toast } from "react-toastify";
 
 interface IEditNewsProps {
-    id: string;
+    newsSelected: INews;
     dismiss: (event: boolean) => void;
+    clubs: IClub[];
 }
 
-const EditNews = ({id, dismiss}: IEditNewsProps) => {
-    const [news, setNews] = useState({
-        adId: "",
-        clubId: "",
-        link: "",
-        image: ""
+const EditNews = ({newsSelected, clubs, dismiss}: IEditNewsProps) => {
+    const [news, setNews] = useState<INews>({
+        adId: newsSelected.adId,
+        clubId: newsSelected.clubId,
+        link: newsSelected.link,
+        image: newsSelected.image
     })
     const [ submitted, setSubmitted ] = useState(false)
     const [ loading, setLoading ] = useState(false)
-    const [ preview, setPreview ] = useState("")
-
-    const clubs : IClub[] = [
-        {
-          id: "1",
-          name: "Club A",
-          code: "ABCDEF",
-          isSubscribed: false
-        },
-        {
-          id: "2",
-          name: "Club B",
-          code: "JFOXMX",
-          isSubscribed: true
-        },
-        {
-          id: "3",
-          name: "Club C",
-          code: "PWEOKD",
-          isSubscribed: true
-        },
-      ]
+    const [ preview, setPreview ] = useState(news.image)
+    const token: string = localStorage.getItem('authorization') || '';
 
     const handleChangeClub = (event: React.ChangeEvent<HTMLSelectElement>):void => {
         const value = event.target.value;
@@ -65,7 +48,7 @@ const EditNews = ({id, dismiss}: IEditNewsProps) => {
             const objectUrl = URL.createObjectURL(value)
             setNews((prev) => ({
               ...prev,
-              image: event.target.value
+              image: value
             }))
             setPreview(objectUrl)
         }
@@ -76,8 +59,43 @@ const EditNews = ({id, dismiss}: IEditNewsProps) => {
         setSubmitted(true);
         if (!news.clubId || !news.link || !news.image) return;
         setLoading(true)
-        // TODO fetch data
-        dismiss(true)
+        editNews()
+    }
+
+    const editNews = async () => {
+        const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/ads`
+        
+        let formData = new FormData();
+        formData.append("adId", news.adId)
+        formData.append("clubId", news.clubId)
+        formData.append("link", news.link)
+        formData.append("image", news.image)
+        
+        const requestOptions = {
+            method: 'POST',
+            headers: { 
+                'Authorization': token
+            },
+            body: formData
+        };
+    
+        try{
+          const response = await fetch(url, requestOptions);
+          
+          const data = await response.json();
+    
+          if (response.status === 200){
+            if(data.message) toast.success(data.message);
+            setLoading(false);
+            dismiss(true);
+          } else {
+            setLoading(false);
+            if(data.message) toast.error(data.message);
+          }
+        } catch (error) {
+            setLoading(false);
+            console.error(error);
+        }
     }
 
     return (
@@ -108,7 +126,7 @@ const EditNews = ({id, dismiss}: IEditNewsProps) => {
                                 >
                                     <option disabled value="">Selecciona un club</option>
                                     {clubs.map(item => {
-                                        return <option key={item.id} value={item.id}>{item.name}</option>
+                                        return <option key={item.clubId} value={item.clubId}>{item.name}</option>
                                     })}
                                 </Form.Select>
                                 { submitted && !news.clubId &&
