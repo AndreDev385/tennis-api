@@ -1,18 +1,31 @@
 import { Ranking } from "../../domain/ranking";
-import { RankingMap } from "../../mappers/rankingMap";
+import { RankingMap, toDomainRanking } from "../../mappers/rankingMap";
 import { RankingQuery, RankingRepository } from "../rankingRepo";
+import { TeamRepository } from "../teamRepo";
 
 export class SequelizeRankingRepository implements RankingRepository {
     private models: any;
+    private teamRepo: TeamRepository;
 
-    constructor(models: any) {
+    constructor(models: any, teamRepo: TeamRepository) {
         this.models = models;
+        this.teamRepo = teamRepo;
+    }
+
+    private fromDb(dbRow: any): toDomainRanking {
+        return {
+            team: dbRow.team,
+            rankingId: dbRow.rankingId,
+            seasonId: dbRow.seasonId,
+            position: dbRow.position,
+            symbol: dbRow.symbol,
+        }
     }
 
     async save(ranking: Ranking): Promise<void> {
         const RankingModel = this.models.RankingModel;
 
-        const raw = RankingMap.toDto(ranking);
+        const raw = RankingMap.toPersistance(ranking);
 
         const exist = await RankingModel.findOne({
             where: { rankingId: raw.rankingId },
@@ -33,7 +46,13 @@ export class SequelizeRankingRepository implements RankingRepository {
 
         const list = await RankingModel.findAll({ where: query });
 
-        return list.map((i: any) => RankingMap.toDomain(i));
+        for (const ranking of list) {
+            const team = await this.teamRepo.getById(ranking.teamId);
+
+            ranking.team = team;
+        }
+
+        return list.map((i: any) => RankingMap.toDomain(this.fromDb(i)));
     }
 
     async getRanking(teamId: string, seasonId: string): Promise<Ranking> {
@@ -45,6 +64,10 @@ export class SequelizeRankingRepository implements RankingRepository {
             throw Error("ranking no encontrado");
         }
 
-        return RankingMap.toDomain(exist);
+        const team = await this.teamRepo.getById(exist.teamId);
+
+        exist.team = team;
+
+        return RankingMap.toDomain(this.fromDb(exist));
     }
 }

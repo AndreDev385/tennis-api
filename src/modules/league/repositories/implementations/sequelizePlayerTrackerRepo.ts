@@ -1,6 +1,6 @@
 import { PlayerTracker } from "../../domain/playerTracker";
 import { PlayerTrackerMapper } from "../../mappers/playerTrackerMap";
-import { PlayerTrackerRepository } from "../playerTrackerRepo";
+import { PlayerTrackerQuery, PlayerTrackerRepository } from "../playerTrackerRepo";
 
 export class SequelizePlayerTrackerRepository
     implements PlayerTrackerRepository {
@@ -12,11 +12,7 @@ export class SequelizePlayerTrackerRepository
     async save(playerTracker: PlayerTracker): Promise<void> {
         const PlayerTrackerModel = this.models.PlayerTrackerModel;
 
-        console.log("SAVE PTR ", playerTracker);
-
         const raw = PlayerTrackerMapper.toPersistance(playerTracker);
-
-        console.log("SAVE PTR to persistance", raw);
 
         const exist = await PlayerTrackerModel.findOne({
             where: {
@@ -51,20 +47,22 @@ export class SequelizePlayerTrackerRepository
         return PlayerTrackerMapper.toDomain(playerTracker);
     }
 
-    async getByPlayerId(playerId: string, seasonId?: string): Promise<PlayerTracker[]> {
+    async getByPlayerId(query: PlayerTrackerQuery): Promise<PlayerTracker[]> {
         const PlayerTrackerModel = this.models.PlayerTrackerModel;
 
-        let query: any = { playerId };
-        if (seasonId) {
-            query.seasonId = seasonId;
+        let _query = {
+            where: {
+                playerId: query.playerId,
+            },
+            order: [['createdAt', "DESC"]],
+            limit: query.limit,
         }
 
-        const list = await PlayerTrackerModel.findAll(
-            {
-                where: query,
-                order: [['createdAt', "DESC"]],
-            }
-        );
+        if (query.seasonId != null) {
+            _query.where["seasonId"] = query.seasonId
+        }
+
+        const list = await PlayerTrackerModel.findAll(_query);
 
         return list.map((t) => PlayerTrackerMapper.toDomain(t));
     }

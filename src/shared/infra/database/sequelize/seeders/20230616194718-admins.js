@@ -11,7 +11,7 @@ module.exports = {
         const password = await bcrypt.hash("12345678", SALT_ROUNDS);
 
         await queryInterface.bulkInsert("users", [
-            // admin
+            // admin test
             {
                 userId: v4(),
                 email: "aizarra2015@gmail.com",
@@ -23,17 +23,7 @@ module.exports = {
                 createdAt: new Date(),
                 updatedAt: new Date(),
             },
-            {
-                userId: v4(),
-                email: "alexandrabalza09@gmail.com",
-                password,
-                firstName: "Alexandra",
-                lastName: "Balza",
-                canTrack: true,
-                isAdmin: true,
-                createdAt: new Date(),
-                updatedAt: new Date(),
-            },
+            // admins
             {
                 userId: v4(),
                 email: "joseraul333@gmail.com",
@@ -56,6 +46,8 @@ module.exports = {
                 createdAt: new Date(),
                 updatedAt: new Date(),
             },
+            // end admins
+            // trackers 
             {
                 userId: v4(),
                 email: "cbarbosave@gmail.com",
@@ -177,10 +169,11 @@ module.exports = {
                 createdAt: new Date(),
                 updatedAt: new Date(),
             },
+            // end trackers
         ]);
     },
 
     async down(queryInterface, Sequelize) {
-        await queryInterface.bulkDelete("users", {});
+        await queryInterface.bulkDelete("users", null, {});
     },
 };

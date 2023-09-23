@@ -30,6 +30,8 @@ interface PlayerTrackerProps {
     pointsWinnedSecondReturn?: number;
     firstReturnIn?: number;
     secondReturnIn?: number;
+    firstReturnOut?: number;
+    secondReturnOut?: number;
     meshPointsWon?: number;
     meshPointsLost?: number;
     bckgPointsWon?: number;
@@ -114,6 +116,12 @@ export class PlayerTracker extends Entity<PlayerTrackerProps> {
     }
     get secondReturnIn(): number {
         return this.props.secondReturnIn;
+    }
+    get firstReturnOut(): number {
+        return this.props.firstReturnOut;
+    }
+    get secondReturnOut(): number {
+        return this.props.secondReturnOut;
     }
     get meshPointsWon(): number {
         return this.props.meshPointsWon;
@@ -224,7 +232,9 @@ export class PlayerTracker extends Entity<PlayerTrackerProps> {
             pointsWinnedFirstReturn: props.pointsWinnedFirstReturn ?? 0,
             firstReturnIn: props.firstReturnIn ?? 0,
             secondReturnIn: props.secondReturnIn ?? 0,
-            meshPointsWon: props.meshPointsLost ?? 0,
+            firstReturnOut: props.firstReturnIn ?? 0,
+            secondReturnOut: props.secondReturnIn ?? 0,
+            meshPointsWon: props.meshPointsWon ?? 0,
             bckgPointsWon: props.bckgPointsWon ?? 0,
             meshPointsLost: props.meshPointsLost ?? 0,
             bckgPointsLost: props.bckgPointsLost ?? 0,

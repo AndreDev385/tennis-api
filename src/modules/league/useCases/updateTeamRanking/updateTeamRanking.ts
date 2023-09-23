@@ -2,12 +2,12 @@ import { AppError } from "../../../../shared/core/AppError";
 import { Either, Result, left, right } from "../../../../shared/core/Result";
 import { UseCase } from "../../../../shared/core/UseCase";
 import { Clash } from "../../domain/clubClash";
-import { Ranking, positions } from "../../domain/ranking";
+import { Ranking, positions, symbols } from "../../domain/ranking";
 import { ClashRepository } from "../../repositories/clashRepo";
 import { RankingRepository } from "../../repositories/rankingRepo";
 import { UpdateTeamRankingRequest } from "./dto";
 
-type Response = Either<AppError.UnexpectedError | Result<string>, Result<void>>;
+type Response = Either<AppError.UnexpectedError | AppError.NotFoundError | Result<string>, Result<void>>;
 
 export class UpdateTeamRanking
     implements UseCase<UpdateTeamRankingRequest, Response>
@@ -37,11 +37,11 @@ export class UpdateTeamRanking
                     clash.seasonId.id.toString()
                 );
             } catch (error) {
-                console.log(error);
                 const rankingOrError = Ranking.create({
-                    teamId: clash.team1.teamId,
+                    team: clash.team1,
                     seasonId: clash.seasonId,
                     position: positions.groups,
+                    symbol: symbols.groups,
                 });
 
                 if (rankingOrError.isFailure) {
@@ -50,11 +50,7 @@ export class UpdateTeamRanking
                 ranking = rankingOrError.getValue();
             }
 
-            console.log("RANKING", ranking)
-
             ranking.updateRankingPosition(clash);
-
-            console.log("AFTER UPDATE RANKING", ranking)
 
             await this.rankingRepo.save(ranking);
 

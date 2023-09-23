@@ -32,9 +32,13 @@ export class SequelizePlayerRepository implements PlayerRepository {
             baseQuery.where["clubId"] = query.clubId;
         }
 
-        const rawList = await PlayerModel.findAll(baseQuery);
+        let rawList = await PlayerModel.findAll(baseQuery);
 
-        const list = rawList.map((p) => PlayerMap.toDomain(p));
+        if (!query.includeDeleted) {
+            rawList = rawList.filter((o: any) => o.user.isDeleted == false);
+        }
+
+        const list = rawList.map((p: any) => PlayerMap.toDomain(p));
 
         return list;
     }

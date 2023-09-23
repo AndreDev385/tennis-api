@@ -31,8 +31,7 @@ module.exports = {
     },
 
     async down(queryInterface, Sequelize) {
-        await queryInterface.bulkDelete("league", {});
-        await queryInterface.bulkDelete("season", {});
-        await queryInterface.bulkDelete("club", {});
+        await queryInterface.bulkDelete("league", null, {});
+        await queryInterface.bulkDelete("season", null, {});
     },
 };

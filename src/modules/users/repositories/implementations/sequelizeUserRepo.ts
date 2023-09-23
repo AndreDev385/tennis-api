@@ -40,18 +40,18 @@ export class SequelizeUserRepo implements UserRepository {
 
     async save(user: User): Promise<void> {
         const UserModel = this.models.UserModel;
-        const exists = await this.exists(user.email);
-
         const rawUser = await UserMap.toPersistance(user);
 
-        if (exists) {
+        try {
+            await this.getUserByUserId(user.userId.id.toString());
             await UserModel.update(rawUser, {
                 where: { userId: user.userId.id.toString() },
             });
-        } else {
+        } catch (error) {
             const user = await UserModel.create(rawUser);
             await user.save();
             return;
+
         }
     }
 

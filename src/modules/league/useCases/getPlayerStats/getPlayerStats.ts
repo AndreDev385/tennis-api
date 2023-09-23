@@ -5,7 +5,7 @@ import { Player } from "../../domain/player";
 import { PlayerTracker } from "../../domain/playerTracker";
 import { PlayerTrackerDto } from "../../dtos/playerTrackerDto";
 import { PlayerRepository } from "../../repositories/playerRepo";
-import { PlayerTrackerRepository } from "../../repositories/playerTrackerRepo";
+import { PlayerTrackerQuery, PlayerTrackerRepository } from "../../repositories/playerTrackerRepo";
 
 
 export interface GetPlayerStatsRequest {
@@ -36,6 +36,9 @@ export class GetPlayerStats
                 if (key == "season") {
                     query.season = value as string;
                 }
+                if (key == "last") {
+                    query.last = true;
+                }
                 if (key == "last3" && !!value == true) {
                     query.last3 = true;
                 }
@@ -51,25 +54,28 @@ export class GetPlayerStats
                 return left(Result.fail<string>("Temporada invalida"));
             }
 
-            const list = await this.playerTrackerRepo.getByPlayerId(
-                player.playerId.id.toString(),
-                query.season ?? ""
-            );
+            const statsQuery: PlayerTrackerQuery = {
+                playerId: player.playerId.id.toString(),
+            }
+
+            if (query.last) {
+                statsQuery.limit = 1;
+            }
+
+            if (query.last3) {
+                statsQuery.limit = 3;
+            }
+
+            if (query.season != null && query.season != "") {
+                statsQuery.seasonId = query.season;
+            }
+
+            const list = await this.playerTrackerRepo.getByPlayerId(statsQuery);
 
             console.log("LIST", list);
 
-            if (list.length === 0) {
-                return left(new AppError.NotFoundError("No cuentas con estadisticas registradas"))
-            }
-
-            if (query.last3 == true) {
-                let total: PlayerTrackerDto;
-                if (list.length <= 3) {
-                    total = calculatePlayerStats(list);
-                    return right(Result.ok(total))
-                }
-                total = calculatePlayerStats([list[0], list[1], list[2]])
-                return right(Result.ok(total));
+            for(const stats of list) {
+                console.log(stats.seasonId.id.toString());
             }
 
             return right(Result.ok(calculatePlayerStats(list)));
@@ -104,6 +110,8 @@ function calculatePlayerStats(stats: Array<PlayerTracker>) {
         pointsWinnedSecondReturn: 0,
         firstReturnIn: 0,
         secondReturnIn: 0,
+        firstReturnOut: 0,
+        secondReturnOut: 0,
         meshPointsWon: 0,
         meshPointsLost: 0,
         bckgPointsWon: 0,
@@ -131,6 +139,8 @@ function calculatePlayerStats(stats: Array<PlayerTracker>) {
         totalStats.pointsWinnedSecondReturn += matchStats.pointsWinnedSecondReturn;
         totalStats.firstReturnIn += matchStats.firstReturnIn;
         totalStats.secondReturnIn += matchStats.secondReturnIn;
+        totalStats.firstReturnOut += matchStats.firstReturnOut;
+        totalStats.secondReturnOut += matchStats.secondReturnOut;
         totalStats.meshPointsWon += matchStats.meshPointsWon;
         totalStats.meshPointsLost += matchStats.meshPointsLost;
         totalStats.bckgPointsWon += matchStats.bckgPointsWon;

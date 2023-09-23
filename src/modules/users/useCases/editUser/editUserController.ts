@@ -27,6 +27,8 @@ export class EditUserController extends BaseController {
             switch (error.constructor) {
                 case AppError.UnexpectedError:
                     return this.fail(res, (error as AppError.UnexpectedError).getErrorValue().message)
+                case AppError.NotFoundError:
+                    return this.clientError(res, (error as AppError.NotFoundError).getErrorValue().message)
                 case CreateUserErrors.EmailAlreadyExistsError:
                     return this.conflict(res, (error as CreateUserErrors.EmailAlreadyExistsError).getErrorValue().message)
                 default:

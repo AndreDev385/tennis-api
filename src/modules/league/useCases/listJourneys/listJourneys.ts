@@ -17,7 +17,6 @@ export class ListJourneys implements UseCase<void, Response> {
     async execute(): Promise<Response> {
         try {
             const list = await this.repo.list();
-            console.log("Jorneys", list);
             return right(Result.ok(list));
         } catch (error) {
             return left(new AppError.UnexpectedError(error))
