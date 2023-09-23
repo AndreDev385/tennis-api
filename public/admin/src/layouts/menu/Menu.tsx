@@ -65,7 +65,7 @@ const Menu = () => {
                         onClick={() => navigateTo("/news")}>
                         <FontAwesomeIcon icon={faNewspaper} />
                         <span>
-                            Novedades
+                            Eventos
                         </span>
                     </div>
 

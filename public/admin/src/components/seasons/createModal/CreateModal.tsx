@@ -34,7 +34,7 @@ const CreateModal = ({dismiss}: ICreateModalProps ) => {
     }
 
     const createSeason = async () => {
-        const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/season`
+        const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/season/`
         const requestOptions = {
             method: 'POST',
             headers: { 

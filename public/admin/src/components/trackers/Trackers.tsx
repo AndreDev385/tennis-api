@@ -1,8 +1,7 @@
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faCircleNotch, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Card, Table } from 'react-bootstrap';
-import { ToastContainer } from 'react-toastify';
 import './Trackers.scss';
 import 'react-toastify/dist/ReactToastify.css';
 import CreateTrackers from './createTrackers/CreateTrackers';
@@ -16,24 +15,37 @@ export interface ITracker {
 
 const Trackers = () => {
   const [showModalCreate, setShowModalCreate] = useState(false)
+  const [trackers, setTrackers] = useState<ITracker[]>([])
+  const [loading, setLoading] = useState(true)
+  const token: string = localStorage.getItem('authorization') || '';
 
-  const trackers : ITracker[] = [
-    {
-      userId: '1',
-      email: 'tracker1@gmail.com',
-      firstName: 'Manuel',
-      lastName: 'Almoguera'
-    },
-    {
-      userId: '2',
-      email: 'tracker2@gmail.com',
-      firstName: 'Juan',
-      lastName: 'Pereira'
-    },
-  ]
+  useEffect(() => {
+    getTrackers()
+  }, []);
+  
+  const getTrackers = async (): Promise<void> => {
+    setLoading(true)
+    const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/users/tracker`
+    const requestOptions = {
+      method: 'GET',
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': token
+      }
+    };
 
-  const getTrackers = (): void => {
-    // TODO delete
+    try{
+      const response = await fetch(url, requestOptions)
+      
+      const data = await response.json()
+
+      if (response.status === 200){
+        setTrackers(data)
+        setLoading(false)
+      } 
+    } catch (error) {
+        setLoading(false)
+    }
   }
 
   const trackersTable = trackers.map( (item) => {
@@ -85,24 +97,15 @@ const Trackers = () => {
             </thead>
 
             <tbody>
-              {trackersTable}
+            {loading? 
+                <FontAwesomeIcon className='center mt-5' icon={faCircleNotch} spin />:
+                <div>
+                  {trackersTable}
+                </div>
+              }
             </tbody>
           </Table>
         </Card>
-
-
-        <ToastContainer
-          position="top-right"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="light"
-        />
       </div>
 
       {showModalCreate && <CreateTrackers dismiss={() => setShowModalCreate(false)} />}

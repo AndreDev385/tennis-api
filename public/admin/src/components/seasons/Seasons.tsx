@@ -140,7 +140,7 @@ const Seasons = () => {
           </h1>
 
           <div>
-            <Button disabled variant="primary" onClick={() => setShowModalCreate(true)}>
+            <Button variant="primary" onClick={() => setShowModalCreate(true)}>
               <FontAwesomeIcon icon={faPlus} />
               Crear temporada
             </Button>

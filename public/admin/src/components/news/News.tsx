@@ -2,14 +2,12 @@ import { faFilter, faPencil, faPlus, faTrash } from '@fortawesome/free-solid-svg
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 import { Button, Card, Form, Table } from 'react-bootstrap';
-import { ToastContainer } from 'react-toastify';
 import { IClub } from '../clubs/Clubs';
 
 import './News.scss';
 import 'react-toastify/dist/ReactToastify.css';
 import ModalQuestion from '../modalQuestion/ModalQuestion';
 import CreateNews from './createNews/CreateNews';
-import EditNews from './editNews/EditNews';
 
 export interface INews {
   adId: string,
@@ -21,7 +19,6 @@ export interface INews {
 const News = () => {
   const [showModalDelete, setShowModalDelete] = useState(false)
   const [showModalCreate, setShowModalCreate] = useState(false)
-  const [showModalEdit, setShowModalEdit] = useState(false)
   const [clubs, setClubs] = useState<IClub[]>([])
   const [clubSelected, setClubSelected] = useState('')
   const [newsSelected, setNewsSelected] = useState<INews>({
@@ -59,7 +56,7 @@ const News = () => {
   }
 
   const getNews = async () => {
-    const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/ads`
+    const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/event`
     const requestOptions = {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' }
@@ -96,11 +93,6 @@ const News = () => {
     setShowModalDelete(true)
   }
 
-  const handleEditModal = (news: INews) => {
-    setNewsSelected(news)
-    setShowModalEdit(true)
-  }
-
   const newsTable = filteredNews.map( (item) => {
     return (
       <tr key={item.adId}>
@@ -114,12 +106,6 @@ const News = () => {
         </td> 
         <td className='text-center'>
           <img src={item.image} />
-        </td>
-        <td className='text-center'>
-          <Button variant="warning" onClick={() => handleEditModal(item)}>
-            <FontAwesomeIcon icon={faPencil} />
-            Editar
-          </Button>
         </td>
         <td className='text-center'>
           <Button variant="danger" onClick={() => handleDeleteModal(item)}>
@@ -136,7 +122,7 @@ const News = () => {
       <div className='news-container'>
         <div className="title-wrap">
           <h1>
-            Novedades
+            Eventos
           </h1>
 
           <div>
@@ -177,9 +163,6 @@ const News = () => {
                   Imagen
                 </th>
                 <th className='text-center'>
-                  Editar
-                </th>
-                <th className='text-center'>
                   Eliminar
                 </th>
               </tr>
@@ -190,34 +173,18 @@ const News = () => {
             </tbody>
           </Table>
         </Card>
-
-
-        <ToastContainer
-          position="top-right"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="light"
-        />
       </div>
 
       {showModalDelete && 
         <ModalQuestion
-          title="Eliminar"
+          title="Eliminar evento"
           question="¿Estás seguro que deseas eliminarla? Esta acción no se puede deshacer."
           dismiss={() => setShowModalDelete(false)}
           accept={() => setShowModalDelete(false)}
         />
       } 
 
-      {showModalCreate && <CreateNews dismiss={() => setShowModalCreate(false)} />}
-
-      {showModalEdit && <EditNews newsSelected={newsSelected} clubs={clubs} dismiss={() => setShowModalEdit(false)} />}
+      {showModalCreate && <CreateNews dismiss={() => setShowModalCreate(false)} clubs={clubs} />}
     </>
   )
 }

@@ -3,13 +3,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { IClub } from "../../clubs/Clubs";
+import { IAds } from "../Ads";
+import { toast } from "react-toastify";
 
 interface ICreateAdsProps {
     dismiss: (event: boolean) => void;
+    clubs: IClub[];
 }
 
-const CreateAds = ({dismiss}: ICreateAdsProps) => {
-    const [form, setForm] = useState({
+const CreateAds = ({clubs, dismiss}: ICreateAdsProps) => {
+    const [form, setForm] = useState<IAds>({
         adId: "",
         clubId: "",
         link: "",
@@ -18,27 +21,7 @@ const CreateAds = ({dismiss}: ICreateAdsProps) => {
     const [ submitted, setSubmitted ] = useState(false)
     const [ loading, setLoading ] = useState(false)
     const [ preview, setPreview ] = useState("")
-
-    const clubs : IClub[] = [
-        {
-          id: "1",
-          name: "Club A",
-          code: "ABCDEF",
-          isSubscribed: false
-        },
-        {
-          id: "2",
-          name: "Club B",
-          code: "JFOXMX",
-          isSubscribed: true
-        },
-        {
-          id: "3",
-          name: "Club C",
-          code: "PWEOKD",
-          isSubscribed: true
-        },
-      ]
+    const token: string = localStorage.getItem('authorization') || '';
 
     const handleChangeClub = (event: React.ChangeEvent<HTMLSelectElement>):void => {
         const value = event.target.value;
@@ -63,19 +46,52 @@ const CreateAds = ({dismiss}: ICreateAdsProps) => {
             const objectUrl = URL.createObjectURL(value)
             setForm((prev) => ({
               ...prev,
-              image: event.target.value
+              image: value
             }))
             setPreview(objectUrl)
         }
-
     }
 
     const handleSubmit = () => {
         setSubmitted(true);
         if (!form.clubId || !form.link || !form.image) return;
         setLoading(true)
-        // TODO fetch data
-        dismiss(true)
+        createAds()
+    }
+
+    const createAds = async () => {
+        const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/ads`
+        
+        let formData = new FormData();
+        formData.append("clubId", form.clubId)
+        formData.append("link", form.link)
+        formData.append("image", form.image)
+        
+        const requestOptions = {
+            method: 'POST',
+            headers: { 
+                'Authorization': token
+            },
+            body: formData
+        };
+    
+        try{
+          const response = await fetch(url, requestOptions);
+          
+          const data = await response.json();
+    
+          if (response.status === 200){
+            if(data.message) toast.success(data.message);
+            setLoading(false);
+            dismiss(true);
+          } else {
+            setLoading(false);
+            if(data.message) toast.error(data.message);
+          }
+        } catch (error) {
+            setLoading(false);
+            console.error(error);
+        }
     }
 
     return (
@@ -86,7 +102,7 @@ const CreateAds = ({dismiss}: ICreateAdsProps) => {
                 <Modal.Dialog>
                     <Modal.Header>
                         <Modal.Title>
-                            Crear anuncio
+                            Crear ads
                         </Modal.Title>
                     </Modal.Header>
 
@@ -105,7 +121,7 @@ const CreateAds = ({dismiss}: ICreateAdsProps) => {
                                 >
                                     <option disabled value="">Selecciona un club</option>
                                     {clubs.map(item => {
-                                        return <option key={item.id} value={item.id}>{item.name}</option>
+                                        return <option key={item.clubId} value={item.clubId}>{item.name}</option>
                                     })}
                                 </Form.Select>
                                 { submitted && !form.clubId &&
@@ -143,7 +159,6 @@ const CreateAds = ({dismiss}: ICreateAdsProps) => {
                                     required 
                                     type="file"
                                     accept="image/png, image/jpeg"
-                                    value={form.image}
                                     placeholder='Imagen' 
                                     onChange={handleChangeImage}
                                 />
@@ -166,7 +181,7 @@ const CreateAds = ({dismiss}: ICreateAdsProps) => {
                                 <FontAwesomeIcon icon={faCircleNotch} spin />:
                                 <span>
                                     <FontAwesomeIcon className='me-2' icon={faPlus} />
-                                    Crear anuncio
+                                    Crear ads
                                 </span>
                             }
                         </Button>

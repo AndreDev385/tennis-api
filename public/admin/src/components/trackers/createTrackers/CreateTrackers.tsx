@@ -2,6 +2,7 @@ import { faCircleNotch, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
+import { toast } from "react-toastify";
 import validator from "validator";
 
 interface ICreateTrackersProps {
@@ -22,6 +23,7 @@ const CreateTrackers = ({dismiss}: ICreateTrackersProps) => {
     const [ validPassword, setValidPassword]  = useState(false);
     const [ validRepeatPassword, setValidRepeatPassword ] = useState(false);
     const [ loading, setLoading ] = useState(false)
+    const token: string = localStorage.getItem('authorization') || '';
     
     const onChangePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
         const value = event.target.value;
@@ -74,8 +76,37 @@ const CreateTrackers = ({dismiss}: ICreateTrackersProps) => {
         setSubmitted(true);
         if (!form.firstName || !form.lastName || !validEmail || !validPassword || !validRepeatPassword) return;
         setLoading(true)
-        // TODO fetch data
-        dismiss(true)
+        createTracker()
+    }
+
+    const createTracker = async () => {
+        const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/users/tracker`
+        const requestOptions = {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': token
+            },
+            body: JSON.stringify(form)
+        };
+    
+        try{
+          const response = await fetch(url, requestOptions);
+          
+          const data = await response.json();
+    
+          if (response.status === 200){
+            if(data.message) toast.success(data.message);
+            setLoading(false);
+            dismiss(true);
+          } else {
+            setLoading(false);
+            if(data.message) toast.error(data.message);
+          }
+        } catch (error) {
+            setLoading(false);
+            console.error(error);
+        }
     }
 
     return (
