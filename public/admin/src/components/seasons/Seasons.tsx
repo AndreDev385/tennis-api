@@ -45,6 +45,7 @@ const Seasons = () => {
       const data = await response.json()
 
       if (response.status === 200){
+        console.log(data)
         setSeasons(data)
         setLoading(false)
       } 
@@ -120,7 +121,7 @@ const Seasons = () => {
         </td>
         <td className='text-center'>
           {item.isCurrentSeason?
-            <Button variant="warning" onClick={() => onClickEndSeason(item)}>
+            <Button variant="warning" disabled onClick={() => onClickEndSeason(item)}>
               Finalizar temporada
             </Button>:
             <span>-</span>
@@ -139,7 +140,7 @@ const Seasons = () => {
           </h1>
 
           <div>
-            <Button variant="primary" onClick={() => setShowModalCreate(true)}>
+            <Button disabled variant="primary" onClick={() => setShowModalCreate(true)}>
               <FontAwesomeIcon icon={faPlus} />
               Crear temporada
             </Button>
