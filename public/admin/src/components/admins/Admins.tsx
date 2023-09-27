@@ -31,9 +31,9 @@ const Admins = () => {
     },
   ]
 
-  const getAdmins = (): void => {
-    // TODO delete
-  }
+  // const getAdmins = (): void => {
+  //   // TODO delete
+  // }
 
   const adminsTable = admins.map( (item) => {
     return (

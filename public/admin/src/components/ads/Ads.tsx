@@ -20,16 +20,16 @@ export interface IAds {
 const Ads = () => {
   const [showModalDelete, setShowModalDelete] = useState(false)
   const [showModalCreate, setShowModalCreate] = useState(false)
-  const [showModalEdit, setShowModalEdit] = useState(false)
+  // const [showModalEdit, setShowModalEdit] = useState(false)
   const [showModalNotifications, setShowModalNotifications] = useState(false)
   const [clubs, setClubs] = useState<IClub[]>([])
   const [clubSelected, setClubSelected] = useState('')
-  const [adsSelected, setAdsSelected] = useState<IAds>({
-    adId: '',
-    clubId: '',
-    link: '',
-    image: ''
-  })
+  // const [adsSelected, setAdsSelected] = useState<IAds>({
+  //   adId: '',
+  //   clubId: '',
+  //   link: '',
+  //   image: ''
+  // })
   const [ads, setAds] = useState<IAds[]>([])
   const [filteredAds, setFilteredAds] = useState<IAds[]>([])
 
@@ -92,13 +92,13 @@ const Ads = () => {
   }
 
   const handleDeleteModal = (ads: IAds) => {
-    setAdsSelected(ads)
+    // setAdsSelected(ads)
     setShowModalDelete(true)
   }
 
   const handleEditModal = (ads: IAds) => {
-    setAdsSelected(ads)
-    setShowModalEdit(true)
+    // setAdsSelected(ads)
+    // setShowModalEdit(true)
   }
 
   const adsTable = filteredAds.map( (item) => {

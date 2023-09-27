@@ -1,4 +1,4 @@
-import { faFilter, faPencil, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faFilter, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 import { Button, Card, Form, Table } from 'react-bootstrap';

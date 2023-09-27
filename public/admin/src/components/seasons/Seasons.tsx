@@ -24,7 +24,8 @@ const Seasons = () => {
   const [seasons, setSeasons] = useState<ISeason[]>([])
   const [loading, setLoading] = useState(false)
   const token: string = localStorage.getItem('authorization') || '';
-
+  console.log(seasonId)
+  console.log(loading)
   useEffect(() => {
     getSeasons()
   }, []);
