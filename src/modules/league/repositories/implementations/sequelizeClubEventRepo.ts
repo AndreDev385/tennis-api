@@ -32,7 +32,7 @@ export class SequelizeClubEventRepository implements ClubEventRepository {
     async list(query: ClubEventQuery): Promise<ClubEvent[]> {
         const ClubEventModel = this.models.ClubEventModel;
 
-        const list = await ClubEventModel.findAll({ where: query });
+        const list = await ClubEventModel.findAll({ where: query, order: [['createdAt', 'DESC']] },);
 
         return list.map((event: any) => ClubEventMap.toDomain(event));
     }
