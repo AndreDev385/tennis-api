@@ -92,11 +92,13 @@ const Ads = () => {
   }
 
   const handleDeleteModal = (ads: IAds) => {
+    console.log(ads);
     // setAdsSelected(ads)
     setShowModalDelete(true)
   }
 
   const handleEditModal = (ads: IAds) => {
+    console.log(ads)
     // setAdsSelected(ads)
     // setShowModalEdit(true)
   }
