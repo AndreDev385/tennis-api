@@ -27,6 +27,7 @@ const News = () => {
     link: '',
     image: ''
   })
+  console.log(newsSelected)
   const [news, setNews] = useState<INews[]>([])
   const [filteredNews, setFilteredNews] = useState<INews[]>([])
 
