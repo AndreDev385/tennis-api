@@ -4,11 +4,11 @@ import { useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap'
 import { toast } from 'react-toastify';
 
-interface ICreateModalProps {
+interface ICreateClubProps {
     dismiss: (event: boolean) => void;
 }
 
-const CreateModal = ({dismiss}: ICreateModalProps ) => {
+const CreateClub = ( {dismiss}: ICreateClubProps) => {
 
     const [ form, setForm ] = useState({ name: "" })
     const [ validName, setValidName ] = useState(false)
@@ -34,7 +34,7 @@ const CreateModal = ({dismiss}: ICreateModalProps ) => {
     }
 
     const createSeason = async () => {
-        const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/season/`
+        const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/season`
         const requestOptions = {
             method: 'POST',
             headers: { 
@@ -118,4 +118,4 @@ const CreateModal = ({dismiss}: ICreateModalProps ) => {
     )
 }
 
-export default CreateModal
+export default CreateClub

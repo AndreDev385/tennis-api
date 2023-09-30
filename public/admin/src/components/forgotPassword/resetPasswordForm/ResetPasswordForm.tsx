@@ -3,9 +3,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react"
 import { Button, Form } from "react-bootstrap"
 import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
 import validator from 'validator';
 
-const ResetPasswordForm = () => {
+interface IResetPasswordFormProps {
+  code: string;
+}
+
+const ResetPasswordForm = ({code}: IResetPasswordFormProps) => {
   const navigate = useNavigate();
   const [ submitted, setSubmitted ] = useState(false)
   const [ loading, setLoading ] = useState(false)
@@ -46,11 +51,42 @@ const ResetPasswordForm = () => {
     
     if(validNewPassword && validRepeatNewPassword){
       setLoading(true)
-      navigate("/")
+      changePassword()
     }
 
     event.preventDefault();
     event.stopPropagation();
+  }
+
+  const changePassword = async () => {
+    const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/users/change-forgotten-password`
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        code: code,
+        newPassword: form.newPassword
+      })
+    };
+
+    try{
+      const response = await fetch(url, requestOptions)
+      
+      const data = await response.json()
+
+      if (response.status === 200){
+        if(data.message) toast.success(data.message)
+        setLoading(false)
+        navigate('/')
+      } else {
+        if(data.message) toast.error(data.message)
+        setLoading(false)
+      }
+    } catch (error) {
+        toast.error('Ha ocurrido un error, intente nuevamente')
+        console.error(error)
+        setLoading(false)
+    }
   }
 
   return (

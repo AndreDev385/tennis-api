@@ -2,20 +2,24 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom"
 import "./Menu.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAd, faAddressBook, faAddressCard, faCalendar, faChartBar, faNewspaper, faSignOutAlt, faTableTennis } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ModalQuestion from "../../components/modalQuestion/ModalQuestion";
 
 const Menu = () => {
     const [showLogOutModal, setShowLogOutModal] = useState(false);
-    
     const location = useLocation();
     const navigate = useNavigate();
+    
+    useEffect(() => {
+        const authorization = localStorage.getItem('authorization');
+        if(!authorization) logOut();
+    })
 
     const clubsClassName = location.pathname === "/clubs"? "wrap-option menu-selected": "wrap-option"
     const seasonsClassName = location.pathname === "/seasons"? "wrap-option menu-selected": "wrap-option"
     const newsClassName = location.pathname === "/news"? "wrap-option menu-selected": "wrap-option"
     const adsClassName = location.pathname === "/ads"? "wrap-option menu-selected": "wrap-option"
-    const measurersClassName = location.pathname === "/measurers"? "wrap-option menu-selected": "wrap-option"
+    const trackersClassName = location.pathname === "/trackers"? "wrap-option menu-selected": "wrap-option"
     const statsClassName = location.pathname === "/stats"? "wrap-option menu-selected": "wrap-option"
     const adminsClassName = location.pathname === "/admins"? "wrap-option menu-selected": "wrap-option"
     
@@ -28,6 +32,7 @@ const Menu = () => {
     }
 
     const logOut = (): void => {
+        localStorage.clear()
         navigate("/")
     }
 
@@ -60,7 +65,7 @@ const Menu = () => {
                         onClick={() => navigateTo("/news")}>
                         <FontAwesomeIcon icon={faNewspaper} />
                         <span>
-                            Novedades
+                            Eventos
                         </span>
                     </div>
 
@@ -72,8 +77,8 @@ const Menu = () => {
                         </span>
                     </div>
 
-                    <div className={measurersClassName}
-                        onClick={() => navigateTo("/measurers")}>
+                    <div className={trackersClassName}
+                        onClick={() => navigateTo("/trackers")}>
                         <FontAwesomeIcon icon={faAddressBook} />
                         <span>
                             Medidores

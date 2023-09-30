@@ -1,15 +1,14 @@
 import { faCircle, faPlus } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { Button, Table } from "react-bootstrap"
-import { ToastContainer } from 'react-toastify';
-
-import "./Seasons.scss";
-import 'react-toastify/dist/ReactToastify.css';
-import { useState } from "react";
+import { Button, Card, Table } from "react-bootstrap"
+import { useEffect, useState } from "react";
 import ModalQuestion from "../modalQuestion/ModalQuestion";
 import CreateModal from "./createModal/CreateModal";
+import "./Seasons.scss";
+import 'react-toastify/dist/ReactToastify.css';
+import { toast } from "react-toastify";
 
-interface Season {
+interface ISeason {
   seasonId: string,
   leagueId: string,
   name: string,
@@ -22,39 +21,81 @@ const Seasons = () => {
   const [showModalCreate, setShowModalCreate] = useState(false)
   const [modalQuestion, setModalQuestion] = useState("")
   const [seasonId, setSeasonId] = useState("")
+  const [seasons, setSeasons] = useState<ISeason[]>([])
+  const [loading, setLoading] = useState(false)
+  const token: string = localStorage.getItem('authorization') || '';
   console.log(seasonId)
+  console.log(loading)
+  useEffect(() => {
+    getSeasons()
+  }, []);
 
-  const seasons : Season[] = [
-    {
-      seasonId: "1234",
-      leagueId: "4567",
-      name: "Temporada A",
-      isFinish: false,
-      isCurrentSeason: true
-    },
-    {
-      seasonId: "12994",
-      leagueId: "4567",
-      name: "Temporada A",
-      isFinish: true,
-      isCurrentSeason: false
+  const getSeasons = async () => {
+    const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/season`
+    const requestOptions = {
+      method: 'GET',
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': token
+      }
+    };
+
+    try{
+      const response = await fetch(url, requestOptions)
+      
+      const data = await response.json()
+
+      if (response.status === 200){
+        console.log(data)
+        setSeasons(data)
+        setLoading(false)
+      } 
+    } catch (error) {
+        setLoading(false)
     }
-  ]
+  }
 
-  const onClickEndSeason = (item: Season): void => {
+  const onClickEndSeason = (item: ISeason): void => {
     setModalQuestion(`¿Estás seguro que quieres finalizar temporada ${item.name}?`)
     setSeasonId(item.seasonId)
     setShowModalQuestion(true)
   }
 
-  const handleEndSeason = () => {
-    // do something 
-    setShowModalQuestion(false)
+  const handleEndSeason = async () => {
+    //TODO
+    // setShowModalQuestion(false)
+    const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/season/finish`
+    const requestOptions = {
+        method: 'PUT',
+        headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': token
+        }
+    };
+
+    try{
+      const response = await fetch(url, requestOptions);
+      
+      const data = await response.json();
+
+      if (response.status === 200){
+        if(data.message) toast.success(data.message);
+        setLoading(false);
+        setShowModalQuestion(false)
+        getSeasons()
+      } else {
+        setLoading(false);
+        if(data.message) toast.error(data.message);
+      }
+    } catch (error) {
+        setLoading(false);
+        console.error(error);
+    }
   }
 
+  // TODO
   const dismissCreateModal = (event: boolean) => {
-    if(event)
-      console.log("TODO refresh")
+    if(event) getSeasons();
     setShowModalCreate(false)
   }
 
@@ -64,11 +105,11 @@ const Seasons = () => {
         <td>
           {item.name}
         </td>
-        <td className='text-center'>
+        <td>
           {item.isFinish && 
             <span>
               <FontAwesomeIcon className='finish' icon={faCircle} />
-              Finalizada
+              Finalizada<br />
             </span>
           }
 
@@ -81,7 +122,7 @@ const Seasons = () => {
         </td>
         <td className='text-center'>
           {item.isCurrentSeason?
-            <Button variant="warning" onClick={() => onClickEndSeason(item)}>
+            <Button variant="warning" disabled onClick={() => onClickEndSeason(item)}>
               Finalizar temporada
             </Button>:
             <span>-</span>
@@ -107,38 +148,27 @@ const Seasons = () => {
           </div>
         </div>
 
-      <Table responsive="sm">
-        <thead>
-          <tr>
-            <th>
-              Nombre
-            </th>
-            <th className='text-center'>
-              Estatus
-            </th>
-            <th className='text-center'>
-              Manejar temporada
-            </th>
-          </tr>
-        </thead>
+        <Card>
+          <Table responsive="sm">
+            <thead>
+              <tr>
+                <th>
+                  Nombre
+                </th>
+                <th>
+                  Estatus
+                </th>
+                <th className='text-center'>
+                  Manejar temporada
+                </th>
+              </tr>
+            </thead>
 
-        <tbody>
-          {seasonTable}
-        </tbody>
-      </Table>
-
-      <ToastContainer 
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
+            <tbody>
+              {seasonTable}
+            </tbody>
+          </Table>
+        </Card>
       </div>
 
       {showModalQuestion && 

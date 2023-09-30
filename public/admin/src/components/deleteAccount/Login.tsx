@@ -5,12 +5,12 @@ import { Button, Form } from "react-bootstrap"
 import { ToastContainer, toast } from "react-toastify";
 import validator from "validator";
 
-interface LoginProps {
+interface ILoginProps {
     setVerified: Dispatch<SetStateAction<boolean>>;
     setToken: Dispatch<SetStateAction<string>>;
 }
 
-const Login = ({setVerified, setToken}: LoginProps) => {
+const Login = ({setVerified, setToken}: ILoginProps) => {
     const [form, setForm] = useState({
         email: '',
         password: ''
@@ -50,7 +50,7 @@ const Login = ({setVerified, setToken}: LoginProps) => {
 
     const login = async () => {
         try{
-            const url = "https://gamemind-app-7ce0a0ff4c64.herokuapp.com/api/v1/users/login"
+            const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/users/login`
             
             const response = await fetch(url,{
                 method: "POST",

@@ -1,13 +1,13 @@
 import { Button, Modal } from 'react-bootstrap'
 
-interface ModalQuestionProps {
+interface IModalQuestionProps {
     title: string;
     question: string;
     dismiss: () => void;
     accept: () => void;
 }
 
-const ModalQuestion = ({question,title,  dismiss, accept}: ModalQuestionProps) => {
+const ModalQuestion = ({question,title,  dismiss, accept}: IModalQuestionProps) => {
 
     return (
         <>

@@ -1,12 +1,13 @@
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import './Login.scss'
 import { Row, Col } from 'react-bootstrap';
 import { useState } from 'react';
 import validator from 'validator';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router';
+import './Login.scss'
+import { toast } from 'react-toastify';
 
 const Login = () => {
 
@@ -26,12 +27,39 @@ const Login = () => {
     setSubmitted(true)
     if(validEmail && validPassword){
       setLoading(true)
-      navigate("/clubs")
+      login()
     }
     event.preventDefault();
     event.stopPropagation();
   };
 
+  const login = async () => {
+    const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/users/login`
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(form)
+    };
+
+    try{
+      const response = await fetch(url, requestOptions)
+      
+      const data = await response.json()
+
+      if (response.status === 200 && data.access_token){
+          setLoading(false)
+          localStorage.setItem('authorization', data.access_token);
+          navigate("/clubs")
+      } else {
+          if(data.message) toast.error(data.message)
+          setLoading(false)
+      }
+    } catch (error) {
+        toast.error('Ha ocurrido un error, intente nuevamente')
+        console.error(error)
+        setLoading(false)
+    }
+  }
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValidEmail(validator.isEmail(event.target.value))

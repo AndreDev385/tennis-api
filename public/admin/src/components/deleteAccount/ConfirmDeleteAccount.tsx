@@ -4,18 +4,18 @@ import { useState } from 'react';
 import { Button } from 'react-bootstrap'
 import { ToastContainer, toast } from 'react-toastify';
 
-interface DeleteAccountProps {
+interface IDeleteAccountProps {
     token: string   
 }
 
-const ConfirmDeleteAccount = ({token}: DeleteAccountProps) => {
+const ConfirmDeleteAccount = ({token}: IDeleteAccountProps) => {
     const [loading, setLoading] = useState(false);
     
     const deleteAccount = async () => {
         setLoading(true)
 
         try{
-            const url = "https://gamemind-app-7ce0a0ff4c64.herokuapp.com/api/v1/users/delete"
+            const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/users/delete`;
             
             const response = await fetch(url,{
                 method: "PUT",
