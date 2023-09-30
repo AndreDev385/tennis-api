@@ -1,7 +1,7 @@
 import { Clash } from "../../domain/clubClash";
 import { Matchs } from "../../domain/matchs";
 import { ClashMap } from "../../mappers/clashMap";
-import { ClashQuery, ClashRepository } from "../clashRepo";
+import { ClashQuery, ClashRepository, PaginateQuery } from "../clashRepo";
 import { ClubRepository } from "../clubRepo";
 import { MatchRepository } from "../matchRepo";
 import { TeamRepository } from "../teamRepo";
@@ -139,4 +139,42 @@ export class SequelizeClashRepo implements ClashRepository {
             })
         );
     }
+
+    async paginate(filters: ClashQuery, pagination: PaginateQuery): Promise<any> {
+        const ClashModel = this.models.ClashModel;
+
+        const query = this.baseQuery();
+
+        query.where = filters
+        query.limit = pagination.limit ?? 6;
+        query.offset = pagination.offset ?? 0;
+        query.order = [['createdAt', "DESC"]];
+
+        const result = await ClashModel.findAndCountAll(query);
+
+        for (const clash of result.rows) {
+            const team1 = await this.teamRepo.getById(clash.team1);
+            const team2 = await this.teamRepo.getById(clash.team2);
+            const hostDomain = await this.clubRepo.findById(clash.host);
+
+            clash.team1Domain = team1;
+            clash.team2Domain = team2;
+            clash.hostDomain = hostDomain
+        }
+
+        result.rows = result.rows.map((clash: any) =>
+            ClashMap.toDomain({
+                clashId: clash.clashId,
+                category: clash.category,
+                seasonId: clash.seasonId,
+                team1: clash.team1Domain,
+                team2: clash.team2Domain,
+                host: clash.hostDomain,
+                journey: clash.journey,
+            })
+        );
+
+        return result;
+    }
+
 }
