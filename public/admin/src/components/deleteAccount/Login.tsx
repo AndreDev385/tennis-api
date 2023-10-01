@@ -79,9 +79,9 @@ const Login = ({setVerified, setToken}: ILoginProps) => {
 
     return (
         <div className="m-3">
-            <h1 className="mb-3">
+            <h2 className="mb-3">
                 Eliminar mi cuenta
-            </h1>
+            </h2>
             <h6>
                 Primero debemos verificar tu identidad.
             </h6>

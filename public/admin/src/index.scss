@@ -97,3 +97,32 @@ body{
     background: #a6a5a5;
   }
 }
+
+.btn{
+  border-radius: 1rem;
+}
+
+.btn-secondary{
+  border-color: #001242;
+  background-color: #ffffff;
+  color: #001242;
+  &:hover{
+    background-color: #011b61;
+    color: #ffffff;
+  }
+}
+
+.btn-warning{
+  color: #ffffff;
+}
+
+h1{
+  margin: 2rem;
+  color: #ffca3ace;
+
+  svg{
+      font-size: 2rem;
+      margin-right: 1rem;
+      color: #ffca3ace;
+  }
+}

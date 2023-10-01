@@ -1,4 +1,4 @@
-import { faBell, faFilter, faPencil, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faAd, faBell, faFilter, faPencil, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 import { Button, Card, Form, Table } from 'react-bootstrap';
@@ -136,6 +136,7 @@ const Ads = () => {
       <div className='ads-container'>
         <div className="title-wrap">
           <h1>
+            <FontAwesomeIcon icon={faAd} />
             Ads
           </h1>
 

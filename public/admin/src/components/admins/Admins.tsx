@@ -1,4 +1,4 @@
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faAddressCard, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 import { Button, Card, Table } from 'react-bootstrap';
@@ -56,6 +56,7 @@ const Admins = () => {
       <div className='admins-container'>
         <div className="title-wrap">
           <h1>
+            <FontAwesomeIcon icon={faAddressCard} />
             Administradores
           </h1>
 

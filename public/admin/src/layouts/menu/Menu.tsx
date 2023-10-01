@@ -1,7 +1,7 @@
 import { Outlet, useLocation, useNavigate } from "react-router-dom"
 import "./Menu.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAd, faAddressBook, faAddressCard, faCalendar, faChartBar, faNewspaper, faSignOutAlt, faTableTennis } from "@fortawesome/free-solid-svg-icons";
+import { faAd, faAddressBook, faAddressCard, faBaseballBall, faCalendar, faChartBar, faNewspaper, faPoll, faSignOutAlt, faTableTennis, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import ModalQuestion from "../../components/modalQuestion/ModalQuestion";
 
@@ -17,11 +17,13 @@ const Menu = () => {
 
     const clubsClassName = location.pathname === "/clubs"? "wrap-option menu-selected": "wrap-option"
     const seasonsClassName = location.pathname === "/seasons"? "wrap-option menu-selected": "wrap-option"
+    const teamsClassName = location.pathname === "/teams"? "wrap-option menu-selected": "wrap-option"
+    const resultsClassName = location.pathname === "/results"? "wrap-option menu-selected": "wrap-option"
+    const playersClassName = location.pathname === "/players"? "wrap-option menu-selected": "wrap-option"
+    const trackersClassName = location.pathname === "/trackers"? "wrap-option menu-selected": "wrap-option"
+    const adminsClassName = location.pathname === "/admins"? "wrap-option menu-selected": "wrap-option"
     const newsClassName = location.pathname === "/news"? "wrap-option menu-selected": "wrap-option"
     const adsClassName = location.pathname === "/ads"? "wrap-option menu-selected": "wrap-option"
-    const trackersClassName = location.pathname === "/trackers"? "wrap-option menu-selected": "wrap-option"
-    const statsClassName = location.pathname === "/stats"? "wrap-option menu-selected": "wrap-option"
-    const adminsClassName = location.pathname === "/admins"? "wrap-option menu-selected": "wrap-option"
     
     const navigateTo = (path: string): void => {
         navigate(path)
@@ -61,6 +63,46 @@ const Menu = () => {
                         </span>
                     </div>
 
+                    <div className={teamsClassName}
+                        onClick={() => navigateTo("/teams")}>
+                        <FontAwesomeIcon icon={faUsers} />
+                        <span>
+                            Equipos
+                        </span>
+                    </div>
+
+                    <div className={resultsClassName}
+                        onClick={() => navigateTo("/results")}>
+                        <FontAwesomeIcon icon={faPoll} />
+                        <span>
+                            Resultados
+                        </span>
+                    </div>
+
+                    <div className={playersClassName}
+                        onClick={() => navigateTo("/players")}>
+                        <FontAwesomeIcon icon={faBaseballBall} />
+                        <span>
+                            Jugadores
+                        </span>
+                    </div>
+
+                    <div className={trackersClassName}
+                        onClick={() => navigateTo("/trackers")}>
+                        <FontAwesomeIcon icon={faAddressBook} />
+                        <span>
+                            Medidores
+                        </span>
+                    </div>
+
+                    <div className={adminsClassName}
+                        onClick={() => navigateTo("/admins")}>
+                        <FontAwesomeIcon icon={faAddressCard} />
+                        <span>
+                            Administradores
+                        </span>
+                    </div>
+
                     <div className={newsClassName}
                         onClick={() => navigateTo("/news")}>
                         <FontAwesomeIcon icon={faNewspaper} />
@@ -74,30 +116,6 @@ const Menu = () => {
                         <FontAwesomeIcon icon={faAd} />
                         <span>
                             Ads
-                        </span>
-                    </div>
-
-                    <div className={trackersClassName}
-                        onClick={() => navigateTo("/trackers")}>
-                        <FontAwesomeIcon icon={faAddressBook} />
-                        <span>
-                            Medidores
-                        </span>
-                    </div>
-
-                    <div className={statsClassName}
-                        onClick={() => navigateTo("/stats")}>
-                        <FontAwesomeIcon icon={faChartBar} />
-                        <span>
-                            Estadísticas
-                        </span>
-                    </div>
-
-                    <div className={adminsClassName}
-                        onClick={() => navigateTo("/admins")}>
-                        <FontAwesomeIcon icon={faAddressCard} />
-                        <span>
-                            Administradores
                         </span>
                     </div>
 

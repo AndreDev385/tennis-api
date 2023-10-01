@@ -1,4 +1,4 @@
-import { faCircleNotch, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faAddressBook, faCircleNotch, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 import { Button, Card, Table } from 'react-bootstrap';
@@ -69,6 +69,7 @@ const Trackers = () => {
       <div className='trackers-container'>
         <div className="title-wrap">
           <h1>
+            <FontAwesomeIcon icon={faAddressBook} />
             Medidores
           </h1>
 

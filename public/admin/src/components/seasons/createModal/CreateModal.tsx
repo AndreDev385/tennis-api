@@ -59,7 +59,6 @@ const CreateModal = ({dismiss}: ICreateModalProps ) => {
           }
         } catch (error) {
             setLoading(false);
-            console.error(error);
         }
     }
 
@@ -79,19 +78,19 @@ const CreateModal = ({dismiss}: ICreateModalProps ) => {
                         <Form>
                             <Form.Group className='mb-3' controlId='formBasicEmail'>
                                 <Form.Label>
-                                    Nombre
+                                    Nombre de la temporada
                                 </Form.Label>
 
                                 <Form.Control 
                                     required 
                                     value={form.name}
                                     type='text'
-                                    placeholder='Nombre' 
+                                    placeholder='Nombre de la temporada' 
                                     onChange={handleNameChange}
                                 />
                                 { submitted && !validName &&
                                     <span className='ms-2 text-error'>
-                                        Nombre requerido
+                                        Nombre de la temporada requerido
                                     </span>
                                 }
                             </Form.Group>

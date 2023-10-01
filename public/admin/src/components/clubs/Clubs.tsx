@@ -1,6 +1,6 @@
 import { Card, Table } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheckCircle, faCircle, faCircleNotch, faCopy } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle, faCircle, faCircleNotch, faCopy, faTableTennis } from '@fortawesome/free-solid-svg-icons';
 import { toast } from 'react-toastify';
 
 import "./Clubs.scss";
@@ -19,14 +19,6 @@ export interface IClub {
 const Clubs = () => {
   const [clubs, setClubs] = useState<IClub[]>([])
   const [loading, setLoading] = useState(true)
-  // TODO susbcribe and unsusbcribe clubs
-  // const [showModalQuestion, setShowModalQuestion] = useState(false)
-  // const [modalTitle, setModalTitle] = useState("")
-  // const [modalQuestion, setModalQuestion] = useState("")
-  // const [id, setId] = useState("")
-
-  // TODO create club
-  // const [showModalCreate, setShowModalCreate] = useState(false)
 
   useEffect(() => {
     getClubs()
@@ -54,36 +46,11 @@ const Clubs = () => {
     }
   }
 
-  // const onClickCancelSubscription = (item: IClub): void => {
-  //   setModalTitle("Cancelar suscripción")
-  //   setModalQuestion(`¿Estás seguro que quieres cancelar suscripción de ${item.name}?`)
-  //   openModal(item.clubId)
-  // }
-
-  // const onClickSubscription = (item: IClub): void => {
-  //   setModalTitle("Suscribir")
-  //   setModalQuestion(`¿Estás seguro que quieres suscribir a ${item.name}?`)
-  //   openModal(item.clubId)
-  // }
-
-  // const openModal = (id: string): void => {
-  //   setId(id)
-  //   setShowModalQuestion(true)
-  // }
-
-  // const handleModalAccept = () => {
-  //   setShowModalQuestion(false)
-  // }
 
   const copyClipboard = (code: string): void => {
     navigator.clipboard.writeText(code)
     toast.info("Copiado en el portapapeles!")
   }
-
-  // const dismissCreateModal = (event: boolean) => {
-  //   if(event) getClubs();
-  //   setShowModalCreate(false)
-  // }
 
   const clubTable = clubs.map( (item) => {
     return (
@@ -111,16 +78,6 @@ const Clubs = () => {
             <FontAwesomeIcon className='circle' icon={faCircle} />
           }
         </td>
-        {/* <td className='text-center'>
-          {item.isSubscribed? 
-            <Button variant="dark" onClick={() => onClickCancelSubscription(item)}>
-              Cancelar suscripción
-            </Button>: 
-            <Button variant="warning" onClick={() => onClickSubscription(item)}>
-              Suscribir
-            </Button>
-          }
-        </td> */}
       </tr>
     )
   })
@@ -130,14 +87,9 @@ const Clubs = () => {
       <div className='clubs-container'>
         <div className='d-flex justify-content-between'>
           <h1>
+            <FontAwesomeIcon icon={faTableTennis} /> 
             Clubes
           </h1>
-          {/* <div className='me-5'>
-            <Button className='mt-5' variant="primary" onClick={() => setShowModalCreate(true)}>
-              <FontAwesomeIcon icon={faPlus} className='me-1' />
-              Crear temporada
-            </Button>
-          </div> */}
         </div>
 
         <Card>
@@ -153,9 +105,6 @@ const Clubs = () => {
                 <th className='text-center'>
                   Suscripción
                 </th>
-                {/* <th className='text-center'>
-                  Manejar suscripción
-                </th> */}
               </tr>
             </thead>
 
@@ -170,16 +119,6 @@ const Clubs = () => {
           </Table>
         </Card>
       </div>
-
-      {/* {showModalQuestion && 
-        <ModalQuestion 
-            title={modalTitle}
-            question={modalQuestion}
-            dismiss={() => setShowModalQuestion(false)} 
-            accept={() => handleModalAccept()}
-        />} */}
-      {/* TODO Create Club */}
-      {/* {showModalCreate && <CreateClub dismiss={dismissCreateModal} />}  */}
     </>
   )
 }

@@ -139,9 +139,9 @@ const Login = () => {
         </Form>
       </Col>
       <Col sm={5} lg={6} className='login-img-wrap'>
-        <h1>
+        <h2>
           Desbloquea<br/>el juego
-        </h1>
+        </h2>
       </Col>
     </Row>
   )

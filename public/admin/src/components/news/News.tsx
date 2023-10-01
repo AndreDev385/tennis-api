@@ -1,4 +1,4 @@
-import { faFilter, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faFilter, faNewspaper, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 import { Button, Card, Form, Table } from 'react-bootstrap';
@@ -123,6 +123,7 @@ const News = () => {
       <div className='news-container'>
         <div className="title-wrap">
           <h1>
+            <FontAwesomeIcon icon={faNewspaper} />
             Eventos
           </h1>
 

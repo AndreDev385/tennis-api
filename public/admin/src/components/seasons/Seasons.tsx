@@ -1,4 +1,4 @@
-import { faCircle, faPlus } from "@fortawesome/free-solid-svg-icons"
+import { faCalendar, faCircle, faPlus } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Button, Card, Table } from "react-bootstrap"
 import { useEffect, useState } from "react";
@@ -24,8 +24,6 @@ const Seasons = () => {
   const [seasons, setSeasons] = useState<ISeason[]>([])
   const [loading, setLoading] = useState(false)
   const token: string = localStorage.getItem('authorization') || '';
-  console.log(seasonId)
-  console.log(loading)
   useEffect(() => {
     getSeasons()
   }, []);
@@ -46,7 +44,6 @@ const Seasons = () => {
       const data = await response.json()
 
       if (response.status === 200){
-        console.log(data)
         setSeasons(data)
         setLoading(false)
       } 
@@ -62,8 +59,6 @@ const Seasons = () => {
   }
 
   const handleEndSeason = async () => {
-    //TODO
-    // setShowModalQuestion(false)
     const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/season/finish`
     const requestOptions = {
         method: 'PUT',
@@ -113,7 +108,7 @@ const Seasons = () => {
             </span>
           }
 
-          {item.isCurrentSeason && 
+          {!item.isCurrentSeason && item.isCurrentSeason && 
             <span>
               <FontAwesomeIcon className='current' icon={faCircle} />
               En curso
@@ -122,7 +117,7 @@ const Seasons = () => {
         </td>
         <td className='text-center'>
           {item.isCurrentSeason?
-            <Button variant="warning" disabled onClick={() => onClickEndSeason(item)}>
+            <Button variant="warning" disabled={item.isFinish} onClick={() => onClickEndSeason(item)}>
               Finalizar temporada
             </Button>:
             <span>-</span>
@@ -137,6 +132,7 @@ const Seasons = () => {
       <div className='seasons-container'>
         <div className="title-wrap">
           <h1>
+            <FontAwesomeIcon icon={faCalendar} />
             Temporadas
           </h1>
 
