@@ -9,18 +9,18 @@ export class SequelizeClubEventRepository implements ClubEventRepository {
         this.models = models;
     }
 
-    async delete(eventId: string): Promise<void> {
+    async delete(clubEventId: string): Promise<void> {
         const ClubEventModel = this.models.ClubEventModel;
 
-        await this.findById(eventId);
+        await this.findById(clubEventId);
 
-        await ClubEventModel.destroy({ where: { eventId } })
+        await ClubEventModel.destroy({ where: { clubEventId } })
     }
 
-    async findById(eventId: string): Promise<ClubEvent> {
+    async findById(clubEventId: string): Promise<ClubEvent> {
         const ClubEventModel = this.models.ClubEventModel;
 
-        const event = await ClubEventModel.findOne({ where: { eventId } })
+        const event = await ClubEventModel.findOne({ where: { clubEventId } })
 
         if (!!event == false) {
             throw new Error("Evento no encontrado");
