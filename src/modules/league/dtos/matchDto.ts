@@ -27,4 +27,5 @@ export interface MatchDto {
     isFinish: boolean;
     isCancelled: boolean;
     matchWon: boolean
+    isPaused: boolean;
 }

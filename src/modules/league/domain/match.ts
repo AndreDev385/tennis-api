@@ -36,6 +36,7 @@ interface MatchProps {
     isLive?: boolean;
     isFinish?: boolean;
     isCancelled?: boolean;
+    isPaused?: boolean;
 }
 
 export class Match extends AggregateRoot<MatchProps> {
@@ -111,6 +112,10 @@ export class Match extends AggregateRoot<MatchProps> {
         return this.props.isCancelled;
     }
 
+    get isPaused(): boolean {
+        return this.props.isPaused;
+    }
+
     get matchWon(): boolean {
         let setsWon = this.sets
             .getItems()
@@ -126,14 +131,15 @@ export class Match extends AggregateRoot<MatchProps> {
     }
 
     public goLive() {
+        this.props.isPaused = false;
         this.props.isLive = true;
         this.addDomainEvent(new MatchGoesLive(this));
     }
 
-    public pauseMatch(sets: Sets, tracker: MatchTracker) {
-        this.props.sets = sets;
+    public pauseMatch(tracker: MatchTracker) {
         this.props.tracker = tracker;
         this.props.isLive = false;
+        this.props.isPaused = true;
         this.addDomainEvent(new MatchPaused(this));
     }
 
@@ -189,6 +195,7 @@ export class Match extends AggregateRoot<MatchProps> {
                 isLive: props.isLive || false,
                 isFinish: props.isFinish || false,
                 isCancelled: props.isCancelled || false,
+                isPaused: props.isPaused || false,
             },
             id
         );
