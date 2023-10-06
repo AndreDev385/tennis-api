@@ -70,7 +70,7 @@ export class PausedMatchMap implements Mapper<PausedMatch> {
             player4: raw.player4,
             initialTeam: raw.initialTeam,
             doubleServeFlow: DoubleServeFlowMap.toDomain(raw.doubleServeFlow),
-            singleServeFlow: SingleServeFlowMap.toDomai(raw.singleServeFlow),
+            singleServeFlow: SingleServeFlowMap.toDomain(raw.singleServeFlow),
             sets,
             currentSetIdx: raw.currentSetIdx,
             currentGame: GameMap.toDomain(raw.currentGame),
