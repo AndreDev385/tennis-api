@@ -15,6 +15,7 @@ import { SequelizeTeamStatsRepository } from "./implementations/sequelizeTeamSta
 import { SequelizeClubEventRepository } from "./implementations/sequelizeClubEventRepo";
 import { SequelizeAdRepository } from "./implementations/sequelizeAdRepo";
 import { SequelizeRankingRepository } from "./implementations/sequelizeRankingRepo";
+import { SequelizePausedMatchRepository } from "./implementations/sequelizePausedMatchRepo";
 
 const sequelizeClubRepo = new SequelizeClubRepository(models);
 const sequelizeCategoryRepo = new SequelizeCategoryRepository(models);
@@ -46,6 +47,8 @@ const sequelizeClubEventRepo = new SequelizeClubEventRepository(models);
 const sequelizeAdRepo = new SequelizeAdRepository(models);
 const sequelizeRankingRepo = new SequelizeRankingRepository(models, sequelizeTeamRepo);
 
+const sequelizePausedMatchRepo = new SequelizePausedMatchRepository(models, sequelizeTrackerRepo);
+
 export {
     sequelizeLeagueRepo,
     sequelizeClashRepo,
@@ -62,4 +65,5 @@ export {
     sequelizeClubEventRepo,
     sequelizeAdRepo,
     sequelizeRankingRepo,
+    sequelizePausedMatchRepo,
 };

@@ -2,6 +2,7 @@ import { Match } from "../domain/match";
 
 export interface MatchQuery {
     clashId?: string;
+    isPaused?: boolean;
     isFinish?: boolean;
 }
 

@@ -93,6 +93,7 @@ export class SequelizeMatchRepository implements MatchRepository {
             isLive: raw.isLive,
             isFinish: raw.isFinish,
             isCancelled: raw.isCancelled,
+            isPaused: raw.isPaused,
         });
     }
 
@@ -146,6 +147,7 @@ export class SequelizeMatchRepository implements MatchRepository {
                 isLive: m.isLive,
                 isFinish: m.isFinish,
                 isCancelled: m.isCancelled,
+                isPaused: m.isPaused,
             })
         );
 
@@ -156,9 +158,7 @@ export class SequelizeMatchRepository implements MatchRepository {
         const MatchModel = this.models.MatchModel;
 
         const baseQuery = this.baseQuery();
-        if (!!query.clashId === true) {
-            baseQuery.where["clashId"] = query.clashId;
-        }
+        baseQuery.where = query;
 
         const raw = await MatchModel.findAll(baseQuery);
 
@@ -193,6 +193,7 @@ export class SequelizeMatchRepository implements MatchRepository {
                 isLive: m.isLive,
                 isFinish: m.isFinish,
                 isCancelled: m.isCancelled,
+                isPaused: m.isPaused,
             })
         );
 
