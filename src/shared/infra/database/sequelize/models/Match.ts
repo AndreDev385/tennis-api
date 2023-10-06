@@ -87,6 +87,10 @@ const MatchModel = sequelize.define(
             type: DataTypes.BOOLEAN,
             defaultValue: false,
         },
+        isPaused: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false,
+        }
     },
     { tableName: "match" }
 );

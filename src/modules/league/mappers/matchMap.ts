@@ -47,6 +47,7 @@ export class MatchMap implements Mapper<Match> {
                 isLive: raw.isLive,
                 isFinish: raw.isFinish,
                 isCancelled: raw.isCancelled,
+                isPaused: raw.isPaused,
             },
             new UniqueEntityID(raw.matchId)
         );
@@ -77,6 +78,7 @@ export class MatchMap implements Mapper<Match> {
             isLive: match.isLive,
             isFinish: match.isFinish,
             isCancelled: match.isCancelled,
+            isPaused: match.isPaused,
         };
     }
 
@@ -109,6 +111,7 @@ export class MatchMap implements Mapper<Match> {
             isFinish: match.isFinish,
             matchWon: match.matchWon,
             isCancelled: match.isCancelled,
+            isPaused: match.isPaused,
         };
     }
 }
