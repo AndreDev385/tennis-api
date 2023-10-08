@@ -14,7 +14,7 @@ export class ListMatchs implements UseCase<any, Response> {
         this.matchRepo = matchRepo;
     }
 
-    async execute(request: any): Promise<Response> {
+    async execute(request?: any): Promise<Response> {
         try {
             const query: MatchQuery = {};
 
@@ -22,9 +22,11 @@ export class ListMatchs implements UseCase<any, Response> {
                 if (key == "clashId") {
                     query.clashId = value as string;
                 }
-
                 if (key == "isFinish") {
                     query.isFinish = value as boolean;
+                }
+                if (key == "isPaused") {
+                    query.isPaused = value as boolean;
                 }
             }
 

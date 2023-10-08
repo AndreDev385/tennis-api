@@ -14,6 +14,7 @@ import { TeamStatsModel } from "./TeamStats";
 import { ClubEventModel } from "./ClubEvent";
 import { AdModel } from "./Ad";
 import { RankingModel } from "./Ranking";
+import { PausedMatchModel } from "./PausedMatch";
 
 const models = {
     UserModel: UserModel,
@@ -32,6 +33,7 @@ const models = {
     ClubEventModel: ClubEventModel,
     AdModel: AdModel,
     RankingModel: RankingModel,
+    PausedMatchModel: PausedMatchModel
 };
 
 export default models;

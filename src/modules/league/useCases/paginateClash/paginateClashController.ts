@@ -1,24 +1,23 @@
 import { Request, Response } from "express";
 import { BaseController } from "../../../../shared/infra/http/models/BaseController";
-import { ListMatchs } from "./listMatchs";
+import { PaginateClash } from "./paginateClash";
 
-export class ListMatchsController extends BaseController {
-    usecase: ListMatchs;
+export class PaginateClashController extends BaseController {
 
-    constructor(usecase: ListMatchs) {
+    private readonly usecase: PaginateClash;
+
+    constructor(usecase: PaginateClash) {
         super();
         this.usecase = usecase;
     }
 
     async executeImpl(req: Request, res: Response) {
+
         const result = await this.usecase.execute(req.query);
 
         if (result.isLeft()) {
-            const error = result.value;
-            return this.fail(res, error.getErrorValue().message);
+            return this.fail(res, result.value.getErrorValue().message)
         }
-
-        console.log(result.value.getValue()[0]);
 
         return this.ok(res, result.value.getValue());
     }

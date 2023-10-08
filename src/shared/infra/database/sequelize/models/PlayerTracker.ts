@@ -107,6 +107,16 @@ const PlayerTrackerModel = sequelize.define(
             defaultValue: 0,
             allowNull: true,
         },
+        firstReturnOut: {
+            type: DataTypes.INTEGER,
+            defaultValue: 0,
+            allowNull: true,
+        },
+        secondReturnOut: {
+            type: DataTypes.INTEGER,
+            defaultValue: 0,
+            allowNull: true,
+        },
         meshPointsWon: {
             type: DataTypes.INTEGER,
             defaultValue: 0,
