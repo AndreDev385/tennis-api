@@ -1,20 +1,10 @@
 import { Card, Table } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faCircle, faCircleNotch, faCopy, faTableTennis } from '@fortawesome/free-solid-svg-icons';
-import { toast } from 'react-toastify';
-
-import "./Clubs.scss";
-import 'react-toastify/dist/ReactToastify.css';
 import { useEffect, useState } from 'react';
-// import ModalQuestion from '../modalQuestion/ModalQuestion';
-// import CreateClub from './createClub/CreateClub';
-
-export interface IClub {
-  clubId: string,
-  name: string,
-  code: string,
-  isSubscribed: boolean
-}
+import { toast } from 'react-toastify';
+import "./Clubs.scss";
+import { IClub } from '../../interfaces/interfaces';
 
 const Clubs = () => {
   const [clubs, setClubs] = useState<IClub[]>([])
@@ -59,6 +49,9 @@ const Clubs = () => {
           {item.name}
         </td>
         <td className='text-center'>
+          {item.symbol}
+        </td>
+        <td className='text-center'>
           {item.code?
             <>
               {item.code} 
@@ -98,6 +91,9 @@ const Clubs = () => {
               <tr>
                 <th>
                   Nombre
+                </th>
+                <th className='text-center'>
+                  Símbolo
                 </th>
                 <th className='text-center'>
                   Código

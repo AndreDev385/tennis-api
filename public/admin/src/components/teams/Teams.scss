@@ -1,0 +1,32 @@
+.teams-container{
+
+    .filter-container{
+        display: grid;
+        grid-template-columns: 25% 25% 25% 13%;
+        margin: 1rem 3rem;
+        gap: 1rem;
+
+        .search{
+            span{
+                background-color: transparent;
+                border-top-left-radius: 1rem;
+                border-bottom-left-radius: 1rem;
+            }
+
+            .input-search{
+                border-top-right-radius: 1rem;
+                border-bottom-right-radius: 1rem;
+            }
+        }
+
+        .form-select{
+            border-radius: 1rem;
+        }
+    }
+
+    button{
+        svg{
+            margin-right: .5rem;
+        }
+    }
+}

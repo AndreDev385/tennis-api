@@ -20,9 +20,7 @@ const Seasons = () => {
   const [showModalQuestion, setShowModalQuestion] = useState(false)
   const [showModalCreate, setShowModalCreate] = useState(false)
   const [modalQuestion, setModalQuestion] = useState("")
-  const [seasonId, setSeasonId] = useState("")
   const [seasons, setSeasons] = useState<ISeason[]>([])
-  const [loading, setLoading] = useState(false)
   const token: string = localStorage.getItem('authorization') || '';
   useEffect(() => {
     getSeasons()
@@ -45,16 +43,13 @@ const Seasons = () => {
 
       if (response.status === 200){
         setSeasons(data)
-        setLoading(false)
       } 
     } catch (error) {
-        setLoading(false)
     }
   }
 
   const onClickEndSeason = (item: ISeason): void => {
     setModalQuestion(`¿Estás seguro que quieres finalizar temporada ${item.name}?`)
-    setSeasonId(item.seasonId)
     setShowModalQuestion(true)
   }
 
@@ -75,15 +70,12 @@ const Seasons = () => {
 
       if (response.status === 200){
         if(data.message) toast.success(data.message);
-        setLoading(false);
         setShowModalQuestion(false)
         getSeasons()
       } else {
-        setLoading(false);
         if(data.message) toast.error(data.message);
       }
     } catch (error) {
-        setLoading(false);
         console.error(error);
     }
   }

@@ -2,9 +2,8 @@ import { faCircleNotch, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
-import { IClub } from "../../clubs/Clubs";
-import { IAds } from "../Ads";
 import { toast } from "react-toastify";
+import { IAds, IClub } from "../../../interfaces/interfaces";
 
 interface ICreateAdsProps {
     dismiss: (event: boolean) => void;

@@ -13,6 +13,9 @@ import { ToastContainer } from 'react-toastify'
 import Teams from './components/teams/Teams'
 import Results from './components/results/Results'
 import Players from './components/players/Players'
+import 'react-toastify/dist/ReactToastify.css';
+import Ranking from './components/ranking/Ranking'
+import Stats from './components/stats/Stats'
 
 const router = createBrowserRouter([
     {
@@ -66,7 +69,15 @@ const router = createBrowserRouter([
                 path: "/admins",
                 element: <Admins />
             }
-        ]
+        ],
+    },
+    {
+        path: '/teams/stats/:id',
+        element: <Stats />
+    },
+    {
+        path: '/teams/ranking/:id',
+        element: <Ranking />
     }
 ])
 
