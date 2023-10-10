@@ -1,22 +1,18 @@
-import { faAddressBook, faCircleNotch, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faAddressBook, faCircleNotch, faPlus, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
-import { Button, Card, Table } from 'react-bootstrap';
+import { Button, Card, Form, InputGroup, Table } from 'react-bootstrap';
+import CreateTrackers from './createTrackers/CreateTrackers';
+import { IUser } from '../../interfaces/interfaces';
 import './Trackers.scss';
 import 'react-toastify/dist/ReactToastify.css';
-import CreateTrackers from './createTrackers/CreateTrackers';
-
-export interface ITracker {
-  userId: string,
-  email: string,
-  firstName: string,
-  lastName: string
-}
 
 const Trackers = () => {
   const [showModalCreate, setShowModalCreate] = useState(false)
-  const [trackers, setTrackers] = useState<ITracker[]>([])
+  const [trackers, setTrackers] = useState<IUser[]>([])
+  const [filteredTrackers, setFilteredTrackers] = useState<IUser[]>([])
   const [loading, setLoading] = useState(true)
+  const [search, setSearch] = useState("")
   const token: string = localStorage.getItem('authorization') || '';
 
   useEffect(() => {
@@ -25,7 +21,7 @@ const Trackers = () => {
   
   const getTrackers = async (): Promise<void> => {
     setLoading(true)
-    const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/users/tracker`
+    const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/users?canTrack=true`
     const requestOptions = {
       method: 'GET',
       headers: { 
@@ -41,14 +37,33 @@ const Trackers = () => {
 
       if (response.status === 200){
         setTrackers(data)
-        setLoading(false)
       } 
     } catch (error) {
         setLoading(false)
     }
   }
 
-  const trackersTable = trackers.map( (item) => {
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      setFilteredTrackers(
+        trackers.filter((item) => (
+          item.firstName.toUpperCase().includes(search.toUpperCase()) ||
+          item.lastName.toUpperCase().includes(search.toUpperCase()) ||
+          item.email.toUpperCase().includes(search.toUpperCase())
+        )
+      ))
+      setLoading(false)
+    }, 1000)
+
+    return () => clearTimeout(delayDebounceFn)
+  }, [search, trackers]);
+
+  const onChangeSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    setSearch(e.target.value);
+  }
+
+  const trackersTable = filteredTrackers.map( (item) => {
     return (
       <tr key={item.userId}>
         <td>
@@ -63,6 +78,12 @@ const Trackers = () => {
       </tr>
     )
   })
+
+  const dismissModal = () => {
+    setSearch('')
+    getTrackers()
+    setShowModalCreate(false)
+  }
 
   return (
     <>
@@ -79,6 +100,22 @@ const Trackers = () => {
               Crear nuevo
             </Button>
           </div>
+        </div>
+
+        <div className="filter-container">
+          <InputGroup className="search">
+            <InputGroup.Text id="searchBar">
+              <FontAwesomeIcon icon={faSearch} />
+            </InputGroup.Text>
+            <Form.Control
+              placeholder="Buscar..."
+              aria-label="search"
+              aria-describedby="searchBar"
+              className="input-search"
+              value={search}
+              onChange={onChangeSearch}
+            />
+          </InputGroup>
         </div>
 
         <Card>
@@ -109,7 +146,7 @@ const Trackers = () => {
         </Card>
       </div>
 
-      {showModalCreate && <CreateTrackers dismiss={() => setShowModalCreate(false)} />}
+      {showModalCreate && <CreateTrackers dismiss={dismissModal} />}
     </>
   )
 }

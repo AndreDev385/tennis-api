@@ -7,14 +7,7 @@ import CreateModal from "./createModal/CreateModal";
 import "./Seasons.scss";
 import 'react-toastify/dist/ReactToastify.css';
 import { toast } from "react-toastify";
-
-interface ISeason {
-  seasonId: string,
-  leagueId: string,
-  name: string,
-  isFinish: boolean,
-  isCurrentSeason: boolean
-}
+import { ISeason } from "../../interfaces/interfaces";
 
 const Seasons = () => {
   const [showModalQuestion, setShowModalQuestion] = useState(false)

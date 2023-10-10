@@ -1,14 +1,16 @@
-import { Card, Table } from 'react-bootstrap'
+import { Card, Form, InputGroup, Table } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheckCircle, faCircle, faCircleNotch, faCopy, faTableTennis } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle, faCircle, faCircleNotch, faCopy, faSearch, faTableTennis } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import "./Clubs.scss";
 import { IClub } from '../../interfaces/interfaces';
+import "./Clubs.scss";
 
 const Clubs = () => {
   const [clubs, setClubs] = useState<IClub[]>([])
+  const [filteredClubs, setFilteredClubs] = useState<IClub[]>([])
   const [loading, setLoading] = useState(true)
+  const [search, setSearch] = useState("")
 
   useEffect(() => {
     getClubs()
@@ -36,13 +38,28 @@ const Clubs = () => {
     }
   }
 
-
   const copyClipboard = (code: string): void => {
     navigator.clipboard.writeText(code)
     toast.info("Copiado en el portapapeles!")
   }
 
-  const clubTable = clubs.map( (item) => {
+  // filter
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      setFilteredClubs(
+        clubs.filter((item) => item.name.toUpperCase().includes(search.toUpperCase()))
+      )
+    }, 1000)
+
+    return () => clearTimeout(delayDebounceFn)
+  }, [search, clubs]);
+
+  const onChangeSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    setSearch(e.target.value);
+  }
+
+  const clubTable = filteredClubs.map( (item) => {
     return (
       <tr key={item.clubId}>
         <td>
@@ -83,6 +100,22 @@ const Clubs = () => {
             <FontAwesomeIcon icon={faTableTennis} /> 
             Clubes
           </h1>
+        </div>
+
+        <div className="filter-container">
+          <InputGroup className="search">
+            <InputGroup.Text id="searchBar">
+              <FontAwesomeIcon icon={faSearch} />
+            </InputGroup.Text>
+            <Form.Control
+              placeholder="Buscar por nombre..."
+              aria-label="search"
+              aria-describedby="searchBar"
+              className="input-search"
+              value={search}
+              onChange={onChangeSearch}
+            />
+          </InputGroup>
         </div>
 
         <Card>

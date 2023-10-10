@@ -21,7 +21,7 @@ export interface IClub {
 }
 
 export interface INews {
-    adId: string,
+    clubEventId: string,
     clubId: string,
     link: string,
     image: any
@@ -48,7 +48,7 @@ export interface ICategory {
     fullNmae: string
 }
 
-export interface ITracker {
+export interface IUser {
     userId: string,
     email: string,
     firstName: string,
