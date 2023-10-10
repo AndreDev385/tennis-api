@@ -57,7 +57,6 @@ const News = () => {
       const data = await response.json()
 
       if (response.status === 200){
-        console.log(data)
         setNews(data)
         setFilteredNews(data)
       } 
@@ -107,6 +106,8 @@ const News = () => {
       if (response.status === 200){
         if(data.message) toast.success(data.message);
         setShowModalDelete(false)
+        getNews();
+        setClubSelected('');
       } else {
         if(data.message) toast.error(data.message);
       }
@@ -117,7 +118,7 @@ const News = () => {
 
   const newsTable = filteredNews.map( (item) => {
     return (
-      <tr key={item.adId}>
+      <tr key={item.clubEventId}>
         <td>
           <a href={item.link}>
             {item.link}

@@ -27,6 +27,13 @@ export interface INews {
     image: any
 }
 
+export interface IAds {
+    adId: string,
+    clubId: string,
+    link: string,
+    image: any
+}
+
 export interface ISeason {
     seasonId: string,
     leagueId: string,

@@ -1,37 +1,23 @@
-import { faAd, faBell, faFilter, faPencil, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faAd, faFilter, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 import { Button, Card, Form, Table } from 'react-bootstrap';
-import { IClub } from '../clubs/Clubs';
-
-import './Ads.scss';
-import 'react-toastify/dist/ReactToastify.css';
+import { IAds, IClub } from '../../interfaces/interfaces';
 import ModalQuestion from '../modalQuestion/ModalQuestion';
 import CreateAds from './createAds/CreateAds';
-import Notifications from './notifications/Notifications';
-
-export interface IAds {
-  adId: string,
-  clubId: string,
-  link: string,
-  image: any
-}
+import { toast } from 'react-toastify';
+import './Ads.scss';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Ads = () => {
   const [showModalDelete, setShowModalDelete] = useState(false)
   const [showModalCreate, setShowModalCreate] = useState(false)
-  // const [showModalEdit, setShowModalEdit] = useState(false)
-  const [showModalNotifications, setShowModalNotifications] = useState(false)
   const [clubs, setClubs] = useState<IClub[]>([])
   const [clubSelected, setClubSelected] = useState('')
-  // const [adsSelected, setAdsSelected] = useState<IAds>({
-  //   adId: '',
-  //   clubId: '',
-  //   link: '',
-  //   image: ''
-  // })
   const [ads, setAds] = useState<IAds[]>([])
   const [filteredAds, setFilteredAds] = useState<IAds[]>([])
+  const [id, setId] = useState("")
+  const token: string = localStorage.getItem('authorization') || '';
 
   useEffect(() => {
     getClubs()
@@ -69,7 +55,7 @@ const Ads = () => {
       const response = await fetch(url, requestOptions)
       
       const data = await response.json()
-
+      console.log(data)
       if (response.status === 200){
         setAds(data)
         setFilteredAds(data)
@@ -91,23 +77,52 @@ const Ads = () => {
     setFilteredAds(ads)
   }
 
-  const handleDeleteModal = (ads: IAds) => {
-    console.log(ads);
-    // setAdsSelected(ads)
+  const handleDeleteModal = (id: string) => {
+    setId(id)
     setShowModalDelete(true)
   }
 
-  const handleEditModal = (ads: IAds) => {
-    console.log(ads)
-    // setAdsSelected(ads)
-    // setShowModalEdit(true)
+  const handleDismissCreate = () => {
+    getAds();
+    setClubSelected('');
+    setShowModalCreate(false)
+  }
+
+  const deleteAd = async () => {
+    const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/ads/${id}`
+    const requestOptions = {
+        method: 'DELETE',
+        headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': token
+        }
+    };
+
+    try{
+      const response = await fetch(url, requestOptions);
+      
+      const data = await response.json();
+
+      if (response.status === 200){
+        if(data.message) toast.success(data.message);
+        setShowModalDelete(false)
+        getAds();
+        setClubSelected('');
+      } else {
+        if(data.message) toast.error(data.message);
+      }
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   const adsTable = filteredAds.map( (item) => {
     return (
       <tr key={item.adId}>
         <td>
-          {item.link}
+          <a href={item.link}>
+            {item.link}
+          </a>
         </td>
         <td className='text-center'>
           {clubs.filter(club => club.clubId === item.clubId)[0]? clubs.filter(club => club.clubId === item.clubId)[0].name: "-"}
@@ -116,13 +131,7 @@ const Ads = () => {
           <img src={item.image} />
         </td>
         <td className='text-center'>
-          <Button variant="warning" onClick={() => handleEditModal(item)}>
-            <FontAwesomeIcon icon={faPencil} />
-            Editar
-          </Button>
-        </td>
-        <td className='text-center'>
-          <Button variant="danger" onClick={() => handleDeleteModal(item)}>
+          <Button variant="danger" onClick={() => handleDeleteModal(item.adId)}>
             <FontAwesomeIcon icon={faTrash} />
             Eliminar
           </Button>
@@ -143,11 +152,6 @@ const Ads = () => {
           <Button variant="primary" onClick={() => setShowModalCreate(true)}>
             <FontAwesomeIcon icon={faPlus} />
             Crear nuevo
-          </Button>
-
-          <Button variant="info" onClick={() => setShowModalNotifications(true)}>
-            <FontAwesomeIcon icon={faBell} />
-            Crear notificación
           </Button>
         </div>
 
@@ -182,9 +186,6 @@ const Ads = () => {
                   Imagen
                 </th>
                 <th className='text-center'>
-                  Editar
-                </th>
-                <th className='text-center'>
                   Eliminar
                 </th>
               </tr>
@@ -202,13 +203,11 @@ const Ads = () => {
           title="Eliminar publicidad"
           question="¿Estás seguro que deseas eliminarla? Esta acción no se puede deshacer."
           dismiss={() => setShowModalDelete(false)}
-          accept={getAds}
+          accept={deleteAd}
         />
       } 
 
-      {showModalCreate && <CreateAds clubs={clubs} dismiss={() => setShowModalCreate(false)} />}
-
-      {showModalNotifications && <Notifications dismiss={() => setShowModalNotifications(false)} />}
+      {showModalCreate && <CreateAds clubs={clubs} dismiss={handleDismissCreate} />}
     </>
   )
 }
