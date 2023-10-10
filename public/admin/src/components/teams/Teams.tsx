@@ -3,8 +3,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Button, Card, Form, InputGroup, Table } from "react-bootstrap"
 import { useEffect, useState } from "react";
 import { ICategory, IClub, ITeam } from "../../interfaces/interfaces";
-import "./Teams.scss";
 import { useNavigate } from "react-router";
+import "./Teams.scss";
 
 const Teams = () => {
   const [teams, setTeams] = useState<ITeam[]>([])
@@ -247,9 +247,11 @@ const Teams = () => {
             <tbody>
               {filteredTeams && teamsTable}
               {filteredTeams.length === 0 && 
-                <p className="text-center mt-3" >
-                  No hay resultados
-                </p>
+                <tr className="text-center mt-3" >
+                  <td>
+                    No hay resultados
+                  </td>
+                </tr>
               }
             </tbody>
           </Table>

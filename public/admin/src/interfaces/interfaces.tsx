@@ -61,3 +61,55 @@ export interface IUser {
     firstName: string,
     lastName: string
 }
+
+export interface IStatsId extends IStats {
+    journey: string,
+    seasonId: string,
+    teamId: string,
+    teamStatsId: string,
+}
+
+export interface IStats {
+    clashPlayedAsLocal: number,
+    clashPlayedAsVisitor: number,
+    clashWonAsLocal: number,
+    clashWonAsVisitor: number,
+    gamesPlayedAsLocal: number,
+    gamesPlayedAsVisitor: number,
+    gamesWonAsLocal: number,
+    gamesWonAsVisitor: number,
+    matchLostAsLocal: number,
+    matchLostAsVisitor: number,
+    matchPlayedAsLocal: number,
+    matchPlayedAsVisitor: number,
+    matchWonAsLocal: number,
+    matchWonAsVisitor: number,
+    matchsPlayedWithFirstSetWonAsLocal: number,
+    matchsPlayedWithFirstSetWonAsVisitor: number,
+    matchsWonWithFirstSetWonAsLocal: number,
+    matchsWonWithFirstSetWonAsVisitor: number,
+    setsPlayedAsLocal: number,
+    setsPlayedAsVisitor: number,
+    setsWonAsLocal: number,
+    setsWonAsVisitor: number,
+    superTieBreaksPlayedAsLocal: number,
+    superTieBreaksPlayedAsVisitor: number,
+    superTieBreaksWonAsLocal: number,
+    superTieBreaksWonAsVisitor: number,
+    totalClashPlayed: number,
+    totalClashWon: number,
+    totalGamesPlayed: number,
+    totalGamesWon: number,
+    totalMatchPlayed: number,
+    totalMatchWon: number,
+    totalMatchsPlayedWithFirstSetWon: number,
+    totalMatchsWonWithFirstSetWon: number,
+    totalSetsPlayed: number,
+    totalSetsWon: number,
+    totalSuperTieBreaksPlayed: number,
+    totalSuperTieBreaksWon: number,
+}
+
+export interface IJourney{
+    name: string,
+}

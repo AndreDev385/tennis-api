@@ -55,7 +55,6 @@ const Ads = () => {
       const response = await fetch(url, requestOptions)
       
       const data = await response.json()
-      console.log(data)
       if (response.status === 200){
         setAds(data)
         setFilteredAds(data)
