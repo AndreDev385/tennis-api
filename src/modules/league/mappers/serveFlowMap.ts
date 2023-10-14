@@ -83,9 +83,9 @@ export class DoubleServeFlowMap implements Mapper<DoubleServeFlow> {
         console.log(raw);
 
         const firstGameFlow = this.serveFlowToDomain(obj.firstGameFlow);
-        const secondGameFlow = this.serveFlowToDomain(obj.firstGameFlow);
-        const thirdGameFlow = this.serveFlowToDomain(obj.firstGameFlow);
-        const fourGameFlow = this.serveFlowToDomain(obj.firstGameFlow);
+        const secondGameFlow = this.serveFlowToDomain(obj.secondGameFlow);
+        const thirdGameFlow = this.serveFlowToDomain(obj.thirdGameFlow);
+        const fourGameFlow = this.serveFlowToDomain(obj.fourGameFlow);
         const order = ServiceOrder.create([firstGameFlow, secondGameFlow, thirdGameFlow, fourGameFlow,])
 
         if (order.isFailure) {
