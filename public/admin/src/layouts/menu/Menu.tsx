@@ -1,7 +1,7 @@
 import { Outlet, useLocation, useNavigate } from "react-router-dom"
 import "./Menu.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAd, faAddressBook, faAddressCard, faBaseballBall, faCalendar, faChartBar, faNewspaper, faPoll, faSignOutAlt, faTableTennis, faUsers } from "@fortawesome/free-solid-svg-icons";
+import { faAd, faAddressBook, faAddressCard, faBaseballBall, faCalendar, faNewspaper, faPoll, faSignOutAlt, faTableTennis, faTrophy, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import ModalQuestion from "../../components/modalQuestion/ModalQuestion";
 
@@ -24,6 +24,7 @@ const Menu = () => {
     const adminsClassName = location.pathname === "/admins"? "wrap-option menu-selected": "wrap-option"
     const newsClassName = location.pathname === "/news"? "wrap-option menu-selected": "wrap-option"
     const adsClassName = location.pathname === "/ads"? "wrap-option menu-selected": "wrap-option"
+    const rankingClassName = location.pathname === "/ranking"? "wrap-option menu-selected": "wrap-option"
     
     const navigateTo = (path: string): void => {
         navigate(path)
@@ -76,6 +77,14 @@ const Menu = () => {
                         <FontAwesomeIcon icon={faPoll} />
                         <span>
                             Resultados
+                        </span>
+                    </div>
+
+                    <div className={rankingClassName}
+                        onClick={() => navigateTo("/ranking")}>
+                        <FontAwesomeIcon icon={faTrophy} />
+                        <span>
+                            Ranking
                         </span>
                     </div>
 

@@ -6,10 +6,10 @@
         height: 100vh;  
 
         img{
-            width: 4rem;
+            width: 3rem;
             margin: 0 auto;
-            margin-top: 1rem;
-            margin-bottom: 1rem;
+            margin-top: .5rem;
+            margin-bottom: .5rem;
         }
 
         .wrap-option, .wrap-logout{
@@ -58,8 +58,6 @@
         }
 
         .wrap-logout{
-            margin-top: 2rem;
-
             &:hover{
                 background-color: #edededa1;
             }

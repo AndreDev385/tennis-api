@@ -126,12 +126,21 @@ const Players = () => {
             </thead>
 
             <tbody>
-              {loading? 
-                  <FontAwesomeIcon className='center mt-5' icon={faCircleNotch} spin />:
-                  <div>
-                    {playersTable}
-                  </div>
-                }
+              {filteredPlayers && playersTable}
+              {loading && 
+                <tr className="text-center mt-3" >
+                  <td>
+                    <FontAwesomeIcon className='center mt-5' icon={faCircleNotch} spin />
+                  </td>
+                </tr>
+              }
+              {filteredPlayers.length === 0 && !loading && 
+                <tr className="text-center mt-3" >
+                  <td>
+                    No hay resultados
+                  </td>
+                </tr>
+              }
             </tbody>
           </Table>
         </Card>

@@ -1,4 +1,4 @@
-import { faChartBar, faSearch, faTrophy, faUsers } from "@fortawesome/free-solid-svg-icons"
+import { faChartBar, faCircleNotch, faSearch, faTrophy, faUsers } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Button, Card, Form, InputGroup, Table } from "react-bootstrap"
 import { useEffect, useState } from "react";
@@ -14,6 +14,7 @@ const Teams = () => {
   const [selectedClub, setSelectedClub] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('')
   const [search, setSearch] = useState('')
+  const [loading, setLoading] = useState(true)
   const token: string = localStorage.getItem('authorization') || '';
   const navigate = useNavigate();
   
@@ -24,6 +25,7 @@ const Teams = () => {
   }, []);
 
   const getTeams = async () => {
+    setLoading(true)
     const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/team`
     const requestOptions = {
       method: 'GET',
@@ -40,9 +42,10 @@ const Teams = () => {
 
       if (response.status === 200){
         setTeams(data)
-        setFilteredTeams(data)
       } 
     } catch (error) {
+      console.error(error)
+      setLoading(false)
     }
   }
 
@@ -58,9 +61,7 @@ const Teams = () => {
 
     try{
       const response = await fetch(url, requestOptions)
-      
       const data = await response.json()
-
       if (response.status === 200){
         setCategories(data)
       } 
@@ -116,6 +117,7 @@ const Teams = () => {
           teams.filter((item) => item.name.toUpperCase().includes(search.toUpperCase()))
         )
       }
+      setLoading(false)
     }, 1000)
 
     return () => clearTimeout(delayDebounceFn)
@@ -146,10 +148,6 @@ const Teams = () => {
     navigate(`stats/${id}`)
   }
 
-  const goToRanking = (id: string) => {
-    navigate(`ranking/${id}`)
-  }
-
   const teamsTable = filteredTeams.map( (item) => {
     return (
       <tr key={item.teamId}>
@@ -166,12 +164,6 @@ const Teams = () => {
           <Button variant="primary" onClick={() => goToStats(item.teamId)}>
             <FontAwesomeIcon icon={faChartBar} />
             Estadísticas
-          </Button>
-        </td>
-        <td className='text-center'>
-          <Button variant="warning" onClick={() => goToRanking(item.teamId)}>
-            <FontAwesomeIcon icon={faTrophy} />
-            Ranking
           </Button>
         </td>
       </tr>
@@ -238,15 +230,19 @@ const Teams = () => {
                 <th className="text-center">
                   Ver estadísticas
                 </th>
-                <th className="text-center">
-                  Ver ranking
-                </th>
               </tr>
             </thead>
 
             <tbody>
               {filteredTeams && teamsTable}
-              {filteredTeams.length === 0 && 
+              {loading && 
+                <tr className="text-center mt-3" >
+                  <td>
+                    <FontAwesomeIcon className='center mt-5' icon={faCircleNotch} spin />
+                  </td>
+                </tr>
+              }
+              {filteredTeams.length === 0 && !loading && 
                 <tr className="text-center mt-3" >
                   <td>
                     No hay resultados

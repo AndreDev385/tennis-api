@@ -196,6 +196,7 @@ const Stats = () => {
             Limpiar filtro
           </Button>
         </div>
+        
         <Card>
           <Table responsive="sm">
             <thead>

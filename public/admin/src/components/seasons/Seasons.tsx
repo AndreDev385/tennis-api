@@ -1,4 +1,4 @@
-import { faCalendar, faCircle, faPlus } from "@fortawesome/free-solid-svg-icons"
+import { faCalendar, faCircle, faCircleNotch, faPlus } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Button, Card, Table } from "react-bootstrap"
 import { useEffect, useState } from "react";
@@ -15,11 +15,14 @@ const Seasons = () => {
   const [modalQuestion, setModalQuestion] = useState("")
   const [seasons, setSeasons] = useState<ISeason[]>([])
   const token: string = localStorage.getItem('authorization') || '';
+  const [loading, setLoading] = useState(true)
+  
   useEffect(() => {
     getSeasons()
   }, []);
 
   const getSeasons = async () => {
+    setLoading(true)
     const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/season`
     const requestOptions = {
       method: 'GET',
@@ -36,8 +39,11 @@ const Seasons = () => {
 
       if (response.status === 200){
         setSeasons(data)
+        setLoading(false)
       } 
     } catch (error) {
+      console.error(error)
+      setLoading(false)
     }
   }
 
@@ -146,7 +152,21 @@ const Seasons = () => {
             </thead>
 
             <tbody>
-              {seasonTable}
+              {seasons && seasonTable}
+              {loading && 
+                <tr className="text-center mt-3" >
+                  <td>
+                    <FontAwesomeIcon className='center mt-5' icon={faCircleNotch} spin />
+                  </td>
+                </tr>
+              }
+              {seasons.length === 0 && !loading && 
+                <tr className="text-center mt-3" >
+                  <td>
+                    No hay resultados
+                  </td>
+                </tr>
+              }
             </tbody>
           </Table>
         </Card>

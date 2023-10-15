@@ -31,10 +31,10 @@ const Clubs = () => {
 
       if (response.status === 200){
         setClubs(data)
-        setLoading(false)
       } 
     } catch (error) {
-        setLoading(false)
+      console.error(error)
+      setLoading(false)
     }
   }
 
@@ -49,8 +49,8 @@ const Clubs = () => {
       setFilteredClubs(
         clubs.filter((item) => item.name.toUpperCase().includes(search.toUpperCase()))
       )
+      setLoading(false)
     }, 1000)
-
     return () => clearTimeout(delayDebounceFn)
   }, [search, clubs]);
 
@@ -137,12 +137,21 @@ const Clubs = () => {
               </tr>
             </thead>
 
-            <tbody className='mt-3'>
-              {loading? 
-                <FontAwesomeIcon className='center mt-5' icon={faCircleNotch} spin />:
-                <div>
-                  {clubTable}
-                </div>
+            <tbody>
+              {filteredClubs && clubTable}
+              {loading && 
+                <tr className="text-center mt-3" >
+                  <td>
+                    <FontAwesomeIcon className='center mt-5' icon={faCircleNotch} spin />
+                  </td>
+                </tr>
+              }
+              {filteredClubs.length === 0 && !loading && 
+                <tr className="text-center mt-3" >
+                  <td>
+                    No hay resultados
+                  </td>
+                </tr>
               }
             </tbody>
           </Table>
