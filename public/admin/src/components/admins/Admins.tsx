@@ -1,7 +1,7 @@
-import { faAddressCard, faCircleNotch, faPlus, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faAddressCard, faCircleNotch, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
-import { Button, Card, Form, InputGroup, Table } from 'react-bootstrap';
+import { Card, Form, InputGroup, Table } from 'react-bootstrap';
 import { ToastContainer } from 'react-toastify';
 import CreateAdmin from './createAdmin/createAdmin';
 import { IUser } from '../../interfaces/interfaces';

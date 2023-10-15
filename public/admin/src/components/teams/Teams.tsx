@@ -1,4 +1,4 @@
-import { faChartBar, faCircleNotch, faSearch, faTrophy, faUsers } from "@fortawesome/free-solid-svg-icons"
+import { faChartBar, faCircleNotch, faSearch, faUsers } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Button, Card, Form, InputGroup, Table } from "react-bootstrap"
 import { useEffect, useState } from "react";
