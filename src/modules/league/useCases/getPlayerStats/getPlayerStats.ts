@@ -72,12 +72,6 @@ export class GetPlayerStats
 
             const list = await this.playerTrackerRepo.getByPlayerId(statsQuery);
 
-            console.log("LIST", list);
-
-            for(const stats of list) {
-                console.log(stats.seasonId.id.toString());
-            }
-
             return right(Result.ok(calculatePlayerStats(list)));
         } catch (error) {
             return left(new AppError.UnexpectedError(error));
