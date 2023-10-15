@@ -9,13 +9,15 @@ import Ads from './components/ads/Ads'
 import Trackers from './components/trackers/Trackers'
 import Admins from './components/admins/Admins'
 import DeleteAccount from './components/deleteAccount/DeleteAccount'
-import { ToastContainer } from 'react-toastify'
 import Teams from './components/teams/Teams'
 import Results from './components/results/Results'
 import Players from './components/players/Players'
+import Ranking from './components/teams/ranking/Ranking'
+import Stats from './components/teams/stats/Stats'
+import PlayerStats from './components/players/playerStats/PlayerStats'
+
+import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
-import Ranking from './components/ranking/Ranking'
-import Stats from './components/stats/Stats'
 
 const router = createBrowserRouter([
     {
@@ -78,6 +80,10 @@ const router = createBrowserRouter([
     {
         path: '/teams/ranking/:id',
         element: <Ranking />
+    },
+    {
+        path: '/players/stats/:id',
+        element: <PlayerStats />
     }
 ])
 

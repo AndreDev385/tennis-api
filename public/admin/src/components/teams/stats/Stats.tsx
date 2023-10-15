@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { IJourney, ISeason, IStats, IStatsId } from "../../interfaces/interfaces"
+import { IJourney, ISeason, IStats, IStatsId } from "../../../interfaces/interfaces"
 import { useParams } from "react-router"
 import { faChartBar } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
