@@ -8,7 +8,7 @@ import { MatchRepository } from "../../repositories/matchRepo";
 import { PlayerRepository } from "../../repositories/playerRepo";
 import { FeatureCoupleRecords, FeatureCoupleObj } from "./dto";
 
-type Response = Either<AppError.UnexpectedError, Result<any>>;
+type Response = Either<AppError.UnexpectedError | Result<string>, Result<any>>;
 
 export class FeatureCouples implements UseCase<any, any> {
 
@@ -25,6 +25,11 @@ export class FeatureCouples implements UseCase<any, any> {
     async execute(request: any): Promise<Response> {
 
         try {
+
+            if (!request.teamId || typeof request.teamId != 'string') {
+                return left(Result.fail<string>("Ingresa un id de equipo"))
+            }
+
             const query = { team1: request.teamId, isFinish: true };
 
             if (!!request.seasonId == true) {
@@ -92,8 +97,10 @@ function updateCoupleRecord(records: FeatureCoupleRecords, tracker: MatchTracker
 
     const [playerId, partnerId] = coupleId.split(" ");
 
+    const reversedCoupleId = `${partnerId} ${playerId}`;
+
     // check for same couple with diferent order
-    if (!!records[coupleId] == false && !!records[`${partnerId} ${playerId}`] == false) {
+    if (!!records[coupleId] == false && !!records[reversedCoupleId] == false) {
         records[coupleId] = {
             meshPointsWon: tracker.meshPointsWon,
             meshPointsLost: tracker.meshPointsLost,
@@ -107,13 +114,27 @@ function updateCoupleRecord(records: FeatureCoupleRecords, tracker: MatchTracker
         }
         return
     }
-    records[coupleId].meshPointsWon += tracker.meshPointsWon;
-    records[coupleId].meshPointsLost += tracker.meshPointsLost;
-    records[coupleId].firstServIn += tracker.firstServIn;
-    records[coupleId].secondServIn += tracker.secondServIn;
-    records[coupleId].dobleFaults += tracker.dobleFaults;
-    records[coupleId].pointsWinnedFirstServ += tracker.pointsWinnedFirstServ;
-    records[coupleId].pointsWinnedSecondServe += tracker.pointsWinnedSecondServ;
-    records[coupleId].breakPtsWinned += tracker.breakPtsWinned;
-    records[coupleId].winBreakPtsChances += tracker.winBreakPtsChances;
+
+    if (!!records[coupleId] != false) {
+        records[coupleId].meshPointsWon += tracker.meshPointsWon;
+        records[coupleId].meshPointsLost += tracker.meshPointsLost;
+        records[coupleId].firstServIn += tracker.firstServIn;
+        records[coupleId].secondServIn += tracker.secondServIn;
+        records[coupleId].dobleFaults += tracker.dobleFaults;
+        records[coupleId].pointsWinnedFirstServ += tracker.pointsWinnedFirstServ;
+        records[coupleId].pointsWinnedSecondServe += tracker.pointsWinnedSecondServ;
+        records[coupleId].breakPtsWinned += tracker.breakPtsWinned;
+        records[coupleId].winBreakPtsChances += tracker.winBreakPtsChances;
+    } else {
+        records[reversedCoupleId].meshPointsWon += tracker.meshPointsWon;
+        records[reversedCoupleId].meshPointsLost += tracker.meshPointsLost;
+        records[reversedCoupleId].firstServIn += tracker.firstServIn;
+        records[reversedCoupleId].secondServIn += tracker.secondServIn;
+        records[reversedCoupleId].dobleFaults += tracker.dobleFaults;
+        records[reversedCoupleId].pointsWinnedFirstServ += tracker.pointsWinnedFirstServ;
+        records[reversedCoupleId].pointsWinnedSecondServe += tracker.pointsWinnedSecondServ;
+        records[reversedCoupleId].breakPtsWinned += tracker.breakPtsWinned;
+        records[reversedCoupleId].winBreakPtsChances += tracker.winBreakPtsChances;
+    }
+
 }
