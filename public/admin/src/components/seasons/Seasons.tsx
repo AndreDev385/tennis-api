@@ -1,4 +1,4 @@
-import { faCircle, faPlus } from "@fortawesome/free-solid-svg-icons"
+import { faCalendar, faCircle, faCircleNotch, faPlus } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Button, Card, Table } from "react-bootstrap"
 import { useEffect, useState } from "react";
@@ -7,30 +7,22 @@ import CreateModal from "./createModal/CreateModal";
 import "./Seasons.scss";
 import 'react-toastify/dist/ReactToastify.css';
 import { toast } from "react-toastify";
-
-interface ISeason {
-  seasonId: string,
-  leagueId: string,
-  name: string,
-  isFinish: boolean,
-  isCurrentSeason: boolean
-}
+import { ISeason } from "../../interfaces/interfaces";
 
 const Seasons = () => {
   const [showModalQuestion, setShowModalQuestion] = useState(false)
   const [showModalCreate, setShowModalCreate] = useState(false)
   const [modalQuestion, setModalQuestion] = useState("")
-  const [seasonId, setSeasonId] = useState("")
   const [seasons, setSeasons] = useState<ISeason[]>([])
-  const [loading, setLoading] = useState(false)
   const token: string = localStorage.getItem('authorization') || '';
-  console.log(seasonId)
-  console.log(loading)
+  const [loading, setLoading] = useState(true)
+  
   useEffect(() => {
     getSeasons()
   }, []);
 
   const getSeasons = async () => {
+    setLoading(true)
     const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/season`
     const requestOptions = {
       method: 'GET',
@@ -46,24 +38,21 @@ const Seasons = () => {
       const data = await response.json()
 
       if (response.status === 200){
-        console.log(data)
         setSeasons(data)
         setLoading(false)
       } 
     } catch (error) {
-        setLoading(false)
+      console.error(error)
+      setLoading(false)
     }
   }
 
   const onClickEndSeason = (item: ISeason): void => {
     setModalQuestion(`¿Estás seguro que quieres finalizar temporada ${item.name}?`)
-    setSeasonId(item.seasonId)
     setShowModalQuestion(true)
   }
 
   const handleEndSeason = async () => {
-    //TODO
-    // setShowModalQuestion(false)
     const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/season/finish`
     const requestOptions = {
         method: 'PUT',
@@ -80,15 +69,12 @@ const Seasons = () => {
 
       if (response.status === 200){
         if(data.message) toast.success(data.message);
-        setLoading(false);
         setShowModalQuestion(false)
         getSeasons()
       } else {
-        setLoading(false);
         if(data.message) toast.error(data.message);
       }
     } catch (error) {
-        setLoading(false);
         console.error(error);
     }
   }
@@ -113,7 +99,7 @@ const Seasons = () => {
             </span>
           }
 
-          {item.isCurrentSeason && 
+          {!item.isCurrentSeason && item.isCurrentSeason && 
             <span>
               <FontAwesomeIcon className='current' icon={faCircle} />
               En curso
@@ -122,7 +108,7 @@ const Seasons = () => {
         </td>
         <td className='text-center'>
           {item.isCurrentSeason?
-            <Button variant="warning" disabled onClick={() => onClickEndSeason(item)}>
+            <Button variant="warning" disabled={item.isFinish} onClick={() => onClickEndSeason(item)}>
               Finalizar temporada
             </Button>:
             <span>-</span>
@@ -137,6 +123,7 @@ const Seasons = () => {
       <div className='seasons-container'>
         <div className="title-wrap">
           <h1>
+            <FontAwesomeIcon icon={faCalendar} />
             Temporadas
           </h1>
 
@@ -165,7 +152,21 @@ const Seasons = () => {
             </thead>
 
             <tbody>
-              {seasonTable}
+              {seasons && seasonTable}
+              {loading && 
+                <tr className="text-center mt-3" >
+                  <td>
+                    <FontAwesomeIcon className='center mt-5' icon={faCircleNotch} spin />
+                  </td>
+                </tr>
+              }
+              {seasons.length === 0 && !loading && 
+                <tr className="text-center mt-3" >
+                  <td>
+                    No hay resultados
+                  </td>
+                </tr>
+              }
             </tbody>
           </Table>
         </Card>

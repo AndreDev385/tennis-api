@@ -1,35 +1,23 @@
-import { faFilter, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faFilter, faNewspaper, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 import { Button, Card, Form, Table } from 'react-bootstrap';
-import { IClub } from '../clubs/Clubs';
-
-import './News.scss';
-import 'react-toastify/dist/ReactToastify.css';
 import ModalQuestion from '../modalQuestion/ModalQuestion';
 import CreateNews from './createNews/CreateNews';
-
-export interface INews {
-  adId: string,
-  clubId: string,
-  link: string,
-  image: any
-}
+import { toast } from 'react-toastify';
+import { IClub, INews } from '../../interfaces/interfaces';
+import './News.scss';
+import 'react-toastify/dist/ReactToastify.css';
 
 const News = () => {
   const [showModalDelete, setShowModalDelete] = useState(false)
   const [showModalCreate, setShowModalCreate] = useState(false)
   const [clubs, setClubs] = useState<IClub[]>([])
   const [clubSelected, setClubSelected] = useState('')
-  const [newsSelected, setNewsSelected] = useState<INews>({
-    adId: '',
-    clubId: '',
-    link: '',
-    image: ''
-  })
-  console.log(newsSelected)
+  const [id, setId] = useState("")
   const [news, setNews] = useState<INews[]>([])
   const [filteredNews, setFilteredNews] = useState<INews[]>([])
+  const token: string = localStorage.getItem('authorization') || '';
 
   useEffect(() => {
     getClubs()
@@ -89,14 +77,48 @@ const News = () => {
     setFilteredNews(news)
   }
 
-  const handleDeleteModal = (news: INews) => {
-    setNewsSelected(news)
+  const handleDeleteModal = (id: string) => {
+    setId(id)
     setShowModalDelete(true)
+  }
+
+  const handleDismissCreate = () => {
+    getNews();
+    setClubSelected('');
+    setShowModalCreate(false)
+  }
+
+  const deleteEvent = async () => {
+    const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/event/${id}`
+    const requestOptions = {
+        method: 'DELETE',
+        headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': token
+        }
+    };
+
+    try{
+      const response = await fetch(url, requestOptions);
+      
+      const data = await response.json();
+
+      if (response.status === 200){
+        if(data.message) toast.success(data.message);
+        setShowModalDelete(false)
+        getNews();
+        setClubSelected('');
+      } else {
+        if(data.message) toast.error(data.message);
+      }
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   const newsTable = filteredNews.map( (item) => {
     return (
-      <tr key={item.adId}>
+      <tr key={item.clubEventId}>
         <td>
           <a href={item.link}>
             {item.link}
@@ -109,7 +131,7 @@ const News = () => {
           <img src={item.image} />
         </td>
         <td className='text-center'>
-          <Button variant="danger" onClick={() => handleDeleteModal(item)}>
+          <Button variant="danger" onClick={() => handleDeleteModal(item.clubEventId)}>
             <FontAwesomeIcon icon={faTrash} />
             Eliminar
           </Button>
@@ -123,6 +145,7 @@ const News = () => {
       <div className='news-container'>
         <div className="title-wrap">
           <h1>
+            <FontAwesomeIcon icon={faNewspaper} />
             Eventos
           </h1>
 
@@ -181,11 +204,11 @@ const News = () => {
           title="Eliminar evento"
           question="¿Estás seguro que deseas eliminarla? Esta acción no se puede deshacer."
           dismiss={() => setShowModalDelete(false)}
-          accept={() => setShowModalDelete(false)}
+          accept={deleteEvent}
         />
       } 
 
-      {showModalCreate && <CreateNews dismiss={() => setShowModalCreate(false)} clubs={clubs} />}
+      {showModalCreate && <CreateNews dismiss={handleDismissCreate} clubs={clubs} />}
     </>
   )
 }

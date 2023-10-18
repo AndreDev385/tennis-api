@@ -56,12 +56,12 @@ export const CodeForm = ({ email, onSubmit, setCode }: ICodeFormProps) => {
 
     return (
         <div className="forgot-pwd-container">
-            <img src="/src/assets/img/forgot-password-person.svg" />
+            <img src="/forgot-password-person.svg" />
             
             <div>
-                <h1>
+                <h2>
                     Código de verificación
-                </h1>
+                </h2>
                 <h6>
                     Revisa tu correo electrónico, te hemos enviado un código de verificación de identidad
                 </h6>

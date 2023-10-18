@@ -1,32 +1,16 @@
-import { Card, Table } from 'react-bootstrap'
+import { Card, Form, InputGroup, Table } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheckCircle, faCircle, faCircleNotch, faCopy } from '@fortawesome/free-solid-svg-icons';
-import { toast } from 'react-toastify';
-
-import "./Clubs.scss";
-import 'react-toastify/dist/ReactToastify.css';
+import { faCheckCircle, faCircle, faCircleNotch, faCopy, faSearch, faTableTennis } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
-// import ModalQuestion from '../modalQuestion/ModalQuestion';
-// import CreateClub from './createClub/CreateClub';
-
-export interface IClub {
-  clubId: string,
-  name: string,
-  code: string,
-  isSubscribed: boolean
-}
+import { toast } from 'react-toastify';
+import { IClub } from '../../interfaces/interfaces';
+import "./Clubs.scss";
 
 const Clubs = () => {
   const [clubs, setClubs] = useState<IClub[]>([])
+  const [filteredClubs, setFilteredClubs] = useState<IClub[]>([])
   const [loading, setLoading] = useState(true)
-  // TODO susbcribe and unsusbcribe clubs
-  // const [showModalQuestion, setShowModalQuestion] = useState(false)
-  // const [modalTitle, setModalTitle] = useState("")
-  // const [modalQuestion, setModalQuestion] = useState("")
-  // const [id, setId] = useState("")
-
-  // TODO create club
-  // const [showModalCreate, setShowModalCreate] = useState(false)
+  const [search, setSearch] = useState("")
 
   useEffect(() => {
     getClubs()
@@ -47,49 +31,42 @@ const Clubs = () => {
 
       if (response.status === 200){
         setClubs(data)
-        setLoading(false)
       } 
     } catch (error) {
-        setLoading(false)
+      console.error(error)
+      setLoading(false)
     }
   }
-
-  // const onClickCancelSubscription = (item: IClub): void => {
-  //   setModalTitle("Cancelar suscripción")
-  //   setModalQuestion(`¿Estás seguro que quieres cancelar suscripción de ${item.name}?`)
-  //   openModal(item.clubId)
-  // }
-
-  // const onClickSubscription = (item: IClub): void => {
-  //   setModalTitle("Suscribir")
-  //   setModalQuestion(`¿Estás seguro que quieres suscribir a ${item.name}?`)
-  //   openModal(item.clubId)
-  // }
-
-  // const openModal = (id: string): void => {
-  //   setId(id)
-  //   setShowModalQuestion(true)
-  // }
-
-  // const handleModalAccept = () => {
-  //   setShowModalQuestion(false)
-  // }
 
   const copyClipboard = (code: string): void => {
     navigator.clipboard.writeText(code)
     toast.info("Copiado en el portapapeles!")
   }
 
-  // const dismissCreateModal = (event: boolean) => {
-  //   if(event) getClubs();
-  //   setShowModalCreate(false)
-  // }
+  // filter
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      setFilteredClubs(
+        clubs.filter((item) => item.name.toUpperCase().includes(search.toUpperCase()))
+      )
+      setLoading(false)
+    }, 1000)
+    return () => clearTimeout(delayDebounceFn)
+  }, [search, clubs]);
 
-  const clubTable = clubs.map( (item) => {
+  const onChangeSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    setSearch(e.target.value);
+  }
+
+  const clubTable = filteredClubs.map( (item) => {
     return (
       <tr key={item.clubId}>
         <td>
           {item.name}
+        </td>
+        <td className='text-center'>
+          {item.symbol}
         </td>
         <td className='text-center'>
           {item.code?
@@ -111,16 +88,6 @@ const Clubs = () => {
             <FontAwesomeIcon className='circle' icon={faCircle} />
           }
         </td>
-        {/* <td className='text-center'>
-          {item.isSubscribed? 
-            <Button variant="dark" onClick={() => onClickCancelSubscription(item)}>
-              Cancelar suscripción
-            </Button>: 
-            <Button variant="warning" onClick={() => onClickSubscription(item)}>
-              Suscribir
-            </Button>
-          }
-        </td> */}
       </tr>
     )
   })
@@ -130,14 +97,25 @@ const Clubs = () => {
       <div className='clubs-container'>
         <div className='d-flex justify-content-between'>
           <h1>
+            <FontAwesomeIcon icon={faTableTennis} /> 
             Clubes
           </h1>
-          {/* <div className='me-5'>
-            <Button className='mt-5' variant="primary" onClick={() => setShowModalCreate(true)}>
-              <FontAwesomeIcon icon={faPlus} className='me-1' />
-              Crear temporada
-            </Button>
-          </div> */}
+        </div>
+
+        <div className="filter-container">
+          <InputGroup className="search">
+            <InputGroup.Text id="searchBar">
+              <FontAwesomeIcon icon={faSearch} />
+            </InputGroup.Text>
+            <Form.Control
+              placeholder="Buscar por nombre..."
+              aria-label="search"
+              aria-describedby="searchBar"
+              className="input-search"
+              value={search}
+              onChange={onChangeSearch}
+            />
+          </InputGroup>
         </div>
 
         <Card>
@@ -148,38 +126,37 @@ const Clubs = () => {
                   Nombre
                 </th>
                 <th className='text-center'>
+                  Símbolo
+                </th>
+                <th className='text-center'>
                   Código
                 </th>
                 <th className='text-center'>
                   Suscripción
                 </th>
-                {/* <th className='text-center'>
-                  Manejar suscripción
-                </th> */}
               </tr>
             </thead>
 
-            <tbody className='mt-3'>
-              {loading? 
-                <FontAwesomeIcon className='center mt-5' icon={faCircleNotch} spin />:
-                <div>
-                  {clubTable}
-                </div>
+            <tbody>
+              {filteredClubs && clubTable}
+              {loading && 
+                <tr className="text-center mt-3" >
+                  <td>
+                    <FontAwesomeIcon className='center mt-5' icon={faCircleNotch} spin />
+                  </td>
+                </tr>
+              }
+              {filteredClubs.length === 0 && !loading && 
+                <tr className="text-center mt-3" >
+                  <td>
+                    No hay resultados
+                  </td>
+                </tr>
               }
             </tbody>
           </Table>
         </Card>
       </div>
-
-      {/* {showModalQuestion && 
-        <ModalQuestion 
-            title={modalTitle}
-            question={modalQuestion}
-            dismiss={() => setShowModalQuestion(false)} 
-            accept={() => handleModalAccept()}
-        />} */}
-      {/* TODO Create Club */}
-      {/* {showModalCreate && <CreateClub dismiss={dismissCreateModal} />}  */}
     </>
   )
 }

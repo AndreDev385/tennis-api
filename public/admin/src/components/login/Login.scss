@@ -16,11 +16,11 @@
 }
 
 .login-img-wrap{
-    background: linear-gradient(0deg, rgba(47, 47, 47, 0.3), rgba(0, 0, 0, 0.3)), url("src/assets/img/tennis-login.jpg");
+    background: linear-gradient(0deg, rgba(47, 47, 47, 0.3), rgba(0, 0, 0, 0.3)), url("/tennis-login.jpg");
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
-    h1{
+    h2{
         color: #fff;
         position: absolute;
         bottom: 3rem;
@@ -33,7 +33,7 @@
     
     .login-img-wrap{
         background: none;
-        h1{
+        h2{
             display: none;
         }
     }

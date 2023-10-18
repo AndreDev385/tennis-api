@@ -2,9 +2,8 @@ import { faCircleNotch, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
-import { IClub } from "../../clubs/Clubs";
 import { toast } from "react-toastify";
-import { INews } from "../News";
+import { IClub, INews } from "../../../interfaces/interfaces";
 
 interface ICreateNewsProps {
     dismiss: (event: boolean) => void;
@@ -13,7 +12,7 @@ interface ICreateNewsProps {
 
 const CreateNews = ({dismiss, clubs}: ICreateNewsProps) => {
     const [form, setForm] = useState<INews>({
-        adId: "",
+        clubEventId: "",
         clubId: "",
         link: "",
         image: ""

@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { BaseController } from "../../../../shared/infra/http/models/BaseController";
 import { FeatureCouples } from "./featureCouples";
 import { AppError } from "../../../../shared/core/AppError";
+import { Result } from "../../../../shared/core/Result";
 
 export class FeatureCouplesController extends BaseController {
 
@@ -19,7 +20,9 @@ export class FeatureCouplesController extends BaseController {
             const error = result.value;
             switch (error.constructor) {
                 case AppError.UnexpectedError:
-                    return this.fail(res, error.getErrorValue().message)
+                    return this.fail(res, (error as AppError.UnexpectedError).getErrorValue().message)
+                default:
+                    return this.fail(res, (error as Result<string>).getErrorValue())
             }
         }
 

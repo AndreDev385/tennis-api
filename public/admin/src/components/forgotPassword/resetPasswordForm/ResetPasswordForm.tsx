@@ -91,11 +91,11 @@ const ResetPasswordForm = ({code}: IResetPasswordFormProps) => {
 
   return (
     <div className="forgot-pwd-container">
-      <img src="/src/assets/img/resetPassword.svg" />
+      <img src="/resetPassword.svg" />
       <div>
-        <h1>
+        <h2>
             Cambiar contraseña
-        </h1>
+        </h2>
 
         <Form>
           <Form.Group 

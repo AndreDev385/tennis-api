@@ -63,9 +63,9 @@ const EmailForm = ( { onSubmit, email, setEmail }: IEmailFormProps ) => {
             <img src="/src/assets/img/forgot-password-person.svg" />
             
             <div>
-                <h1>
+                <h2>
                     ¿Olvidaste tu contraseña?
-                </h1>
+                </h2>
                 <h6>
                     Te enviaremos un código de verificación a tu correo electrónico para verificar tu identidad
                 </h6>

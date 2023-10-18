@@ -7,10 +7,18 @@ import Seasons from './components/seasons/Seasons'
 import News from './components/news/News'
 import Ads from './components/ads/Ads'
 import Trackers from './components/trackers/Trackers'
-import Stats from './components/stats/Stats'
 import Admins from './components/admins/Admins'
 import DeleteAccount from './components/deleteAccount/DeleteAccount'
+import Teams from './components/teams/Teams'
+import Results from './components/results/Results'
+import Players from './components/players/Players'
+import Ranking from './components/ranking/Ranking'
+import Stats from './components/teams/stats/Stats'
+import PlayerStats from './components/players/playerStats/PlayerStats'
+
 import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
+import Games from './components/results/games/Games'
 
 const router = createBrowserRouter([
     {
@@ -49,14 +57,38 @@ const router = createBrowserRouter([
                 element: <Trackers />
             },
             {
-                path: "/stats",
-                element: <Stats />
+                path: "/teams",
+                element: <Teams />
+            },
+            {
+                path: "/results",
+                element: <Results />
+            },
+            {
+                path: "/players",
+                element: <Players />
             },
             {
                 path: "/admins",
                 element: <Admins />
-            }
-        ]
+            },
+            {
+                path: '/ranking',
+                element: <Ranking />
+            },
+        ],
+    },
+    {
+        path: '/teams/stats/:id',
+        element: <Stats />
+    },
+    {
+        path: '/players/stats/:id',
+        element: <PlayerStats />
+    },
+    {
+        path: '/results/match/:id',
+        element: <Games />
     }
 ])
 

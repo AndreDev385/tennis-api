@@ -1,8 +1,4 @@
 .clubs-container{
-    h1{
-        margin: 2rem;
-    }
-
     .copy{
         color: #3e3e3e;
         margin-left: .5rem;
@@ -19,5 +15,10 @@
 
     button{
         width: 12rem;
+    }
+
+    .filter-container{
+        margin: 1rem 3rem;
+        width: 40%;
     }
 }
