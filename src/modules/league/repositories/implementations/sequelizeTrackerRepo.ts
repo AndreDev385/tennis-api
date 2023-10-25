@@ -83,4 +83,10 @@ export class SequelizeTrackerRepository implements TrackerRepository {
             rivalPointsWinnedSecondReturn: raw.rivalPointsWinnedSecondReturn,
         });
     }
+
+    async delete(matchId: string): Promise<void> {
+        const TrackerModel = this.models.TrackerModel;
+
+        await TrackerModel.destroy({ where: { matchId } })
+    }
 }

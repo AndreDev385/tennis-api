@@ -25,6 +25,8 @@ const TrackerModel = sequelize.define(
             type: DataTypes.UUID,
             allowNull: false,
             primaryKey: true,
+            onDelete: "CASCADE",
+            onUpdate: "CASCADE",
             references: {
                 model: "match",
                 key: "matchId",
@@ -146,6 +148,7 @@ TrackerModel.belongsTo(MatchModel, {
     foreignKey: "matchId",
     targetKey: "matchId",
     as: "Match",
+    onDelete: "CASCADE"
 });
 
 export { TrackerModel };

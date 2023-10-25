@@ -11,4 +11,5 @@ export interface MatchRepository {
     list(query: MatchQuery): Promise<Array<Match>>;
     getMatchById(matchId: string): Promise<Match>;
     getMatchsByClashId(clashId: string): Promise<Array<Match>>;
+    delete(matchId: string): Promise<void>;
 }
