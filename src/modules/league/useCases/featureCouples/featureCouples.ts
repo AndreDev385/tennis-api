@@ -93,6 +93,7 @@ export class FeatureCouples implements UseCase<any, any> {
 
 
 function updateCoupleRecord(records: FeatureCoupleRecords, tracker: MatchTracker) {
+    if (!tracker.me || !tracker.partner) return;
     const coupleId = `${tracker.me.playerId.id.toString()} ${tracker.partner.playerId.id.toString()}`;
 
     const [playerId, partnerId] = coupleId.split(" ");
