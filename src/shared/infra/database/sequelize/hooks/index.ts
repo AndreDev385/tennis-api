@@ -3,7 +3,6 @@ import { DomainEvents } from '../../../../domain/events/DomainEvents';
 import models from '../models';
 
 export const dispatchEventsCallback = (model: any, primaryKeyField: string) => {
-    console.log(model)
     const aggregateId = new UniqueEntityID(model[primaryKeyField]);
     DomainEvents.dispatchEventsForAggregate(aggregateId);
 }
