@@ -199,4 +199,20 @@ export class SequelizeMatchRepository implements MatchRepository {
 
         return matchs;
     }
+
+    async delete(matchId: string): Promise<void> {
+        const MatchModel = this.models.MatchModel;
+
+        const exist = await MatchModel.findOne({ where: { matchId } })
+
+        console.log("EXIST", exist);
+
+        if (!!exist == false) {
+            throw new Error("Partido no encontrado");
+        }
+
+        await this.trackerRepo.delete(matchId);
+
+        await MatchModel.destroy({ where: { matchId } });
+    }
 }

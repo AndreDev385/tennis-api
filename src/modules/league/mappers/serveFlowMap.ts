@@ -64,7 +64,8 @@ export class DoubleServeFlowMap implements Mapper<DoubleServeFlow> {
             secondGameFlow: flow.secondGameFlow.value,
             thirdGameFlow: flow.thirdGameFlow.value,
             fourGameFlow: flow.fourGameFlow.value,
-            order: flow.order.getItems().map((flow) => flow.value)
+            order: flow.order.getItems().map((flow) => flow.value),
+            tiebreakFirstPointDone: flow.tiebreakFirstPointDone,
         }
     }
 
@@ -107,7 +108,8 @@ export class DoubleServeFlowMap implements Mapper<DoubleServeFlow> {
             secondGameFlow,
             thirdGameFlow,
             fourGameFlow,
-            order: order.getValue()
+            order: order.getValue(),
+            tiebreakFirstPointDone: obj.tiebreakFirstPointDone ?? false,
         })
 
         flowOrError.isFailure && console.log(flowOrError.getErrorValue())

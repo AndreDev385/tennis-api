@@ -177,4 +177,23 @@ export class SequelizeClashRepo implements ClashRepository {
         return result;
     }
 
+    async delete(clashId: string): Promise<void> {
+        const ClashModel = this.models.ClashModel;
+
+        const exist = await ClashModel.findOne({ where: { clashId } })
+
+        if (!!exist == false) {
+            throw new Error("El encuentro no existe");
+        }
+
+        const matches = await this.matchRepo.getMatchsByClashId(exist.clashId);
+
+        if (matches.length > 0) {
+            for (const match of matches) {
+                await this.matchRepo.delete(match.matchId.id.toString());
+            }
+        }
+
+        await ClashModel.destroy({ where: { clashId } })
+    }
 }

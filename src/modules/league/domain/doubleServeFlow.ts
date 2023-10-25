@@ -62,6 +62,7 @@ interface DoubleServeFlowProps {
     thirdGameFlow: ServiceFlow;
     fourGameFlow: ServiceFlow;
     order: ServiceOrder;
+    tiebreakFirstPointDone: boolean;
 }
 
 export class DoubleServeFlow extends ValueObject<DoubleServeFlowProps> {
@@ -106,6 +107,9 @@ export class DoubleServeFlow extends ValueObject<DoubleServeFlowProps> {
     }
     get initialTeam(): number {
         return this.props.initialTeam;
+    }
+    get tiebreakFirstPointDone(): boolean {
+        return this.props.tiebreakFirstPointDone;
     }
 
     private constructor(props: DoubleServeFlowProps) {
