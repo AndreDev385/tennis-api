@@ -20,4 +20,5 @@ export interface ClashRepository {
     getClashById(id: string): Promise<Clash>;
     list(filters: ClashQuery): Promise<Array<Clash>>;
     paginate(filters: ClashQuery, pagination: PaginateQuery): Promise<any>;
+    delete(clashId: string): Promise<void>;
 }

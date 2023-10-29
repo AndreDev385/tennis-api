@@ -95,8 +95,6 @@ const MatchModel = sequelize.define(
     { tableName: "match" }
 );
 
-//MatchModel.afterUpdate(() => dispatchEventsCallback(MatchModel, 'matchId'))
-
 MatchModel.belongsTo(ClashModel, {
     foreignKey: "clashId",
     targetKey: "clashId",

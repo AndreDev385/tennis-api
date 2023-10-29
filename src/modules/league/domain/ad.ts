@@ -44,7 +44,7 @@ export class Ad extends AggregateRoot<AdsProps> {
             return Result.fail<Ad>(guardResult.getErrorValue());
         }
 
-        const isNew = !id === false;
+        const isNew = !!id === false;
 
         const ad = new Ad(props, id);
 

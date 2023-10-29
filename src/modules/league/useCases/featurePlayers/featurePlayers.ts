@@ -79,6 +79,9 @@ export class FeaturePlayers implements UseCase<FeaturePlayersRequest, any> {
 }
 
 function updatePlayerRecord(records: FeaturePlayersRecords, playerStats: PlayerTracker) {
+    if (!!playerStats == false) {
+        return;
+    }
     if (!records[playerStats.playerId.id.toString()]) {
         records[playerStats.playerId.id.toString()] = {
             meshPointsWon: playerStats.meshPointsWon,
