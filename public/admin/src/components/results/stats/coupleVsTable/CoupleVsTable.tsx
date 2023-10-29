@@ -6,15 +6,15 @@ import Rally from "./stats/Rally"
 import Return from "./stats/Return"
 import Service from "./stats/Service"
 
-const CoupleVsTable = ({tracker, mode, playerVsPlayer}: IPropsTable) => {
+const CoupleVsTable = ({tracker, playerVsPlayer}: IPropsTable) => {
   return (
     <> 
-      <Service tracker={tracker} mode={mode} playerVsPlayer={playerVsPlayer}/>
-      <Return tracker={tracker} mode={mode} playerVsPlayer={playerVsPlayer} />
-      <Points tracker={tracker} mode={mode} playerVsPlayer={playerVsPlayer}/>
-      {!playerVsPlayer && <Games tracker={tracker}  mode={mode} playerVsPlayer={playerVsPlayer}/>}
-      <BallInGame tracker={tracker} mode={mode} playerVsPlayer={playerVsPlayer}/>
-      {!playerVsPlayer && <Rally tracker={tracker} mode={mode} playerVsPlayer={playerVsPlayer}/>}
+      <Service tracker={tracker} playerVsPlayer={playerVsPlayer}/>
+      <Return tracker={tracker} playerVsPlayer={playerVsPlayer} />
+      <Points tracker={tracker} playerVsPlayer={playerVsPlayer}/>
+      {!playerVsPlayer && <Games tracker={tracker}  playerVsPlayer={playerVsPlayer}/>}
+      <BallInGame tracker={tracker} playerVsPlayer={playerVsPlayer}/>
+      {!playerVsPlayer && <Rally tracker={tracker} playerVsPlayer={playerVsPlayer}/>}
     </>
   )
 }

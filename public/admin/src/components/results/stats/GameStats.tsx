@@ -10,14 +10,12 @@ import './GameStats.scss'
 
 export interface IPropsTable {
   tracker: ISetStats
-  mode: "single" | "double"
   playerVsPlayer: boolean
 }
 
 const GameStats = () => {
   const [stats, setStats] = useState<IMatch>()
   const [playerVsPlayer, setPlayerVsPlayer] = useState(false)
-  const [loading, setLoading] = useState(false)
   const token: string = localStorage.getItem('authorization') || '';
   const { matchId } = useParams()
   const requestOptions = {
@@ -33,8 +31,6 @@ const GameStats = () => {
   }, [matchId]);
 
   const getStats = async () => {
-    setLoading(true)
-    
     const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/match/` + matchId
 
     try{
@@ -44,7 +40,6 @@ const GameStats = () => {
       if (response.status === 200){
         if(data && data.mode === "single") {setPlayerVsPlayer(true)}
         setStats(data)
-        setLoading(false)
       } 
     } catch (error) {
       console.error(error)
@@ -103,9 +98,9 @@ const GameStats = () => {
             </tr>
           </thead>
 
-          {stats?.mode === "double" && <CoupleVsTable tracker={stats.tracker} mode={stats.mode} playerVsPlayer={playerVsPlayer} />}
+          {stats?.mode === "double" && <CoupleVsTable tracker={stats.tracker} playerVsPlayer={playerVsPlayer} />}
 
-          {stats?.mode === "single" && <AdvancedTable tracker={stats.tracker} mode={stats.mode} playerVsPlayer={playerVsPlayer} />}
+          {stats?.mode === "single" && <AdvancedTable tracker={stats.tracker} playerVsPlayer={playerVsPlayer} />}
         </Table>
       </Card>}
     </div>

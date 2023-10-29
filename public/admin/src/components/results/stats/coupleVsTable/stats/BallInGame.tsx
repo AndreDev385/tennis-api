@@ -1,7 +1,7 @@
 import { IPropsTable } from '../../GameStats'
 import '../../GameStats.scss'
 
-const BallInGame = ({tracker, mode, playerVsPlayer}: IPropsTable) => {
+const BallInGame = ({tracker, playerVsPlayer}: IPropsTable) => {
   return (
     <>
         <div className="title">
