@@ -62,6 +62,14 @@ export interface IUser {
     lastName: string
 }
 
+
+export interface IUserPlayer {
+    playerId: string;
+    clubId: string;
+    user: IUser;
+    fullName: string;
+}
+
 export interface IStatsId extends IStats {
     journey: string
     seasonId: string
@@ -187,7 +195,7 @@ export interface ISetStats {
     partner?: ISetStatsIndiv
 }
 
-interface ISetStatsIndiv {
+export interface ISetStatsIndiv {
     aces: number
     bckgPointsLost: number
     bckgPointsWon: number

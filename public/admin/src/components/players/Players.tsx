@@ -2,40 +2,46 @@ import { faBaseballBall, faChartBar, faCircleNotch, faSearch } from "@fortawesom
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Button, Card, Form, InputGroup, Table } from "react-bootstrap"
 import { useEffect, useState } from "react";
-import { IUser } from "../../interfaces/interfaces";
+import { IClub, IUserPlayer } from "../../interfaces/interfaces";
 import { useNavigate } from "react-router";
 import './Players.scss'
 
 const Players = () => {
-  const [players, setPlayers] = useState<IUser[]>([])
-  const [filteredPlayers, setFilteredPlayers] = useState<IUser[]>([])
+  const [players, setPlayers] = useState<IUserPlayer[]>([])
+  const [filteredPlayers, setFilteredPlayers] = useState<IUserPlayer[]>([])
+  const [selectedClub, setSelectedClub] = useState('')
+  const [clubs, setClubs] = useState<IClub[]>([])
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(true)
   const token: string = localStorage.getItem('authorization') || '';
   const navigate = useNavigate();
+  const requestOptions = {
+    method: 'GET',
+    headers: { 
+      'Content-Type': 'application/json',
+      'Authorization': token
+    }
+  };
   
   useEffect(() => {
     getPlayers()
+    getClubs()
   }, []);
 
   const getPlayers = async () => {
     setLoading(true)
-    const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/users?isPlayer=true`
-    const requestOptions = {
-      method: 'GET',
-      headers: { 
-        'Content-Type': 'application/json',
-        'Authorization': token
-      }
-    };
-
+    const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/player`
     try{
       const response = await fetch(url, requestOptions)
       
       const data = await response.json()
 
       if (response.status === 200){
-        setPlayers(data)
+        const fullNameData = data.map( (item: IUserPlayer) => {
+          item.fullName = item.user.firstName + ' ' + item.user.lastName
+          return item
+        })
+        setPlayers(fullNameData)
       } 
     } catch (error) {
       console.error(error)
@@ -43,38 +49,66 @@ const Players = () => {
     }
   }
 
-  // filter
+  const getClubs = async () => {
+    const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/club`
+    try{
+      const response = await fetch(url, requestOptions)
+      const data = await response.json()
+      if (response.status === 200){
+        setClubs(data)
+      } 
+    } catch (error) {
+    }
+  }
+
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
-      setFilteredPlayers(
-        players.filter((item) => item.firstName.toUpperCase().includes(search.toUpperCase()) || item.lastName.toUpperCase().includes(search.toUpperCase()))
-      )
+      if(selectedClub){
+        setFilteredPlayers(
+          players.filter((item) => (item.fullName.toUpperCase().includes(search.toUpperCase()) && 
+          selectedClub === item.clubId))
+        )
+      } else {
+        setFilteredPlayers(
+          players.filter((item) => item.fullName.toUpperCase().includes(search.toUpperCase()))
+        )
+      }
       setLoading(false)
     }, 1000)
 
     return () => clearTimeout(delayDebounceFn)
-  }, [search, players]);
+  }, [search, selectedClub, players]);
 
   const onChangeSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setSearch(e.target.value);
   }
 
+  const onChangeClub = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    e.preventDefault();
+    setSelectedClub(e.target.value);
+  }
+
+  const onReset = () => {
+    setSelectedClub('')
+    setSearch('')
+  }
+
   const goToStats = (id: string) => {
-    navigate(`stats/${id}`)
+    navigate(`${id}`)
   }
 
   const playersTable = filteredPlayers.map( (item) => {
     return (
-      <tr key={item.userId}>
+      <tr key={item.playerId}>
         <td className="text-center">
-          {item.firstName}{' '}{item.lastName}
+          {item.user.firstName}{' '}{item.user.lastName}
         </td>
         <td className="text-center">
-          {item.email}
+          {clubs.filter(club => club.clubId === item.clubId)[0]? clubs.filter(club => club.clubId === item.clubId)[0].symbol: "-"}
         </td>
         <td className='text-center'>
-          <Button variant="primary" onClick={() => goToStats(item.userId)}>
+          <Button variant="primary" onClick={() => goToStats(item.user.userId)}>
             <FontAwesomeIcon icon={faChartBar} />
             Estadísticas
           </Button>
@@ -107,6 +141,17 @@ const Players = () => {
               onChange={onChangeSearch}
             />
           </InputGroup>
+
+          <Form.Select onChange={onChangeClub} value={selectedClub} aria-label="Filtrar por clubes">
+            <option value="" disabled>Filtrar por clubes</option>
+            {clubs.map(item => {
+              return <option key={item.clubId} value={item.clubId}>{item.symbol}</option>
+            })}
+          </Form.Select>
+
+          <Button onClick={onReset} variant="secondary">
+             Limpiar filtro
+          </Button>
         </div>
 
         <Card>
@@ -117,7 +162,7 @@ const Players = () => {
                   Nombre
                 </th>
                 <th className="text-center">
-                  Email
+                  Club
                 </th>
                 <th className="text-center">
                   Ver estadísticas

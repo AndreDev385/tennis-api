@@ -1,0 +1,19 @@
+.player-stats-container{
+    .title{
+        span{
+            background-color: #011755;
+            color: #fff;
+            text-align: center;
+            display: block;
+        }
+    }
+
+    .filter-container{
+        margin: 1rem 3rem;
+        width: 15%;
+    }
+
+    tbody{
+        height: auto !important;
+    }
+}
