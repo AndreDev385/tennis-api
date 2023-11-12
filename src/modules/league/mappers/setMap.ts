@@ -109,6 +109,10 @@ export class SetMap implements Mapper<Set> {
             myGames: set.myGames,
             rivalGames: set.rivalGames,
             setWon: set.setWon,
+            tiebreak: set.tiebreak,
+            superTiebreak: set.superTiebreak,
+            myTiebreakPoints: set.myTiebreakPoints,
+            rivalTiebreakPoints: set.rivalTiebreakPoints,
             stats: this.statsToDto(set.stats),
         };
 
