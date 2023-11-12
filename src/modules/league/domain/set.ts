@@ -6,6 +6,10 @@ import { SetStats } from "./setStats";
 interface SetProps {
     myGames: number;
     rivalGames: number;
+    tiebreak: boolean;
+    superTiebreak: boolean;
+    myTiebreakPoints: number;
+    rivalTiebreakPoints: number;
     setWon: boolean | null;
     stats: SetStats | null;
 }
@@ -27,12 +31,37 @@ export class Set extends ValueObject<SetProps> {
         return this.props.stats;
     }
 
+    get tiebreak(): boolean {
+        return this.props.tiebreak;
+    }
+
+    get superTiebreak(): boolean {
+        return this.props.superTiebreak;
+    }
+
+    get myTiebreakPoints(): number {
+        return this.props.myTiebreakPoints;
+    }
+
+    get rivalTiebreakPoints(): number {
+        return this.props.rivalTiebreakPoints;
+    }
+
     private constructor(props: SetProps) {
         super(props);
     }
 
     public static createDefaultLeague(): Set {
-        return new Set({ myGames: 0, rivalGames: 0, setWon: null, stats: null });
+        return new Set({
+            myGames: 0,
+            rivalGames: 0,
+            setWon: null,
+            stats: null,
+            tiebreak: false,
+            superTiebreak: false,
+            myTiebreakPoints: 0,
+            rivalTiebreakPoints: 0,
+        });
     }
 
     public static create(props: SetProps): Result<Set> {
@@ -48,7 +77,11 @@ export class Set extends ValueObject<SetProps> {
         const set = new Set({
             ...props,
             setWon: props.setWon ?? null,
-            stats: props.stats ?? null
+            stats: props.stats ?? null,
+            tiebreak: props.tiebreak ?? false,
+            superTiebreak: props.superTiebreak ?? false,
+            myTiebreakPoints: props.myTiebreakPoints ?? 0,
+            rivalTiebreakPoints: props.rivalTiebreakPoints ?? 0,
         });
 
         return Result.ok<Set>(set);

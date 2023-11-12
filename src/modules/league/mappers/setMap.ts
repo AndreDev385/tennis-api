@@ -115,7 +115,7 @@ export class SetMap implements Mapper<Set> {
         return JSON.stringify(object);
     }
 
-    public static toDomain(raw: any): Set {
+    public static toDomain(raw: SetDto | string): Set {
         let object: any;
         if (typeof raw == 'string') {
             object = JSON.parse(raw);
@@ -127,6 +127,10 @@ export class SetMap implements Mapper<Set> {
             setWon: object.setWon,
             myGames: object.myGames,
             rivalGames: object.rivalGames,
+            tiebreak: object.tiebreak ?? false,
+            superTiebreak: object.superTiebreak ?? false,
+            myTiebreakPoints: object.myTiebreakPoints ?? 0,
+            rivalTiebreakPoints: object.rivalTiebreakPoints ?? 0,
             stats: this.statsToDomain(object.stats),
         });
 
@@ -140,6 +144,10 @@ export class SetMap implements Mapper<Set> {
             myGames: set.myGames,
             rivalGames: set.rivalGames,
             setWon: set.setWon,
+            tiebreak: set.tiebreak,
+            superTiebreak: set.superTiebreak,
+            myTiebreakPoints: set.myTiebreakPoints,
+            rivalTiebreakPoints: set.rivalTiebreakPoints,
             stats: this.statsToDto(set.stats),
         };
     }
