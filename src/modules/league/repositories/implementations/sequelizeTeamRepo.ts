@@ -76,6 +76,7 @@ export class SequelizeTeamRepository implements TeamRepository {
 
         const query = this.baseQuery();
         query.where["clubId"] = clubId;
+        query.where["isDeleted"] = false;
 
         const rawList = await TeamModel.findAll(query);
 
@@ -87,12 +88,25 @@ export class SequelizeTeamRepository implements TeamRepository {
 
         const baseQuery = this.baseQuery();
         baseQuery.where = query;
-
-        console.log(baseQuery);
+        baseQuery.where["isDeleted"] = false;
 
         const rawList = await TeamModel.findAll(baseQuery);
 
         return rawList.map((team: any) => TeamMap.toDomain(team));
+    }
+
+    async delete(teamId: string): Promise<void> {
+        const TeamModel = this.models.TeamModel;
+
+        const exist = await TeamModel.findOne({ where: { teamId } });
+
+        if (!!exist == false) {
+            throw new Error("Equipo no encontrado");
+        }
+
+        const raw = TeamMap.toPersistance(exist);
+
+        await TeamModel.update(raw, { where: { teamId } });
     }
 
 }

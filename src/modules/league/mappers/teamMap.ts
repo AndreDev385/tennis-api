@@ -11,6 +11,7 @@ export class TeamMap implements Mapper<Team> {
             teamId: team.teamId.id.toString(),
             clubId: team.club.clubId.id.toString(),
             categoryId: team.category.categoryId.id.toString(),
+            isDeleted: team.isDeleted,
             name: team.name,
         };
     }
@@ -24,6 +25,7 @@ export class TeamMap implements Mapper<Team> {
                 club,
                 name: raw.name,
                 category,
+                isDeleted: raw.isDeleted,
             },
             new UniqueEntityID(raw.teamId)
         );
@@ -39,7 +41,7 @@ export class TeamMap implements Mapper<Team> {
             teamId: team.teamId.id.toString(),
             name: team.name,
             club: ClubMap.toDto(team.club, false),
-            category: CategoryMap.toDto(team.category)
+            category: CategoryMap.toDto(team.category),
         };
     }
 }

@@ -30,6 +30,11 @@ const TeamModel = sequelize.define(
                 key: "categoryId",
             }
         },
+        isDeleted: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false,
+        },
         name: {
             type: DataTypes.STRING,
             allowNull: false,
