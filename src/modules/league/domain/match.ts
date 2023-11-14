@@ -136,8 +136,10 @@ export class Match extends AggregateRoot<MatchProps> {
         this.addDomainEvent(new MatchGoesLive(this));
     }
 
-    public pauseMatch(tracker: MatchTracker) {
+    public pauseMatch(tracker: MatchTracker, sets: Sets, superTieBreak: boolean) {
+        this.props.superTieBreak = superTieBreak;
         this.props.tracker = tracker;
+        this.props.sets = sets;
         this.props.isLive = false;
         this.props.isPaused = true;
         this.addDomainEvent(new MatchPaused(this));

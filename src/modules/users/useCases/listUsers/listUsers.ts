@@ -27,6 +27,10 @@ export class ListUsers implements UseCase<any, Response> {
                     if (value === 'true') query.canTrack = true;
                     else query.canTrack = false;
                 }
+                if (key == "isPlayer") {
+                    if (value === 'true') query.canTrack = true;
+                    else query.canTrack = false;
+                }
             }
 
             const list = await this.userRepo.list(query);
