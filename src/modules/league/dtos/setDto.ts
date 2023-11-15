@@ -2,6 +2,10 @@ export interface SetDto {
     myGames: number;
     rivalGames: number;
     setWon: boolean;
+    tiebreak: boolean;
+    superTiebreak: boolean;
+    myTiebreakPoints: number;
+    rivalTiebreakPoints: number;
     stats: SetStatsDto;
 }
 

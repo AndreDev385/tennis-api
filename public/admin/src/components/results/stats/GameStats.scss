@@ -1,0 +1,30 @@
+.game-stats-container{
+    .btn-group{
+        display: block;
+        text-align: center;
+    }
+
+    .title{
+        background-color: #011755;
+        span{
+            color: #fff;
+            text-align: center;
+            display: block;
+        }
+    }
+
+    .btn.active{
+        background-color: #011755;
+        border-color: #011755;
+    }
+
+    .card{
+        margin: 2rem;
+        max-height: none !important;
+
+        tbody{
+            height: auto !important;
+        }
+    }
+
+}

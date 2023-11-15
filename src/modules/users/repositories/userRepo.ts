@@ -4,6 +4,7 @@ import { UserEmail } from "../domain/email";
 export interface UserQuery {
     canTrack?: boolean;
     isAdmin?: boolean;
+    isPlayer?: boolean;
 }
 
 export interface UserRepository {

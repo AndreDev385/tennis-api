@@ -13,7 +13,7 @@ import { CategoryRepository } from "../../repositories/categoryRepo";
 import { ClashRepository } from "../../repositories/clashRepo";
 import { ClubRepository } from "../../repositories/clubRepo";
 import { SeasonRepository } from "../../repositories/seasonRepo";
-import { TeamRepository } from "../../repositories/teamRepo";
+import { TeamCreationService } from "../../services/teamCreation";
 import { CreateClashDto } from "./createClashDto";
 import { CreateClashErrors } from "./createClashError";
 
@@ -30,20 +30,20 @@ export class CreateClashUseCase implements UseCase<CreateClashDto, Response> {
     clubRepo: ClubRepository;
     categoryRepo: CategoryRepository;
     seasonRepo: SeasonRepository;
-    teamRepo: TeamRepository;
+    teamCreationServ: TeamCreationService;
 
     constructor(
         clashRepo: ClashRepository,
         clubRepo: ClubRepository,
         categoryRepo: CategoryRepository,
         seasonRepo: SeasonRepository,
-        teamRepo: TeamRepository
+        teamCreationServ: TeamCreationService
     ) {
         this.clashRepo = clashRepo;
         this.clubRepo = clubRepo;
         this.categoryRepo = categoryRepo;
         this.seasonRepo = seasonRepo;
-        this.teamRepo = teamRepo;
+        this.teamCreationServ = teamCreationServ;
     }
 
     async execute(request: CreateClashDto): Promise<Response> {
@@ -77,45 +77,31 @@ export class CreateClashUseCase implements UseCase<CreateClashDto, Response> {
                 return left(new AppError.NotFoundError(error));
             }
 
-            try {
-                const existTeam1 = await this.teamRepo.getTeam(
-                    request.team1Name,
-                    request.team1ClubId,
-                    request.categoryId,
-                );
-                team1 = existTeam1;
-            } catch (error) {
-                const teamOrError = Team.create({
-                    name: request.team1Name,
-                    club: club1,
-                    category,
-                });
-                if (teamOrError.isFailure) {
-                    return left(Result.fail<string>("Equipo 1 invalido"));
-                }
-                team1 = teamOrError.getValue();
-                await this.teamRepo.save(team1);
+            // team 1
+            const team1Creation = await this.teamCreationServ.execute({
+                teamName: request.team1Name,
+                club: club1,
+                category,
+            })
+
+            if (team1Creation.isLeft()) {
+                return left(Result.fail<string>(team1Creation.value.getErrorValue()))
             }
 
-            try {
-                const existTeam2 = await this.teamRepo.getTeam(
-                    request.team2Name,
-                    request.team2ClubId,
-                    request.categoryId,
-                );
-                team2 = existTeam2;
-            } catch (error) {
-                const teamOrError = Team.create({
-                    name: request.team2Name,
-                    club: club2,
-                    category,
-                });
-                if (teamOrError.isFailure) {
-                    return left(Result.fail<string>("Equipo 1 invalido"));
-                }
-                team2 = teamOrError.getValue();
-                await this.teamRepo.save(team2);
+            team1 = team1Creation.value.getValue();
+
+            // team 2
+            const team2Creation = await this.teamCreationServ.execute({
+                teamName: request.team1Name,
+                club: club2,
+                category,
+            })
+
+            if (team2Creation.isLeft()) {
+                return left(Result.fail<string>(team2Creation.value.getErrorValue()))
             }
+
+            team2 = team2Creation.value.getValue();
 
             const clashOrError = Clash.create({
                 team1,

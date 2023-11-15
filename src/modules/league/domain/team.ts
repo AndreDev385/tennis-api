@@ -1,18 +1,20 @@
 import { Guard } from "../../../shared/core/Guard";
 import { Result } from "../../../shared/core/Result";
-import { Entity } from "../../../shared/domain/Entity";
+import { AggregateRoot } from "../../../shared/domain/AggregateRoot";
 import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
 import { Category } from "./category";
 import { Club } from "./club";
+import { TeamDeleted } from "./events/teamDeleted";
 import { TeamId } from "./teamId";
 
 interface TeamProps {
     name: string;
     club: Club;
     category: Category;
+    isDeleted?: boolean;
 }
 
-export class Team extends Entity<TeamProps> {
+export class Team extends AggregateRoot<TeamProps> {
     get teamId(): TeamId {
         return TeamId.create(this._id).getValue();
     }
@@ -27,6 +29,19 @@ export class Team extends Entity<TeamProps> {
 
     get category(): Category {
         return this.props.category;
+    }
+
+    get isDeleted(): boolean {
+        return this.props.isDeleted;
+    }
+
+    public delete(): void {
+        this.props.isDeleted = true;
+        this.addDomainEvent(new TeamDeleted(this));
+    }
+
+    public restore(): void {
+        this.props.isDeleted = false;
     }
 
     private static validate(value: string): boolean {
@@ -54,7 +69,10 @@ export class Team extends Entity<TeamProps> {
             return Result.fail<Team>("Equipo invalido.");
         }
 
-        const instance = new Team(props, id);
+        const instance = new Team({
+            ...props,
+            isDeleted: props.isDeleted ?? false,
+        }, id);
 
         return Result.ok(instance);
     }

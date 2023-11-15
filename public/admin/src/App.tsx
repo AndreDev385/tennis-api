@@ -19,6 +19,7 @@ import PlayerStats from './components/players/playerStats/PlayerStats'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import Games from './components/results/games/Games'
+import GameStats from './components/results/stats/GameStats'
 
 const router = createBrowserRouter([
     {
@@ -83,12 +84,16 @@ const router = createBrowserRouter([
         element: <Stats />
     },
     {
-        path: '/players/stats/:id',
+        path: '/players/:id',
         element: <PlayerStats />
     },
     {
-        path: '/results/match/:id',
+        path: '/results/:id',
         element: <Games />
+    },
+    {
+        path: '/results/:id/match/:matchId',
+        element: <GameStats />
     }
 ])
 

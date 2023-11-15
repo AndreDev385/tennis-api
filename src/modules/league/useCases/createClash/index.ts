@@ -5,15 +5,15 @@ import {
     sequelizeClashRepo,
     sequelizeClubRepo,
     sequelizeSeasonRepo,
-    sequelizeTeamRepo,
 } from "../../repositories/";
+import { sequelizeTeamCreation } from "../../services";
 
 const createClashUseCase = new CreateClashUseCase(
     sequelizeClashRepo,
     sequelizeClubRepo,
     sequelizeCategoryRepo,
     sequelizeSeasonRepo,
-    sequelizeTeamRepo
+    sequelizeTeamCreation,
 );
 const createClashController = new CreateClashController(createClashUseCase);
 

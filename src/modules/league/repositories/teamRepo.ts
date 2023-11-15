@@ -12,4 +12,5 @@ export interface TeamRepository {
     getById(teamId: string): Promise<Team>;
     listByClubId(clubId: string): Promise<Array<Team>>;
     list(query: TeamQuery): Promise<Array<Team>>;
+    delete(teamId: string): Promise<void>;
 }

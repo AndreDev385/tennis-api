@@ -154,8 +154,6 @@ export class PauseMatch implements UseCase<PauseMatchRequest, Response> {
 
             tracker = trackerOrError.getValue();
 
-            console.log(`isMatchFinish: ${request.matchFinish}`);
-
             const pausedMatchOrError = PausedMatch.create({
                 mode,
                 tracker,
@@ -188,7 +186,7 @@ export class PauseMatch implements UseCase<PauseMatchRequest, Response> {
 
             pausedMatch = pausedMatchOrError.getValue();
 
-            match.pauseMatch(tracker);
+            match.pauseMatch(tracker, sets, request.superTiebreak ?? false);
 
             await this.matchRepo.save(match);
             await this.trackerRepo.save(match.tracker);

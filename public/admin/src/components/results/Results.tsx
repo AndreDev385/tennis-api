@@ -121,7 +121,7 @@ const Results = () => {
   }
 
   const goToGames = (id: string) => {
-    navigate(`match/${id}`)
+    navigate(`${id}`)
   }
 
   const resultsTable = results.map( (item) => {

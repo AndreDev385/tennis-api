@@ -10,6 +10,7 @@ import { featureCouplesController } from "../../../useCases/featureCouples";
 import { middleware } from "../../../../../shared/infra/http";
 import { sequelizeTeamStatsRepo } from "../../../repositories";
 import { TeamStatsMap } from "../../../mappers/teamStatsMap";
+import { deleteTeamController } from "../../../useCases/deleteTeam";
 
 const teamRouter = express.Router();
 
@@ -49,16 +50,15 @@ teamRouter.get("/feature-couples", (req, res) => featureCouplesController.execut
 
 teamRouter.post("/rankings", async (req, res) => {
 
-    console.log(req.body);
-
     const result = await updateTeamRanking.execute(req.body);
 
     if (result.isLeft()) {
-        console.log(result.value.getErrorValue())
         return res.json({ message: "Error" });
     }
 
     return res.json({ message: "Success" })
 })
+
+teamRouter.delete("/:teamId", middleware.adminAuthenticated(), (req, res) => deleteTeamController.execute(req, res))
 
 export { teamRouter };

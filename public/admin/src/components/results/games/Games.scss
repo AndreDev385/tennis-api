@@ -1,0 +1,33 @@
+.games-container{
+
+    .bold{
+        font-weight: 600;
+    }
+
+    .set{
+        margin-left: 1rem;
+    }
+
+    .players{
+        width: 30rem;
+    }
+
+    h6{
+        margin: 1rem 3rem;
+        svg{
+            color:#16c049ce;
+        }
+    }
+
+    .won{
+        color: #ffca3ace;
+        font-size: .7rem;
+        margin-left: .5rem;
+    }
+
+    button, h6{
+        svg{
+            margin-right: .5rem;
+        }
+    }
+}
