@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { IClub, IUserPlayer } from "../../interfaces/interfaces";
 import { useNavigate } from "react-router";
 import './Players.scss'
+import { VITE_SERVER_URL } from "../../env/env.prod";
 
 const Players = () => {
   const [players, setPlayers] = useState<IUserPlayer[]>([])
@@ -30,7 +31,7 @@ const Players = () => {
 
   const getPlayers = async () => {
     setLoading(true)
-    const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/player`
+    const url = `${VITE_SERVER_URL}/api/v1/player`
     try{
       const response = await fetch(url, requestOptions)
       
@@ -50,7 +51,7 @@ const Players = () => {
   }
 
   const getClubs = async () => {
-    const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/club`
+    const url = `${VITE_SERVER_URL}/api/v1/club`
     try{
       const response = await fetch(url, requestOptions)
       const data = await response.json()

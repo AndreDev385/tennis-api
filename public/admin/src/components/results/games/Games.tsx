@@ -5,6 +5,7 @@ import { Button, Card, Table } from "react-bootstrap"
 import { useNavigate, useParams } from "react-router"
 import { IMatch } from "../../../interfaces/interfaces"
 import './Games.scss'
+import { VITE_SERVER_URL } from "../../../env/env.prod"
 
 const Games = () => {
   const [games, setGames] = useState<IMatch[]>([])
@@ -31,7 +32,7 @@ const Games = () => {
       ...(id && { clashId: id })
     };
     
-    const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/match?` + new URLSearchParams(params)
+    const url = `${VITE_SERVER_URL}/api/v1/match?` + new URLSearchParams(params)
 
     try{
       const response = await fetch(url, requestOptions)

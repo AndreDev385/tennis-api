@@ -8,6 +8,7 @@ import "./Seasons.scss";
 import 'react-toastify/dist/ReactToastify.css';
 import { toast } from "react-toastify";
 import { ISeason } from "../../interfaces/interfaces";
+import { VITE_SERVER_URL } from "../../env/env.prod";
 
 const Seasons = () => {
   const [showModalQuestion, setShowModalQuestion] = useState(false)
@@ -23,7 +24,7 @@ const Seasons = () => {
 
   const getSeasons = async () => {
     setLoading(true)
-    const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/season`
+    const url = `${VITE_SERVER_URL}/api/v1/season`
     const requestOptions = {
       method: 'GET',
       headers: { 
@@ -53,7 +54,7 @@ const Seasons = () => {
   }
 
   const handleEndSeason = async () => {
-    const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/season/finish`
+    const url = `${VITE_SERVER_URL}/api/v1/season/finish`
     const requestOptions = {
         method: 'PUT',
         headers: { 

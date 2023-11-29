@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { toast } from "react-toastify";
 import validator from "validator";
+import { VITE_SERVER_URL } from "../../../env/env.prod";
 
 interface ICreateAdminProps {
     dismiss: (event: boolean) => void;
@@ -80,7 +81,7 @@ const createAdmin = ({dismiss}: ICreateAdminProps) => {
     }
 
     const createAdmin = async () => {
-        const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/users/admin`
+        const url = `${VITE_SERVER_URL}/api/v1/users/admin`
         const requestOptions = {
             method: 'POST',
             headers: { 

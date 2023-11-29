@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { IClub } from '../../interfaces/interfaces';
 import "./Clubs.scss";
+import { VITE_SERVER_URL } from '../../env/env.prod';
 
 const Clubs = () => {
   const [clubs, setClubs] = useState<IClub[]>([])
@@ -18,7 +19,7 @@ const Clubs = () => {
 
   const getClubs = async () => {
     setLoading(true)
-    const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/club`
+    const url = `${VITE_SERVER_URL}/api/v1/club`
     const requestOptions = {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' }

@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap'
 import { toast } from 'react-toastify';
+import { VITE_SERVER_URL } from '../../../env/env.prod';
 
 interface ICreateModalProps {
     dismiss: (event: boolean) => void;
@@ -34,7 +35,7 @@ const CreateModal = ({dismiss}: ICreateModalProps ) => {
     }
 
     const createSeason = async () => {
-        const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/season/`
+        const url = `${VITE_SERVER_URL}/api/v1/season/`
         const requestOptions = {
             method: 'POST',
             headers: { 

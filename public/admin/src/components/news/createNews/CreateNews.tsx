@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { IClub, INews } from "../../../interfaces/interfaces";
+import { VITE_SERVER_URL } from "../../../env/env.prod";
 
 interface ICreateNewsProps {
     dismiss: (event: boolean) => void;
@@ -59,7 +60,7 @@ const CreateNews = ({dismiss, clubs}: ICreateNewsProps) => {
     }
 
     const createNews = async () => {
-        const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/event`
+        const url = `${VITE_SERVER_URL}/api/v1/event`
         
         let formData = new FormData();
         formData.append("clubId", form.clubId)

@@ -5,6 +5,7 @@ import { Button, Form } from "react-bootstrap"
 import validator from "validator";
 import './EmailForm.scss'
 import { toast } from "react-toastify";
+import { VITE_SERVER_URL } from "../../../env/env.prod";
 
 interface IEmailFormProps {
     onSubmit: () => void;
@@ -31,7 +32,7 @@ const EmailForm = ( { onSubmit, email, setEmail }: IEmailFormProps ) => {
     }
 
     const sendVerificationCode = async () => {
-        const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/users/forget-password`
+        const url = `${VITE_SERVER_URL}/api/v1/users/forget-password`
         const requestOptions = {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },

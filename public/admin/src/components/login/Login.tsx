@@ -8,6 +8,7 @@ import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router';
 import './Login.scss'
 import { toast } from 'react-toastify';
+import { VITE_SERVER_URL } from '../../env/env.prod';
 
 const Login = () => {
 
@@ -34,7 +35,7 @@ const Login = () => {
   };
 
   const login = async () => {
-    const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/users/login`
+    const url = `${VITE_SERVER_URL}/api/v1/users/login`
     const requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

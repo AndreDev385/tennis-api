@@ -1,0 +1,1 @@
+export const VITE_SERVER_URL = "https://gamemind-app-7ce0a0ff4c64.herokuapp.com";

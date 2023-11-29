@@ -2,6 +2,7 @@ import { Dispatch, SetStateAction, useState } from "react"
 import ReactCodeInput from "react-code-input";
 import { toast } from "react-toastify";
 import './CodeForm.scss'
+import { VITE_SERVER_URL } from "../../../env/env.prod";
 
 interface ICodeFormProps {
     onSubmit: () => void;
@@ -24,7 +25,7 @@ export const CodeForm = ({ email, onSubmit, setCode }: ICodeFormProps) => {
     }
 
     const validateVerificationCode = async (code: string) => {
-        const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/users/validate-password-code`
+        const url = `${VITE_SERVER_URL}/api/v1/users/validate-password-code`
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

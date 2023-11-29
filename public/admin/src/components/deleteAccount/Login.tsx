@@ -4,6 +4,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { Button, Form } from "react-bootstrap"
 import { ToastContainer, toast } from "react-toastify";
 import validator from "validator";
+import { VITE_SERVER_URL } from "../../env/env.prod";
 
 interface ILoginProps {
     setVerified: Dispatch<SetStateAction<boolean>>;
@@ -50,7 +51,7 @@ const Login = ({setVerified, setToken}: ILoginProps) => {
 
     const login = async () => {
         try{
-            const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/users/login`
+            const url = `${VITE_SERVER_URL}/api/v1/users/login`
             
             const response = await fetch(url,{
                 method: "POST",

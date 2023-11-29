@@ -6,6 +6,7 @@ import CreateTrackers from './createTrackers/CreateTrackers';
 import { IUser } from '../../interfaces/interfaces';
 import './Trackers.scss';
 import 'react-toastify/dist/ReactToastify.css';
+import { VITE_SERVER_URL } from '../../env/env.prod';
 
 const Trackers = () => {
   const [showModalCreate, setShowModalCreate] = useState(false)
@@ -21,7 +22,7 @@ const Trackers = () => {
   
   const getTrackers = async (): Promise<void> => {
     setLoading(true)
-    const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/users?canTrack=true`
+    const url = `${VITE_SERVER_URL}/api/v1/users?canTrack=true`
     const requestOptions = {
       method: 'GET',
       headers: { 

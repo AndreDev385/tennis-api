@@ -5,6 +5,7 @@ import { Card, Form, Table } from "react-bootstrap";
 import { useParams } from "react-router";
 import './PlayerStats.scss'
 import { ISetStatsIndiv } from "../../../interfaces/interfaces";
+import { VITE_SERVER_URL } from "../../../env/env.prod";
 
 const PlayerStats = () => {
   const [stats, setStats] = useState<ISetStatsIndiv | undefined>(undefined)
@@ -30,7 +31,7 @@ const PlayerStats = () => {
       ...(param === "last3" && { last3: "true" }),
       ...(param === "season" && { season: "true" }),
     };
-    const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/player/stats-by-userid/` + id + "?" + new URLSearchParams(params)
+    const url = `${VITE_SERVER_URL}/api/v1/player/stats-by-userid/` + id + "?" + new URLSearchParams(params)
 
     try{
       const response = await fetch(url, requestOptions)

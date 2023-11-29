@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 import { IClub, INews } from '../../interfaces/interfaces';
 import './News.scss';
 import 'react-toastify/dist/ReactToastify.css';
+import { VITE_SERVER_URL } from '../../env/env.prod';
 
 const News = () => {
   const [showModalDelete, setShowModalDelete] = useState(false)
@@ -25,7 +26,7 @@ const News = () => {
   }, []);
 
   const getClubs = async () => {
-    const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/club`
+    const url = `${VITE_SERVER_URL}/api/v1/club`
     const requestOptions = {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' }
@@ -45,7 +46,7 @@ const News = () => {
   }
 
   const getNews = async () => {
-    const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/event`
+    const url = `${VITE_SERVER_URL}/api/v1/event`
     const requestOptions = {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' }
@@ -89,7 +90,7 @@ const News = () => {
   }
 
   const deleteEvent = async () => {
-    const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/event/${id}`
+    const url = `${VITE_SERVER_URL}/api/v1/event/${id}`
     const requestOptions = {
         method: 'DELETE',
         headers: { 

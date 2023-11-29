@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCircleNotch, faPoll, faTableTennis } from "@fortawesome/free-solid-svg-icons"
 import { Button, Card, Form, Table } from "react-bootstrap"
 import { useNavigate } from "react-router"
+import { VITE_SERVER_URL } from "../../env/env.prod"
 
 const Results = () => {
   const [results, setResults] = useState<IClash[]>([])
@@ -44,7 +45,7 @@ const Results = () => {
       ...(selectedCategory && { categoryId: selectedCategory }),
     };
 
-    const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/clash?` + new URLSearchParams(params)
+    const url = `${VITE_SERVER_URL}/api/v1/clash?` + new URLSearchParams(params)
 
     try{
       const response = await fetch(url, requestOptions)
@@ -60,7 +61,7 @@ const Results = () => {
   }
 
   const getCategories = async () => {
-    const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/categories`
+    const url = `${VITE_SERVER_URL}/api/v1/categories`
     try{
       const response = await fetch(url, requestOptions)
       const data = await response.json()
@@ -73,7 +74,7 @@ const Results = () => {
   }
 
   const getSeasons = async () => {
-    const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/season`
+    const url = `${VITE_SERVER_URL}/api/v1/season`
     try{
       const response = await fetch(url, requestOptions)
       const data = await response.json()
@@ -86,7 +87,7 @@ const Results = () => {
   }
 
   const getJourneys = async () => {
-    const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/utils/journeys`
+    const url = `${VITE_SERVER_URL}/api/v1/utils/journeys`
     try{
       const response = await fetch(url, requestOptions)
       const data = await response.json()
