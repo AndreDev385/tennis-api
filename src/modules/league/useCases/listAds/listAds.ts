@@ -16,7 +16,7 @@ export class ListAds implements UseCase<any, Response> {
 
     async execute(request: any): Promise<Response> {
         try {
-            const query = {}
+            const query: any = {}
             for (const [key, value] of Object.keys(request)) {
                 if (key == 'clubId') {
                     query[key] = value;

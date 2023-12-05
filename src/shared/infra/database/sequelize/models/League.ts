@@ -1,9 +1,14 @@
-import { DataTypes, Sequelize } from "sequelize";
+import { DataTypes, InferAttributes, Model, Sequelize } from "sequelize";
 import config from "../config/config";
 
 const sequelize: Sequelize = config.connection;
 
-const LeagueModel = sequelize.define(
+interface LeagueData extends Model<InferAttributes<LeagueData>> {
+    leagueId: string;
+    name: string;
+}
+
+const LeagueModel = sequelize.define<LeagueData>(
     "league",
     {
         leagueId: {
@@ -20,4 +25,4 @@ const LeagueModel = sequelize.define(
     { tableName: "league" }
 );
 
-export { LeagueModel };
+export { LeagueModel, LeagueData };

@@ -18,7 +18,7 @@ teamRouter.get("/stats", (req, res) =>
     listTeamStatsController.execute(req, res)
 );
 
-teamRouter.put("/stats", middleware.adminAuthenticated(), async (req, res) => {
+teamRouter.put("/stats", middleware.adminAuthenticated() as any, async (req, res) => {
     try {
         const { seasonId, teamId, journey } = req.body;
         const teamStats = await sequelizeTeamStatsRepo.getStats(seasonId, teamId, journey);
@@ -28,7 +28,11 @@ teamRouter.put("/stats", middleware.adminAuthenticated(), async (req, res) => {
             teamStatsId: teamStats.teamStatsId.id.toString(),
         })
 
-        await sequelizeTeamStatsRepo.save(updatedTeamStats);
+        if (!teamStats) {
+            return res.status(400).json({ "message": "Ha ocurrido un error" });
+        }
+
+        await sequelizeTeamStatsRepo.save(updatedTeamStats!);
 
         return res.status(200).json({ "message": "Estadisticas actualizadas" });
     } catch (error) {
@@ -59,6 +63,6 @@ teamRouter.post("/rankings", async (req, res) => {
     return res.json({ message: "Success" })
 })
 
-teamRouter.delete("/:teamId", middleware.adminAuthenticated(), (req, res) => deleteTeamController.execute(req, res))
+teamRouter.delete("/:teamId", middleware.adminAuthenticated() as any, (req, res) => deleteTeamController.execute(req, res))
 
 export { teamRouter };

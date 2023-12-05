@@ -5,7 +5,7 @@ import { Season } from "../domain/season";
 import { SeasonDto } from "../dtos/seasonDto";
 
 export class SeasonMap implements Mapper<Season> {
-    public static toDomain(raw: any): Season {
+    public static toDomain(raw: any): Season | null {
 
         const leagueIdOrError = LeagueId.create(new UniqueEntityID(raw.leagueId));
 

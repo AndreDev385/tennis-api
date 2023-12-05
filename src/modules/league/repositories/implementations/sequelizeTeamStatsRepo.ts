@@ -1,17 +1,11 @@
+import { TeamStatsModel } from "../../../../shared/infra/database/sequelize/models/TeamStats";
 import { TeamStats } from "../../domain/teamStats";
 import { TeamStatsMap } from "../../mappers/teamStatsMap";
 import { TeamStatsQuery, TeamStatsRepository } from "../teamStatsRepo";
 
 export class SequelizeTeamStatsRepository implements TeamStatsRepository {
-    models: any;
-
-    constructor(models: any) {
-        this.models = models;
-    }
 
     async save(teamStats: TeamStats): Promise<void> {
-        const TeamStatsModel = this.models["TeamStatsModel"];
-
         const exist = await TeamStatsModel.findOne({
             where: { teamStatsId: teamStats.teamStatsId.id.toString() },
         });
@@ -29,23 +23,19 @@ export class SequelizeTeamStatsRepository implements TeamStatsRepository {
     }
 
     async list(query: TeamStatsQuery): Promise<TeamStats[]> {
-        const TeamStatsModel = this.models["TeamStatsModel"];
+        const list = await TeamStatsModel.findAll({ where: query as any });
 
-        const list = await TeamStatsModel.findAll({ where: query });
-
-        return list.map((raw: any) => TeamStatsMap.toDomain(raw));
+        return list.map((raw: any) => TeamStatsMap.toDomain(raw)!);
     }
 
     async getStats(seasonId: string, teamId: string, journey: string): Promise<TeamStats> {
-        const TeamStatsModel = this.models["TeamStatsModel"];
-
         const rawStats = await TeamStatsModel.findOne({ where: { seasonId, teamId, journey } })
 
         if (!!rawStats == false) {
             throw new Error("Estadisticas de equipo no encontradas");
         }
 
-        return TeamStatsMap.toDomain(rawStats);
+        return TeamStatsMap.toDomain(rawStats)!;
     }
 
 }

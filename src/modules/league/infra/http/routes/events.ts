@@ -10,13 +10,13 @@ eventRouter.get("/", (req, res) => listClubEventsController.execute(req, res))
 
 eventRouter.post(
     "/",
-    middleware.adminAuthenticated(),
+    middleware.adminAuthenticated() as any,
     middleware.uploadImageHandler.single("image"),
     (req, res) => createClubEventController.execute(req, res)
 );
 
 eventRouter.delete("/:eventId",
-    middleware.adminAuthenticated(),
+    middleware.adminAuthenticated() as any,
     (req, res) => deleteEventController.execute(req, res)
 )
 

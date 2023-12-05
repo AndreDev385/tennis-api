@@ -16,7 +16,7 @@ export class AfterClashFinish implements IHandle<ClashFinished> {
 
     setupSubscriptions(): void {
         DomainEvents.register(
-            this.onUpdateTeamStats.bind(this),
+            this.onUpdateTeamStats.bind(this) as any,
             ClashFinished.name,
         );
     }

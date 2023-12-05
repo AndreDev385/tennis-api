@@ -9,6 +9,6 @@ export interface ClashDto {
     team2: TeamDto;
     journey: string;
     host: string;
-    matchs: Array<MatchDto>
+    matchs?: Array<MatchDto>
     isFinish: boolean;
 }

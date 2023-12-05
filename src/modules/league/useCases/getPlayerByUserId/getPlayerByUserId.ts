@@ -22,7 +22,7 @@ export class GetPlayerByUserId implements UseCase<string, Promise<Response>> {
         this.playerRepo = playerRepo;
     }
 
-    async execute(userId?: string): Promise<Response> {
+    async execute(userId: string): Promise<Response> {
         let user: User;
         let player: Player;
 

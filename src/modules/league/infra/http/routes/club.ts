@@ -9,7 +9,7 @@ clubRouter.get("/", (req, res) => listClubController.execute(req, res));
 
 clubRouter.post(
     "/",
-    middleware.adminAuthenticated(),
+    middleware.adminAuthenticated() as any,
     (req, res) => createClubController.execute(req, res)
 );
 

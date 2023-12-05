@@ -7,7 +7,7 @@ import { Player } from "../domain/player";
 import { PlayerDto } from "../dtos/playerDto";
 
 export class PlayerMap implements Mapper<Player> {
-    public static toDomain(raw: any): Player {
+    public static toDomain(raw: any): Player | null {
         const firstNameOrError = FirstName.create({
             value: raw.user.firstName,
         });

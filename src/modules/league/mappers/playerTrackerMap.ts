@@ -78,7 +78,7 @@ export class PlayerTrackerMapper implements Mapper<PlayerTracker> {
         };
     }
 
-    public static toDomain(raw: any): PlayerTracker {
+    public static toDomain(raw: any): PlayerTracker | null {
         const playerId = PlayerId.create(new UniqueEntityID(raw.playerId));
         const seasonId = SeasonId.create(new UniqueEntityID(raw.seasonId));
 

@@ -26,7 +26,7 @@ export class CreateClubEventController extends BaseController {
 
         if (result.isLeft()) {
             const error = result.value;
-            switch (error.constructor) {
+            switch (error?.constructor) {
                 case AppError.UnexpectedError:
                     return this.fail(res, (error as AppError.UnexpectedError).getErrorValue().message)
 

@@ -10,7 +10,8 @@ import { MatchMap } from "./matchMap";
 import { TeamMap } from "./teamMap";
 
 export class ClashMap implements Mapper<Clash> {
-    public static toDomain(raw: any, matchs?: Matchs): Clash {
+    public static toDomain(raw: any, matchs?: Matchs): Clash | null {
+        console.log(raw, matchs);
         const journeyOrError = Journey.create({ value: raw.journey });
         const seasonIdOrError = SeasonId.create(
             new UniqueEntityID(raw.seasonId)
@@ -18,12 +19,12 @@ export class ClashMap implements Mapper<Clash> {
 
         const clashOrError = Clash.create(
             {
-                category: CategoryMap.toDomain(raw.category),
+                category: CategoryMap.toDomain(raw.category)!,
                 seasonId: seasonIdOrError.getValue(),
                 team1: raw.team1,
                 team2: raw.team2,
                 host: raw.host,
-                matchs: matchs || Matchs.create(),
+                matchs: matchs ?? Matchs.create(),
                 journey: journeyOrError.getValue() || null,
                 isFinish: raw.isFinish,
             },

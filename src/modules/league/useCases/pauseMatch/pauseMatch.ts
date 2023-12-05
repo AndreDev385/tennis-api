@@ -10,6 +10,7 @@ import { MatchTracker } from "../../domain/matchTracker";
 import { PausedMatch } from "../../domain/pausedMatch";
 import { PlayerTracker } from "../../domain/playerTracker";
 import { SingleServeFlow } from "../../domain/serviceFlow";
+import { Set } from "../../domain/set";
 import { SetQuantity } from "../../domain/setQuantity";
 import { Sets } from "../../domain/sets";
 import { Surface } from "../../domain/surface";
@@ -42,8 +43,8 @@ export class PauseMatch implements UseCase<PauseMatchRequest, Response> {
     }
 
     async execute(request: PauseMatchRequest): Promise<Response> {
-        let me: PlayerTracker;
-        let partner: PlayerTracker;
+        let me: PlayerTracker | null;
+        let partner: PlayerTracker | null = null;
         let match: Match;
         let tracker: MatchTracker;
         let pausedMatch: PausedMatch;
@@ -54,8 +55,8 @@ export class PauseMatch implements UseCase<PauseMatchRequest, Response> {
         let setsQuantity: SetQuantity;
         let gamesPerSet: GamesPerSet;
         let currentGame: Game;
-        let singleServeFlow: SingleServeFlow = null
-        let doubleServeFlow: DoubleServeFlow = null
+        let singleServeFlow: SingleServeFlow | null = null
+        let doubleServeFlow: DoubleServeFlow | null = null
         try {
             // sets
             const setsArr = request.sets.map((s) => SetMap.toDomain(s));
@@ -66,7 +67,7 @@ export class PauseMatch implements UseCase<PauseMatchRequest, Response> {
                 }
             }
 
-            sets = Sets.create(setsArr);
+            sets = Sets.create(setsArr as Set[]);
             // end sets
 
             // check valid request
@@ -189,7 +190,7 @@ export class PauseMatch implements UseCase<PauseMatchRequest, Response> {
             match.pauseMatch(tracker, sets, request.superTiebreak ?? false);
 
             await this.matchRepo.save(match);
-            await this.trackerRepo.save(match.tracker);
+            await this.trackerRepo.save(match.tracker!);
             await this.pausedMatchRepo.save(pausedMatch);
 
             return right(Result.ok<void>());

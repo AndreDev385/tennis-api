@@ -1,17 +1,17 @@
 export interface SetDto {
     myGames: number;
     rivalGames: number;
-    setWon: boolean;
+    setWon: boolean | null;
     tiebreak: boolean;
     superTiebreak: boolean;
     myTiebreakPoints: number;
     rivalTiebreakPoints: number;
-    stats: SetStatsDto;
+    stats: SetStatsDto | null;
 }
 
 export interface SetStatsDto {
     me: SetPlayerStatsDto;
-    partner: SetPlayerStatsDto;
+    partner: SetPlayerStatsDto | null;
     gamesWonReturning: number;
     gamesLostReturning: number;
     winBreakPtsChances: number;

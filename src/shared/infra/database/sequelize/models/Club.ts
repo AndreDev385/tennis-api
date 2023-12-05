@@ -1,9 +1,17 @@
-import { DataTypes, Sequelize } from "sequelize";
+import { DataTypes, InferAttributes, Model, Sequelize } from "sequelize";
 import config from "../config/config";
 
 const sequelize: Sequelize = config.connection;
 
-const ClubModel = sequelize.define(
+interface ClubData extends Model<InferAttributes<ClubData>> {
+    clubId: string;
+    name: string;
+    symbol: string;
+    code: string | null;
+    isSubscribed: boolean;
+}
+
+const ClubModel = sequelize.define<ClubData>(
     "club",
     {
         clubId: {
@@ -36,4 +44,4 @@ const ClubModel = sequelize.define(
     }
 );
 
-export { ClubModel };
+export { ClubModel, ClubData };

@@ -1,21 +1,45 @@
 import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
 import { Mapper } from "../../../shared/infra/Mapper";
-import { ClashId } from "../domain/clashId";
 import { Mode } from "../domain/gameMode";
 import { GamesPerSet } from "../domain/gamesPerSet";
 import { Match } from "../domain/match";
+import { MatchStatus } from "../domain/matchStatus";
+import { MatchTracker } from "../domain/matchTracker";
+import { Player } from "../domain/player";
+import { Set } from "../domain/set";
 import { SetQuantity } from "../domain/setQuantity";
 import { Sets } from "../domain/sets";
 import { Surface } from "../domain/surface";
+import { CategoryDto } from "../dtos/categoryDto";
 import { MatchDto } from "../dtos/matchDto";
 import { CategoryMap } from "./categoryMap";
 import { SetMap } from "./setMap";
 import { TrackerMap } from "./trackerMap";
 
+export interface MatchDataForMapper {
+    matchId: string;
+    sets: string[]
+    clashId: string;
+    mode: string;
+    surface: string;
+    superTieBreak: boolean;
+    gamesPerSet: number;
+    setsQuantity: number;
+    status: number;
+    category: CategoryDto;
+    address: string | null;
+    player1: Player;
+    player2: string;
+    player3?: Player | null;
+    player4?: string | null;
+    tracker: MatchTracker | null;
+    matchWon: boolean | null
+}
+
 export class MatchMap implements Mapper<Match> {
-    public static toDomain(raw: any): Match {
-        const setsArr = raw.sets.map((s) => SetMap.toDomain(s));
-        const clashIdOrError = ClashId.create(new UniqueEntityID(raw.clashId));
+    public static toDomain(raw: MatchDataForMapper): Match | null {
+        const setsArr = raw.sets.map((s: any) => SetMap.toDomain(s));
+
 
         const modeOrError = Mode.create({ value: raw.mode });
         const surfaceOrError = Surface.create({ value: raw.surface });
@@ -26,11 +50,13 @@ export class MatchMap implements Mapper<Match> {
             value: raw.gamesPerSet,
         });
 
-        const sets = Sets.create(setsArr);
+        const sets = Sets.create(setsArr as Set[]);
+
+        const status = MatchStatus.create({ value: raw.status });
 
         const matchOrError = Match.create(
             {
-                clashId: clashIdOrError.getValue(),
+                clashId: new UniqueEntityID(raw.clashId),
                 tracker: raw.tracker,
                 surface: surfaceOrError.getValue(),
                 superTieBreak: raw.superTieBreak,
@@ -43,11 +69,9 @@ export class MatchMap implements Mapper<Match> {
                 player2: raw.player2,
                 player3: raw.player3,
                 player4: raw.player4,
-                category: CategoryMap.toDomain(raw.category),
-                isLive: raw.isLive,
-                isFinish: raw.isFinish,
-                isCancelled: raw.isCancelled,
-                isPaused: raw.isPaused,
+                category: CategoryMap.toDomain(raw.category)!,
+                status: status.getValue(),
+                matchWon: raw.matchWon,
             },
             new UniqueEntityID(raw.matchId)
         );
@@ -62,7 +86,7 @@ export class MatchMap implements Mapper<Match> {
 
         return {
             matchId: match.matchId.id.toString(),
-            clashId: match.clashId.id.toString(),
+            clashId: match.clashId.toString(),
             mode: match.mode.value,
             categoryId: match.category.categoryId.id.toString(),
             setsQuantity: match.setsQuantity.value,
@@ -73,26 +97,24 @@ export class MatchMap implements Mapper<Match> {
             surface: match.surface.value,
             player1: match.player1.playerId.id.toString(),
             player2: match.player2,
-            player3: match.player3?.playerId?.id?.toString() || null,
-            player4: match.player4 || null,
-            isLive: match.isLive,
-            isFinish: match.isFinish,
-            isCancelled: match.isCancelled,
-            isPaused: match.isPaused,
+            player3: match.player3?.playerId?.id?.toString() ?? null,
+            player4: match.player4 ?? null,
+            status: match.status.value,
+            matchWon: match.matchWon ?? null,
         };
     }
 
     public static toDto(match: Match): MatchDto {
         return {
             matchId: match.matchId.id.toString(),
-            clashId: match.clashId.id.toString(),
+            clashId: match.clashId.toString(),
             mode: match.mode.value,
             category: match.category.name,
             setsQuantity: match.setsQuantity.value,
             sets: match.sets.getItems().map((set) => SetMap.toDto(set)),
             gamesPerSet: match.gamesPerSet.value,
             superTieBreak: match.superTieBreak,
-            address: match.address,
+            address: match.address ?? "",
             surface: match.surface.value,
             player1: {
                 playerId: match.player1.playerId.id.toString(),
@@ -105,13 +127,10 @@ export class MatchMap implements Mapper<Match> {
                     name: `${match.player3.firstName.value} ${match.player3.lastName.value}`,
                 }
                 : null,
-            player4: match.player4 || null,
+            player4: match.player4 ?? null,
             tracker: match.tracker ? TrackerMap.toDto(match.tracker) : null,
-            isLive: match.isLive,
-            isFinish: match.isFinish,
-            matchWon: match.matchWon,
-            isCancelled: match.isCancelled,
-            isPaused: match.isPaused,
+            matchWon: match.matchWon ?? null,
+            status: match.status.value,
         };
     }
 }

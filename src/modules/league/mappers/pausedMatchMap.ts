@@ -41,8 +41,8 @@ export class PausedMatchMap implements Mapper<PausedMatch> {
         }
     }
 
-    public static toDomain(raw: any): PausedMatch {
-        const setsArr = raw.sets.map((s) => SetMap.toDomain(s));
+    public static toDomain(raw: any): PausedMatch | null {
+        const setsArr = raw.sets.map((s: any) => SetMap.toDomain(s));
 
         const modeOrError = Mode.create({ value: raw.mode });
         const surfaceOrError = Surface.create({ value: raw.surface });

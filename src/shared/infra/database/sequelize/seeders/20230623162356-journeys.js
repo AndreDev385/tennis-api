@@ -60,6 +60,11 @@ module.exports = {
                 updatedAt: new Date(),
             },
             {
+                name: "3er puesto",
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            },
+            {
                 name: "Semi final",
                 createdAt: new Date(),
                 updatedAt: new Date(),

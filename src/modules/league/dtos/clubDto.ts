@@ -3,5 +3,5 @@ export interface ClubDto {
     name: string;
     symbol: string;
     isSubscribed: boolean;
-    code?: string;
+    code: string | null;
 }

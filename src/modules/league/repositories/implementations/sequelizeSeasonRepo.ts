@@ -1,18 +1,11 @@
+import { SeasonModel } from "../../../../shared/infra/database/sequelize/models/Season";
 import { Season } from "../../domain/season";
 import { SeasonDto } from "../../dtos/seasonDto";
 import { SeasonMap } from "../../mappers/seasonMap";
 import { SeasonQuery, SeasonRepository } from "../seasonRepo";
 
 export class SequelizeSeasonRepository implements SeasonRepository {
-    models: any;
-
-    constructor(models: any) {
-        this.models = models;
-    }
-
     async currentSeason(): Promise<Season> {
-        const SeasonModel = this.models.SeasonModel;
-
         const currentSeason = await SeasonModel.findOne({
             where: { isCurrentSeason: true },
         });
@@ -21,12 +14,10 @@ export class SequelizeSeasonRepository implements SeasonRepository {
             throw new Error("No hay una temporada en curso");
         }
 
-        return SeasonMap.toDomain(currentSeason);
+        return SeasonMap.toDomain(currentSeason)!;
     }
 
     async save(season: Season): Promise<void> {
-        const SeasonModel = this.models.SeasonModel;
-
         const rawSeason = SeasonMap.toDto(season);
 
         const exists = await SeasonModel.findOne({
@@ -44,21 +35,17 @@ export class SequelizeSeasonRepository implements SeasonRepository {
     }
 
     async list(query: SeasonQuery): Promise<SeasonDto[]> {
-        const SeasonModel = this.models.SeasonModel;
-
-        const list = await SeasonModel.findAll({ where: query });
+        const list = await SeasonModel.findAll({ where: query as any });
 
         return list;
     }
 
     async findById(seasonId: string): Promise<Season> {
-        const SeasonModel = this.models.SeasonModel;
-
         const season = await SeasonModel.findOne({ where: { seasonId } });
         if (!season) {
             throw new Error("Temporada no encontrada");
         }
 
-        return SeasonMap.toDomain(season);
+        return SeasonMap.toDomain(season)!;
     }
 }

@@ -37,7 +37,6 @@ export class ListClash implements UseCase<any, Promise<Response>> {
             const dtoList = list.map((clash) => {
                 const obj = ClashMap.toDto(clash);
                 delete obj.matchs;
-
                 return obj;
             });
 

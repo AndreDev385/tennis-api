@@ -1,11 +1,32 @@
-import { DataTypes, Sequelize } from "sequelize";
+import { DataTypes, InferAttributes, Model, Sequelize } from "sequelize";
 import config from "../config/config";
 import { ClashModel } from "./ClubClash";
 import { CategoryModel } from "./Category";
+import { CategoryDto } from "../../../../../modules/league/dtos/categoryDto";
 
 const sequelize: Sequelize = config.connection;
 
-const MatchModel = sequelize.define(
+interface MatchData extends Model<InferAttributes<MatchData>> {
+    matchId: string;
+    clashId: string;
+    mode: string;
+    categoryId: string;
+    setsQuantity: number;
+    sets: string[];
+    gamesPerSet: number;
+    superTieBreak: boolean;
+    category?: CategoryDto;
+    address: string | null;
+    surface: string;
+    player1: string;
+    player2: string;
+    player3: string | null;
+    player4: string | null;
+    status: number;
+    matchWon: boolean | null;
+}
+
+const MatchModel = sequelize.define<MatchData>(
     "match",
     {
         matchId: {
@@ -17,10 +38,6 @@ const MatchModel = sequelize.define(
         clashId: {
             type: DataTypes.UUID,
             allowNull: false,
-            references: {
-                model: "clash",
-                key: "clashId",
-            },
         },
         mode: {
             type: DataTypes.STRING,
@@ -75,21 +92,13 @@ const MatchModel = sequelize.define(
             type: DataTypes.STRING,
             allowNull: true,
         },
-        isLive: {
-            type: DataTypes.BOOLEAN,
-            defaultValue: false,
+        status: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
         },
-        isFinish: {
+        matchWon: {
             type: DataTypes.BOOLEAN,
-            defaultValue: false,
-        },
-        isCancelled: {
-            type: DataTypes.BOOLEAN,
-            defaultValue: false,
-        },
-        isPaused: {
-            type: DataTypes.BOOLEAN,
-            defaultValue: false,
+            allowNull: true,
         }
     },
     { tableName: "match" }
@@ -107,4 +116,4 @@ MatchModel.belongsTo(CategoryModel, {
     as: "category",
 });
 
-export { MatchModel };
+export { MatchModel, MatchData };

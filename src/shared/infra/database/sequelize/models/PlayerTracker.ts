@@ -1,10 +1,43 @@
-import { DataTypes, Sequelize } from "sequelize";
+import { DataTypes, InferAttributes, Model, Sequelize } from "sequelize";
 import config from "../config/config";
-import { PlayerModel } from "./Player";
 
 const sequelize: Sequelize = config.connection;
 
-const PlayerTrackerModel = sequelize.define(
+interface PlayerTrackerData extends Model<InferAttributes<PlayerTrackerData>> {
+    playerTrackerId: string;
+    playerId: string;
+    seasonId: string;
+    pointsWon: number;
+    pointsWonServing: number;
+    pointsWonReturning: number;
+    pointsLost: number;
+    pointsLostReturning: number;
+    pointsLostServing: number;
+    saveBreakPtsChances: number;
+    breakPtsSaved: number;
+    gamesWonServing: number;
+    gamesLostServing: number;
+    pointsWinnedFirstServ: number;
+    pointsWinnedSecondServ: number;
+    firstServIn: number;
+    secondServIn: number;
+    aces: number;
+    dobleFaults: number;
+    pointsWinnedFirstReturn: number;
+    pointsWinnedSecondReturn: number;
+    firstReturnIn: number;
+    secondReturnIn: number;
+    firstReturnOut: number;
+    secondReturnOut: number;
+    meshPointsWon: number;
+    meshPointsLost: number;
+    bckgPointsWon: number;
+    bckgPointsLost: number;
+    winners: number;
+    noForcedErrors: number;
+}
+
+const PlayerTrackerModel = sequelize.define<PlayerTrackerData>(
     "playerTracker",
     {
         playerTrackerId: {
@@ -150,11 +183,5 @@ const PlayerTrackerModel = sequelize.define(
     },
     { tableName: "playerTracker" }
 );
-
-PlayerTrackerModel.belongsTo(PlayerModel, {
-    foreignKey: "playerId",
-    targetKey: "playerId",
-    as: "Player",
-});
 
 export { PlayerTrackerModel };

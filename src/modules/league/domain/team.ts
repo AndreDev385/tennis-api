@@ -32,7 +32,7 @@ export class Team extends AggregateRoot<TeamProps> {
     }
 
     get isDeleted(): boolean {
-        return this.props.isDeleted;
+        return this.props.isDeleted!;
     }
 
     public delete(): void {

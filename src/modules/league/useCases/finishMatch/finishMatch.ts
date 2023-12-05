@@ -6,6 +6,7 @@ import { Match } from "../../domain/match";
 import { MatchTracker } from "../../domain/matchTracker";
 import { PlayerTracker } from "../../domain/playerTracker";
 import { Season } from "../../domain/season";
+import { Set } from "../../domain/set";
 import { Sets } from "../../domain/sets";
 import { PlayerTrackerMapper } from "../../mappers/playerTrackerMap";
 import { SeasonMap } from "../../mappers/seasonMap";
@@ -38,7 +39,7 @@ export class FinishMatch implements UseCase<any, Response> {
     async execute(request: FinishMatchRequest): Promise<Response> {
         let currentSeason: Season;
         let me: PlayerTracker;
-        let partner: PlayerTracker;
+        let partner: PlayerTracker | null = null;
         let match: Match;
 
         let sets: Sets;
@@ -56,7 +57,7 @@ export class FinishMatch implements UseCase<any, Response> {
                         Result.fail<string>("No hay una temporada en curso")
                     );
                 }
-                currentSeason = SeasonMap.toDomain(seasons[0]);
+                currentSeason = SeasonMap.toDomain(seasons[0])!;
             } catch (error) {
                 return left(new AppError.NotFoundError(error));
             }
@@ -64,7 +65,7 @@ export class FinishMatch implements UseCase<any, Response> {
             me = PlayerTrackerMapper.toDomain({
                 ...request.tracker.me,
                 seasonId: currentSeason.id.toString(),
-            });
+            })!;
 
             if (me == null) {
                 return left(
@@ -75,7 +76,7 @@ export class FinishMatch implements UseCase<any, Response> {
                 partner = PlayerTrackerMapper.toDomain({
                     ...request.tracker.partner,
                     seasonId: currentSeason.id.toString(),
-                });
+                })!;
 
                 if (partner == null) {
                     return left(
@@ -100,7 +101,7 @@ export class FinishMatch implements UseCase<any, Response> {
                 }
             }
 
-            sets = Sets.create(setsArr);
+            sets = Sets.create(setsArr as Set[]);
 
             const trackerOrError = MatchTracker.create(
                 {
@@ -120,11 +121,11 @@ export class FinishMatch implements UseCase<any, Response> {
 
             tracker = trackerOrError.getValue();
 
-            match.finishMatch(sets, tracker, request.superTieBreak);
+            match.finishMatch(sets, tracker, request.superTieBreak, request.matchWon);
 
             await this.matchRepo.save(match);
 
-            await this.trackerRepo.save(match.tracker);
+            await this.trackerRepo.save(match.tracker!);
 
             return right(Result.ok<void>());
         } catch (error) {

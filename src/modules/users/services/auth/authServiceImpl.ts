@@ -6,12 +6,12 @@ import { environment } from "../../../../config";
 export class AuthServiceImpl implements AuthService {
 
     public signJWT(props: JWTData): string {
-        return jwt.sign(props, environment.jwt_secret);
+        return jwt.sign(props, environment.jwt_secret!);
     }
 
-    public decodeJWT(token: string): Promise<JWTData> {
+    public decodeJWT(token: string): Promise<JWTData | null> {
         return new Promise((resolve, reject) => {
-            jwt.verify(token, environment.jwt_secret, (err, decoded) => {
+            jwt.verify(token, environment.jwt_secret!, (err, decoded) => {
                 if (err) return resolve(null);
                 return resolve(decoded as JWTData);
             });

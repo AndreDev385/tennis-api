@@ -1,9 +1,17 @@
-import { DataTypes, Sequelize } from "sequelize";
+import { DataTypes, InferAttributes, Model, Sequelize } from "sequelize";
 import config from "../config/config";
 
 const sequelize: Sequelize = config.connection;
 
-const RankingModel = sequelize.define(
+interface RankingData extends Model<InferAttributes<RankingData>> {
+    rankingId: string;
+    position: string;
+    symbol: string;
+    teamId: string;
+    seasonId: string;
+}
+
+const RankingModel = sequelize.define<RankingData>(
     "ranking",
     {
         rankingId: {
@@ -23,21 +31,13 @@ const RankingModel = sequelize.define(
         teamId: {
             type: DataTypes.UUID,
             allowNull: false,
-            references: {
-                model: "team",
-                key: "teamId"
-            }
         },
         seasonId: {
             type: DataTypes.UUID,
             allowNull: false,
-            references: {
-                model: "season",
-                key: "seasonId"
-            }
         },
     },
     { tableName: "ranking" }
 );
 
-export { RankingModel };
+export { RankingModel, RankingData };

@@ -11,17 +11,17 @@ seasonRouter.get("/", (req, res) =>
     listSeasonController.execute(req, res)
 );
 
-seasonRouter.post("/", middleware.adminAuthenticated(), (req, res) =>
+seasonRouter.post("/", middleware.adminAuthenticated() as any, (req, res) =>
     createSeasonController.execute(req, res)
 );
 
-seasonRouter.put("/finish", middleware.adminAuthenticated(), (req, res) =>
+seasonRouter.put("/finish", middleware.adminAuthenticated() as any, (req, res) =>
     finishSeasonController.execute(req, res)
 );
 
 seasonRouter.put(
     "/resume",
-    middleware.adminAuthenticated(),
+    middleware.adminAuthenticated() as any,
     (req, res) => resumeSeasonController.execute(req, res)
 )
 

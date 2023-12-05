@@ -18,7 +18,7 @@ export class Sets extends WatchedList<Set> {
         ]);
     }
 
-    public static create(seasons?: Array<Set>): Sets {
+    public static create(seasons: Array<Set> = []): Sets {
         return new Sets(seasons);
     }
 }

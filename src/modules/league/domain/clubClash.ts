@@ -59,7 +59,7 @@ export class Clash extends AggregateRoot<ClubClashProps> {
     }
 
     get isFinish(): boolean {
-        return this.props.isFinish;
+        return this.props.isFinish!;
     }
 
     get isLocal(): boolean {
@@ -77,7 +77,7 @@ export class Clash extends AggregateRoot<ClubClashProps> {
     }
 
     public createMatchs(matchs: Matchs) {
-        const playersIds = [];
+        const playersIds: Array<string> = [];
 
         for (const match of matchs.getItems()) {
             if (playersIds.includes(match.player1.playerId.id.toString())) {
@@ -87,7 +87,7 @@ export class Clash extends AggregateRoot<ClubClashProps> {
             }
             if (
                 match.mode.value == GameMode.double &&
-                playersIds.includes(match.player3.playerId.id.toString())
+                playersIds.includes(match.player3!.playerId.id.toString())
             ) {
                 throw new Error(
                     `El jugador ${match.player1.firstName.value} esta repetido`
@@ -96,7 +96,7 @@ export class Clash extends AggregateRoot<ClubClashProps> {
 
             playersIds.push(match.player1.playerId.id.toString());
             if (match.mode.value == GameMode.double) {
-                playersIds.push(match.player3.playerId.id.toString());
+                playersIds.push(match.player3!.playerId.id.toString());
             }
         }
 

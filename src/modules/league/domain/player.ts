@@ -13,7 +13,7 @@ interface PlayerProps {
     clubId: ClubId;
     firstName: FirstName,
     lastName: LastName,
-    avatar?: string;
+    avatar?: string | null;
 }
 
 export class Player extends AggregateRoot<PlayerProps> {
@@ -37,7 +37,7 @@ export class Player extends AggregateRoot<PlayerProps> {
         return this.props.lastName;
     }
 
-    get avatar(): string {
+    get avatar(): string | undefined | null {
         return this.props.avatar;
     }
 

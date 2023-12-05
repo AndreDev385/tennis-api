@@ -6,7 +6,7 @@ import { TrackerDto } from "../dtos/trackerDto";
 import { PlayerTrackerMapper } from "./playerTrackerMap";
 
 export class TrackerMap implements Mapper<MatchTracker> {
-    public static toDomain(raw: any): MatchTracker {
+    public static toDomain(raw: any): MatchTracker | null {
         const matchIdOrError = MatchId.create(new UniqueEntityID(raw.matchId));
         const trackerOrError = MatchTracker.create(
             {
