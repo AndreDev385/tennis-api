@@ -9,6 +9,7 @@ const sequelize: Sequelize = config.connection;
 interface ClashData extends Model<InferAttributes<ClashData>> {
     clashId: string;
     categoryId: string;
+    clubId: string;
     category?: CategoryDto;
     team1: string;
     team2: string;
@@ -34,6 +35,10 @@ const ClashModel = sequelize.define<ClashData>(
                 model: "category",
                 key: "categoryId",
             },
+        },
+        clubId: {
+            type: DataTypes.UUID,
+            allowNull: false,
         },
         team1: {
             type: DataTypes.UUID,

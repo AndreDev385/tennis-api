@@ -264,6 +264,10 @@ module.exports = {
                         key: "categoryId",
                     },
                 },
+                clubId: {
+                    type: Sequelize.UUID,
+                    allowNull: false,
+                },
                 team1: {
                     type: Sequelize.UUID,
                     allowNull: false,

@@ -3,9 +3,20 @@ import { Club } from "../../domain/club";
 import { ClubDto } from "../../dtos/clubDto";
 import { ClubMap } from "../../mappers/clubMap";
 import { ListQueryDto } from "../../useCases/listClubs/requestListQueryDto";
-import { ClubRepository } from "../clubRepo";
+import { ClubQuery, ClubRepository } from "../clubRepo";
 
 export class SequelizeClubRepository implements ClubRepository {
+
+    async find(query: ClubQuery): Promise<Club> {
+        const club = await ClubModel.findOne({ where: query as any });
+
+        if (!club) {
+            throw new Error("Club no encontrado");
+        }
+
+        return ClubMap.toDomain(club)!;
+    }
+
     async findById(clubId: string): Promise<Club> {
         const club = await ClubModel.findOne({ where: { clubId } });
 

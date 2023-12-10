@@ -104,6 +104,7 @@ export class CreateClashUseCase implements UseCase<CreateClashDto, Response> {
             team2 = team2Creation.value.getValue();
 
             const clashOrError = Clash.create({
+                clubId: team1.club.clubId,
                 team1,
                 team2,
                 host,

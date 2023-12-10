@@ -5,6 +5,7 @@ import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
 import { Category } from "./category";
 import { ClashId } from "./clashId";
 import { Club } from "./club";
+import { ClubId } from "./clubId";
 import { ClashCreated } from "./events/clashCreated";
 import { ClashFinished } from "./events/clashFinished";
 import { GameMode } from "./gameMode";
@@ -16,6 +17,7 @@ import { Team } from "./team";
 
 interface ClubClashProps {
     seasonId: SeasonId;
+    clubId: ClubId;
     team1: Team;
     team2: Team;
     category: Category;
@@ -32,6 +34,10 @@ export class Clash extends AggregateRoot<ClubClashProps> {
 
     get seasonId(): SeasonId {
         return this.props.seasonId;
+    }
+
+    get clubId(): ClubId {
+        return this.props.clubId;
     }
 
     get matchs(): Array<Match> {
@@ -113,6 +119,7 @@ export class Clash extends AggregateRoot<ClubClashProps> {
     ): Result<Clash> {
         const guardResult = Guard.againstNullOrUndefinedBulk([
             { argument: props.seasonId, argumentName: "season id" },
+            { argument: props.seasonId, argumentName: "clubId" },
             { argument: props.matchs, argumentName: "matchs" },
             { argument: props.team1, argumentName: "team 1" },
             { argument: props.team2, argumentName: "team 2" },

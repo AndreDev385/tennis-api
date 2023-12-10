@@ -51,21 +51,16 @@ export class CreatePlayer
             }
 
             try {
-                club = await this.clubRepo.findById(request.clubId);
+                club = await this.clubRepo.find({ code: request.code });
             } catch (error) {
-                return left(
-                    new CreatePlayerErrors.ClubDoesNotExist(request.clubId)
-                );
-            }
-
-            if (club.code !== request.code) {
-                return left(new CreatePlayerErrors.WrongCode(request.code));
+                return left(new AppError.NotFoundError(error));
             }
 
             try {
                 const alreadyExist = await this.playerRepo.exist(
                     request.userId
                 );
+
                 if (alreadyExist) {
                     return left(
                         new CreatePlayerErrors.PlayerAlreadyExistError(
