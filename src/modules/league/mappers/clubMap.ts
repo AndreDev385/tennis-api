@@ -4,7 +4,7 @@ import { Club } from "../domain/club";
 import { ClubDto } from "../dtos/clubDto";
 
 export class ClubMap implements Mapper<Club> {
-    public static toDomain(raw: any): Club {
+    public static toDomain(raw: any): Club | null {
         const clubOrError = Club.create(
             {
                 name: raw.name,
@@ -36,7 +36,7 @@ export class ClubMap implements Mapper<Club> {
             symbol: club.symbol,
             clubId: club.clubId.id.toString(),
             isSubscribed: club.isSubscribed,
-            code: sendCode ? club.code : undefined
+            code: sendCode ? club.code : null
         };
     }
 }

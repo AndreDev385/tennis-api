@@ -15,11 +15,9 @@ export class FinishMatchController extends BaseController {
     async executeImpl(req: Request, res: Response) {
         try {
             if (typeof req.body['tracker'] == 'string') {
-                console.log('string?')
                 req.body['tracker'] = JSON.parse(req.body['tracker']);
             }
             if (typeof req.body['sets'] == 'string') {
-                console.log('string?')
                 req.body['sets'] = JSON.parse(req.body['sets']);
             }
         } catch (error) {

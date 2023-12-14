@@ -16,15 +16,15 @@ export class TeamMap implements Mapper<Team> {
         };
     }
 
-    public static toDomain(raw: any): Team {
+    public static toDomain(raw: any): Team | null {
         const club = ClubMap.toDomain(raw.club);
         const category = CategoryMap.toDomain(raw.category);
 
         const teamOrError = Team.create(
             {
-                club,
+                club: club!,
                 name: raw.name,
-                category,
+                category: category!,
                 isDeleted: raw.isDeleted,
             },
             new UniqueEntityID(raw.teamId)

@@ -1,9 +1,15 @@
-import { DataTypes, Sequelize } from "sequelize";
+import { DataTypes, InferAttributes, Model, Sequelize } from "sequelize";
 import config from "../config/config";
 
 const sequelize: Sequelize = config.connection;
 
-const CategoryModel = sequelize.define(
+interface CategoryData extends Model<InferAttributes<CategoryData>> {
+    categoryId: string;
+    name: string;
+    fullName: string;
+}
+
+const CategoryModel = sequelize.define<CategoryData>(
     "category",
     {
         categoryId: {
@@ -24,4 +30,4 @@ const CategoryModel = sequelize.define(
     { tableName: "category" }
 );
 
-export { CategoryModel };
+export { CategoryModel, CategoryData };

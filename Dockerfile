@@ -13,6 +13,7 @@ CMD ["sh", "entrypoint.sh"]
 
 FROM base as dev
 ENV NODE_ENV=development
+RUN npm install -g npm
 RUN npm i
 COPY . .
 CMD ["sh", "entrypoint-dev.sh"]

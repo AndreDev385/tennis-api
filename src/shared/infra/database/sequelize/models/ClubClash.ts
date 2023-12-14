@@ -1,11 +1,25 @@
-import { DataTypes, Sequelize } from "sequelize";
+import { DataTypes, InferAttributes, Model, Sequelize } from "sequelize";
 import config from "../config/config";
 import { SeasonModel } from "./Season";
 import { CategoryModel } from "./Category";
+import { CategoryDto } from "../../../../../modules/league/dtos/categoryDto";
 
 const sequelize: Sequelize = config.connection;
 
-const ClashModel = sequelize.define(
+interface ClashData extends Model<InferAttributes<ClashData>> {
+    clashId: string;
+    categoryId: string;
+    clubId: string;
+    category?: CategoryDto;
+    team1: string;
+    team2: string;
+    journey: string;
+    seasonId: string;
+    host: string;
+    isFinish: boolean;
+}
+
+const ClashModel = sequelize.define<ClashData>(
     "clash",
     {
         clashId: {
@@ -21,6 +35,10 @@ const ClashModel = sequelize.define(
                 model: "category",
                 key: "categoryId",
             },
+        },
+        clubId: {
+            type: DataTypes.UUID,
+            allowNull: false,
         },
         team1: {
             type: DataTypes.UUID,
@@ -74,4 +92,4 @@ ClashModel.belongsTo(CategoryModel, {
     as: "category",
 });
 
-export { ClashModel };
+export { ClashModel, ClashData };

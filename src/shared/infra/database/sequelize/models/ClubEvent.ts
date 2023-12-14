@@ -1,9 +1,16 @@
-import { DataTypes, Sequelize } from "sequelize";
+import { DataTypes, InferAttributes, Model, Sequelize } from "sequelize";
 import config from "../config/config";
 
 const sequelize: Sequelize = config.connection;
 
-const ClubEventModel = sequelize.define(
+interface ClubEventData extends Model<InferAttributes<ClubEventData>> {
+    clubEventId: string;
+    clubId: string;
+    link: string;
+    image: string;
+}
+
+const ClubEventModel = sequelize.define<ClubEventData>(
     "clubEvent",
     {
         clubEventId: {
@@ -34,4 +41,4 @@ const ClubEventModel = sequelize.define(
     }
 );
 
-export { ClubEventModel };
+export { ClubEventModel, ClubEventData };

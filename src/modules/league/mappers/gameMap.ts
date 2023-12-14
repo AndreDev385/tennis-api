@@ -3,7 +3,10 @@ import { Game } from "../domain/game";
 import { GameDto } from "../dtos/gameDto";
 
 export class GameMap implements Mapper<Game> {
-    public static toDto(game: Game): GameDto {
+    public static toDto(game: Game | null): GameDto | null {
+        if (!game) {
+            return null
+        }
         return {
             superTiebreak: game.superTiebreak,
             pointsToWin: game.pointsToWin,
@@ -16,7 +19,7 @@ export class GameMap implements Mapper<Game> {
         }
     }
 
-    public static toDomain(raw: any): Game {
+    public static toDomain(raw: any): Game | null {
         let object: any
         if (typeof raw == "string") {
             object = JSON.parse(raw)

@@ -1,10 +1,43 @@
-import { DataTypes, Sequelize } from "sequelize";
+import { DataTypes, InferAttributes, Model, Sequelize } from "sequelize";
 import config from "../config/config";
 import { MatchModel } from "./Match";
 
 const sequelize: Sequelize = config.connection;
 
-const TrackerModel = sequelize.define(
+interface TrackerData extends Model<InferAttributes<TrackerData>> {
+    trackerId: string;
+    me: string;
+    partner: string | null;
+    matchId: string;
+    gamesWonReturning: number;
+    gamesLostReturning: number;
+    winBreakPtsChances: number;
+    breakPtsWinned: number;
+
+    rivalPointsWinnedFirstServ: number;
+    rivalPointsWinnedSecondServ: number;
+    rivalFirstServIn: number;
+    rivalSecondServIn: number;
+    rivalFirstServWon: number;
+    rivalSecondServWon: number;
+    rivalPointsWinnedFirstReturn: number;
+    rivalPointsWinnedSecondReturn: number;
+    rivalFirstReturnIn: number;
+    rivalSecondReturnIn: number;
+
+    rivalAces: number;
+    rivalDobleFault: number;
+    rivalNoForcedErrors: number;
+    rivalWinners: number;
+    shortRallyWon: number;
+    mediumRallyWon: number;
+    longRallyWon: number;
+    shortRallyLost: number;
+    mediumRallyLost: number;
+    longRallyLost: number;
+}
+
+const TrackerModel = sequelize.define<TrackerData>(
     "tracker",
     {
         trackerId: {
@@ -58,6 +91,17 @@ const TrackerModel = sequelize.define(
             type: DataTypes.INTEGER,
             defaultValue: 0,
             allowNull: true,
+        },
+        rivalFirstServWon: {
+            type: DataTypes.INTEGER,
+            defaultValue: 0,
+            allowNull: true,
+        },
+        rivalSecondServWon: {
+            type: DataTypes.INTEGER,
+            defaultValue: 0,
+            allowNull: true,
+
         },
         rivalFirstServIn: {
             type: DataTypes.INTEGER,
@@ -151,4 +195,4 @@ TrackerModel.belongsTo(MatchModel, {
     onDelete: "CASCADE"
 });
 
-export { TrackerModel };
+export { TrackerModel, TrackerData };

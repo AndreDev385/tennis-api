@@ -7,18 +7,23 @@ export class ServiceOrder extends WatchedList<ServiceFlow> {
         super(initialServiceFlow);
     }
 
-    private static validate(values: Array<ServiceFlow>): boolean {
+    private static validate(values: Array<ServiceFlow | null>): boolean {
+        for (const v of values) {
+            if (!v) {
+                return false
+            }
+        }
         return values.length == 4;
     }
 
-    public static create(values?: Array<ServiceFlow>): Result<ServiceOrder> {
+    public static create(values: Array<ServiceFlow | null> = []): Result<ServiceOrder> {
         if (!this.validate(values)) {
             return Result.fail(
                 `Orden de saques invalido. La logitud deberia ser 4, obtenido ${values.length}`,
             );
         }
 
-        return Result.ok(new ServiceOrder(values));
+        return Result.ok(new ServiceOrder(values as Array<ServiceFlow>));
     }
 
     public compareItems(a: ServiceFlow, b: ServiceFlow): boolean {

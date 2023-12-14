@@ -23,20 +23,20 @@ interface PausedMatchProps {
     tracker: MatchTracker;
     player1: string;
     player2: string;
-    player3?: string;
-    player4?: string;
+    player3?: string | null;
+    player4?: string | null;
     // serving
     sets: Sets;
     currentSetIdx: number;
-    currentGame: Game;
+    currentGame: Game | null;
     setsWon: number;
     setsLost: number;
     matchFinish: boolean;
-    superTiebreak?: boolean;
-    initialTeam?: number;
-    matchWon?: boolean;
-    doubleServeFlow?: DoubleServeFlow,
-    singleServeFlow?: SingleServeFlow,
+    superTiebreak?: boolean | null;
+    initialTeam?: number | null;
+    matchWon?: boolean | null;
+    doubleServeFlow?: DoubleServeFlow | null,
+    singleServeFlow?: SingleServeFlow | null,
 }
 
 export class PausedMatch extends ValueObject<PausedMatchProps> {
@@ -56,8 +56,8 @@ export class PausedMatch extends ValueObject<PausedMatchProps> {
     get surface(): Surface {
         return this.props.surface;
     }
-    get superTiebreak(): boolean {
-        return this.props.superTiebreak;
+    get superTiebreak(): boolean | null {
+        return this.props.superTiebreak!;
     }
     get direction(): string {
         return this.props.direction;
@@ -74,20 +74,20 @@ export class PausedMatch extends ValueObject<PausedMatchProps> {
     get player2(): string {
         return this.props.player2;
     }
-    get player3(): string {
+    get player3(): string | undefined | null {
         return this.props.player3;
     }
-    get player4(): string {
+    get player4(): string | undefined | null {
         return this.props.player4;
     }
     // serving
-    get initialTeam(): number {
+    get initialTeam(): number | undefined | null {
         return this.props.initialTeam;
     }
-    get doubleServeFlow(): DoubleServeFlow {
+    get doubleServeFlow(): DoubleServeFlow | undefined | null {
         return this.props.doubleServeFlow;
     }
-    get singleServeFlow(): SingleServeFlow {
+    get singleServeFlow(): SingleServeFlow | undefined | null {
         return this.props.singleServeFlow;
     }
     get sets(): Sets {
@@ -96,7 +96,7 @@ export class PausedMatch extends ValueObject<PausedMatchProps> {
     get currentSetIdx(): number {
         return this.props.currentSetIdx;
     }
-    get currentGame(): Game {
+    get currentGame(): Game | null {
         return this.props.currentGame;
     }
     get setsWon(): number {
@@ -105,7 +105,7 @@ export class PausedMatch extends ValueObject<PausedMatchProps> {
     get setsLost(): number {
         return this.props.setsLost;
     }
-    get matchWon(): boolean {
+    get matchWon(): boolean | undefined | null {
         return this.props.matchWon;
     }
     get matchFinish(): boolean {

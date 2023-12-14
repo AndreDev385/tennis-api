@@ -25,7 +25,7 @@ export class FeaturePlayers implements UseCase<FeaturePlayersRequest, any> {
 
     async execute(request: FeaturePlayersRequest): Promise<Response> {
         try {
-            const query = { team1: request.teamId, isFinish: true };
+            const query: any = { team1: request.teamId, isFinish: true };
 
             if (!!request.seasonId == true) {
                 query['seasonId'] = request.seasonId;
@@ -43,9 +43,9 @@ export class FeaturePlayers implements UseCase<FeaturePlayersRequest, any> {
                 const matches = await this.matchRepo.getMatchsByClashId(clash.clashId.id.toString());
 
                 for (const match of matches) {
-                    updatePlayerRecord(playersRecord, match.tracker.me);
+                    updatePlayerRecord(playersRecord, match.tracker!.me);
                     if (match.mode.value == GameMode.double) {
-                        updatePlayerRecord(playersRecord, match.tracker.partner);
+                        updatePlayerRecord(playersRecord, match.tracker!.partner!);
                     }
                 }
 
@@ -79,7 +79,7 @@ export class FeaturePlayers implements UseCase<FeaturePlayersRequest, any> {
 }
 
 function updatePlayerRecord(records: FeaturePlayersRecords, playerStats: PlayerTracker) {
-    if (!!playerStats == false) {
+    if (!!playerStats as boolean == false) {
         return;
     }
     if (!records[playerStats.playerId.id.toString()]) {

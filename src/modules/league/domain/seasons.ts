@@ -10,7 +10,7 @@ export class Seasons extends WatchedList<Season> {
         return a.equals(b);
     }
 
-    public static create(seasons?: Array<Season>): Seasons {
+    public static create(seasons: Array<Season> = []): Seasons {
         return new Seasons(seasons);
     }
 }

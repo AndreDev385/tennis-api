@@ -10,14 +10,14 @@ adsRouter.get("/", (req, res) => listAdsController.execute(req, res));
 
 adsRouter.post(
     "/",
-    middleware.adminAuthenticated(),
+    middleware.adminAuthenticated() as any,
     middleware.uploadImageHandler.single("image"),
     (req, res) => createAdController.execute(req, res)
 );
 
 adsRouter.delete(
     "/:adId",
-    middleware.ensureAuthenticated(),
+    middleware.ensureAuthenticated() as any,
     (req, res) => deleteAdController.execute(req, res)
 )
 

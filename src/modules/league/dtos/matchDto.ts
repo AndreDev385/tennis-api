@@ -20,12 +20,9 @@ export interface MatchDto {
     player3?: {
         playerId: string;
         name: string;
-    };
-    player4?: string;
-    tracker: TrackerDto;
-    isLive: boolean;
-    isFinish: boolean;
-    isCancelled: boolean;
-    matchWon: boolean
-    isPaused: boolean;
+    } | null;
+    player4?: string | null;
+    tracker: TrackerDto | null;
+    status: number;
+    matchWon: boolean | null;
 }

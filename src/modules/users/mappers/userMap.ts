@@ -8,7 +8,7 @@ import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
 
 export class UserMap implements Mapper<User> {
     public static async toPersistance(user: User) {
-        let password: string = null;
+        let password: string | null = null;
         if (!!user.password === true) {
             if (user.password.isAlreadyHashed()) {
                 password = user.password.value;
@@ -32,7 +32,7 @@ export class UserMap implements Mapper<User> {
         };
     }
 
-    public static toDomain(raw: any): User {
+    public static toDomain(raw: any): User | null {
         const emailOrError = UserEmail.create(raw.email);
         const firstNameOrError = FirstName.create({ value: raw.firstName });
         const lastNameOrError = LastName.create({ value: raw.lastName });

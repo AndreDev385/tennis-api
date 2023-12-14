@@ -4,7 +4,7 @@ import { Category } from "../domain/category";
 import { CategoryDto } from "../dtos/categoryDto";
 
 export class CategoryMap implements Mapper<Category> {
-    public static toDomain(raw: CategoryDto): Category {
+    public static toDomain(raw: CategoryDto): Category | null {
 
         const categoryOrError = Category.create(
             { name: raw.name, fullName: raw.fullName },

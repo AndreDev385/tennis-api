@@ -6,7 +6,7 @@ import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID"; import {
 interface ClubProps {
     name: string;
     symbol: string;
-    code?: string;
+    code?: string | null;
     isSubscribed?: boolean;
 }
 
@@ -23,12 +23,12 @@ export class Club extends Entity<ClubProps> {
         return this.props.symbol;
     }
 
-    get code(): string {
-        return this.props.code;
+    get code(): string | null {
+        return this.props.code!;
     }
 
     get isSubscribed(): boolean {
-        return this.props.isSubscribed;
+        return this.props.isSubscribed!;
     }
 
     public subscribe() {

@@ -39,7 +39,7 @@ const { username, password, database, host, dialect } =
 
 const mode = NODE_ENV == "production" ? "production" : "development";
 
-console.log(`[DB]: Connecting to db ${database} in ${mode} mode`);
+console.log(`[DB]: Connecting to db ${database} in ${mode} mode ${password}`);
 console.log(`[App]: ${host}`);
 
 module.exports = {
@@ -53,7 +53,7 @@ module.exports = {
                 require: true,
                 rejectUnauthorized: false
             }
-        }: {},
+        } : {},
         pool: {
             max: 5,
             min: 0,

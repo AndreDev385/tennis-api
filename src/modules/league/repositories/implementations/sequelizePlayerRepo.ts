@@ -1,51 +1,41 @@
+import { UserModel } from "../../../../shared/infra/database/sequelize/models/BaseUser";
+import { PlayerModel } from "../../../../shared/infra/database/sequelize/models/Player";
 import { Player } from "../../domain/player";
 import { PlayerMap } from "../../mappers/playerMap";
 import { PlayerQuery, PlayerRepository } from "../playerRepo";
 
 export class SequelizePlayerRepository implements PlayerRepository {
-    models: any;
-    constructor(models: any) {
-        this.models = models;
-    }
-
     private baseQuery(): any {
-        const models = this.models;
         return {
             where: {},
-            include: [{ model: models.UserModel, as: "user" }],
+            include: [{ model: UserModel, as: "user" }],
         };
     }
 
     async exist(userId: string): Promise<boolean> {
-        const PlayerModel = this.models.PlayerModel;
-
         const exist = await PlayerModel.findOne({ where: { userId } });
         return !!exist === true;
     }
 
     async list(query?: PlayerQuery): Promise<Player[]> {
-        const PlayerModel = this.models.PlayerModel;
-
         const baseQuery = this.baseQuery();
 
         if (!!query?.clubId === true) {
-            baseQuery.where["clubId"] = query.clubId;
+            baseQuery.where["clubId"] = query?.clubId;
         }
 
         let rawList = await PlayerModel.findAll(baseQuery);
 
-        if (!query.includeDeleted) {
+        if (!query?.includeDeleted) {
             rawList = rawList.filter((o: any) => o.user.isDeleted == false);
         }
 
-        const list = rawList.map((p: any) => PlayerMap.toDomain(p));
+        const list = rawList.map((p: any) => PlayerMap.toDomain(p)!);
 
         return list;
     }
 
     async save(player: Player): Promise<void> {
-        const PlayerModel = this.models.PlayerModel;
-
         const raw = PlayerMap.toPersistance(player);
 
         const exist = await this.exist(player.userId.id.toString());
@@ -59,7 +49,6 @@ export class SequelizePlayerRepository implements PlayerRepository {
     }
 
     async getPlayerById(playerId: string): Promise<Player> {
-        const PlayerModel = this.models.PlayerModel;
         const query = this.baseQuery();
         query.where["playerId"] = playerId;
 
@@ -69,12 +58,10 @@ export class SequelizePlayerRepository implements PlayerRepository {
             throw new Error("Jugador no encontrado");
         }
 
-        return PlayerMap.toDomain(rawPlayer);
+        return PlayerMap.toDomain(rawPlayer)!;
     }
 
     async getPlayerByUserId(userId: string): Promise<Player> {
-        const PlayerModel = this.models.PlayerModel;
-
         const exist = await this.exist(userId);
 
         if (!exist) {
@@ -86,6 +73,6 @@ export class SequelizePlayerRepository implements PlayerRepository {
 
         const rawPlayer = await PlayerModel.findOne(query);
 
-        return PlayerMap.toDomain(rawPlayer);
+        return PlayerMap.toDomain(rawPlayer)!;
     }
 }

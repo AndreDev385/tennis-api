@@ -17,18 +17,11 @@ export class ListClash implements UseCase<any, Promise<Response>> {
         try {
             const query: ClashQuery = {};
 
+            const validQueries = ["categoryId", "clubId", "isFinish", "journey", "seasonId"];
+
             for (const [key, value] of Object.entries(request)) {
-                if (key == "categoryId") {
-                    query.categoryId = value as string;
-                }
-                if (key == "isFinish") {
-                    query.isFinish = value as boolean;
-                }
-                if (key == "journey") {
-                    query.journey = value as string;
-                }
-                if (key == "seasonId") {
-                    query.seasonId = value as string;
+                if (validQueries.includes(key)) {
+                    query[key] = value;
                 }
             }
 
@@ -37,7 +30,6 @@ export class ListClash implements UseCase<any, Promise<Response>> {
             const dtoList = list.map((clash) => {
                 const obj = ClashMap.toDto(clash);
                 delete obj.matchs;
-
                 return obj;
             });
 

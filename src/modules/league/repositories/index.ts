@@ -1,5 +1,3 @@
-import models from "../../../shared/infra/database/sequelize/models";
-
 import { SequelizeClubRepository } from "./implementations/sequelizeClubRepo";
 import { SequelizeTrackerRepository } from "./implementations/sequelizeTrackerRepo";
 import { SequelizeSeasonRepository } from "./implementations/sequelizeSeasonRepo";
@@ -17,37 +15,34 @@ import { SequelizeAdRepository } from "./implementations/sequelizeAdRepo";
 import { SequelizeRankingRepository } from "./implementations/sequelizeRankingRepo";
 import { SequelizePausedMatchRepository } from "./implementations/sequelizePausedMatchRepo";
 
-const sequelizeClubRepo = new SequelizeClubRepository(models);
-const sequelizeCategoryRepo = new SequelizeCategoryRepository(models);
-const sequelizeSeasonRepo = new SequelizeSeasonRepository(models);
-const sequelizePlayerTrackerRepo = new SequelizePlayerTrackerRepository(models);
+const sequelizeClubRepo = new SequelizeClubRepository();
+const sequelizeCategoryRepo = new SequelizeCategoryRepository();
+const sequelizeSeasonRepo = new SequelizeSeasonRepository();
+const sequelizePlayerTrackerRepo = new SequelizePlayerTrackerRepository();
 const sequelizeTrackerRepo = new SequelizeTrackerRepository(
-    models,
     sequelizePlayerTrackerRepo
 );
-const sequelizeLeagueRepo = new SequelizeLeagueRepository(models);
-const sequelizePlayerRepo = new SequelizePlayerRepository(models);
+const sequelizeLeagueRepo = new SequelizeLeagueRepository();
+const sequelizePlayerRepo = new SequelizePlayerRepository();
 const sequelizeMatchRepo = new SequelizeMatchRepository(
-    models,
     sequelizeTrackerRepo,
     sequelizePlayerRepo
 );
 
-const sequelizeTeamRepo = new SequelizeTeamRepository(models);
+const sequelizeTeamRepo = new SequelizeTeamRepository();
 const sequelizeClashRepo = new SequelizeClashRepo(
-    models,
     sequelizeMatchRepo,
     sequelizeTeamRepo,
     sequelizeClubRepo,
 );
-const sequelizeJourneyRepo = new SequelizeJourneyRepository(models);
-const sequelizeTeamStatsRepo = new SequelizeTeamStatsRepository(models);
+const sequelizeJourneyRepo = new SequelizeJourneyRepository();
+const sequelizeTeamStatsRepo = new SequelizeTeamStatsRepository();
 
-const sequelizeClubEventRepo = new SequelizeClubEventRepository(models);
-const sequelizeAdRepo = new SequelizeAdRepository(models);
-const sequelizeRankingRepo = new SequelizeRankingRepository(models, sequelizeTeamRepo);
+const sequelizeClubEventRepo = new SequelizeClubEventRepository();
+const sequelizeAdRepo = new SequelizeAdRepository();
+const sequelizeRankingRepo = new SequelizeRankingRepository(sequelizeTeamRepo);
 
-const sequelizePausedMatchRepo = new SequelizePausedMatchRepository(models, sequelizeTrackerRepo);
+const sequelizePausedMatchRepo = new SequelizePausedMatchRepository(sequelizeTrackerRepo);
 
 export {
     sequelizeLeagueRepo,

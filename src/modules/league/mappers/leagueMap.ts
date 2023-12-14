@@ -1,6 +1,7 @@
 import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
 import { Mapper } from "../../../shared/infra/Mapper";
 import { League } from "../domain/league";
+import { Season } from "../domain/season";
 import { Seasons } from "../domain/seasons";
 import { LeagueDto } from "../dtos/leagueDto";
 import { SeasonDto } from "../dtos/seasonDto";
@@ -14,9 +15,9 @@ export class LeagueMap implements Mapper<League> {
         };
     }
 
-    public static toDomain(raw: LeagueDto, seasons?: Array<SeasonDto>): League {
-        let seasonsArr = seasons?.map((s) => SeasonMap.toDomain(s));
-        const seasonsDomain = Seasons.create(seasonsArr);
+    public static toDomain(raw: LeagueDto, seasons: Array<SeasonDto> = []): League | null {
+        let seasonsArr = seasons.map((s) => SeasonMap.toDomain(s));
+        const seasonsDomain = Seasons.create(seasonsArr as Season[]);
 
         const leagueOrError = League.create(
             { name: raw.name, seasons: seasonsDomain },

@@ -52,13 +52,9 @@ export class LoginUseCase implements UseCase<LoginDto, Response> {
                 return left(new LoginUseCaseErrors.EmailDoesNotExist());
             }
 
-            console.log(password.value);
-
             const validPassword = await user.password.comparePassword(
                 password.value
             );
-
-            console.log(`Valid password ${validPassword}`);
 
             if (!validPassword) {
                 return left(new LoginUseCaseErrors.PasswordDoesntMatchError());

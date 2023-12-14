@@ -6,7 +6,7 @@ import { SetPlayerStats } from "../domain/playerSetStats";
 
 export class SetMap implements Mapper<Set> {
 
-    private static playerStatsToDomain(raw: any): SetPlayerStats {
+    private static playerStatsToDomain(raw: any): SetPlayerStats | null {
         const statsOrError = SetPlayerStats.create(raw);
 
         statsOrError.isFailure && console.log(statsOrError.getErrorValue());
@@ -14,12 +14,12 @@ export class SetMap implements Mapper<Set> {
         return statsOrError.isSuccess ? statsOrError.getValue() : null;
     }
 
-    private static statsToDomain(raw: any): SetStats {
+    private static statsToDomain(raw: any): SetStats | null {
         if (!raw) {
             return null
         }
         const playerStats = this.playerStatsToDomain(raw.me);
-        let partnerStats: SetPlayerStats;
+        let partnerStats: SetPlayerStats | null = null;
 
         if (raw.partner) {
             partnerStats = this.playerStatsToDomain(raw.partner);
@@ -36,7 +36,7 @@ export class SetMap implements Mapper<Set> {
         return statsOrError.isSuccess ? statsOrError.getValue() : null;
     }
 
-    private static playerStatsToDto(stats: SetPlayerStats): SetPlayerStatsDto {
+    private static playerStatsToDto(stats: SetPlayerStats | null | undefined): SetPlayerStatsDto | null {
         if (!stats) {
             return null
         }
@@ -72,13 +72,13 @@ export class SetMap implements Mapper<Set> {
         }
     }
 
-    private static statsToDto(stats: SetStats): SetStatsDto {
+    private static statsToDto(stats?: SetStats | null): SetStatsDto | null {
         if (!stats) {
             return null
         }
         return {
-            me: this.playerStatsToDto(stats.me),
-            partner: this.playerStatsToDto(stats.partner) ?? null,
+            me: this.playerStatsToDto(stats.me)!,
+            partner: this.playerStatsToDto(stats.partner),
             gamesWonReturning: stats.gamesWonReturning,
             gamesLostReturning: stats.gamesLostReturning,
             winBreakPtsChances: stats.winBreakPtsChances,
@@ -119,7 +119,7 @@ export class SetMap implements Mapper<Set> {
         return JSON.stringify(object);
     }
 
-    public static toDomain(raw: SetDto | string): Set {
+    public static toDomain(raw: SetDto | string): Set | null {
         let object: any;
         if (typeof raw == 'string') {
             object = JSON.parse(raw);
@@ -147,7 +147,7 @@ export class SetMap implements Mapper<Set> {
         return {
             myGames: set.myGames,
             rivalGames: set.rivalGames,
-            setWon: set.setWon,
+            setWon: set.setWon ?? null,
             tiebreak: set.tiebreak,
             superTiebreak: set.superTiebreak,
             myTiebreakPoints: set.myTiebreakPoints,

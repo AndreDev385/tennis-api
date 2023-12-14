@@ -30,7 +30,7 @@ export class FeatureCouples implements UseCase<any, any> {
                 return left(Result.fail<string>("Ingresa un id de equipo"))
             }
 
-            const query = { team1: request.teamId, isFinish: true };
+            const query: any = { team1: request.teamId, isFinish: true };
 
             if (!!request.seasonId == true) {
                 query['seasonId'] = request.seasonId;
@@ -49,7 +49,7 @@ export class FeatureCouples implements UseCase<any, any> {
 
                 for (const match of matches) {
                     if (match.mode.value == GameMode.double) {
-                        updateCoupleRecord(couplesRecord, match.tracker);
+                        updateCoupleRecord(couplesRecord, match.tracker!);
                     }
                 }
 
@@ -101,7 +101,7 @@ function updateCoupleRecord(records: FeatureCoupleRecords, tracker: MatchTracker
     const reversedCoupleId = `${partnerId} ${playerId}`;
 
     // check for same couple with diferent order
-    if (!!records[coupleId] == false && !!records[reversedCoupleId] == false) {
+    if ((!!records[coupleId] as boolean == false) && (!!records[reversedCoupleId] as boolean == false)) {
         records[coupleId] = {
             meshPointsWon: tracker.meshPointsWon,
             meshPointsLost: tracker.meshPointsLost,
@@ -116,7 +116,7 @@ function updateCoupleRecord(records: FeatureCoupleRecords, tracker: MatchTracker
         return
     }
 
-    if (!!records[coupleId] != false) {
+    if (!!records[coupleId] as boolean != false) {
         records[coupleId].meshPointsWon += tracker.meshPointsWon;
         records[coupleId].meshPointsLost += tracker.meshPointsLost;
         records[coupleId].firstServIn += tracker.firstServIn;

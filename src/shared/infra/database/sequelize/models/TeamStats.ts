@@ -1,9 +1,47 @@
-import { DataTypes, Sequelize } from "sequelize";
+import { DataTypes, InferAttributes, Model, Sequelize } from "sequelize";
 import config from "../config/config";
 
 const sequelize: Sequelize = config.connection;
 
-const TeamStatsModel = sequelize.define(
+interface TeamStatsData extends Model<InferAttributes<TeamStatsData>> {
+    teamStatsId: string;
+    teamId: string;
+    seasonId: string;
+    journey: string;
+    gamesWonAsLocal: number;
+    gamesPlayedAsLocal: number;
+    gamesWonAsVisitor: number;
+    gamesPlayedAsVisitor: number;
+    // sets
+    setsWonAsLocal: number;
+    setsPlayedAsLocal: number;
+    setsWonAsVisitor: number;
+    setsPlayedAsVisitor: number;
+    // super tie-break
+    superTieBreaksWonAsLocal: number;
+    superTieBreaksPlayedAsLocal: number;
+    superTieBreaksWonAsVisitor: number;
+    superTieBreaksPlayedAsVisitor: number;
+    // matchs
+    matchWonAsLocal: number;
+    matchLostAsLocal: number;
+    matchPlayedAsLocal: number;
+    matchWonAsVisitor: number;
+    matchLostAsVisitor: number;
+    matchPlayedAsVisitor: number;
+    // match won with first set won
+    matchsWonWithFirstSetWonAsLocal: number;
+    matchsPlayedWithFirstSetWonAsLocal: number;
+    matchsWonWithFirstSetWonAsVisitor: number;
+    matchsPlayedWithFirstSetWonAsVisitor: number;
+    // clash won
+    clashWonAsLocal: number;
+    clashPlayedAsLocal: number;
+    clashWonAsVisitor: number;
+    clashPlayedAsVisitor: number;
+}
+
+const TeamStatsModel = sequelize.define<TeamStatsData>(
     "teamStats",
     {
         teamStatsId: {

@@ -11,6 +11,7 @@ export class PlayerTrackerMapper implements Mapper<PlayerTracker> {
             playerTrackerId: playerTracker.playerTrackerId.id.toString(),
             playerId: playerTracker.playerId.id.toString(),
             seasonId: playerTracker.seasonId.id.toString(),
+            isDouble: playerTracker.isDouble,
             pointsWon: playerTracker.pointsWon,
             pointsWonServing: playerTracker.pointsWonServing,
             pointsWonReturning: playerTracker.pointsWonReturning,
@@ -25,6 +26,8 @@ export class PlayerTrackerMapper implements Mapper<PlayerTracker> {
             pointsWinnedSecondServ: playerTracker.pointsWinnedSecondServ,
             firstServIn: playerTracker.firstServIn,
             secondServIn: playerTracker.secondServIn,
+            firstServWon: playerTracker.firstServWon,
+            secondServWon: playerTracker.secondServWon,
             aces: playerTracker.aces,
             dobleFaults: playerTracker.dobleFaults,
             pointsWinnedFirstReturn: playerTracker.pointsWinnedFirstReturn,
@@ -33,12 +36,18 @@ export class PlayerTrackerMapper implements Mapper<PlayerTracker> {
             secondReturnIn: playerTracker.secondReturnIn,
             firstReturnOut: playerTracker.firstReturnOut,
             secondReturnOut: playerTracker.secondReturnOut,
+            firstReturnWon: playerTracker.firstReturnWon,
+            secondReturnWon: playerTracker.secondReturnWon,
+            firstReturnWinner: playerTracker.firstReturnWinner,
+            secondReturnWinner: playerTracker.secondReturnWinner,
             meshPointsWon: playerTracker.meshPointsWon,
             meshPointsLost: playerTracker.meshPointsLost,
+            meshError: playerTracker.meshError,
+            meshWinner: playerTracker.meshWinner,
             bckgPointsWon: playerTracker.bckgPointsWon,
             bckgPointsLost: playerTracker.bckgPointsLost,
-            winners: playerTracker.winners,
-            noForcedErrors: playerTracker.noForcedErrors,
+            bckgError: playerTracker.bckgError,
+            bckgWinner: playerTracker.bckgWinner,
         };
     }
 
@@ -47,6 +56,7 @@ export class PlayerTrackerMapper implements Mapper<PlayerTracker> {
             playerId: playerTracker.playerId.id.toString(),
             seasonId: playerTracker.seasonId.id.toString(),
             playerTrackerId: playerTracker.playerTrackerId.id.toString(),
+            isDouble: playerTracker.isDouble,
             pointsWon: playerTracker.pointsWon,
             pointsWonServing: playerTracker.pointsWonServing,
             pointsWonReturning: playerTracker.pointsWonReturning,
@@ -61,6 +71,8 @@ export class PlayerTrackerMapper implements Mapper<PlayerTracker> {
             pointsWinnedSecondServ: playerTracker.pointsWinnedSecondServ,
             firstServIn: playerTracker.firstServIn,
             secondServIn: playerTracker.secondServIn,
+            firstServWon: playerTracker.firstServWon,
+            secondServWon: playerTracker.secondServWon,
             aces: playerTracker.aces,
             dobleFaults: playerTracker.dobleFaults,
             pointsWinnedFirstReturn: playerTracker.pointsWinnedFirstReturn,
@@ -69,16 +81,22 @@ export class PlayerTrackerMapper implements Mapper<PlayerTracker> {
             secondReturnIn: playerTracker.secondReturnIn,
             firstReturnOut: playerTracker.firstReturnOut,
             secondReturnOut: playerTracker.secondReturnOut,
+            firstReturnWon: playerTracker.firstReturnWon,
+            secondReturnWon: playerTracker.secondReturnWon,
+            firstReturnWinner: playerTracker.firstReturnWinner,
+            secondReturnWinner: playerTracker.secondReturnWinner,
             meshPointsWon: playerTracker.meshPointsWon,
             meshPointsLost: playerTracker.meshPointsLost,
+            meshError: playerTracker.meshError,
+            meshWinner: playerTracker.meshWinner,
             bckgPointsWon: playerTracker.bckgPointsWon,
             bckgPointsLost: playerTracker.bckgPointsLost,
-            winners: playerTracker.winners,
-            noForcedErrors: playerTracker.noForcedErrors,
+            bckgError: playerTracker.bckgError,
+            bckgWinner: playerTracker.bckgWinner,
         };
     }
 
-    public static toDomain(raw: any): PlayerTracker {
+    public static toDomain(raw: any): PlayerTracker | null {
         const playerId = PlayerId.create(new UniqueEntityID(raw.playerId));
         const seasonId = SeasonId.create(new UniqueEntityID(raw.seasonId));
 
@@ -86,6 +104,7 @@ export class PlayerTrackerMapper implements Mapper<PlayerTracker> {
             {
                 seasonId: seasonId.getValue(),
                 playerId: playerId.getValue(),
+                isDouble: raw.isDouble,
                 pointsWon: raw.pointsWon,
                 pointsWonServing: raw.pointsWonServing,
                 pointsWonReturning: raw.pointsWonReturning,
@@ -100,6 +119,8 @@ export class PlayerTrackerMapper implements Mapper<PlayerTracker> {
                 pointsWinnedSecondServ: raw.pointsWinnedSecondServ,
                 firstServIn: raw.firstServIn,
                 secondServIn: raw.secondServIn,
+                firstServWon: raw.firstServWon,
+                secondServWon: raw.secondServWon,
                 aces: raw.aces,
                 dobleFaults: raw.dobleFaults,
                 pointsWinnedFirstReturn: raw.pointsWinnedFirstReturn,
@@ -108,12 +129,18 @@ export class PlayerTrackerMapper implements Mapper<PlayerTracker> {
                 secondReturnIn: raw.secondReturnIn,
                 firstReturnOut: raw.firstReturnOut,
                 secondReturnOut: raw.secondReturnOut,
+                firstReturnWon: raw.firstReturnWon,
+                secondReturnWon: raw.secondReturnWon,
+                firstReturnWinner: raw.firstReturnWinner,
+                secondReturnWinner: raw.secondReturnWinner,
                 meshPointsWon: raw.meshPointsWon,
                 meshPointsLost: raw.meshPointsLost,
+                meshError: raw.meshError,
+                meshWinner: raw.meshWinner,
                 bckgPointsWon: raw.bckgPointsWon,
                 bckgPointsLost: raw.bckgPointsLost,
-                winners: raw.winners,
-                noForcedErrors: raw.noForcedErrors,
+                bckgError: raw.bckgError,
+                bckgWinner: raw.bckgWinner,
             },
             new UniqueEntityID(raw.playerTrackerId)
         );

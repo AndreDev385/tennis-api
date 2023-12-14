@@ -1,24 +1,21 @@
+import { TrackerModel } from "../../../../shared/infra/database/sequelize/models/Tracker";
 import { MatchTracker } from "../../domain/matchTracker";
 import { TrackerMap } from "../../mappers/trackerMap";
 import { PlayerTrackerRepository } from "../playerTrackerRepo";
 import { TrackerRepository } from "../trackerRepo";
 
 export class SequelizeTrackerRepository implements TrackerRepository {
-    private models: any;
     private playerTracker: PlayerTrackerRepository;
 
-    constructor(models: any, playerTracker: PlayerTrackerRepository) {
-        this.models = models;
+    constructor(playerTracker: PlayerTrackerRepository) {
         this.playerTracker = playerTracker;
     }
 
     async save(tracker: MatchTracker): Promise<void> {
-        const TrackerModel = this.models.TrackerModel;
-
         await this.playerTracker.save(tracker.me);
 
         if (!!tracker.partner === true) {
-            await this.playerTracker.save(tracker.partner);
+            await this.playerTracker.save(tracker.partner!);
         }
 
         const raw = TrackerMap.toPersistance(tracker);
@@ -36,8 +33,6 @@ export class SequelizeTrackerRepository implements TrackerRepository {
     }
 
     async findTrackerByMatchId(matchId: string): Promise<MatchTracker> {
-        const TrackerModel = this.models.TrackerModel;
-
         const raw = await TrackerModel.findOne({
             where: { matchId },
         });
@@ -50,7 +45,7 @@ export class SequelizeTrackerRepository implements TrackerRepository {
         let partner: any;
 
         if (!!raw.partner == true) {
-            partner = await this.playerTracker.getById(raw.partner);
+            partner = await this.playerTracker.getById(raw.partner!);
         }
 
         return TrackerMap.toDomain({
@@ -63,10 +58,8 @@ export class SequelizeTrackerRepository implements TrackerRepository {
             breakPtsWinned: raw.breakPtsWinned,
             longRallyLost: raw.longRallyLost,
             shortRallyWon: raw.shortRallyWon,
-            gamesWonServing: raw.gamesWonServing,
             mediumRallyWon: raw.mediumRallyWon,
             shortRallyLost: raw.shortRallyLost,
-            gamesLostServing: raw.gamesLostServing,
             mediumRallyLost: raw.mediumRallyLost,
             rivalDobleFault: raw.rivalDobleFault,
             gamesWonReturning: raw.gamesWonReturning,
@@ -81,12 +74,10 @@ export class SequelizeTrackerRepository implements TrackerRepository {
             rivalPointsWinnedSecondServ: raw.rivalPointsWinnedSecondServ,
             rivalPointsWinnedFirstReturn: raw.rivalPointsWinnedFirstReturn,
             rivalPointsWinnedSecondReturn: raw.rivalPointsWinnedSecondReturn,
-        });
+        })!;
     }
 
     async delete(matchId: string): Promise<void> {
-        const TrackerModel = this.models.TrackerModel;
-
         await TrackerModel.destroy({ where: { matchId } })
     }
 }

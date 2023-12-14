@@ -20,7 +20,7 @@ module.exports = {
             {
                 seasonId,
                 leagueId,
-                name: "Temporada 2 2023",
+                name: "Temporada 1 2024",
                 isCurrentSeason: true,
                 isFinish: false,
                 createdAt: new Date(),

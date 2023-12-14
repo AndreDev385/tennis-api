@@ -1,9 +1,16 @@
-import { DataTypes, Sequelize } from "sequelize";
+import { DataTypes, InferAttributes, Model, Sequelize } from "sequelize";
 import config from "../config/config";
 
 const sequelize: Sequelize = config.connection;
 
-const AdModel = sequelize.define(
+interface AdData extends Model<InferAttributes<AdData>> {
+    adId: string;
+    clubId: string;
+    link: string;
+    image: string;
+}
+
+const AdModel = sequelize.define<AdData>(
     "ad",
     {
         adId: {
@@ -34,4 +41,4 @@ const AdModel = sequelize.define(
     }
 );
 
-export { AdModel };
+export { AdModel, AdData };
