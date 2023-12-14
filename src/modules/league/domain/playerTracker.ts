@@ -10,6 +10,7 @@ interface PlayerTrackerProps {
     playerId: PlayerId;
     seasonId: SeasonId;
 
+    isDouble: boolean;
     pointsWon: number;
     pointsWonServing: number;
     pointsWonReturning: number;
@@ -24,6 +25,8 @@ interface PlayerTrackerProps {
     pointsWinnedSecondServ: number;
     firstServIn: number;
     secondServIn: number;
+    firstServWon: number;
+    secondServWon: number;
     aces: number;
     dobleFaults: number;
     pointsWinnedFirstReturn: number;
@@ -32,17 +35,51 @@ interface PlayerTrackerProps {
     secondReturnIn: number;
     firstReturnOut: number;
     secondReturnOut: number;
+    firstReturnWon: number;
+    secondReturnWon: number;
+    firstReturnWinner: number;
+    secondReturnWinner: number;
     meshPointsWon: number;
     meshPointsLost: number;
+    meshWinner: number;
+    meshError: number;
     bckgPointsWon: number;
     bckgPointsLost: number;
-    winners: number;
-    noForcedErrors: number;
+    bckgWinner: number;
+    bckgError: number;
 }
 
 export class PlayerTracker extends Entity<PlayerTrackerProps> {
     get playerTrackerId(): PlayerTrackerId {
         return PlayerTrackerId.create(this._id).getValue();
+    }
+
+    get isDouble(): boolean {
+        return this.props.isDouble;
+    }
+
+    get firstServWon(): number {
+        return this.props.firstServWon;
+    }
+
+    get secondServWon(): number {
+        return this.props.secondServWon;
+    }
+
+    get firstReturnWon(): number {
+        return this.props.firstReturnWon;
+    }
+
+    get secondReturnWon(): number {
+        return this.props.secondReturnWon;
+    }
+
+    get firstReturnWinner(): number {
+        return this.props.firstReturnWinner;
+    }
+
+    get secondReturnWinner(): number {
+        return this.props.secondReturnWinner;
     }
 
     get seasonId(): SeasonId {
@@ -129,17 +166,28 @@ export class PlayerTracker extends Entity<PlayerTrackerProps> {
     get meshPointsLost(): number {
         return this.props.meshPointsLost;
     }
+    get meshWinner(): number {
+        return this.props.meshWinner;
+    }
+
+    get meshError(): number {
+        return this.props.meshError;
+    }
+
     get bckgPointsWon(): number {
         return this.props.bckgPointsWon;
     }
+
     get bckgPointsLost(): number {
         return this.props.bckgPointsLost;
     }
-    get winners(): number {
-        return this.props.winners;
+
+    get bckgWinner(): number {
+        return this.props.bckgWinner;
     }
-    get noForcedErrors(): number {
-        return this.props.noForcedErrors;
+
+    get bckgError(): number {
+        return this.props.bckgError;
     }
 
     private constructor(props: PlayerTrackerProps, id?: UniqueEntityID) {
@@ -148,7 +196,8 @@ export class PlayerTracker extends Entity<PlayerTrackerProps> {
 
     public static createNewPlayerTracker(
         playerId: PlayerId,
-        seasonId: SeasonId
+        seasonId: SeasonId,
+        isDouble: boolean,
     ): Result<PlayerTracker> {
         const guard = Guard.againstNullOrUndefinedBulk([
             { argument: playerId, argumentName: "id de jugador" },
@@ -162,6 +211,7 @@ export class PlayerTracker extends Entity<PlayerTrackerProps> {
         const result = PlayerTracker.create({
             seasonId,
             playerId,
+            isDouble,
             gamesLostServing: 0,
             gamesWonServing: 0,
             pointsWon: 0,
@@ -176,6 +226,8 @@ export class PlayerTracker extends Entity<PlayerTrackerProps> {
             pointsWinnedSecondServ: 0,
             firstServIn: 0,
             secondServIn: 0,
+            firstServWon: 0,
+            secondServWon: 0,
             aces: 0,
             dobleFaults: 0,
             pointsWinnedFirstReturn: 0,
@@ -184,12 +236,18 @@ export class PlayerTracker extends Entity<PlayerTrackerProps> {
             secondReturnIn: 0,
             firstReturnOut: 0,
             secondReturnOut: 0,
+            firstReturnWon: 0,
+            secondReturnWon: 0,
+            firstReturnWinner: 0,
+            secondReturnWinner: 0,
             meshPointsWon: 0,
             meshPointsLost: 0,
+            meshError: 0,
+            meshWinner: 0,
             bckgPointsWon: 0,
             bckgPointsLost: 0,
-            winners: 0,
-            noForcedErrors: 0,
+            bckgError: 0,
+            bckgWinner: 0
         });
 
         if (result.isFailure) {
@@ -245,6 +303,8 @@ export class PlayerTracker extends Entity<PlayerTrackerProps> {
             pointsWinnedSecondServ: props.pointsWinnedSecondServ ?? 0,
             firstServIn: props.firstServIn ?? 0,
             secondServIn: props.secondServIn ?? 0,
+            firstServWon: props.firstServWon ?? 0,
+            secondServWon: props.secondServWon ?? 0,
             aces: props.aces ?? 0,
             dobleFaults: props.dobleFaults ?? 0,
             pointsWinnedFirstReturn: props.pointsWinnedFirstReturn ?? 0,
@@ -252,12 +312,18 @@ export class PlayerTracker extends Entity<PlayerTrackerProps> {
             secondReturnIn: props.secondReturnIn ?? 0,
             firstReturnOut: props.firstReturnOut ?? 0,
             secondReturnOut: props.secondReturnOut ?? 0,
+            firstReturnWon: props.firstReturnWon ?? 0,
+            secondReturnWon: props.secondReturnWon ?? 0,
+            firstReturnWinner: props.firstReturnWinner ?? 0,
+            secondReturnWinner: props.secondReturnWinner ?? 0,
             meshPointsWon: props.meshPointsWon ?? 0,
-            bckgPointsWon: props.bckgPointsWon ?? 0,
             meshPointsLost: props.meshPointsLost ?? 0,
+            meshWinner: props.meshWinner ?? 0,
+            meshError: props.meshError ?? 0,
+            bckgPointsWon: props.bckgPointsWon ?? 0,
             bckgPointsLost: props.bckgPointsLost ?? 0,
-            winners: props.winners ?? 0,
-            noForcedErrors: props.noForcedErrors ?? 0,
+            bckgWinner: props.bckgWinner ?? 0,
+            bckgError: props.bckgError ?? 0,
         }, id);
 
         return Result.ok<PlayerTracker>(playerTracker);

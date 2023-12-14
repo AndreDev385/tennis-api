@@ -19,6 +19,8 @@ interface MatchTrackerProps {
     winBreakPtsChances: number;
     breakPtsWinned: number;
 
+    rivalFirstServWon: number;
+    rivalSecondServWon: number;
     rivalPointsWinnedFirstServ: number;
     rivalPointsWinnedSecondServ: number;
     rivalFirstServIn: number;
@@ -69,6 +71,14 @@ export class MatchTracker extends Entity<MatchTrackerProps> {
             return this.me.secondServIn + this.partner.secondServIn;
         }
         return this.me.secondServIn
+    }
+
+    get rivalFirstServWon(): number {
+        return this.props.rivalFirstServWon;
+    }
+
+    get rivalSecondServWon(): number {
+        return this.props.rivalSecondServWon;
     }
 
     get dobleFaults(): number {
@@ -182,7 +192,8 @@ export class MatchTracker extends Entity<MatchTrackerProps> {
         id: MatchId,
         seasonId: SeasonId,
         playerId: PlayerId,
-        partnerId?: PlayerId
+        isDouble: boolean,
+        partnerId?: PlayerId,
     ): Result<MatchTracker> {
         const guard = Guard.againstNullOrUndefined(id, "match id");
 
@@ -192,7 +203,8 @@ export class MatchTracker extends Entity<MatchTrackerProps> {
 
         const meOrError = PlayerTracker.createNewPlayerTracker(
             playerId,
-            seasonId
+            seasonId,
+            isDouble,
         );
 
         if (meOrError.isFailure) {
@@ -203,7 +215,8 @@ export class MatchTracker extends Entity<MatchTrackerProps> {
         if (!!partnerId === true) {
             const partnerOrError = PlayerTracker.createNewPlayerTracker(
                 partnerId!,
-                seasonId
+                seasonId,
+                isDouble,
             );
             if (partnerOrError.isFailure) {
                 return Result.fail(`${partnerOrError.getErrorValue()}`);
@@ -223,6 +236,8 @@ export class MatchTracker extends Entity<MatchTrackerProps> {
             rivalPointsWinnedSecondServ: 0,
             rivalFirstServIn: 0,
             rivalSecondServIn: 0,
+            rivalFirstServWon: 0,
+            rivalSecondServWon: 0,
             rivalPointsWinnedFirstReturn: 0,
             rivalPointsWinnedSecondReturn: 0,
             rivalFirstReturnIn: 0,

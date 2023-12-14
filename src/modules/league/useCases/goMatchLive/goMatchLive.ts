@@ -2,6 +2,7 @@ import { AppError } from "../../../../shared/core/AppError";
 import { Either, Result, left, right } from "../../../../shared/core/Result";
 import { UseCase } from "../../../../shared/core/UseCase";
 import { Clash } from "../../domain/clubClash";
+import { GameMode } from "../../domain/gameMode";
 import { Match } from "../../domain/match";
 import { MatchStatuses } from "../../domain/matchStatus";
 import { MatchTracker } from "../../domain/matchTracker";
@@ -52,7 +53,8 @@ export class GoMatchLive
                     match.matchId,
                     clash.seasonId,
                     match.player1.playerId,
-                    match.player3?.playerId
+                    match.mode.value == GameMode.double,
+                    match.player3?.playerId,
                 );
 
                 if (trackerOrError.isFailure) {

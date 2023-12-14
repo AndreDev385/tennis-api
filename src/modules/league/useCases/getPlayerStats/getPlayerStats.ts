@@ -84,6 +84,7 @@ function calculatePlayerStats(stats: Array<PlayerTracker>) {
         playerId: stats[0].playerId.id.toString(),
         playerTrackerId: stats[0].playerTrackerId.id.toString(),
         seasonId: stats[0].seasonId.id.toString(),
+        isDouble: stats[0].isDouble,
         pointsWon: 0,
         pointsWonServing: 0,
         pointsWonReturning: 0,
@@ -98,6 +99,8 @@ function calculatePlayerStats(stats: Array<PlayerTracker>) {
         pointsWinnedSecondServ: 0,
         firstServIn: 0,
         secondServIn: 0,
+        firstServWon: 0,
+        secondServWon: 0,
         aces: 0,
         dobleFaults: 0,
         pointsWinnedFirstReturn: 0,
@@ -106,12 +109,18 @@ function calculatePlayerStats(stats: Array<PlayerTracker>) {
         secondReturnIn: 0,
         firstReturnOut: 0,
         secondReturnOut: 0,
+        firstReturnWon: 0,
+        secondReturnWon: 0,
+        firstReturnWinner: 0,
+        secondReturnWinner: 0,
         meshPointsWon: 0,
         meshPointsLost: 0,
+        meshError: 0,
+        meshWinner: 0,
         bckgPointsWon: 0,
         bckgPointsLost: 0,
-        winners: 0,
-        noForcedErrors: 0,
+        bckgError: 0,
+        bckgWinner: 0,
     }
 
     for (const matchStats of stats) {
@@ -127,6 +136,8 @@ function calculatePlayerStats(stats: Array<PlayerTracker>) {
         totalStats.pointsWinnedSecondServ += matchStats.pointsWinnedSecondServ;
         totalStats.firstServIn += matchStats.firstServIn;
         totalStats.secondServIn += matchStats.secondServIn;
+        totalStats.firstServWon += matchStats.firstServWon;
+        totalStats.secondServWon += matchStats.secondServWon;
         totalStats.aces += matchStats.aces;
         totalStats.dobleFaults += matchStats.dobleFaults;
         totalStats.pointsWinnedFirstReturn += matchStats.pointsWinnedFirstReturn;
@@ -135,12 +146,18 @@ function calculatePlayerStats(stats: Array<PlayerTracker>) {
         totalStats.secondReturnIn += matchStats.secondReturnIn;
         totalStats.firstReturnOut += matchStats.firstReturnOut;
         totalStats.secondReturnOut += matchStats.secondReturnOut;
+        totalStats.firstReturnWon += matchStats.firstReturnWon;
+        totalStats.secondReturnWon += matchStats.secondReturnWon;
+        totalStats.firstReturnWinner += matchStats.firstReturnWinner;
+        totalStats.secondReturnWinner += matchStats.secondReturnWinner;
         totalStats.meshPointsWon += matchStats.meshPointsWon;
         totalStats.meshPointsLost += matchStats.meshPointsLost;
+        totalStats.meshError += matchStats.meshError;
+        totalStats.meshWinner += matchStats.meshWinner;
         totalStats.bckgPointsWon += matchStats.bckgPointsWon;
         totalStats.bckgPointsLost += matchStats.bckgPointsLost;
-        totalStats.winners += matchStats.winners;
-        totalStats.noForcedErrors += matchStats.noForcedErrors;
+        totalStats.bckgWinner += matchStats.bckgWinner;
+        totalStats.bckgError += matchStats.bckgError;
         totalStats.gamesWonServing += matchStats.gamesWonServing
         totalStats.gamesLostServing += matchStats.gamesLostServing
     }

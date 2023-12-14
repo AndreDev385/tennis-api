@@ -7,6 +7,7 @@ interface PlayerTrackerData extends Model<InferAttributes<PlayerTrackerData>> {
     playerTrackerId: string;
     playerId: string;
     seasonId: string;
+    isDouble: boolean;
     pointsWon: number;
     pointsWonServing: number;
     pointsWonReturning: number;
@@ -21,6 +22,8 @@ interface PlayerTrackerData extends Model<InferAttributes<PlayerTrackerData>> {
     pointsWinnedSecondServ: number;
     firstServIn: number;
     secondServIn: number;
+    firstServWon: number;
+    secondServWon: number;
     aces: number;
     dobleFaults: number;
     pointsWinnedFirstReturn: number;
@@ -29,12 +32,18 @@ interface PlayerTrackerData extends Model<InferAttributes<PlayerTrackerData>> {
     secondReturnIn: number;
     firstReturnOut: number;
     secondReturnOut: number;
+    firstReturnWon: number;
+    secondReturnWon: number;
+    firstReturnWinner: number;
+    secondReturnWinner: number;
     meshPointsWon: number;
     meshPointsLost: number;
+    meshError: number;
+    meshWinner: number;
     bckgPointsWon: number;
     bckgPointsLost: number;
-    winners: number;
-    noForcedErrors: number;
+    bckgError: number;
+    bckgWinner: number;
 }
 
 const PlayerTrackerModel = sequelize.define<PlayerTrackerData>(
@@ -52,6 +61,10 @@ const PlayerTrackerModel = sequelize.define<PlayerTrackerData>(
         },
         seasonId: {
             type: DataTypes.UUID,
+            allowNull: false,
+        },
+        isDouble: {
+            type: DataTypes.BOOLEAN,
             allowNull: false,
         },
         pointsWon: {
@@ -110,6 +123,14 @@ const PlayerTrackerModel = sequelize.define<PlayerTrackerData>(
             type: DataTypes.INTEGER,
             allowNull: false,
         },
+        firstServWon: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        secondServWon: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
         aces: {
             type: DataTypes.INTEGER,
             defaultValue: 0,
@@ -150,12 +171,43 @@ const PlayerTrackerModel = sequelize.define<PlayerTrackerData>(
             defaultValue: 0,
             allowNull: true,
         },
+        firstReturnWon: {
+            type: DataTypes.INTEGER,
+            defaultValue: 0,
+            allowNull: true,
+        },
+        secondReturnWon: {
+            type: DataTypes.INTEGER,
+            defaultValue: 0,
+            allowNull: true,
+        },
+        firstReturnWinner: {
+            type: DataTypes.INTEGER,
+            defaultValue: 0,
+            allowNull: true,
+        },
+        secondReturnWinner: {
+            type: DataTypes.INTEGER,
+            defaultValue: 0,
+            allowNull: true,
+        },
         meshPointsWon: {
             type: DataTypes.INTEGER,
             defaultValue: 0,
             allowNull: true,
         },
         meshPointsLost: {
+            type: DataTypes.INTEGER,
+            defaultValue: 0,
+            allowNull: true,
+        },
+        meshWinner: {
+
+            type: DataTypes.INTEGER,
+            defaultValue: 0,
+            allowNull: true,
+        },
+        meshError: {
             type: DataTypes.INTEGER,
             defaultValue: 0,
             allowNull: true,
@@ -170,12 +222,12 @@ const PlayerTrackerModel = sequelize.define<PlayerTrackerData>(
             defaultValue: 0,
             allowNull: true,
         },
-        winners: {
+        bckgWinner: {
             type: DataTypes.INTEGER,
             defaultValue: 0,
             allowNull: true,
         },
-        noForcedErrors: {
+        bckgError: {
             type: DataTypes.INTEGER,
             defaultValue: 0,
             allowNull: true,

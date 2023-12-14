@@ -450,6 +450,14 @@ module.exports = {
                     type: Sequelize.INTEGER,
                     defaultValue: 0,
                 },
+                rivalFirstServWon: {
+                    type: Sequelize.INTEGER,
+                    defaultValue: 0,
+                },
+                rivalSecondServWon: {
+                    type: Sequelize.INTEGER,
+                    defaultValue: 0,
+                },
                 rivalPointsWinnedFirstReturn: {
                     type: Sequelize.INTEGER,
                     defaultValue: 0,
@@ -535,6 +543,10 @@ module.exports = {
                     type: Sequelize.UUID,
                     allowNull: false,
                 },
+                isDouble: {
+                    type: Sequelize.BOOLEAN,
+                    allowNull: false,
+                },
                 pointsWon: {
                     type: Sequelize.INTEGER,
                     allowNull: false,
@@ -591,6 +603,14 @@ module.exports = {
                     type: Sequelize.INTEGER,
                     defaultValue: 0,
                 },
+                firstServWon: {
+                    type: Sequelize.INTEGER,
+                    defaultValue: 0,
+                },
+                secondServWon: {
+                    type: Sequelize.INTEGER,
+                    defaultValue: 0,
+                },
                 aces: {
                     type: Sequelize.INTEGER,
                     defaultValue: 0,
@@ -623,11 +643,35 @@ module.exports = {
                     type: Sequelize.INTEGER,
                     defaultValue: 0,
                 },
+                firstReturnWon: {
+                    type: Sequelize.INTEGER,
+                    defaultValue: 0,
+                },
+                secondReturnWon: {
+                    type: Sequelize.INTEGER,
+                    defaultValue: 0,
+                },
+                firstReturnWinner: {
+                    type: Sequelize.INTEGER,
+                    defaultValue: 0,
+                },
+                secondReturnWinner: {
+                    type: Sequelize.INTEGER,
+                    defaultValue: 0,
+                },
                 meshPointsWon: {
                     type: Sequelize.INTEGER,
                     defaultValue: 0,
                 },
                 meshPointsLost: {
+                    type: Sequelize.INTEGER,
+                    defaultValue: 0,
+                },
+                meshWinner: {
+                    type: Sequelize.INTEGER,
+                    defaultValue: 0,
+                },
+                meshError: {
                     type: Sequelize.INTEGER,
                     defaultValue: 0,
                 },
@@ -639,11 +683,11 @@ module.exports = {
                     type: Sequelize.INTEGER,
                     defaultValue: 0,
                 },
-                winners: {
+                bckgError: {
                     type: Sequelize.INTEGER,
                     defaultValue: 0,
                 },
-                noForcedErrors: {
+                bckgWinner: {
                     type: Sequelize.INTEGER,
                     defaultValue: 0,
                 },

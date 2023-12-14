@@ -18,6 +18,8 @@ interface TrackerData extends Model<InferAttributes<TrackerData>> {
     rivalPointsWinnedSecondServ: number;
     rivalFirstServIn: number;
     rivalSecondServIn: number;
+    rivalFirstServWon: number;
+    rivalSecondServWon: number;
     rivalPointsWinnedFirstReturn: number;
     rivalPointsWinnedSecondReturn: number;
     rivalFirstReturnIn: number;
@@ -89,6 +91,17 @@ const TrackerModel = sequelize.define<TrackerData>(
             type: DataTypes.INTEGER,
             defaultValue: 0,
             allowNull: true,
+        },
+        rivalFirstServWon: {
+            type: DataTypes.INTEGER,
+            defaultValue: 0,
+            allowNull: true,
+        },
+        rivalSecondServWon: {
+            type: DataTypes.INTEGER,
+            defaultValue: 0,
+            allowNull: true,
+
         },
         rivalFirstServIn: {
             type: DataTypes.INTEGER,
