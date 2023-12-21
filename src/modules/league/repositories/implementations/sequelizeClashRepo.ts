@@ -93,6 +93,7 @@ export class SequelizeClashRepo implements ClashRepository {
                 category: clashRaw.category,
                 team1,
                 team2,
+                clubId: clashRaw.clubId,
                 host: club,
                 clashId: clashRaw.clashId,
             },
