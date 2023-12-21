@@ -18,9 +18,9 @@ export class ListPlayers implements UseCase<any, Promise<Response>> {
     async execute(request?: any): Promise<Response> {
         const query: PlayerQuery = {};
 
-        for (const [key, value] of Object.keys(request)) {
+        for (const [key, value] of Object.entries(request)) {
             if (key == "clubId") {
-                query.clubId = value;
+                query.clubId = value as string;
             }
             if (key == "includeDeleted") {
                 query.includeDeleted = true;
