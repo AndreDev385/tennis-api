@@ -1,7 +1,9 @@
 import { CategoryModel } from "../../../../shared/infra/database/sequelize/models/Category";
-import { ClashModel } from "../../../../shared/infra/database/sequelize/models/ClubClash";
+import { ClashData, ClashModel } from "../../../../shared/infra/database/sequelize/models/ClubClash";
+import { Club } from "../../domain/club";
 import { Clash } from "../../domain/clubClash";
 import { Matchs } from "../../domain/matchs";
+import { Team } from "../../domain/team";
 import { ClashMap } from "../../mappers/clashMap";
 import { ClashQuery, ClashRepository, PaginateQuery } from "../clashRepo";
 import { ClubRepository } from "../clubRepo";
@@ -119,13 +121,14 @@ export class SequelizeClashRepo implements ClashRepository {
             clash.hostDomain = hostDomain
         }
 
-        return list.map((clash: any) =>
+        return list.map((clash: ClashData & { team1Domain: Team, team2Domain: Team, hostDomain: Club }) =>
             ClashMap.toDomain({
                 clashId: clash.clashId,
                 category: clash.category,
                 seasonId: clash.seasonId,
                 team1: clash.team1Domain,
                 team2: clash.team2Domain,
+                clubId: clash.clubId,
                 host: clash.hostDomain,
                 journey: clash.journey,
             })
@@ -159,6 +162,7 @@ export class SequelizeClashRepo implements ClashRepository {
                 clashId: clash.clashId,
                 category: clash.category,
                 seasonId: clash.seasonId,
+                clubId: clash.clubId,
                 team1: clash.team1Domain,
                 team2: clash.team2Domain,
                 host: clash.hostDomain,
