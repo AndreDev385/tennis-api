@@ -20,10 +20,6 @@ export class SequelizePlayerRepository implements PlayerRepository {
     async list(query?: PlayerQuery): Promise<Player[]> {
         const baseQuery = this.baseQuery();
 
-        if (!!query?.clubId === true) {
-            baseQuery.where["clubId"] = query?.clubId;
-        }
-
         let rawList = await PlayerModel.findAll(baseQuery);
 
         if (!query?.includeDeleted) {
