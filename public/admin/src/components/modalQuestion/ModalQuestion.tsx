@@ -1,42 +1,37 @@
-import { Button, Modal } from 'react-bootstrap'
+import { Button, Modal } from 'react-bootstrap';
 
 interface IModalQuestionProps {
-    title: string;
-    question: string;
-    dismiss: () => void;
-    accept: () => void;
+  title: string;
+  question: string;
+  dismiss: () => void;
+  accept: () => void;
 }
 
-const ModalQuestion = ({question,title,  dismiss, accept}: IModalQuestionProps) => {
+const ModalQuestion = ({ question, title, dismiss, accept }: IModalQuestionProps) => {
+  return (
+    <>
+      <div className='overlay' />
 
-    return (
-        <>
-            <div className="overlay" />
+      <div className='modal show wrap-modal'>
+        <Modal.Dialog>
+          <Modal.Header>
+            <Modal.Title>{title}</Modal.Title>
+          </Modal.Header>
 
-            <div className="modal show wrap-modal">
-                <Modal.Dialog>
-                    <Modal.Header>
-                        <Modal.Title>
-                            {title}
-                        </Modal.Title>
-                    </Modal.Header>
+          <Modal.Body>
+            <p>{question}</p>
+          </Modal.Body>
 
-                    <Modal.Body>
-                        <p>{question}</p>
-                    </Modal.Body>
+          <Modal.Footer onClick={dismiss}>
+            <Button variant='secondary'>Cancelar</Button>
+            <Button onClick={accept} variant='primary'>
+              {title}
+            </Button>
+          </Modal.Footer>
+        </Modal.Dialog>
+      </div>
+    </>
+  );
+};
 
-                    <Modal.Footer onClick={dismiss}>
-                        <Button variant="secondary">
-                            Cancelar
-                        </Button>
-                        <Button onClick={accept} variant="primary">
-                            {title}
-                        </Button>
-                    </Modal.Footer>
-                </Modal.Dialog>
-            </div>
-        </>
-    )
-}
-
-export default ModalQuestion
+export default ModalQuestion;
