@@ -15,7 +15,8 @@ import { IClub } from '../../interfaces/interfaces';
 import './Clubs.scss';
 import { VITE_SERVER_URL } from '../../env/env.prod';
 import ModalQuestion from '../modalQuestion/ModalQuestion';
-import { suscribeClub } from '../../utils/data';
+import { requestClubSubscription } from '../../utils/data';
+import { get } from 'http';
 
 const Clubs = () => {
   const [clubs, setClubs] = useState<IClub[]>([]);
@@ -83,15 +84,11 @@ const Clubs = () => {
   const handleSuscribeClub = async () => {
     const toastId = toast.loading('Estamos suscribiendo el club...');
     try {
-      await suscribeClub(selectedClub?.clubId || '');
+      await requestClubSubscription(selectedClub?.clubId || '');
 
-      const clubToUpdate = clubs.find((item) => item.clubId === selectedClub?.clubId);
-      if (clubToUpdate) {
-        clubToUpdate.isSubscribed = true;
-        setClubs([...clubs]);
-      }
+      await getClubs();
 
-      toast.success('Suscripción exitosa!');
+      toast.success('Club suscrito exitosamente!');
     } catch (error) {
       toast.error('Error al intentar suscribir el club!');
     } finally {
