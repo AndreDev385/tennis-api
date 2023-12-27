@@ -5,6 +5,7 @@ import { Button, Form } from "react-bootstrap"
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import validator from 'validator';
+import { VITE_SERVER_URL } from "../../../env/env.prod";
 
 interface IResetPasswordFormProps {
   code: string;
@@ -59,7 +60,7 @@ const ResetPasswordForm = ({code}: IResetPasswordFormProps) => {
   }
 
   const changePassword = async () => {
-    const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/users/change-forgotten-password`
+    const url = `${VITE_SERVER_URL}/api/v1/users/change-forgotten-password`
     const requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

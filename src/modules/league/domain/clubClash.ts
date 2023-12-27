@@ -5,6 +5,7 @@ import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
 import { Category } from "./category";
 import { ClashId } from "./clashId";
 import { Club } from "./club";
+import { ClubId } from "./clubId";
 import { ClashCreated } from "./events/clashCreated";
 import { ClashFinished } from "./events/clashFinished";
 import { GameMode } from "./gameMode";
@@ -16,6 +17,7 @@ import { Team } from "./team";
 
 interface ClubClashProps {
     seasonId: SeasonId;
+    clubId: ClubId;
     team1: Team;
     team2: Team;
     category: Category;
@@ -32,6 +34,10 @@ export class Clash extends AggregateRoot<ClubClashProps> {
 
     get seasonId(): SeasonId {
         return this.props.seasonId;
+    }
+
+    get clubId(): ClubId {
+        return this.props.clubId;
     }
 
     get matchs(): Array<Match> {
@@ -59,7 +65,7 @@ export class Clash extends AggregateRoot<ClubClashProps> {
     }
 
     get isFinish(): boolean {
-        return this.props.isFinish;
+        return this.props.isFinish!;
     }
 
     get isLocal(): boolean {
@@ -77,7 +83,7 @@ export class Clash extends AggregateRoot<ClubClashProps> {
     }
 
     public createMatchs(matchs: Matchs) {
-        const playersIds = [];
+        const playersIds: Array<string> = [];
 
         for (const match of matchs.getItems()) {
             if (playersIds.includes(match.player1.playerId.id.toString())) {
@@ -87,7 +93,7 @@ export class Clash extends AggregateRoot<ClubClashProps> {
             }
             if (
                 match.mode.value == GameMode.double &&
-                playersIds.includes(match.player3.playerId.id.toString())
+                playersIds.includes(match.player3!.playerId.id.toString())
             ) {
                 throw new Error(
                     `El jugador ${match.player1.firstName.value} esta repetido`
@@ -96,7 +102,7 @@ export class Clash extends AggregateRoot<ClubClashProps> {
 
             playersIds.push(match.player1.playerId.id.toString());
             if (match.mode.value == GameMode.double) {
-                playersIds.push(match.player3.playerId.id.toString());
+                playersIds.push(match.player3!.playerId.id.toString());
             }
         }
 
@@ -113,6 +119,7 @@ export class Clash extends AggregateRoot<ClubClashProps> {
     ): Result<Clash> {
         const guardResult = Guard.againstNullOrUndefinedBulk([
             { argument: props.seasonId, argumentName: "season id" },
+            { argument: props.seasonId, argumentName: "clubId" },
             { argument: props.matchs, argumentName: "matchs" },
             { argument: props.team1, argumentName: "team 1" },
             { argument: props.team2, argumentName: "team 2" },

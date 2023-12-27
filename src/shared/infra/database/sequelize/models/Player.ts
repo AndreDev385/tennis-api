@@ -1,10 +1,17 @@
 import config from "../config/config";
-import { DataTypes, Sequelize } from "sequelize";
+import { DataTypes, InferAttributes, Model, Sequelize } from "sequelize";
 import { UserModel } from "./BaseUser";
 
 const sequelize: Sequelize = config.connection;
 
-const PlayerModel = sequelize.define(
+interface PlayerData extends Model<InferAttributes<PlayerData>> {
+    playerId: string;
+    clubId: string;
+    userId: string;
+    avatar?: string;
+}
+
+const PlayerModel = sequelize.define<PlayerData>(
     "player",
     {
         playerId: {
@@ -17,10 +24,6 @@ const PlayerModel = sequelize.define(
             type: DataTypes.UUID,
             primaryKey: true,
             allowNull: false,
-            references: {
-                model: "club",
-                key: "clubId",
-            },
         },
         userId: {
             type: DataTypes.UUID,
@@ -48,4 +51,4 @@ PlayerModel.belongsTo(UserModel, {
     as: "user",
 });
 
-export { PlayerModel };
+export { PlayerModel, PlayerData };

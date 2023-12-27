@@ -1,10 +1,18 @@
-import { DataTypes, Sequelize } from "sequelize";
+import { DataTypes, InferAttributes, Model, Sequelize } from "sequelize";
 import config from "../config/config";
 import { LeagueModel } from "./League";
 
 const sequelize: Sequelize = config.connection;
 
-const SeasonModel = sequelize.define(
+interface SeasonData extends Model<InferAttributes<SeasonData>> {
+    seasonId: string;
+    leagueId: string;
+    name: string;
+    isFinish: boolean;
+    isCurrentSeason: boolean;
+}
+
+const SeasonModel = sequelize.define<SeasonData>(
     "season",
     {
         seasonId: {
@@ -45,4 +53,4 @@ SeasonModel.belongsTo(LeagueModel, {
     as: "League",
 });
 
-export { SeasonModel };
+export { SeasonModel, SeasonData };

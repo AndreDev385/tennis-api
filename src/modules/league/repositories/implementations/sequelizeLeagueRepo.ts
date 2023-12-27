@@ -1,17 +1,10 @@
+import { LeagueModel } from "../../../../shared/infra/database/sequelize/models/League";
 import { League } from "../../domain/league";
 import { LeagueMap } from "../../mappers/leagueMap";
 import { LeagueRepository } from "../leagueRepo";
 
 export class SequelizeLeagueRepository implements LeagueRepository {
-    models: any;
-
-    constructor(models: any) {
-        this.models = models;
-    }
-
     async save(league: League): Promise<void> {
-        const LeagueModel = this.models.LeagueModel;
-
         const raw = LeagueMap.toPersistance(league);
 
         const exists = await LeagueModel.findOne({
@@ -29,8 +22,6 @@ export class SequelizeLeagueRepository implements LeagueRepository {
     }
 
     async list(): Promise<any[]> {
-        const LeagueModel = this.models.LeagueModel;
-
         const list = await LeagueModel.findAll({});
 
         return list;

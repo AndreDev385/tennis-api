@@ -10,7 +10,7 @@ export class Matchs extends WatchedList<Match> {
         return a.equals(b)
     }
 
-    public static create(matchs?: Array<Match>): Matchs {
+    public static create(matchs: Array<Match> = []): Matchs {
         return new Matchs(matchs);
     }
 }

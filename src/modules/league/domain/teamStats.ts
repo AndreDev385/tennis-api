@@ -223,17 +223,12 @@ export class TeamStats extends Entity<TeamStatsProps> {
     }
 
     private addMatchStats(match: Match, isLocal: boolean) {
-        console.log("[ADD MATCH STATS EXECUTED]");
         if (isLocal) {
-            console.log("[Played as Local]");
             this.props.matchPlayedAsLocal += 1;
-            if (!!match.isCancelled === true) return;
             if (match.matchWon) this.props.matchWonAsLocal += 1;
             else this.props.matchLostAsLocal += 1;
         } else {
-            console.log("[Played as Visitor]");
             this.props.matchPlayedAsVisitor += 1;
-            if (!!match.isCancelled === true) return;
             if (match.matchWon) this.props.matchWonAsVisitor += 1;
             else this.props.matchLostAsVisitor += 1;
         }

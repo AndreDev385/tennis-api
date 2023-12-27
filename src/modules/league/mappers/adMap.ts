@@ -4,7 +4,7 @@ import { Ad } from "../domain/ad";
 import { ClubId } from "../domain/clubId";
 
 export class AdMap implements Mapper<Ad> {
-    public static toDomain(raw: any): Ad {
+    public static toDomain(raw: any): Ad | null {
         const clubId = ClubId.create(new UniqueEntityID(raw.clubId))
 
         const adOrError = Ad.create({

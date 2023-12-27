@@ -1,11 +1,19 @@
-import { DataTypes, Sequelize } from "sequelize";
+import { DataTypes, InferAttributes, Model, Sequelize } from "sequelize";
 import config from "../config/config";
 import { ClubModel } from "./Club";
 import { CategoryModel } from "./Category";
 
 const sequelize: Sequelize = config.connection;
 
-const TeamModel = sequelize.define(
+interface TeamData extends Model<InferAttributes<TeamData>> {
+    teamId: string;
+    clubId: string;
+    categoryId: string;
+    isDeleted: boolean;
+    name: string;
+}
+
+const TeamModel = sequelize.define<TeamData>(
     "team",
     {
         teamId: {

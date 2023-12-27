@@ -1,9 +1,34 @@
-import { DataTypes, Sequelize } from "sequelize";
+import { DataTypes, InferAttributes, Model, Sequelize } from "sequelize";
 import config from "../config/config";
 
 const sequelize: Sequelize = config.connection;
 
-const PausedMatchModel = sequelize.define(
+interface PausedMatchData extends Model<InferAttributes<PausedMatchData>> {
+    matchId: string;
+    mode: string;
+    setsQuantity: number;
+    surface: string;
+    gamesPerSet: number;
+    superTiebreak: boolean | null;
+    direction: string;
+    statistics: string;
+    player1: string;
+    player2: string;
+    player3: string | null;
+    player4: string | null;
+    initialTeam: number | null;
+    doubleServeFlow: string | null;
+    singleServeFlow: string | null;
+    sets: Array<string>;
+    currentSetIdx: number;
+    currentGame: string;
+    setsWon: number;
+    setsLost: number;
+    matchWon: boolean | null;
+    matchFinish: boolean;
+}
+
+const PausedMatchModel = sequelize.define<PausedMatchData>(
     "pausedMatch",
     {
         matchId: {
@@ -99,4 +124,4 @@ const PausedMatchModel = sequelize.define(
     { tableName: "pausedMatch" }
 );
 
-export { PausedMatchModel };
+export { PausedMatchModel, PausedMatchData };

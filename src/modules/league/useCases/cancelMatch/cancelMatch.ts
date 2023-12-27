@@ -6,6 +6,7 @@ import { Match } from "../../domain/match";
 import { MatchTracker } from "../../domain/matchTracker";
 import { PlayerTracker } from "../../domain/playerTracker";
 import { Season } from "../../domain/season";
+import { Set } from "../../domain/set";
 import { Sets } from "../../domain/sets";
 import { PlayerTrackerMapper } from "../../mappers/playerTrackerMap";
 import { SeasonMap } from "../../mappers/seasonMap";
@@ -15,10 +16,12 @@ import { SeasonRepository } from "../../repositories/seasonRepo";
 import { TrackerRepository } from "../../repositories/trackerRepo";
 import { CancelMatchRequest } from "./dtos";
 
-type Response = Either<AppError.UnexpectedError | AppError.NotFoundError | Result<string>, Result<void>>
+type Response = Either<
+    AppError.UnexpectedError | AppError.NotFoundError | Result<string>,
+    Result<void>
+>;
 
 export class CancelMatch implements UseCase<CancelMatchRequest, Response> {
-
     private matchRepo: MatchRepository;
     private trackerRepo: TrackerRepository;
     private seasonRepo: SeasonRepository;
@@ -26,7 +29,7 @@ export class CancelMatch implements UseCase<CancelMatchRequest, Response> {
     constructor(
         matchRepo: MatchRepository,
         trackerRepo: TrackerRepository,
-        seasonRepo: SeasonRepository,
+        seasonRepo: SeasonRepository
     ) {
         this.matchRepo = matchRepo;
         this.trackerRepo = trackerRepo;
@@ -36,14 +39,13 @@ export class CancelMatch implements UseCase<CancelMatchRequest, Response> {
     async execute(request: CancelMatchRequest): Promise<Response> {
         let currentSeason: Season;
         let me: PlayerTracker;
-        let partner: PlayerTracker;
+        let partner: PlayerTracker | null = null;
         let match: Match;
 
         let sets: Sets;
         let tracker: MatchTracker;
 
         try {
-
             try {
                 const seasons = await this.seasonRepo.list({
                     isCurrentSeason: true,
@@ -53,25 +55,27 @@ export class CancelMatch implements UseCase<CancelMatchRequest, Response> {
                         Result.fail<string>("No hay una temporada en curso")
                     );
                 }
-                currentSeason = SeasonMap.toDomain(seasons[0]);
+                currentSeason = SeasonMap.toDomain(seasons[0])!;
             } catch (error) {
                 return left(new AppError.NotFoundError(error));
             }
 
             me = PlayerTrackerMapper.toDomain({
                 ...request.tracker.me,
-                seasonId: currentSeason.seasonId.id.toString()
-            });
+                seasonId: currentSeason.seasonId.id.toString(),
+            })!;
 
             if (me == null) {
-                return left(Result.fail<string>("Estadisticas de jugador invalidas"))
+                return left(
+                    Result.fail<string>("Estadisticas de jugador invalidas")
+                );
             }
 
             if (request.tracker.partner) {
                 partner = PlayerTrackerMapper.toDomain({
                     ...request.tracker.partner,
-                    seasonId: currentSeason.id.toString()
-                })
+                    seasonId: currentSeason.id.toString(),
+                })!;
 
                 if (partner == null) {
                     return left(
@@ -96,7 +100,7 @@ export class CancelMatch implements UseCase<CancelMatchRequest, Response> {
                 }
             }
 
-            sets = Sets.create(setsArr);
+            sets = Sets.create(setsArr as Array<Set>);
 
             const trackerOrError = MatchTracker.create(
                 {
@@ -116,15 +120,18 @@ export class CancelMatch implements UseCase<CancelMatchRequest, Response> {
 
             tracker = trackerOrError.getValue();
 
-            match.cancelMatch(sets, tracker, request.superTieBreak);
+            console.log('matchWon', request.matchWon);
+
+            match.cancelMatch(sets, tracker, request.superTieBreak, request.matchWon);
+
+            console.log('matchWon obj', match.matchWon);
 
             await this.matchRepo.save(match);
-            await this.trackerRepo.save(match.tracker);
+            await this.trackerRepo.save(match.tracker!);
 
             return right(Result.ok<void>());
         } catch (error) {
-            return left(new AppError.UnexpectedError(error))
+            return left(new AppError.UnexpectedError(error));
         }
     }
-
 }

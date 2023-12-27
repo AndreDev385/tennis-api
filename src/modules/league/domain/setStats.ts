@@ -34,7 +34,7 @@ export class SetStats extends ValueObject<SetStatsProps> {
     get me(): SetPlayerStats {
         return this.props.me;
     }
-    get partner(): SetPlayerStats {
+    get partner(): SetPlayerStats | undefined {
         return this.props.partner;
     }
     get gamesWonReturning(): number {

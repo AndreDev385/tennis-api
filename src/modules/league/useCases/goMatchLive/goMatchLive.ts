@@ -2,7 +2,9 @@ import { AppError } from "../../../../shared/core/AppError";
 import { Either, Result, left, right } from "../../../../shared/core/Result";
 import { UseCase } from "../../../../shared/core/UseCase";
 import { Clash } from "../../domain/clubClash";
+import { GameMode } from "../../domain/gameMode";
 import { Match } from "../../domain/match";
+import { MatchStatuses } from "../../domain/matchStatus";
 import { MatchTracker } from "../../domain/matchTracker";
 import { ClashRepository } from "../../repositories/clashRepo";
 import { MatchRepository } from "../../repositories/matchRepo";
@@ -32,18 +34,17 @@ export class GoMatchLive
         try {
             try {
                 match = await this.matchRepo.getMatchById(request.matchId);
-                console.log(match.tracker, 'Tracker')
             } catch (error) {
                 return left(new AppError.NotFoundError(error));
             }
 
             try {
-                clash = await this.clashRepo.getClashById(match.clashId.id.toString())
+                clash = await this.clashRepo.getClashById(match.clashId.toString())
             } catch (error) {
                 return left(new AppError.NotFoundError(error));
             }
 
-            if (match.isLive) {
+            if (match.status.value == MatchStatuses.Live) {
                 return left(Result.fail<string>("El partido ya se encuentra en vivo"))
             }
 
@@ -52,7 +53,8 @@ export class GoMatchLive
                     match.matchId,
                     clash.seasonId,
                     match.player1.playerId,
-                    match.player3?.playerId
+                    match.mode.value == GameMode.double,
+                    match.player3?.playerId,
                 );
 
                 if (trackerOrError.isFailure) {
@@ -66,7 +68,7 @@ export class GoMatchLive
 
             match.goLive();
 
-            await this.trackerRepo.save(match.tracker);
+            await this.trackerRepo.save(match.tracker!);
             await this.matchRepo.save(match);
 
             return right(Result.ok<void>());

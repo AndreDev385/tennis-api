@@ -264,6 +264,10 @@ module.exports = {
                         key: "categoryId",
                     },
                 },
+                clubId: {
+                    type: Sequelize.UUID,
+                    allowNull: false,
+                },
                 team1: {
                     type: Sequelize.UUID,
                     allowNull: false,
@@ -372,17 +376,9 @@ module.exports = {
                     type: Sequelize.STRING,
                     allowNull: true,
                 },
-                isLive: {
-                    type: Sequelize.BOOLEAN,
-                    defaultValue: false,
-                },
-                isFinish: {
-                    type: Sequelize.BOOLEAN,
-                    defaultValue: false,
-                },
-                isCancelled: {
-                    type: Sequelize.BOOLEAN,
-                    defaultValue: false,
+                statuts: {
+                    type: Sequelize.INTEGER,
+                    allowNull: false,
                 },
                 createdAt: {
                     allowNull: true,
@@ -441,93 +437,83 @@ module.exports = {
                 rivalPointsWinnedFirstServ: {
                     type: Sequelize.INTEGER,
                     defaultValue: 0,
-                    allowNull: true,
                 },
                 rivalPointsWinnedSecondServ: {
                     type: Sequelize.INTEGER,
                     defaultValue: 0,
-                    allowNull: true,
                 },
                 rivalFirstServIn: {
                     type: Sequelize.INTEGER,
                     defaultValue: 0,
-                    allowNull: true,
                 },
                 rivalSecondServIn: {
                     type: Sequelize.INTEGER,
                     defaultValue: 0,
-                    allowNull: true,
+                },
+                rivalFirstServWon: {
+                    type: Sequelize.INTEGER,
+                    defaultValue: 0,
+                },
+                rivalSecondServWon: {
+                    type: Sequelize.INTEGER,
+                    defaultValue: 0,
                 },
                 rivalPointsWinnedFirstReturn: {
                     type: Sequelize.INTEGER,
                     defaultValue: 0,
-                    allowNull: true,
                 },
                 rivalPointsWinnedSecondReturn: {
                     type: Sequelize.INTEGER,
                     defaultValue: 0,
-                    allowNull: true,
                 },
                 rivalFirstReturnIn: {
                     type: Sequelize.INTEGER,
                     defaultValue: 0,
-                    allowNull: true,
                 },
                 rivalSecondReturnIn: {
                     type: Sequelize.INTEGER,
                     defaultValue: 0,
-                    allowNull: true,
                 },
 
                 rivalAces: {
                     defaultValue: 0,
                     type: Sequelize.INTEGER,
-                    allowNull: true,
                 },
                 rivalDobleFault: {
                     defaultValue: 0,
                     type: Sequelize.INTEGER,
-                    allowNull: true,
                 },
                 rivalNoForcedErrors: {
                     defaultValue: 0,
                     type: Sequelize.INTEGER,
-                    allowNull: true,
                 },
                 rivalWinners: {
                     defaultValue: 0,
                     type: Sequelize.INTEGER,
-                    allowNull: true,
                 },
                 shortRallyWon: {
                     defaultValue: 0,
                     type: Sequelize.INTEGER,
-                    allowNull: true,
                 },
                 mediumRallyWon: {
                     defaultValue: 0,
                     type: Sequelize.INTEGER,
-                    allowNull: true,
                 },
                 longRallyWon: {
                     defaultValue: 0,
                     type: Sequelize.INTEGER,
-                    allowNull: true,
                 },
                 shortRallyLost: {
                     defaultValue: 0,
                     type: Sequelize.INTEGER,
-                    allowNull: true,
                 },
                 mediumRallyLost: {
                     defaultValue: 0,
                     type: Sequelize.INTEGER,
-                    allowNull: true,
                 },
                 longRallyLost: {
                     defaultValue: 0,
                     type: Sequelize.INTEGER,
-                    allowNull: true,
                 },
                 createdAt: {
                     allowNull: true,
@@ -555,6 +541,10 @@ module.exports = {
                 },
                 seasonId: {
                     type: Sequelize.UUID,
+                    allowNull: false,
+                },
+                isDouble: {
+                    type: Sequelize.BOOLEAN,
                     allowNull: false,
                 },
                 pointsWon: {
@@ -608,72 +598,98 @@ module.exports = {
                 firstServIn: {
                     type: Sequelize.INTEGER,
                     defaultValue: 0,
-                    allowNull: true,
                 },
                 secondServIn: {
                     type: Sequelize.INTEGER,
                     defaultValue: 0,
-                    allowNull: false,
+                },
+                firstServWon: {
+                    type: Sequelize.INTEGER,
+                    defaultValue: 0,
+                },
+                secondServWon: {
+                    type: Sequelize.INTEGER,
+                    defaultValue: 0,
                 },
                 aces: {
                     type: Sequelize.INTEGER,
                     defaultValue: 0,
-                    allowNull: true,
                 },
                 dobleFaults: {
                     type: Sequelize.INTEGER,
                     defaultValue: 0,
-                    allowNull: true,
                 },
                 pointsWinnedFirstReturn: {
                     type: Sequelize.INTEGER,
                     defaultValue: 0,
-                    allowNull: true,
                 },
                 pointsWinnedSecondReturn: {
                     type: Sequelize.INTEGER,
                     defaultValue: 0,
-                    allowNull: true,
                 },
                 firstReturnIn: {
                     type: Sequelize.INTEGER,
                     defaultValue: 0,
-                    allowNull: true,
+                },
+                firstReturnOut: {
+                    type: Sequelize.INTEGER,
+                    defaultValue: 0,
                 },
                 secondReturnIn: {
                     type: Sequelize.INTEGER,
                     defaultValue: 0,
-                    allowNull: true,
+                },
+                secondReturnOut: {
+                    type: Sequelize.INTEGER,
+                    defaultValue: 0,
+                },
+                firstReturnWon: {
+                    type: Sequelize.INTEGER,
+                    defaultValue: 0,
+                },
+                secondReturnWon: {
+                    type: Sequelize.INTEGER,
+                    defaultValue: 0,
+                },
+                firstReturnWinner: {
+                    type: Sequelize.INTEGER,
+                    defaultValue: 0,
+                },
+                secondReturnWinner: {
+                    type: Sequelize.INTEGER,
+                    defaultValue: 0,
                 },
                 meshPointsWon: {
                     type: Sequelize.INTEGER,
                     defaultValue: 0,
-                    allowNull: true,
                 },
                 meshPointsLost: {
                     type: Sequelize.INTEGER,
                     defaultValue: 0,
-                    allowNull: true,
+                },
+                meshWinner: {
+                    type: Sequelize.INTEGER,
+                    defaultValue: 0,
+                },
+                meshError: {
+                    type: Sequelize.INTEGER,
+                    defaultValue: 0,
                 },
                 bckgPointsWon: {
                     type: Sequelize.INTEGER,
                     defaultValue: 0,
-                    allowNull: true,
                 },
                 bckgPointsLost: {
                     type: Sequelize.INTEGER,
                     defaultValue: 0,
-                    allowNull: true,
                 },
-                winners: {
+                bckgError: {
                     type: Sequelize.INTEGER,
                     defaultValue: 0,
-                    allowNull: true,
                 },
-                noForcedErrors: {
+                bckgWinner: {
                     type: Sequelize.INTEGER,
                     defaultValue: 0,
-                    allowNull: true,
                 },
                 createdAt: {
                     allowNull: true,
@@ -731,6 +747,11 @@ module.exports = {
                 },
                 name: {
                     type: Sequelize.STRING,
+                    allowNull: false,
+                },
+                isDeleted: {
+                    type: Sequelize.BOOLEAN,
+                    defaultValue: false,
                     allowNull: false,
                 },
                 createdAt: {

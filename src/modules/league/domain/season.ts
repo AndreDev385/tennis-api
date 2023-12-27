@@ -27,11 +27,11 @@ export class Season extends AggregateRoot<SeasonProps> {
     }
 
     get isCurrentSeason(): boolean {
-        return this.props.isCurrentSeason;
+        return this.props.isCurrentSeason!;
     }
 
     get isFinish(): boolean {
-        return this.props.isFinish;
+        return this.props.isFinish!;
     }
 
     public finishSeason() {

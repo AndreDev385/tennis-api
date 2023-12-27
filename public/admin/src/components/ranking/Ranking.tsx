@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleNotch, faTrophy } from "@fortawesome/free-solid-svg-icons";
 import { Button, Card, Form, Table } from "react-bootstrap";
 import './Ranking.scss'
+import { VITE_SERVER_URL } from "../../env/env.prod";
 
 const Ranking = () => {
   const [ranking, setRanking] = useState<IRanking[]>([])
@@ -32,7 +33,7 @@ const Ranking = () => {
 
   const getRanking = async () => {
     setLoading(true)
-    const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/team/rankings`
+    const url = `${VITE_SERVER_URL}/api/v1/team/rankings`
     const requestOptions = {
       method: 'GET',
       headers: { 
@@ -56,7 +57,7 @@ const Ranking = () => {
   }
 
   const getCategories= async () => {
-    const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/categories`
+    const url = `${VITE_SERVER_URL}/api/v1/categories`
     const requestOptions = {
       method: 'GET',
       headers: { 
@@ -76,7 +77,7 @@ const Ranking = () => {
   }
 
   const getClubs = async () => {
-    const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/club`
+    const url = `${VITE_SERVER_URL}/api/v1/club`
     const requestOptions = {
       method: 'GET',
       headers: { 

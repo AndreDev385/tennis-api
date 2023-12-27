@@ -72,6 +72,8 @@ export class CreateMatch
                 return left(new AppError.NotFoundError(error));
             }
 
+            console.log(clash, "matches")
+
             if (clash.matchs.length != 0) {
                 return left(
                     Result.fail<string>("Ya se han creado los partidos de este encuentro.")
@@ -98,7 +100,7 @@ export class CreateMatch
                     );
                     if (matchData.mode == GameMode.double) {
                         player3 = await this.playerRepo.getPlayerById(
-                            matchData.player3
+                            matchData.player3!
                         );
                     }
                 } catch (error) {
@@ -106,12 +108,12 @@ export class CreateMatch
                 }
                 const createMatchOrError = Match.create({
                     player1,
-                    player3: matchData.mode == GameMode.double ? player3 : null,
+                    player3: matchData.mode == GameMode.double ? player3! : null,
                     mode,
                     surface,
                     sets,
                     gamesPerSet,
-                    clashId: clash.clashId,
+                    clashId: clash.clashId.id,
                     player2: matchData.player2,
                     category: clash.category,
                     address: clash.host.name,
@@ -137,7 +139,7 @@ export class CreateMatch
             try {
                 clash.createMatchs(Matchs.create(matchs));
             } catch (error) {
-                return left(new CreateMatchsError.PlayerRepeated(error));
+                return left(new CreateMatchsError.PlayerRepeated(error as Error));
             }
 
             await this.clashRepo.save(clash);

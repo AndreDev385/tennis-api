@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { toast } from "react-toastify";
 import validator from "validator";
+import { VITE_SERVER_URL } from "../../../env/env.prod";
 
 interface ICreateTrackersProps {
     dismiss: (event: boolean) => void;
@@ -80,7 +81,7 @@ const CreateTrackers = ({dismiss}: ICreateTrackersProps) => {
     }
 
     const createTracker = async () => {
-        const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/users/tracker`
+        const url = `${VITE_SERVER_URL}/api/v1/users/tracker`
         const requestOptions = {
             method: 'POST',
             headers: { 

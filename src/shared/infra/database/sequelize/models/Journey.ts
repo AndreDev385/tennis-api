@@ -1,9 +1,13 @@
-import { DataTypes, Sequelize } from "sequelize";
+import { DataTypes, InferAttributes, Model, Sequelize } from "sequelize";
 import config from "../config/config";
 
 const sequelize: Sequelize = config.connection;
 
-const JourneyModel = sequelize.define(
+interface JourneyData extends Model<InferAttributes<JourneyData>> {
+    name: string;
+}
+
+const JourneyModel = sequelize.define<JourneyData>(
     "journey",
     {
         name: {
@@ -14,4 +18,4 @@ const JourneyModel = sequelize.define(
     { tableName: "journey" }
 );
 
-export { JourneyModel };
+export { JourneyModel, JourneyData };

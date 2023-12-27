@@ -18,7 +18,7 @@ export class ChangeForgotterPasswordController extends BaseController {
         if (result.isLeft()) {
             const error = result.value;
 
-            switch (error.constructor) {
+            switch (error?.constructor) {
                 case AppError.UnexpectedError:
                     return this.fail(
                         res,

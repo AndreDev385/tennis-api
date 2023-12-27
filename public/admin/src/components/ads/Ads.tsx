@@ -8,6 +8,7 @@ import CreateAds from './createAds/CreateAds';
 import { toast } from 'react-toastify';
 import './Ads.scss';
 import 'react-toastify/dist/ReactToastify.css';
+import { VITE_SERVER_URL } from '../../env/env.prod';
 
 const Ads = () => {
   const [showModalDelete, setShowModalDelete] = useState(false)
@@ -25,7 +26,7 @@ const Ads = () => {
   }, []);
 
   const getClubs = async () => {
-    const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/club`
+    const url = `${VITE_SERVER_URL}/api/v1/club`
     const requestOptions = {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' }
@@ -45,7 +46,7 @@ const Ads = () => {
   }
 
   const getAds = async () => {
-    const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/ads`
+    const url = `${VITE_SERVER_URL}/api/v1/ads`
     const requestOptions = {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' }
@@ -88,7 +89,7 @@ const Ads = () => {
   }
 
   const deleteAd = async () => {
-    const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/ads/${id}`
+    const url = `${VITE_SERVER_URL}/api/v1/ads/${id}`
     const requestOptions = {
         method: 'DELETE',
         headers: { 

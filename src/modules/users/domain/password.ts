@@ -45,7 +45,7 @@ export class UserPassword extends ValueObject<IUserPasswordProps> {
     }
 
     public isAlreadyHashed(): boolean {
-        return this.props.hashed;
+        return this.props.hashed!;
     }
 
     private hashPassword(password: string): Promise<string> {

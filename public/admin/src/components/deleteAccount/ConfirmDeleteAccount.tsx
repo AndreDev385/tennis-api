@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 import { Button } from 'react-bootstrap'
 import { ToastContainer, toast } from 'react-toastify';
+import { VITE_SERVER_URL } from '../../env/env.prod';
 
 interface IDeleteAccountProps {
     token: string   
@@ -15,7 +16,7 @@ const ConfirmDeleteAccount = ({token}: IDeleteAccountProps) => {
         setLoading(true)
 
         try{
-            const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/users/delete`;
+            const url = `${VITE_SERVER_URL}/api/v1/users/delete`;
             
             const response = await fetch(url,{
                 method: "PUT",

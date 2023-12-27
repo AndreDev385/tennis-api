@@ -12,32 +12,34 @@ interface MatchTrackerProps {
     matchId: MatchId;
 
     me: PlayerTracker;
-    partner?: PlayerTracker;
+    partner?: PlayerTracker | null;
 
     gamesWonReturning: number;
     gamesLostReturning: number;
     winBreakPtsChances: number;
     breakPtsWinned: number;
 
-    rivalPointsWinnedFirstServ?: number;
-    rivalPointsWinnedSecondServ?: number;
-    rivalFirstServIn?: number;
-    rivalSecondServIn?: number;
-    rivalPointsWinnedFirstReturn?: number;
-    rivalPointsWinnedSecondReturn?: number;
-    rivalFirstReturnIn?: number;
-    rivalSecondReturnIn?: number;
+    rivalFirstServWon: number;
+    rivalSecondServWon: number;
+    rivalPointsWinnedFirstServ: number;
+    rivalPointsWinnedSecondServ: number;
+    rivalFirstServIn: number;
+    rivalSecondServIn: number;
+    rivalPointsWinnedFirstReturn: number;
+    rivalPointsWinnedSecondReturn: number;
+    rivalFirstReturnIn: number;
+    rivalSecondReturnIn: number;
 
-    rivalAces?: number;
-    rivalDobleFault?: number;
-    rivalNoForcedErrors?: number;
-    rivalWinners?: number;
-    shortRallyWon?: number;
-    mediumRallyWon?: number;
-    longRallyWon?: number;
-    shortRallyLost?: number;
-    mediumRallyLost?: number;
-    longRallyLost?: number;
+    rivalAces: number;
+    rivalDobleFault: number;
+    rivalNoForcedErrors: number;
+    rivalWinners: number;
+    shortRallyWon: number;
+    mediumRallyWon: number;
+    longRallyWon: number;
+    shortRallyLost: number;
+    mediumRallyLost: number;
+    longRallyLost: number;
 }
 
 export class MatchTracker extends Entity<MatchTrackerProps> {
@@ -69,6 +71,14 @@ export class MatchTracker extends Entity<MatchTrackerProps> {
             return this.me.secondServIn + this.partner.secondServIn;
         }
         return this.me.secondServIn
+    }
+
+    get rivalFirstServWon(): number {
+        return this.props.rivalFirstServWon;
+    }
+
+    get rivalSecondServWon(): number {
+        return this.props.rivalSecondServWon;
     }
 
     get dobleFaults(): number {
@@ -182,7 +192,8 @@ export class MatchTracker extends Entity<MatchTrackerProps> {
         id: MatchId,
         seasonId: SeasonId,
         playerId: PlayerId,
-        partnerId?: PlayerId
+        isDouble: boolean,
+        partnerId?: PlayerId,
     ): Result<MatchTracker> {
         const guard = Guard.againstNullOrUndefined(id, "match id");
 
@@ -192,18 +203,20 @@ export class MatchTracker extends Entity<MatchTrackerProps> {
 
         const meOrError = PlayerTracker.createNewPlayerTracker(
             playerId,
-            seasonId
+            seasonId,
+            isDouble,
         );
 
         if (meOrError.isFailure) {
             return Result.fail(`${meOrError.getErrorValue()}`);
         }
 
-        let partner: PlayerTracker;
+        let partner: PlayerTracker | null = null;
         if (!!partnerId === true) {
             const partnerOrError = PlayerTracker.createNewPlayerTracker(
-                partnerId,
-                seasonId
+                partnerId!,
+                seasonId,
+                isDouble,
             );
             if (partnerOrError.isFailure) {
                 return Result.fail(`${partnerOrError.getErrorValue()}`);
@@ -219,6 +232,26 @@ export class MatchTracker extends Entity<MatchTrackerProps> {
             gamesLostReturning: 0,
             winBreakPtsChances: 0,
             breakPtsWinned: 0,
+            rivalPointsWinnedFirstServ: 0,
+            rivalPointsWinnedSecondServ: 0,
+            rivalFirstServIn: 0,
+            rivalSecondServIn: 0,
+            rivalFirstServWon: 0,
+            rivalSecondServWon: 0,
+            rivalPointsWinnedFirstReturn: 0,
+            rivalPointsWinnedSecondReturn: 0,
+            rivalFirstReturnIn: 0,
+            rivalSecondReturnIn: 0,
+            rivalAces: 0,
+            rivalDobleFault: 0,
+            rivalNoForcedErrors: 0,
+            rivalWinners: 0,
+            shortRallyWon: 0,
+            mediumRallyWon: 0,
+            longRallyWon: 0,
+            shortRallyLost: 0,
+            mediumRallyLost: 0,
+            longRallyLost: 0,
         });
 
         return Result.ok(instance);

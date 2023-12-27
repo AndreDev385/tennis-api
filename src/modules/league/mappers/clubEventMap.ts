@@ -5,7 +5,7 @@ import { ClubEventId } from "../domain/clubEventId";
 
 export class ClubEventMap implements Mapper<ClubEvent> {
 
-    public static toDomain(raw: any): ClubEvent {
+    public static toDomain(raw: any): ClubEvent | null {
         const clubId = ClubEventId.create(new UniqueEntityID(raw.clubId));
 
         const clubEventOrError = ClubEvent.create({

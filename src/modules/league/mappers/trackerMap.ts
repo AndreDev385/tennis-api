@@ -6,7 +6,7 @@ import { TrackerDto } from "../dtos/trackerDto";
 import { PlayerTrackerMapper } from "./playerTrackerMap";
 
 export class TrackerMap implements Mapper<MatchTracker> {
-    public static toDomain(raw: any): MatchTracker {
+    public static toDomain(raw: any): MatchTracker | null {
         const matchIdOrError = MatchId.create(new UniqueEntityID(raw.matchId));
         const trackerOrError = MatchTracker.create(
             {
@@ -25,6 +25,8 @@ export class TrackerMap implements Mapper<MatchTracker> {
                 rivalDobleFault: raw.rivalDobleFault,
                 gamesWonReturning: raw.gamesWonReturning,
                 rivalFirstServIn: raw.rivalFirstServIn,
+                rivalFirstServWon: raw.rivalFirstServWon,
+                rivalSecondServWon: raw.rivalSecondServWon,
                 gamesLostReturning: raw.gamesLostReturning,
                 winBreakPtsChances: raw.winBreakPtsChances,
                 rivalSecondServIn: raw.rivalSecondServIn,
@@ -53,29 +55,31 @@ export class TrackerMap implements Mapper<MatchTracker> {
             matchId: tracker.matchId.id.toString(),
             me: tracker.me.playerTrackerId.id.toString(),
             partner: tracker.partner?.playerTrackerId.id.toString() || null,
-            rivalAces: tracker.rivalAces,
-            longRallyWon: tracker.longRallyWon,
-            rivalWinners: tracker.rivalWinners,
             breakPtsWinned: tracker.breakPtsWinned,
-            longRallyLost: tracker.longRallyLost,
-            shortRallyWon: tracker.shortRallyWon,
-            mediumRallyWon: tracker.mediumRallyWon,
-            shortRallyLost: tracker.shortRallyLost,
-            mediumRallyLost: tracker.mediumRallyLost,
-            rivalDobleFault: tracker.rivalDobleFault,
-            gamesWonReturning: tracker.gamesWonReturning,
-            rivalFirstServIn: tracker.rivalFirstServIn,
-            gamesLostReturning: tracker.gamesLostReturning,
             winBreakPtsChances: tracker.winBreakPtsChances,
+            gamesWonReturning: tracker.gamesWonReturning,
+            gamesLostReturning: tracker.gamesLostReturning,
+            rivalAces: tracker.rivalAces,
+            rivalDobleFault: tracker.rivalDobleFault,
+            rivalFirstServIn: tracker.rivalFirstServIn,
             rivalSecondServIn: tracker.rivalSecondServIn,
-            rivalFirstReturnIn: tracker.rivalFirstReturnIn,
+            rivalFirstServWon: tracker.rivalFirstServWon,
+            rivalSecondServWon: tracker.rivalSecondServWon,
+            rivalWinners: tracker.rivalWinners,
             rivalNoForcedErrors: tracker.rivalNoForcedErrors,
+            rivalFirstReturnIn: tracker.rivalFirstReturnIn,
             rivalSecondReturnIn: tracker.rivalSecondReturnIn,
             rivalPointsWinnedFirstServ: tracker.rivalPointsWinnedFirstServ,
             rivalPointsWinnedSecondServ: tracker.rivalPointsWinnedSecondServ,
             rivalPointsWinnedFirstReturn: tracker.rivalPointsWinnedFirstReturn,
             rivalPointsWinnedSecondReturn:
                 tracker.rivalPointsWinnedSecondReturn,
+            shortRallyWon: tracker.shortRallyWon,
+            shortRallyLost: tracker.shortRallyLost,
+            mediumRallyWon: tracker.mediumRallyWon,
+            mediumRallyLost: tracker.mediumRallyLost,
+            longRallyWon: tracker.longRallyWon,
+            longRallyLost: tracker.longRallyLost,
         };
     }
 
@@ -87,29 +91,31 @@ export class TrackerMap implements Mapper<MatchTracker> {
             partner: tracker.partner
                 ? PlayerTrackerMapper.toDto(tracker.partner)
                 : null,
-            rivalAces: tracker.rivalAces,
-            longRallyWon: tracker.longRallyWon,
-            rivalWinners: tracker.rivalWinners,
             breakPtsWinned: tracker.breakPtsWinned,
-            longRallyLost: tracker.longRallyLost,
-            shortRallyWon: tracker.shortRallyWon,
-            mediumRallyWon: tracker.mediumRallyWon,
-            shortRallyLost: tracker.shortRallyLost,
-            mediumRallyLost: tracker.mediumRallyLost,
-            rivalDobleFault: tracker.rivalDobleFault,
-            gamesWonReturning: tracker.gamesWonReturning,
-            rivalFirstServIn: tracker.rivalFirstServIn,
-            gamesLostReturning: tracker.gamesLostReturning,
             winBreakPtsChances: tracker.winBreakPtsChances,
+            gamesWonReturning: tracker.gamesWonReturning,
+            gamesLostReturning: tracker.gamesLostReturning,
+            rivalAces: tracker.rivalAces,
+            rivalDobleFault: tracker.rivalDobleFault,
+            rivalFirstServIn: tracker.rivalFirstServIn,
             rivalSecondServIn: tracker.rivalSecondServIn,
-            rivalFirstReturnIn: tracker.rivalFirstReturnIn,
+            rivalFirstServWon: tracker.rivalFirstServWon,
+            rivalSecondServWon: tracker.rivalSecondServWon,
+            rivalWinners: tracker.rivalWinners,
             rivalNoForcedErrors: tracker.rivalNoForcedErrors,
+            rivalFirstReturnIn: tracker.rivalFirstReturnIn,
             rivalSecondReturnIn: tracker.rivalSecondReturnIn,
             rivalPointsWinnedFirstServ: tracker.rivalPointsWinnedFirstServ,
             rivalPointsWinnedSecondServ: tracker.rivalPointsWinnedSecondServ,
             rivalPointsWinnedFirstReturn: tracker.rivalPointsWinnedFirstReturn,
             rivalPointsWinnedSecondReturn:
                 tracker.rivalPointsWinnedSecondReturn,
-        };
-    }
+            shortRallyWon: tracker.shortRallyWon,
+            shortRallyLost: tracker.shortRallyLost,
+            mediumRallyWon: tracker.mediumRallyWon,
+            mediumRallyLost: tracker.mediumRallyLost,
+            longRallyWon: tracker.longRallyWon,
+            longRallyLost: tracker.longRallyLost,
+        }
+    };
 }

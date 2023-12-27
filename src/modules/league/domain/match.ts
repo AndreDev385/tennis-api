@@ -3,7 +3,6 @@ import { Result } from "../../../shared/core/Result";
 import { AggregateRoot } from "../../../shared/domain/AggregateRoot";
 import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
 import { Category } from "./category";
-import { ClashId } from "./clashId";
 import { MatchCancelled } from "./events/matchCancelled";
 import { MatchCreated } from "./events/matchCreated";
 import { MatchFinished } from "./events/matchFinished";
@@ -12,6 +11,7 @@ import { MatchPaused } from "./events/matchPaused";
 import { Mode } from "./gameMode";
 import { GamesPerSet } from "./gamesPerSet";
 import { MatchId } from "./matchId";
+import { MatchStatus, MatchStatuses } from "./matchStatus";
 import { MatchTracker } from "./matchTracker";
 import { Player } from "./player";
 import { SetQuantity } from "./setQuantity";
@@ -19,24 +19,22 @@ import { Sets } from "./sets";
 import { Surface } from "./surface";
 
 interface MatchProps {
+    clashId: UniqueEntityID;
     mode: Mode;
-    clashId: ClashId;
     setsQuantity: SetQuantity;
     gamesPerSet: GamesPerSet;
     superTieBreak: boolean;
     category: Category;
-    address?: string;
+    address?: string | null;
     sets: Sets;
     surface: Surface;
     player1: Player;
     player2: string;
-    player3?: Player;
-    player4?: string;
-    tracker?: MatchTracker;
-    isLive?: boolean;
-    isFinish?: boolean;
-    isCancelled?: boolean;
-    isPaused?: boolean;
+    player3?: Player | null;
+    player4?: string | null;
+    tracker?: MatchTracker | null;
+    status?: MatchStatus;
+    matchWon?: boolean | null;
 }
 
 export class Match extends AggregateRoot<MatchProps> {
@@ -44,7 +42,7 @@ export class Match extends AggregateRoot<MatchProps> {
         return MatchId.create(this._id).getValue();
     }
 
-    get clashId(): ClashId {
+    get clashId(): UniqueEntityID {
         return this.props.clashId;
     }
 
@@ -72,8 +70,8 @@ export class Match extends AggregateRoot<MatchProps> {
         return this.props.superTieBreak;
     }
 
-    get address(): string {
-        return this.props.address;
+    get address(): string | null {
+        return this.props.address!;
     }
 
     get surface(): Surface {
@@ -100,30 +98,19 @@ export class Match extends AggregateRoot<MatchProps> {
         return this.props.tracker;
     }
 
-    get isLive(): boolean {
-        return this.props.isLive;
+    get status(): MatchStatus {
+        return this.props.status!
     }
 
-    get isFinish(): boolean {
-        return this.props.isFinish;
+    get matchWon(): boolean | undefined | null {
+        return this.props.matchWon
     }
 
-    get isCancelled(): boolean {
-        return this.props.isCancelled;
-    }
-
-    get isPaused(): boolean {
-        return this.props.isPaused;
-    }
-
-    get matchWon(): boolean {
+    private setMatchWon() {
         let setsWon = this.sets
             .getItems()
             .filter((set) => set.setWon == true);
-        if (setsWon.length >= Math.floor(this.setsQuantity.value / 2) + 1) {
-            return true;
-        }
-        return false;
+        this.props.matchWon = (setsWon.length >= Math.floor(this.setsQuantity.value / 2) + 1)
     }
 
     public addTracker(tracker: MatchTracker) {
@@ -131,8 +118,7 @@ export class Match extends AggregateRoot<MatchProps> {
     }
 
     public goLive() {
-        this.props.isPaused = false;
-        this.props.isLive = true;
+        this.props.status = MatchStatus.createNew(MatchStatuses.Live)
         this.addDomainEvent(new MatchGoesLive(this));
     }
 
@@ -140,27 +126,29 @@ export class Match extends AggregateRoot<MatchProps> {
         this.props.superTieBreak = superTieBreak;
         this.props.tracker = tracker;
         this.props.sets = sets;
-        this.props.isLive = false;
-        this.props.isPaused = true;
+        this.props.status = MatchStatus.createNew(MatchStatuses.Paused)
         this.addDomainEvent(new MatchPaused(this));
     }
 
-    public finishMatch(sets: Sets, tracker: MatchTracker, superTieBreak: boolean) {
+    public finishMatch(sets: Sets, tracker: MatchTracker, superTieBreak: boolean, matchWon: boolean | null) {
         this.props.superTieBreak = superTieBreak;
-        this.props.isFinish = true;
-        this.props.isLive = false;
+        this.props.status = MatchStatus.createNew(MatchStatuses.Finished)
         this.props.tracker = tracker;
         this.props.sets = sets;
+        if (matchWon == null) {
+            this.setMatchWon()
+        } else {
+            this.props.matchWon = matchWon;
+        }
         this.addDomainEvent(new MatchFinished(this));
     }
 
-    public cancelMatch(sets: Sets, tracker: MatchTracker, superTieBreak?: boolean) {
+    public cancelMatch(sets: Sets, tracker: MatchTracker, superTieBreak?: boolean, matchWon: boolean | null = null) {
         this.props.superTieBreak = superTieBreak || false;
-        this.props.isFinish = true;
-        this.props.isLive = false;
         this.props.tracker = tracker;
         this.props.sets = sets;
-        this.props.isCancelled = true;
+        this.props.status = MatchStatus.createNew(MatchStatuses.Canceled)
+        this.props.matchWon = matchWon;
         this.addDomainEvent(new MatchCancelled(this))
     }
 
@@ -194,10 +182,9 @@ export class Match extends AggregateRoot<MatchProps> {
         const match = new Match(
             {
                 ...props,
-                isLive: props.isLive || false,
-                isFinish: props.isFinish || false,
-                isCancelled: props.isCancelled || false,
-                isPaused: props.isPaused || false,
+                status: props.status ?? MatchStatus.createNew(MatchStatuses.Waiting),
+                matchWon: props.matchWon ?? null,
+                address: props.address ?? null
             },
             id
         );

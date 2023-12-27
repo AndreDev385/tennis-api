@@ -57,10 +57,10 @@ interface DoubleServeFlowProps {
     initialServingPlayer: number;
     initialReturningPlayer: number;
     setNextFlow: boolean;
-    firstGameFlow: ServiceFlow;
-    secondGameFlow: ServiceFlow;
-    thirdGameFlow: ServiceFlow;
-    fourGameFlow: ServiceFlow;
+    firstGameFlow: ServiceFlow | null;
+    secondGameFlow: ServiceFlow | null;
+    thirdGameFlow: ServiceFlow | null;
+    fourGameFlow: ServiceFlow | null;
     order: ServiceOrder;
     tiebreakFirstPointDone: boolean;
 }
@@ -69,16 +69,16 @@ export class DoubleServeFlow extends ValueObject<DoubleServeFlowProps> {
     get order(): ServiceOrder {
         return this.props.order;
     }
-    get fourGameFlow(): ServiceFlow {
+    get fourGameFlow(): ServiceFlow | null {
         return this.props.fourGameFlow;
     }
-    get thirdGameFlow(): ServiceFlow {
+    get thirdGameFlow(): ServiceFlow | null {
         return this.props.thirdGameFlow;
     }
-    get secondGameFlow(): ServiceFlow {
+    get secondGameFlow(): ServiceFlow | null {
         return this.props.secondGameFlow;
     }
-    get firstGameFlow(): ServiceFlow {
+    get firstGameFlow(): ServiceFlow | null {
         return this.props.firstGameFlow;
     }
     get setNextFlow(): boolean {

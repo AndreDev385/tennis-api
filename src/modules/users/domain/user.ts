@@ -16,11 +16,11 @@ interface UserProps {
     lastName: LastName;
     email: UserEmail;
     password: UserPassword;
-    recoverPasswordCode?: string;
+    recoverPasswordCode?: string | null;
     isAdmin?: boolean;
     isPlayer?: boolean;
     canTrack?: boolean;
-    accessToken?: JWTToken;
+    accessToken?: JWTToken | null;
     isDeleted?: boolean;
     lastLogin?: Date;
 }
@@ -46,8 +46,8 @@ export class User extends AggregateRoot<UserProps> {
         return this.props.password;
     }
 
-    get accessToken(): string {
-        return this.props.accessToken;
+    get accessToken(): string | null {
+        return this.props.accessToken!;
     }
 
     get isDeleted(): boolean {
@@ -62,12 +62,12 @@ export class User extends AggregateRoot<UserProps> {
         return !!this.props.canTrack;
     }
 
-    get recoverPasswordCode(): string {
-        return this.props.recoverPasswordCode;
+    get recoverPasswordCode(): string | null {
+        return this.props.recoverPasswordCode!;
     }
 
     get isPlayer(): boolean {
-        return this.props.isPlayer;
+        return this.props.isPlayer!;
     }
 
     get lastLogin() {
@@ -135,6 +135,7 @@ export class User extends AggregateRoot<UserProps> {
                 canTrack: props.canTrack || false,
                 isPlayer: props.isPlayer || false,
                 accessToken: props.accessToken || null,
+                recoverPasswordCode: props.recoverPasswordCode || null,
             },
             id
         );

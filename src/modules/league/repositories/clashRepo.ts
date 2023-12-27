@@ -1,12 +1,14 @@
 import { Clash } from "../domain/clubClash";
 
 export interface ClashQuery {
+    [index: string]: any;
     categoryId?: string;
     isFinish?: boolean;
     journey?: string;
     seasonId?: string;
     team1?: string;
     team2?: string;
+    clubId?: string;
 }
 
 export interface PaginateQuery {

@@ -1,17 +1,12 @@
+import { PlayerTrackerModel } from "../../../../shared/infra/database/sequelize/models/PlayerTracker";
 import { PlayerTracker } from "../../domain/playerTracker";
 import { PlayerTrackerMapper } from "../../mappers/playerTrackerMap";
 import { PlayerTrackerQuery, PlayerTrackerRepository } from "../playerTrackerRepo";
 
 export class SequelizePlayerTrackerRepository
     implements PlayerTrackerRepository {
-    models: any;
 
-    constructor(models: any) {
-        this.models = models;
-    }
     async save(playerTracker: PlayerTracker): Promise<void> {
-        const PlayerTrackerModel = this.models.PlayerTrackerModel;
-
         const raw = PlayerTrackerMapper.toPersistance(playerTracker);
 
         const exist = await PlayerTrackerModel.findOne({
@@ -34,8 +29,6 @@ export class SequelizePlayerTrackerRepository
     }
 
     async getById(playerTrackerId: string): Promise<PlayerTracker> {
-        const PlayerTrackerModel = this.models.PlayerTrackerModel;
-
         const playerTracker = await PlayerTrackerModel.findOne({
             where: { playerTrackerId },
         });
@@ -44,13 +37,11 @@ export class SequelizePlayerTrackerRepository
             throw new Error("Estadisticas de jugador no encontradas.");
         }
 
-        return PlayerTrackerMapper.toDomain(playerTracker);
+        return PlayerTrackerMapper.toDomain(playerTracker)!;
     }
 
     async getByPlayerId(query: PlayerTrackerQuery): Promise<PlayerTracker[]> {
-        const PlayerTrackerModel = this.models.PlayerTrackerModel;
-
-        let _query = {
+        let _query: any = {
             where: {
                 playerId: query.playerId,
             },
@@ -64,6 +55,6 @@ export class SequelizePlayerTrackerRepository
 
         const list = await PlayerTrackerModel.findAll(_query);
 
-        return list.map((t) => PlayerTrackerMapper.toDomain(t));
+        return list.map((t: any) => PlayerTrackerMapper.toDomain(t)!);
     }
 }

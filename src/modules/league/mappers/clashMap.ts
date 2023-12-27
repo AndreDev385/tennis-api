@@ -1,6 +1,7 @@
 import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
 import { Mapper } from "../../../shared/infra/Mapper";
 import { Clash } from "../domain/clubClash";
+import { ClubId } from "../domain/clubId";
 import { Journey } from "../domain/journey";
 import { Matchs } from "../domain/matchs";
 import { SeasonId } from "../domain/seasonId";
@@ -10,20 +11,25 @@ import { MatchMap } from "./matchMap";
 import { TeamMap } from "./teamMap";
 
 export class ClashMap implements Mapper<Clash> {
-    public static toDomain(raw: any, matchs?: Matchs): Clash {
+    public static toDomain(raw: any, matchs?: Matchs): Clash | null {
+        console.log(raw, matchs);
         const journeyOrError = Journey.create({ value: raw.journey });
         const seasonIdOrError = SeasonId.create(
             new UniqueEntityID(raw.seasonId)
         );
+        const clubIdOrError = ClubId.create(
+            new UniqueEntityID(raw.clubId)
+        );
 
         const clashOrError = Clash.create(
             {
-                category: CategoryMap.toDomain(raw.category),
+                category: CategoryMap.toDomain(raw.category)!,
                 seasonId: seasonIdOrError.getValue(),
+                clubId: clubIdOrError.getValue(),
                 team1: raw.team1,
                 team2: raw.team2,
                 host: raw.host,
-                matchs: matchs || Matchs.create(),
+                matchs: matchs ?? Matchs.create(),
                 journey: journeyOrError.getValue() || null,
                 isFinish: raw.isFinish,
             },
@@ -38,6 +44,7 @@ export class ClashMap implements Mapper<Clash> {
     public static toPersistance(clash: Clash) {
         return {
             seasonId: clash.seasonId.id.toString(),
+            clubId: clash.clubId.id.toString(),
             clashId: clash.clashId.id.toString(),
             categoryId: clash.category.categoryId.id.toString(),
             team1: clash.team1.teamId.id.toString(),
@@ -52,6 +59,7 @@ export class ClashMap implements Mapper<Clash> {
         return {
             seasonId: clash.seasonId.id.toString(),
             clashId: clash.clashId.id.toString(),
+            clubId: clash.clubId.id.toString(),
             category: clash.category.name,
             team1: TeamMap.toDto(clash.team1),
             team2: TeamMap.toDto(clash.team2),

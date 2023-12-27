@@ -16,7 +16,7 @@ clashRouter.get("/paginate", (req, res) => paginateClashController.execute(req, 
 clashRouter.get("/:clashId", (req, res) => getClashByIdController.execute(req, res));
 clashRouter.delete(
     "/:clashId",
-    middleware.adminAuthenticated(),
+    middleware.adminAuthenticated() as any,
     (req, res) => deleteClashController.execute(req, res)
 );
 

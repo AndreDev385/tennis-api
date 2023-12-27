@@ -7,6 +7,7 @@ import { IMatch, ISetStats } from "../../../interfaces/interfaces"
 import AdvancedTable from "./advancedTable/AdvancedTable"
 import CoupleVsTable from "./coupleVsTable/CoupleVsTable"
 import './GameStats.scss'
+import { VITE_SERVER_URL } from "../../../env/env.prod"
 
 export interface IPropsTable {
   tracker: ISetStats
@@ -31,7 +32,7 @@ const GameStats = () => {
   }, [matchId]);
 
   const getStats = async () => {
-    const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/match/` + matchId
+    const url = `${VITE_SERVER_URL}/api/v1/match/` + matchId
 
     try{
       const response = await fetch(url, requestOptions)

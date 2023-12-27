@@ -80,7 +80,7 @@ export class Guard {
   }
 
   public static allInRange (numbers: number[], min: number, max: number, argumentName: string) : Result<GuardResponse> {
-    let failingResult: Result<GuardResponse> = null;
+    let failingResult: Result<GuardResponse> | null = null;
 
     for(let num of numbers) {
       const numIsInRangeResult = this.inRange(num, min, max, argumentName);

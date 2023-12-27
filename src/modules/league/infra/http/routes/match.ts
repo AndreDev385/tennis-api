@@ -20,7 +20,7 @@ matchRouter.get("/:matchId", (req, res) =>
     getMatchByIdController.execute(req, res)
 );
 
-matchRouter.post("/", middleware.ensureAuthenticated(), (req, res) =>
+matchRouter.post("/", middleware.ensureAuthenticated() as any, (req, res) =>
     createMatchController.execute(req, res)
 );
 matchRouter.put("/go-live", (req, res) =>

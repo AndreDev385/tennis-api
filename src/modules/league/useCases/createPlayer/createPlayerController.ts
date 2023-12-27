@@ -32,7 +32,12 @@ export class CreatePlayerController extends BaseController {
                         (error as AppError.UnexpectedError).getErrorValue()
                             .message
                     );
-
+                case AppError.NotFoundError:
+                    return this.notFound(
+                        res,
+                        (error as AppError.UnexpectedError).getErrorValue()
+                            .message
+                    );
                 case CreatePlayerErrors.UserDoesNotExist:
                     return this.clientError(
                         res,
@@ -40,15 +45,6 @@ export class CreatePlayerController extends BaseController {
                             error as CreatePlayerErrors.UserDoesNotExist
                         ).getErrorValue().message
                     );
-
-                case CreatePlayerErrors.ClubDoesNotExist:
-                    return this.clientError(
-                        res,
-                        (
-                            error as CreatePlayerErrors.ClubDoesNotExist
-                        ).getErrorValue().message
-                    );
-
                 case CreatePlayerErrors.PlayerAlreadyExistError:
                     return this.conflict(
                         res,
@@ -56,7 +52,6 @@ export class CreatePlayerController extends BaseController {
                             error as CreatePlayerErrors.PlayerAlreadyExistError
                         ).getErrorValue().message
                     );
-
                 default:
                     return this.clientError(
                         res,
@@ -65,6 +60,6 @@ export class CreatePlayerController extends BaseController {
             }
         }
 
-        return this.ok(res, { message: "Jugador agregado" });
+        return this.created(res);
     }
 }

@@ -2,6 +2,7 @@ import { AppError } from "../../../../shared/core/AppError";
 import { Either, Result, left, right } from "../../../../shared/core/Result";
 import { UseCase } from "../../../../shared/core/UseCase";
 import { Clash } from "../../domain/clubClash";
+import { MatchStatuses } from "../../domain/matchStatus";
 import { ClashRepository } from "../../repositories/clashRepo";
 import { FinishClashRequest } from "./finishClashDtos";
 
@@ -28,7 +29,7 @@ export class FinishClash implements UseCase<any, Response> {
                 return left(new AppError.NotFoundError(error));
             }
 
-            let matchFinished = clash.matchs.filter((m) => m.isFinish == true);
+            let matchFinished = clash.matchs.filter((m) => m.status.value == MatchStatuses.Finished || m.status.value == MatchStatuses.Canceled);
 
             if (matchFinished.length < MATCH_PER_CLASH) {
                 console.log(`Aun quedan partidos por terminar (${MATCH_PER_CLASH - matchFinished.length})`)

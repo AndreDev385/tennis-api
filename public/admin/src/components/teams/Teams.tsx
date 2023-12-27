@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { ICategory, IClub, ITeam } from "../../interfaces/interfaces";
 import { useNavigate } from "react-router";
 import "./Teams.scss";
+import { VITE_SERVER_URL } from "../../env/env.prod";
 
 const Teams = () => {
   const [teams, setTeams] = useState<ITeam[]>([])
@@ -26,7 +27,7 @@ const Teams = () => {
 
   const getTeams = async () => {
     setLoading(true)
-    const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/team`
+    const url = `${VITE_SERVER_URL}/api/v1/team`
     const requestOptions = {
       method: 'GET',
       headers: { 
@@ -50,7 +51,7 @@ const Teams = () => {
   }
 
   const getCategories= async () => {
-    const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/categories`
+    const url = `${VITE_SERVER_URL}/api/v1/categories`
     const requestOptions = {
       method: 'GET',
       headers: { 
@@ -70,7 +71,7 @@ const Teams = () => {
   }
 
   const getClubs = async () => {
-    const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/club`
+    const url = `${VITE_SERVER_URL}/api/v1/club`
     const requestOptions = {
       method: 'GET',
       headers: { 

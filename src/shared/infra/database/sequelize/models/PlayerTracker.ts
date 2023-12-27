@@ -1,10 +1,52 @@
-import { DataTypes, Sequelize } from "sequelize";
+import { DataTypes, InferAttributes, Model, Sequelize } from "sequelize";
 import config from "../config/config";
-import { PlayerModel } from "./Player";
 
 const sequelize: Sequelize = config.connection;
 
-const PlayerTrackerModel = sequelize.define(
+interface PlayerTrackerData extends Model<InferAttributes<PlayerTrackerData>> {
+    playerTrackerId: string;
+    playerId: string;
+    seasonId: string;
+    isDouble: boolean;
+    pointsWon: number;
+    pointsWonServing: number;
+    pointsWonReturning: number;
+    pointsLost: number;
+    pointsLostReturning: number;
+    pointsLostServing: number;
+    saveBreakPtsChances: number;
+    breakPtsSaved: number;
+    gamesWonServing: number;
+    gamesLostServing: number;
+    pointsWinnedFirstServ: number;
+    pointsWinnedSecondServ: number;
+    firstServIn: number;
+    secondServIn: number;
+    firstServWon: number;
+    secondServWon: number;
+    aces: number;
+    dobleFaults: number;
+    pointsWinnedFirstReturn: number;
+    pointsWinnedSecondReturn: number;
+    firstReturnIn: number;
+    secondReturnIn: number;
+    firstReturnOut: number;
+    secondReturnOut: number;
+    firstReturnWon: number;
+    secondReturnWon: number;
+    firstReturnWinner: number;
+    secondReturnWinner: number;
+    meshPointsWon: number;
+    meshPointsLost: number;
+    meshError: number;
+    meshWinner: number;
+    bckgPointsWon: number;
+    bckgPointsLost: number;
+    bckgError: number;
+    bckgWinner: number;
+}
+
+const PlayerTrackerModel = sequelize.define<PlayerTrackerData>(
     "playerTracker",
     {
         playerTrackerId: {
@@ -19,6 +61,10 @@ const PlayerTrackerModel = sequelize.define(
         },
         seasonId: {
             type: DataTypes.UUID,
+            allowNull: false,
+        },
+        isDouble: {
+            type: DataTypes.BOOLEAN,
             allowNull: false,
         },
         pointsWon: {
@@ -77,6 +123,14 @@ const PlayerTrackerModel = sequelize.define(
             type: DataTypes.INTEGER,
             allowNull: false,
         },
+        firstServWon: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        secondServWon: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
         aces: {
             type: DataTypes.INTEGER,
             defaultValue: 0,
@@ -117,12 +171,43 @@ const PlayerTrackerModel = sequelize.define(
             defaultValue: 0,
             allowNull: true,
         },
+        firstReturnWon: {
+            type: DataTypes.INTEGER,
+            defaultValue: 0,
+            allowNull: true,
+        },
+        secondReturnWon: {
+            type: DataTypes.INTEGER,
+            defaultValue: 0,
+            allowNull: true,
+        },
+        firstReturnWinner: {
+            type: DataTypes.INTEGER,
+            defaultValue: 0,
+            allowNull: true,
+        },
+        secondReturnWinner: {
+            type: DataTypes.INTEGER,
+            defaultValue: 0,
+            allowNull: true,
+        },
         meshPointsWon: {
             type: DataTypes.INTEGER,
             defaultValue: 0,
             allowNull: true,
         },
         meshPointsLost: {
+            type: DataTypes.INTEGER,
+            defaultValue: 0,
+            allowNull: true,
+        },
+        meshWinner: {
+
+            type: DataTypes.INTEGER,
+            defaultValue: 0,
+            allowNull: true,
+        },
+        meshError: {
             type: DataTypes.INTEGER,
             defaultValue: 0,
             allowNull: true,
@@ -137,12 +222,12 @@ const PlayerTrackerModel = sequelize.define(
             defaultValue: 0,
             allowNull: true,
         },
-        winners: {
+        bckgWinner: {
             type: DataTypes.INTEGER,
             defaultValue: 0,
             allowNull: true,
         },
-        noForcedErrors: {
+        bckgError: {
             type: DataTypes.INTEGER,
             defaultValue: 0,
             allowNull: true,
@@ -150,11 +235,5 @@ const PlayerTrackerModel = sequelize.define(
     },
     { tableName: "playerTracker" }
 );
-
-PlayerTrackerModel.belongsTo(PlayerModel, {
-    foreignKey: "playerId",
-    targetKey: "playerId",
-    as: "Player",
-});
 
 export { PlayerTrackerModel };

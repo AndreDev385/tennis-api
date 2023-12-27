@@ -18,8 +18,6 @@ export class ListMatchsController extends BaseController {
             return this.fail(res, error.getErrorValue().message);
         }
 
-        console.log(result.value.getValue()[0]);
-
         return this.ok(res, result.value.getValue());
     }
 }

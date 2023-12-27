@@ -1,18 +1,11 @@
+import { UserModel } from "../../../../shared/infra/database/sequelize/models/BaseUser";
 import { UserEmail } from "../../domain/email";
 import { User } from "../../domain/user.js";
 import { UserMap } from "../../mappers/userMap";
 import { UserQuery, UserRepository } from "../userRepo";
 
 export class SequelizeUserRepo implements UserRepository {
-    private models: any;
-
-    constructor(models: any) {
-        this.models = models;
-    }
-
     async exists(email: UserEmail): Promise<boolean> {
-        const UserModel = this.models.UserModel;
-
         const user = await UserModel.findOne({
             where: { email: email.value },
         });
@@ -21,25 +14,22 @@ export class SequelizeUserRepo implements UserRepository {
     }
 
     async getUserByUserId(userId: string): Promise<User> {
-        const UserModel = this.models.UserModel;
         const user = await UserModel.findOne({ where: { userId: userId } });
         if (!!user == false) throw new Error("User not found");
 
-        return UserMap.toDomain(user);
+        return UserMap.toDomain(user)!;
     }
 
     async getUserByEmail(email: UserEmail): Promise<User> {
-        const UserModel = this.models.UserModel;
         const user = await UserModel.findOne({
             where: { email: email.value },
         });
         if (!!user == false) throw new Error("User not found");
 
-        return UserMap.toDomain(user);
+        return UserMap.toDomain(user)!;
     }
 
     async save(user: User): Promise<void> {
-        const UserModel = this.models.UserModel;
         const rawUser = await UserMap.toPersistance(user);
 
         try {
@@ -56,16 +46,14 @@ export class SequelizeUserRepo implements UserRepository {
     }
 
     async list(query: UserQuery): Promise<User[]> {
-        const UserModel = this.models.UserModel;
         const rawList = await UserModel.findAll({
-            where: query
+            where: query as any
         });
 
-        return rawList.map((raw: any) => UserMap.toDomain(raw))
+        return rawList.map((raw: any) => UserMap.toDomain(raw)!)
     }
 
     async getUserByRecoveryPasswordCode(code: string): Promise<User> {
-        const UserModel = this.models.UserModel;
 
         const user = await UserModel.findOne({
             where: { recoverPasswordCode: code },
@@ -73,12 +61,10 @@ export class SequelizeUserRepo implements UserRepository {
 
         if (!!user == false) throw new Error("User not found");
 
-        return UserMap.toDomain(user);
+        return UserMap.toDomain(user)!;
     }
 
     async delete(userId: string): Promise<void> {
-        const UserModel = this.models.UserModel;
-
         await UserModel.destroy({
             where: { userId }
         })

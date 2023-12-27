@@ -5,6 +5,7 @@ import { faChartBar } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Button, Card, Form, Table } from "react-bootstrap"
 import "./Stats.scss";
+import { VITE_SERVER_URL } from "../../../env/env.prod"
 
 const Stats = () => {
   const { id } = useParams()
@@ -31,7 +32,7 @@ const Stats = () => {
       ...(selectedSeason && { season: selectedSeason }),
     };
 
-    const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/team/stats?` + new URLSearchParams(params)
+    const url = `${VITE_SERVER_URL}/api/v1/team/stats?` + new URLSearchParams(params)
     const requestOptions = {
       method: 'GET',
       headers: { 
@@ -106,7 +107,7 @@ const Stats = () => {
   }
 
   const getSeasons = async () => {
-    const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/season`
+    const url = `${VITE_SERVER_URL}/api/v1/season`
     const requestOptions = {
       method: 'GET',
       headers: { 
@@ -129,7 +130,7 @@ const Stats = () => {
   }
 
   const getJourney = async () => {
-    const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/utils/journeys`
+    const url = `${VITE_SERVER_URL}/api/v1/utils/journeys`
     const requestOptions = {
       method: 'GET',
       headers: { 

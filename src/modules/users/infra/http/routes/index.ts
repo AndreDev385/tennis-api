@@ -23,13 +23,13 @@ import { deleteUserController } from "../../../useCases/deleteUser";
 
 const userRouter = express.Router();
 
-userRouter.get("/", middleware.ensureAuthenticated(), (req, res) => listUserController.execute(req, res));
+userRouter.get("/", middleware.ensureAuthenticated() as any, (req, res) => listUserController.execute(req, res));
 
 userRouter.post("/", (req, res) => createUserController.execute(req, res));
 
-userRouter.put("/", middleware.ensureAuthenticated(), (req, res) => editUserController.execute(req, res))
+userRouter.put("/", middleware.ensureAuthenticated() as any, (req, res) => editUserController.execute(req, res))
 
-userRouter.post("/tracker", middleware.adminAuthenticated(), (req, res) =>
+userRouter.post("/tracker", middleware.adminAuthenticated() as any, (req, res) =>
     createTrackerController.execute(req, res)
 );
 
@@ -53,11 +53,11 @@ userRouter.post("/validate-password-code", (req, res) =>
 
 userRouter.put(
     "/change-password",
-    middleware.ensureAuthenticated(),
+    middleware.ensureAuthenticated() as any,
     (req, res) => changePasswordController.execute(req, res)
 );
 
-userRouter.get("/me", middleware.ensureAuthenticated(), (req, res) =>
+userRouter.get("/me", middleware.ensureAuthenticated() as any, (req, res) =>
     getUserByEmailWithToken.execute(req, res)
 );
 
@@ -65,6 +65,6 @@ userRouter.get("/:email", (req, res) =>
     getUserByEmailController.execute(req, res)
 );
 
-userRouter.put("/delete", middleware.ensureAuthenticated(), (req, res) => deleteUserController.execute(req, res))
+userRouter.put("/delete", middleware.ensureAuthenticated() as any, (req, res) => deleteUserController.execute(req, res))
 
 export { userRouter };

@@ -14,14 +14,14 @@ export class AfterMatchCancelled implements IHandle<MatchCancelled> {
     }
 
     setupSubscriptions(): void {
-        DomainEvents.register(this.onFinishClash.bind(this), MatchCancelled.name);
+        DomainEvents.register(this.onFinishClash.bind(this) as any, MatchCancelled.name);
     }
 
     private async onFinishClash(event: MatchCancelled): Promise<void> {
         const { match } = event
 
         try {
-            await this.finishClash.execute({ clashId: match.clashId.id.toString(), matchId: match.matchId.id.toString() })
+            await this.finishClash.execute({ clashId: match.clashId.toString(), matchId: match.matchId.id.toString() })
             console.log(`[AfterMatchCancelled]: Successfully executed FinishClash use case AfterMatchCancelled`)
         } catch (error) {
             console.log(`[AfterMatchCancelled]: Failer to execute FinishClash use case AfterMatchCancelled`)

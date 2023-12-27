@@ -1,33 +1,35 @@
+import { ClubModel } from "../../../../shared/infra/database/sequelize/models/Club";
 import { Club } from "../../domain/club";
 import { ClubDto } from "../../dtos/clubDto";
 import { ClubMap } from "../../mappers/clubMap";
 import { ListQueryDto } from "../../useCases/listClubs/requestListQueryDto";
-import { ClubRepository } from "../clubRepo";
+import { ClubQuery, ClubRepository } from "../clubRepo";
 
 export class SequelizeClubRepository implements ClubRepository {
-    private models: any;
 
-    constructor(models: any) {
-        this.models = models;
+    async find(query: ClubQuery): Promise<Club> {
+        const club = await ClubModel.findOne({ where: query as any });
+
+        if (!club) {
+            throw new Error("Club no encontrado");
+        }
+
+        return ClubMap.toDomain(club)!;
     }
 
     async findById(clubId: string): Promise<Club> {
-        const ClubModel = this.models.ClubModel;
-
         const club = await ClubModel.findOne({ where: { clubId } });
 
         if (!club) {
             throw new Error("Club no encontrado");
         }
 
-        return ClubMap.toDomain(club);
+        return ClubMap.toDomain(club)!;
     }
 
     async list(query: ListQueryDto): Promise<ClubDto[]> {
-        const ClubModel = this.models.ClubModel;
-
         const list = await ClubModel.findAll({
-            where: query,
+            where: query as any,
             order: [['name', "ASC"]],
         });
 
@@ -35,8 +37,6 @@ export class SequelizeClubRepository implements ClubRepository {
     }
 
     async save(club: Club): Promise<void> {
-        const ClubModel = this.models.ClubModel;
-
         const raw = ClubMap.toPersistance(club);
 
         const exist = await ClubModel.findOne({ where: { clubId: raw.clubId } })

@@ -1,6 +1,8 @@
 import path from "path";
 import { AuthService } from "../../../../modules/users/services/auth/authService";
 import multer from 'multer';
+import { NextFunction, Response } from "express";
+import { DecodedRequest } from "../../../../modules/users/infra/http/models/decodedRequest";
 
 export class Middleware {
     private authService: AuthService;
@@ -18,11 +20,11 @@ export class Middleware {
     }
 
     public ensureAuthenticated() {
-        return async (req, res, next) => {
+        return async (req: DecodedRequest, res: Response, next: NextFunction) => {
             const token = req.headers["authorization"];
             if (token) {
                 const decoded = await this.authService.decodeJWT(token);
-                const signatureFailed = !!decoded === false;
+                const signatureFailed = !!decoded as boolean === false;
 
                 if (signatureFailed) {
                     return this.endRequest(
@@ -31,7 +33,7 @@ export class Middleware {
                         res
                     );
                 }
-                req.decoded = decoded;
+                req.decoded = decoded!;
                 return next();
             } else {
                 return this.endRequest(403, "No autorizado.", res);
@@ -40,12 +42,12 @@ export class Middleware {
     }
 
     public adminAuthenticated() {
-        return async (req, res, next) => {
+        return async (req: DecodedRequest, res: Response, next: NextFunction) => {
             const token = req.headers["authorization"];
             // Confirm that the token was signed with our signature.
             if (token) {
                 const decoded = await this.authService.decodeJWT(token);
-                const signatureFailed = !!decoded === false;
+                const signatureFailed = !!decoded as boolean === false;
                 if (signatureFailed) {
                     return this.endRequest(
                         403,
@@ -53,7 +55,7 @@ export class Middleware {
                         res
                     );
                 }
-                if (!decoded.isAdmin) {
+                if (!decoded?.isAdmin) {
                     return this.endRequest(
                         403,
                         "No autorizado.",

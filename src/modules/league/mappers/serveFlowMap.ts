@@ -4,7 +4,7 @@ import { SingleServeFlow } from "../domain/serviceFlow";
 import { ServiceOrder } from "../domain/serviceOrder";
 
 export class SingleServeFlowMap implements Mapper<SingleServeFlow> {
-    public static toDto(flow: SingleServeFlow | null) {
+    public static toDto(flow: SingleServeFlow | null | undefined) {
         if (!flow) {
             return null
         }
@@ -14,7 +14,7 @@ export class SingleServeFlowMap implements Mapper<SingleServeFlow> {
         }
     }
 
-    public static toDomain(raw: any): SingleServeFlow {
+    public static toDomain(raw: any): SingleServeFlow | null {
         let obj: any;
         if (typeof raw == 'string') {
             obj = JSON.parse(raw);
@@ -46,7 +46,7 @@ export class DoubleServeFlowMap implements Mapper<DoubleServeFlow> {
         return flowOrError.isSuccess ? flowOrError.getValue() : null;
     }
 
-    public static toDto(flow: DoubleServeFlow | null) {
+    public static toDto(flow: DoubleServeFlow | null | undefined) {
         if (!flow) {
             return null
         }
@@ -60,16 +60,16 @@ export class DoubleServeFlowMap implements Mapper<DoubleServeFlow> {
             returningPlayer: flow.returningPlayer,
             isFlowComplete: flow.isFlowComplete,
             actualSetOrder: flow.actualSetOrder,
-            firstGameFlow: flow.firstGameFlow.value,
-            secondGameFlow: flow.secondGameFlow.value,
-            thirdGameFlow: flow.thirdGameFlow.value,
-            fourGameFlow: flow.fourGameFlow.value,
+            firstGameFlow: flow.firstGameFlow?.value,
+            secondGameFlow: flow.secondGameFlow?.value,
+            thirdGameFlow: flow.thirdGameFlow?.value,
+            fourGameFlow: flow.fourGameFlow?.value,
             order: flow.order.getItems().map((flow) => flow.value),
             tiebreakFirstPointDone: flow.tiebreakFirstPointDone,
         }
     }
 
-    public static toDomain(raw: any): DoubleServeFlow {
+    public static toDomain(raw: any): DoubleServeFlow | null {
         let obj: any;
         if (typeof raw == 'string') {
             obj = JSON.parse(raw);
@@ -81,16 +81,14 @@ export class DoubleServeFlowMap implements Mapper<DoubleServeFlow> {
             return null;
         }
 
-        console.log(raw);
-
         const firstGameFlow = this.serveFlowToDomain(obj.firstGameFlow);
         const secondGameFlow = this.serveFlowToDomain(obj.secondGameFlow);
         const thirdGameFlow = this.serveFlowToDomain(obj.thirdGameFlow);
         const fourGameFlow = this.serveFlowToDomain(obj.fourGameFlow);
+
         const order = ServiceOrder.create([firstGameFlow, secondGameFlow, thirdGameFlow, fourGameFlow,])
 
         if (order.isFailure) {
-            console.log(order.getErrorValue())
             return null
         }
 

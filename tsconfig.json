@@ -7,6 +7,8 @@
         "sourceMap": true,
         "target": "es2017",
         "outDir": "./dist",
+        "strict": true,
+        "strictPropertyInitialization": false,
         "lib": [
             "es6",
             "dom"

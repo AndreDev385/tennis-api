@@ -13,14 +13,14 @@ export class AfterMatchFinished implements IHandle<MatchFinished> {
     }
 
     setupSubscriptions(): void {
-        DomainEvents.register(this.onFinishClash.bind(this), MatchFinished.name);
+        DomainEvents.register(this.onFinishClash.bind(this) as any, MatchFinished.name);
     }
 
     private async onFinishClash(event: MatchFinished): Promise<void> {
         const { match } = event
 
         try {
-            await this.finishClash.execute({ clashId: match.clashId.id.toString(), matchId: match.matchId.id.toString() })
+            await this.finishClash.execute({ clashId: match.clashId.toString(), matchId: match.matchId.id.toString() })
             console.log(`[AfterMatchFinished]: Successfully executed FinishClash use case AfterMatchFinished`)
         } catch (error) {
             console.log(`[AfterMatchFinished]: Failer to execute FinishClash use case AfterMatchFinished`)

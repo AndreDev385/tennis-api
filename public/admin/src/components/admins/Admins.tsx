@@ -7,6 +7,7 @@ import CreateAdmin from './createAdmin/createAdmin';
 import { IUser } from '../../interfaces/interfaces';
 import './Admin.scss';
 import 'react-toastify/dist/ReactToastify.css';
+import { VITE_SERVER_URL } from '../../env/env.prod';
 
 export interface IAdmin {
   userId: string,
@@ -29,7 +30,7 @@ const Admins = () => {
   
   const getAdmins = async (): Promise<void> => {
     setLoading(true)
-    const url = `${import.meta.env.VITE_SERVER_URL}/api/v1/users?isAdmin=true`
+    const url = `${VITE_SERVER_URL}/api/v1/users?isAdmin=true`
     const requestOptions = {
       method: 'GET',
       headers: { 
