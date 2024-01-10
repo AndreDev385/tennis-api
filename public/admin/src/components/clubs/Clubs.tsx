@@ -16,7 +16,6 @@ import './Clubs.scss';
 import { VITE_SERVER_URL } from '../../env/env.prod';
 import ModalQuestion from '../modalQuestion/ModalQuestion';
 import { requestClubSubscription } from '../../utils/data';
-import { get } from 'http';
 
 const Clubs = () => {
   const [clubs, setClubs] = useState<IClub[]>([]);
