@@ -195,7 +195,12 @@ export class MatchTracker extends Entity<MatchTrackerProps> {
         isDouble: boolean,
         partnerId?: PlayerId,
     ): Result<MatchTracker> {
-        const guard = Guard.againstNullOrUndefined(id, "match id");
+        const guard = Guard.againstNullOrUndefinedBulk([
+            { argument: id, argumentName: 'matchId' },
+            { argument: seasonId, argumentName: 'seasonId' },
+            { argument: playerId, argumentName: 'playerId' },
+            { argument: isDouble, argumentName: 'isDouble' },
+        ]);
 
         if (guard.isFailure) {
             return Result.fail<MatchTracker>(guard.getErrorValue());
@@ -232,20 +237,24 @@ export class MatchTracker extends Entity<MatchTrackerProps> {
             gamesLostReturning: 0,
             winBreakPtsChances: 0,
             breakPtsWinned: 0,
+
             rivalPointsWinnedFirstServ: 0,
             rivalPointsWinnedSecondServ: 0,
             rivalFirstServIn: 0,
             rivalSecondServIn: 0,
             rivalFirstServWon: 0,
             rivalSecondServWon: 0,
+
             rivalPointsWinnedFirstReturn: 0,
             rivalPointsWinnedSecondReturn: 0,
             rivalFirstReturnIn: 0,
             rivalSecondReturnIn: 0,
+
             rivalAces: 0,
             rivalDobleFault: 0,
             rivalNoForcedErrors: 0,
             rivalWinners: 0,
+
             shortRallyWon: 0,
             mediumRallyWon: 0,
             longRallyWon: 0,
