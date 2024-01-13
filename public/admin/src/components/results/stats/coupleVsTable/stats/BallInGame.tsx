@@ -1,106 +1,171 @@
-import { IPropsTable } from '../../GameStats'
-import '../../GameStats.scss'
+import { calculatePercentage } from '../../../../../utils/calculatePercantage';
+import { IPropsTable } from '../../GameStats';
+import '../../GameStats.scss';
 
-const BallInGame = ({tracker, playerVsPlayer}: IPropsTable) => {
+const BallInGame = ({ tracker, playerVsPlayer }: IPropsTable) => {
   return (
     <>
-        <div className="title">
-            <span>
-              Pelota en juego
-            </span>
-          </div>
+      <div className='title'>
+        <span>Pelota en juego</span>
+      </div>
 
-          {tracker.partner && <tbody>
-            {playerVsPlayer &&
-              <tr>
-                <td className="text-center">
-                  Puntos ganados en malla
-                </td>
-                <td className="text-center">
-                  {tracker.me.meshPointsWon}/
-                  {tracker.me.meshPointsLost + tracker.me.meshPointsWon}
-                  ({Math.floor(tracker.me.meshPointsWon/(tracker.me.meshPointsLost + tracker.me.meshPointsWon)*100)}%)
-                </td>
-                <td className="text-center">
-                  {tracker.partner.meshPointsWon}/
-                  {tracker.partner.meshPointsLost + tracker.partner.meshPointsWon}
-                  ({Math.floor(tracker.partner.meshPointsWon/(tracker.partner.meshPointsLost + tracker.partner.meshPointsWon)*100)}%)
-                </td>
-              </tr>
-            }
-
-            {playerVsPlayer &&
-              <tr>
-                <td className="text-center">
-                  Puntos ganados de fondo/approach
-                </td>
-                <td className="text-center">
-                  {tracker.me.bckgPointsWon}/
-                  {tracker.me.bckgPointsWon + tracker.me.bckgPointsLost + tracker.me.winners}
-                  ({Math.floor(tracker.me.bckgPointsWon/(tracker.me.bckgPointsLost + tracker.me.bckgPointsWon + tracker.me.winners)*100)}%)
-                </td>
-                <td className="text-center">
-                  {tracker.partner.bckgPointsWon}/
-                  {tracker.partner.bckgPointsWon + tracker.partner.bckgPointsLost + tracker.partner.winners}
-                  ({Math.floor(tracker.partner.bckgPointsWon/(tracker.partner.bckgPointsLost + tracker.partner.bckgPointsWon  + tracker.partner.winners)*100)}%)
-                </td>
-              </tr>
-            }
-
+      {tracker.partner && (
+        <tbody>
+          {playerVsPlayer && (
             <tr>
-              <td className="text-center">
-                Winners
+              <td className='text-center'>Puntos ganados en malla</td>
+              <td className='text-center'>
+                {tracker.me.meshPointsWon}/
+                {tracker.me.meshPointsLost + tracker.me.meshPointsWon}(
+                {calculatePercentage(
+                  tracker.me.meshPointsWon,
+                  tracker.me.meshPointsLost + tracker.me.meshPointsWon
+                )}
+                %)
               </td>
-              <td className="text-center">
-                {playerVsPlayer? 
-                  <span>
-                    {tracker.me.winners} 
-                  </span>:
-                  <span>
-                    {tracker.me.winners + tracker.partner.winners}
-                  </span>
-                }
-              </td>
-              <td className="text-center">
-                {playerVsPlayer? 
-                  <span>
-                    {tracker.partner.winners}
-                  </span>:
-                  <span>
-                    {tracker.rivalWinners}
-                  </span>
-                }
+              <td className='text-center'>
+                {tracker.partner.meshPointsWon}/
+                {tracker.partner.meshPointsLost + tracker.partner.meshPointsWon}(
+                {calculatePercentage(
+                  tracker.partner.meshPointsWon,
+                  tracker.partner.meshPointsLost + tracker.partner.meshPointsWon
+                )}
+                %)
               </td>
             </tr>
+          )}
 
+          {playerVsPlayer && (
             <tr>
-              <td className="text-center">
-                Errores no forzados
+              <td className='text-center'>Winners en malla</td>
+              <td className='text-center'>{tracker.me.meshWinner}</td>
+              <td className='text-center'>{tracker.partner.meshWinner}</td>
+            </tr>
+          )}
+
+          {playerVsPlayer && (
+            <tr>
+              <td className='text-center'>Errores en malla</td>
+              <td className='text-center'>{tracker.me.meshError}</td>
+              <td className='text-center'>{tracker.partner.meshError}</td>
+            </tr>
+          )}
+
+          {playerVsPlayer && (
+            <tr>
+              <td className='text-center'>Puntos ganados de fondo/approach</td>
+              <td className='text-center'>
+                {tracker.me.bckgPointsWon}/
+                {tracker.me.bckgPointsWon + tracker.me.bckgPointsLost}(
+                {calculatePercentage(
+                  tracker.me.bckgPointsWon,
+                  tracker.me.bckgPointsWon + tracker.me.bckgPointsLost
+                )}
+                %)
               </td>
-              <td className="text-center">
-                {playerVsPlayer? 
-                  <span>
-                    {tracker.me.noForcedErrors}
-                  </span>:
-                  <span>
-                    {tracker.me.noForcedErrors + tracker.partner.noForcedErrors}
-                  </span>
-                }
-              </td>
-              <td className="text-center">
-                {playerVsPlayer? 
-                  <span>
-                    {tracker.partner.noForcedErrors}
-                  </span>:
-                  <span>
-                    {tracker.rivalNoForcedErrors}
-                  </span>
-                }
+              <td className='text-center'>
+                {tracker.partner.bckgPointsWon}/
+                {tracker.partner.bckgPointsWon + tracker.partner.bckgPointsLost}(
+                {calculatePercentage(
+                  tracker.partner.bckgPointsWon,
+                  tracker.partner.bckgPointsWon + tracker.partner.bckgPointsLost
+                )}
+                %)
               </td>
             </tr>
-        </tbody>}
+          )}
+
+          {playerVsPlayer && (
+            <tr>
+              <td className='text-center'>Winners en fondo/approach</td>
+              <td className='text-center'>{tracker.me.bckgWinner}</td>
+              <td className='text-center'>{tracker.partner.bckgWinner}</td>
+            </tr>
+          )}
+
+          {playerVsPlayer && (
+            <tr>
+              <td className='text-center'>Errores en fondo/approach</td>
+              <td className='text-center'>{tracker.me.bckgError}</td>
+              <td className='text-center'>{tracker.partner.bckgError}</td>
+            </tr>
+          )}
+
+          <tr>
+            <td className='text-center'>Winners</td>
+            <td className='text-center'>
+              {playerVsPlayer ? (
+                <span>
+                  {tracker.me.meshWinner +
+                    tracker.me.bckgWinner +
+                    tracker.me.firstReturnWinner +
+                    tracker.me.secondReturnWinner +
+                    tracker.me.aces}
+                </span>
+              ) : (
+                <span>
+                  {tracker.me.meshWinner +
+                    tracker.me.bckgWinner +
+                    tracker.me.firstReturnWinner +
+                    tracker.me.secondReturnWinner +
+                    tracker.me.aces +
+                    (tracker.me.meshWinner +
+                      tracker.partner.bckgWinner +
+                      tracker.partner.firstReturnWinner +
+                      tracker.partner.secondReturnWinner +
+                      tracker.partner.aces)}
+                </span>
+              )}
+            </td>
+            <td className='text-center'>
+              {playerVsPlayer ? (
+                <span>
+                  {tracker.me.meshWinner +
+                    tracker.partner.bckgWinner +
+                    tracker.partner.firstReturnWinner +
+                    tracker.partner.secondReturnWinner +
+                    tracker.partner.aces}
+                </span>
+              ) : (
+                <span>{tracker.rivalWinners}</span>
+              )}
+            </td>
+          </tr>
+
+          <tr>
+            <td className='text-center'>Errores no forzados</td>
+            <td className='text-center'>
+              {playerVsPlayer ? (
+                <span>
+                  {tracker.me.meshError + tracker.me.bckgError + tracker.me.dobleFaults}
+                </span>
+              ) : (
+                <span>
+                  {tracker.me.meshError +
+                    tracker.me.bckgError +
+                    tracker.me.dobleFaults +
+                    (tracker.partner.meshError +
+                      tracker.partner.bckgError +
+                      tracker.partner.dobleFaults)}
+                </span>
+              )}
+            </td>
+            <td className='text-center'>
+              {playerVsPlayer ? (
+                <span>
+                  {tracker.partner.meshError +
+                    tracker.partner.bckgError +
+                    tracker.partner.dobleFaults}
+                </span>
+              ) : (
+                <span>{tracker.rivalNoForcedErrors}</span>
+              )}
+            </td>
+          </tr>
+        </tbody>
+      )}
     </>
-  )
-}
+  );
+};
 
-export default BallInGame
+export default BallInGame;
