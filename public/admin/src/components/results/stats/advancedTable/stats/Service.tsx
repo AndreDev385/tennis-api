@@ -1,3 +1,4 @@
+import { calculatePercentage } from '../../../../../utils/calculatePercantage';
 import { IPropsTable } from '../../GameStats';
 import '../../GameStats.scss';
 
@@ -25,20 +26,18 @@ const Service = ({ tracker }: IPropsTable) => {
           <td className='text-center'>1er Servicio In</td>
           <td className='text-center'>
             {tracker.me.firstServIn}/{tracker.me.firstServIn + tracker.me.secondServIn}(
-            {Math.floor(
-              (tracker.me.firstServIn /
-                (tracker.me.firstServIn + tracker.me.secondServIn)) *
-                100
+            {calculatePercentage(
+              tracker.me.firstServIn,
+              tracker.me.firstServIn + tracker.me.secondServIn
             )}
             %)
           </td>
           <td className='text-center'>
             {tracker.rivalFirstServIn}/
             {tracker.rivalFirstServIn + tracker.rivalSecondServIn}(
-            {Math.floor(
-              (tracker.rivalFirstServIn /
-                (tracker.rivalFirstServIn + tracker.rivalSecondServIn)) *
-                100
+            {calculatePercentage(
+              tracker.rivalFirstServIn,
+              tracker.rivalFirstServIn + tracker.rivalSecondServIn
             )}
             %)
           </td>
@@ -48,15 +47,17 @@ const Service = ({ tracker }: IPropsTable) => {
           <td className='text-center'>Ptos ganados con el 1er servicio</td>
           <td className='text-center'>
             {tracker.me.pointsWinnedFirstServ}/{tracker.me.firstServIn}(
-            {Math.floor(
-              (tracker.me.pointsWinnedFirstServ / tracker.me.firstServIn) * 100
+            {calculatePercentage(
+              tracker.me.pointsWinnedFirstServ,
+              tracker.me.firstServIn
             )}
             %)
           </td>
           <td className='text-center'>
             {tracker.rivalPointsWinnedFirstServ}/{tracker.rivalFirstServIn}(
-            {Math.floor(
-              (tracker.rivalPointsWinnedFirstServ / tracker.rivalFirstServIn) * 100
+            {calculatePercentage(
+              tracker.rivalPointsWinnedFirstServ,
+              tracker.rivalFirstServIn
             )}
             %)
           </td>
@@ -66,15 +67,17 @@ const Service = ({ tracker }: IPropsTable) => {
           <td className='text-center'>Ptos ganados con el 2do servicio</td>
           <td className='text-center'>
             {tracker.me.pointsWinnedSecondServ}/{tracker.me.secondServIn}(
-            {Math.floor(
-              (tracker.me.pointsWinnedSecondServ / tracker.me.secondServIn) * 100
+            {calculatePercentage(
+              tracker.me.pointsWinnedSecondServ,
+              tracker.me.secondServIn
             )}
             %)
           </td>
           <td className='text-center'>
             {tracker.rivalPointsWinnedSecondServ}/{tracker.rivalSecondServIn}(
-            {Math.floor(
-              (tracker.rivalPointsWinnedSecondServ / tracker.rivalSecondServIn) * 100
+            {calculatePercentage(
+              tracker.rivalPointsWinnedSecondServ,
+              tracker.rivalSecondServIn
             )}
             %)
           </td>
