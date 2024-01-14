@@ -25,21 +25,39 @@ const Service = ({ tracker }: IPropsTable) => {
         <tr>
           <td className='text-center'>1er Servicio In</td>
           <td className='text-center'>
-            {tracker.me.firstServIn}/{tracker.me.firstServIn + tracker.me.secondServIn}(
+            {tracker.me.firstServIn}/
+            {tracker.me.firstServIn + tracker.me.secondServIn + tracker.me.dobleFaults}(
             {calculatePercentage(
               tracker.me.firstServIn,
-              tracker.me.firstServIn + tracker.me.secondServIn
+              tracker.me.firstServIn + tracker.me.secondServIn + tracker.me.dobleFaults
             )}
             %)
           </td>
           <td className='text-center'>
             {tracker.rivalFirstServIn}/
-            {tracker.rivalFirstServIn + tracker.rivalSecondServIn}(
+            {tracker.rivalFirstServIn +
+              tracker.rivalSecondServIn +
+              tracker.rivalDobleFault}
+            (
             {calculatePercentage(
               tracker.rivalFirstServIn,
-              tracker.rivalFirstServIn + tracker.rivalSecondServIn
+              tracker.rivalFirstServIn +
+                tracker.rivalSecondServIn +
+                tracker.rivalDobleFault
             )}
             %)
+          </td>
+        </tr>
+
+        <tr>
+          <td className='text-center'>1er saque ganador</td>
+
+          <td className='text-center'>
+            <span>{tracker.me.firstServWon}</span>
+          </td>
+
+          <td className='text-center'>
+            <span>{tracker.rivalFirstServWon}</span>
           </td>
         </tr>
 
@@ -60,6 +78,49 @@ const Service = ({ tracker }: IPropsTable) => {
               tracker.rivalFirstServIn
             )}
             %)
+          </td>
+        </tr>
+
+        <tr>
+          <td className='text-center'>2do Servicio In</td>
+          <td className='text-center'>
+            <span>
+              {tracker.me.secondServIn}/{tracker.me.secondServIn + tracker.me.dobleFaults}
+              (
+              {calculatePercentage(
+                tracker.me.secondServIn,
+                tracker.me.secondServIn + tracker.me.dobleFaults
+              )}
+              %)
+            </span>
+          </td>
+          <td className='text-center'>
+            <span>
+              {tracker.rivalFirstServIn}/
+              {tracker.rivalFirstServIn +
+                tracker.rivalSecondServIn +
+                tracker.rivalDobleFault}
+              (
+              {calculatePercentage(
+                tracker.rivalFirstServIn,
+                tracker.rivalFirstServIn +
+                  tracker.rivalSecondServIn +
+                  tracker.rivalDobleFault
+              )}
+              %)
+            </span>
+          </td>
+        </tr>
+
+        <tr>
+          <td className='text-center'>2do saque ganador</td>
+
+          <td className='text-center'>
+            <span>{tracker.me.secondServWon}</span>
+          </td>
+
+          <td className='text-center'>
+            <span>{tracker.rivalSecondServIn}</span>
           </td>
         </tr>
 
@@ -85,7 +146,12 @@ const Service = ({ tracker }: IPropsTable) => {
 
         <tr>
           <td className='text-center'>Games ganados con el servicio</td>
-          <td className='text-center'>{tracker.me.gamesWonServing}</td>
+          <td className='text-center'>
+            <span>
+              {tracker.me.gamesWonServing}/
+              {tracker.me.gamesWonServing + tracker.me.gamesLostServing}
+            </span>
+          </td>
           <td className='text-center'>{tracker.gamesLostReturning}</td>
         </tr>
       </tbody>

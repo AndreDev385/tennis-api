@@ -22,6 +22,19 @@ const BallInGame = ({ tracker }: IPropsTable) => {
           </td>
           <td className='text-center' />
         </tr>
+
+        <tr>
+          <td className='text-center'>Winners en malla</td>
+          <td className='text-center'>{tracker.me.meshWinner}</td>
+          <td className='text-center' />
+        </tr>
+
+        <tr>
+          <td className='text-center'>Errores en malla</td>
+          <td className='text-center'>{tracker.me.meshError}</td>
+          <td className='text-center' />
+        </tr>
+
         <tr>
           <td className='text-center'>Puntos ganados de fondo/approach</td>
           <td className='text-center'>
@@ -37,14 +50,38 @@ const BallInGame = ({ tracker }: IPropsTable) => {
         </tr>
 
         <tr>
+          <td className='text-center'>Winners en fondo/approach</td>
+          <td className='text-center'>{tracker.me.bckgWinner}</td>
+          <td className='text-center' />
+        </tr>
+
+        <tr>
+          <td className='text-center'>Errores en fondo/approach</td>
+          <td className='text-center'>{tracker.me.bckgError}</td>
+          <td className='text-center' />
+        </tr>
+
+        <tr>
           <td className='text-center'>Winners</td>
-          <td className='text-center'>{tracker.me.winners}</td>
+          <td className='text-center'>
+            <span>
+              {tracker.me.meshWinner +
+                tracker.me.bckgWinner +
+                tracker.me.firstReturnWinner +
+                tracker.me.secondReturnWinner +
+                tracker.me.aces}
+            </span>
+          </td>
           <td className='text-center'>{tracker.rivalWinners}</td>
         </tr>
 
         <tr>
           <td className='text-center'>Errores no forzados</td>
-          <td className='text-center'>{tracker.me.noForcedErrors}</td>
+          <td className='text-center'>
+            <span>
+              {tracker.me.meshError + tracker.me.bckgError + tracker.me.dobleFaults}
+            </span>
+          </td>
           <td className='text-center'>{tracker.rivalNoForcedErrors}</td>
         </tr>
       </tbody>
