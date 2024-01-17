@@ -15,12 +15,12 @@ const PlayerStats = () => {
 
   const requestOptions = {
     method: 'GET',
-    headers: { 
+    headers: {
       'Content-Type': 'application/json',
       'Authorization': token
     }
   };
-  
+
   useEffect(() => {
     getStats()
   }, [id, param])
@@ -33,13 +33,13 @@ const PlayerStats = () => {
     };
     const url = `${VITE_SERVER_URL}/api/v1/player/stats-by-userid/` + id + "?" + new URLSearchParams(params)
 
-    try{
+    try {
       const response = await fetch(url, requestOptions)
       const data = await response.json()
 
-      if (response.status === 200){
+      if (response.status === 200) {
         setStats(data)
-      } 
+      }
     } catch (error) {
       console.error(error)
     }
@@ -66,7 +66,7 @@ const PlayerStats = () => {
           <option value="season">Temporada</option>
           <option value="">Siempre</option>
         </Form.Select>
-      </div> 
+      </div>
 
       <Card>
         <Table responsive="sm">
@@ -186,7 +186,7 @@ const PlayerStats = () => {
 
             <tr>
               <td className="text-center">
-              Puntos ganados con la 2da devolución
+                Puntos ganados con la 2da devolución
               </td>
               <td className="text-center">
                 {stats.pointsWinnedSecondReturn}/{stats.secondReturnIn}
@@ -210,28 +210,10 @@ const PlayerStats = () => {
 
             <tr>
               <td className="text-center">
-              Puntos ganados en fondo/approach
+                Puntos ganados en fondo/approach
               </td>
               <td className="text-center">
                 {stats.bckgPointsWon}/{stats.bckgPointsWon + stats.bckgPointsLost}
-              </td>
-            </tr>
-
-            <tr>
-              <td className="text-center">
-                Winners
-              </td>
-              <td className="text-center">
-                {stats.winners}
-              </td>
-            </tr>
-
-            <tr>
-              <td className="text-center">
-                Errores no forzados
-              </td>
-              <td className="text-center">
-                {stats.noForcedErrors}
               </td>
             </tr>
           </tbody>}
