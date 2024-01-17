@@ -16,12 +16,13 @@ export class CancelMatchController extends BaseController {
     async executeImpl(req: Request, res: Response) {
         try {
             if (typeof req.body['tracker'] == 'string') {
-                console.log('string?')
                 req.body['tracker'] = JSON.parse(req.body['tracker']);
             }
             if (typeof req.body['sets'] == 'string') {
-                console.log('string?')
                 req.body['sets'] = JSON.parse(req.body['sets']);
+            }
+            if (typeof req.body['matchWon'] == 'string') {
+                req.body['matchWon'] = JSON.parse(req.body['matchWon']);
             }
         } catch (error) {
             return this.clientError(res, "JSON invalido");

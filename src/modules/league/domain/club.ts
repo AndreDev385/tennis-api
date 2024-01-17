@@ -44,8 +44,8 @@ export class Club extends Entity<ClubProps> {
         var code = "";
 
         for (var i = 0; i < len; i++) {
-            var indiceAleatorio = Math.floor(Math.random() * characters.length);
-            code += characters.charAt(indiceAleatorio);
+            var randomIndex = Math.floor(Math.random() * characters.length);
+            code += characters.charAt(randomIndex);
         }
 
         this.props.code = code;
