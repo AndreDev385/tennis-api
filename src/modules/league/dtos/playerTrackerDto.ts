@@ -2,6 +2,7 @@ export interface PlayerTrackerDto {
     playerId: string;
     seasonId: string;
     playerTrackerId: string;
+
     isDouble: boolean;
     pointsWon: number;
     pointsWonServing: number;
@@ -11,6 +12,7 @@ export interface PlayerTrackerDto {
     pointsLostServing: number;
     saveBreakPtsChances: number;
     breakPtsSaved: number;
+    //
     gamesWonServing: number;
     gamesLostServing: number;
     pointsWinnedFirstServ: number;
@@ -21,6 +23,7 @@ export interface PlayerTrackerDto {
     secondServWon: number; // Saque no devuelto
     aces: number;
     dobleFaults: number;
+    //
     pointsWinnedFirstReturn: number;
     pointsWinnedSecondReturn: number;
     firstReturnIn: number;
@@ -31,6 +34,7 @@ export interface PlayerTrackerDto {
     secondReturnWon: number;
     firstReturnWinner: number;
     secondReturnWinner: number;
+    //
     meshPointsWon: number;
     meshPointsLost: number;
     meshWinner: number;

@@ -4,12 +4,22 @@ import { middleware } from "../../../../../shared/infra/http";
 import { createPlayerController } from "../../../useCases/createPlayer";
 import { getPlayerByUserIdController } from "../../../useCases/getPlayerByUserId";
 import { listPlayersController } from "../../../useCases/listPlayers";
-import { getPlayerStatsByUserIdController, getPlayerStatsController } from "../../../useCases/getPlayerStats";
+import {
+    getPlayerStatsByUserIdController,
+    getPlayerStatsController,
+} from "../../../useCases/getPlayerStats";
+import { registerPlayerController } from "../../../useCases/registerPlayerFromAdmin";
 
 const playerRoute = express.Router();
 
 playerRoute.post("/", middleware.ensureAuthenticated() as any, (req, res) =>
     createPlayerController.execute(req, res)
+);
+
+playerRoute.post(
+    "/register",
+    middleware.ensureAuthenticated() as any,
+    (req, res) => registerPlayerController.execute(req, res)
 );
 
 playerRoute.get("/", middleware.ensureAuthenticated() as any, (req, res) =>
@@ -20,12 +30,14 @@ playerRoute.get("/me", middleware.ensureAuthenticated() as any, (req, res) =>
     getPlayerByUserIdController.execute(req, res)
 );
 
-playerRoute.get('/stats', middleware.ensureAuthenticated() as any, (req, res) => getPlayerStatsController.execute(req, res))
+playerRoute.get("/stats", middleware.ensureAuthenticated() as any, (req, res) =>
+    getPlayerStatsController.execute(req, res)
+);
 
 playerRoute.get(
     "/stats-by-userid/:userId",
     middleware.ensureAuthenticated() as any,
     (req, res) => getPlayerStatsByUserIdController.execute(req, res)
-)
+);
 
 export { playerRoute };

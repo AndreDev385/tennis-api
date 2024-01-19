@@ -212,8 +212,7 @@ export class PlayerTracker extends Entity<PlayerTrackerProps> {
             seasonId,
             playerId,
             isDouble,
-            gamesLostServing: 0,
-            gamesWonServing: 0,
+
             pointsWon: 0,
             pointsWonServing: 0,
             pointsWonReturning: 0,
@@ -222,6 +221,9 @@ export class PlayerTracker extends Entity<PlayerTrackerProps> {
             pointsLostReturning: 0,
             saveBreakPtsChances: 0,
             breakPtsSaved: 0,
+            //
+            gamesLostServing: 0,
+            gamesWonServing: 0,
             pointsWinnedFirstServ: 0,
             pointsWinnedSecondServ: 0,
             firstServIn: 0,
@@ -230,6 +232,7 @@ export class PlayerTracker extends Entity<PlayerTrackerProps> {
             secondServWon: 0,
             aces: 0,
             dobleFaults: 0,
+            //
             pointsWinnedFirstReturn: 0,
             pointsWinnedSecondReturn: 0,
             firstReturnIn: 0,
@@ -240,6 +243,7 @@ export class PlayerTracker extends Entity<PlayerTrackerProps> {
             secondReturnWon: 0,
             firstReturnWinner: 0,
             secondReturnWinner: 0,
+            //
             meshPointsWon: 0,
             meshPointsLost: 0,
             meshError: 0,
@@ -296,35 +300,7 @@ export class PlayerTracker extends Entity<PlayerTrackerProps> {
             return Result.fail<PlayerTracker>(guardResult.getErrorValue());
         }
 
-        const playerTracker = new PlayerTracker({
-            ...props,
-            pointsWinnedFirstServ: props.pointsWinnedFirstServ ?? 0,
-            pointsWinnedSecondReturn: props.pointsWinnedSecondReturn ?? 0,
-            pointsWinnedSecondServ: props.pointsWinnedSecondServ ?? 0,
-            firstServIn: props.firstServIn ?? 0,
-            secondServIn: props.secondServIn ?? 0,
-            firstServWon: props.firstServWon ?? 0,
-            secondServWon: props.secondServWon ?? 0,
-            aces: props.aces ?? 0,
-            dobleFaults: props.dobleFaults ?? 0,
-            pointsWinnedFirstReturn: props.pointsWinnedFirstReturn ?? 0,
-            firstReturnIn: props.firstReturnIn ?? 0,
-            secondReturnIn: props.secondReturnIn ?? 0,
-            firstReturnOut: props.firstReturnOut ?? 0,
-            secondReturnOut: props.secondReturnOut ?? 0,
-            firstReturnWon: props.firstReturnWon ?? 0,
-            secondReturnWon: props.secondReturnWon ?? 0,
-            firstReturnWinner: props.firstReturnWinner ?? 0,
-            secondReturnWinner: props.secondReturnWinner ?? 0,
-            meshPointsWon: props.meshPointsWon ?? 0,
-            meshPointsLost: props.meshPointsLost ?? 0,
-            meshWinner: props.meshWinner ?? 0,
-            meshError: props.meshError ?? 0,
-            bckgPointsWon: props.bckgPointsWon ?? 0,
-            bckgPointsLost: props.bckgPointsLost ?? 0,
-            bckgWinner: props.bckgWinner ?? 0,
-            bckgError: props.bckgError ?? 0,
-        }, id);
+        const playerTracker = new PlayerTracker(props, id);
 
         return Result.ok<PlayerTracker>(playerTracker);
     }
