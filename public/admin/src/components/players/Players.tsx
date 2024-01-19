@@ -115,26 +115,32 @@ const Players = () => {
     setShowModalCreate(false);
   };
 
-  const playersTable = filteredPlayers.map((item) => {
-    return (
-      <tr key={item.playerId}>
-        <td className='text-center'>
-          {item.user.firstName} {item.user.lastName}
-        </td>
-        <td className='text-center'>
-          {clubs.filter((club) => club.clubId === item.clubId)[0]
-            ? clubs.filter((club) => club.clubId === item.clubId)[0].symbol
-            : '-'}
-        </td>
-        <td className='text-center'>
-          <Button variant='primary' onClick={() => goToStats(item.user.userId)}>
-            <FontAwesomeIcon icon={faChartBar} />
-            Estadísticas
-          </Button>
-        </td>
-      </tr>
-    );
-  });
+  const playersTable = filteredPlayers
+    .sort((a, b) => {
+      const fullNameA = `${a.user.firstName} ${a.user.lastName}`.toLocaleLowerCase('es');
+      const fullNameB = `${b.user.firstName} ${b.user.lastName}`.toLocaleLowerCase('es');
+      return fullNameA.localeCompare(fullNameB, 'es');
+    })
+    .map((item) => {
+      return (
+        <tr key={item.playerId}>
+          <td className='text-center'>
+            {item.user.firstName} {item.user.lastName}
+          </td>
+          <td className='text-center'>
+            {clubs.filter((club) => club.clubId === item.clubId)[0]
+              ? clubs.filter((club) => club.clubId === item.clubId)[0].symbol
+              : '-'}
+          </td>
+          <td className='text-center'>
+            <Button variant='primary' onClick={() => goToStats(item.user.userId)}>
+              <FontAwesomeIcon icon={faChartBar} />
+              Estadísticas
+            </Button>
+          </td>
+        </tr>
+      );
+    });
 
   return (
     <>
@@ -201,7 +207,7 @@ const Players = () => {
             </thead>
 
             <tbody>
-              {filteredPlayers && playersTable}
+              {!loading && filteredPlayers && playersTable}
               {loading && (
                 <tr className='text-center mt-3'>
                   <td>
@@ -219,7 +225,13 @@ const Players = () => {
         </Card>
       </div>
 
-      {showModalCreate && <CreatePlayerModal clubs={clubs} onClose={onClosedModal} />}
+      {showModalCreate && (
+        <CreatePlayerModal
+          clubs={clubs}
+          onClose={onClosedModal}
+          getPlayers={getPlayers}
+        />
+      )}
     </>
   );
 };
