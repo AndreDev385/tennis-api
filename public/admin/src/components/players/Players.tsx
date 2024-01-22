@@ -13,9 +13,11 @@ import { useNavigate } from 'react-router';
 import './Players.scss';
 import { VITE_SERVER_URL } from '../../env/env.prod';
 import CreatePlayerModal from './createPlayerModal/CreatePlayerModal';
+import CreatePlayersModal from './createPlayersModal/CreatePlayersModal';
 
 const Players = () => {
   const [showModalCreate, setShowModalCreate] = useState(false);
+  const [showModalPlayers, setShowModalPlayers] = useState(false);
   const [players, setPlayers] = useState<IUserPlayer[]>([]);
   const [filteredPlayers, setFilteredPlayers] = useState<IUserPlayer[]>([]);
   const [selectedClub, setSelectedClub] = useState('');
@@ -115,6 +117,10 @@ const Players = () => {
     setShowModalCreate(false);
   };
 
+  const onClosePlayersModal = () => {
+    setShowModalPlayers(false);
+  };
+
   const playersTable = filteredPlayers
     .sort((a, b) => {
       const fullNameA = `${a.user.firstName} ${a.user.lastName}`.toLocaleLowerCase('es');
@@ -151,10 +157,14 @@ const Players = () => {
             Jugadores
           </h1>
 
-          <div>
+          <div className='buttons-wrapper'>
             <Button variant='primary' onClick={() => setShowModalCreate(true)}>
               <FontAwesomeIcon icon={faPlus} />
               Agregar jugador
+            </Button>
+            <Button variant='primary' onClick={() => setShowModalPlayers(true)}>
+              <FontAwesomeIcon icon={faPlus} />
+              Agregar jugadores
             </Button>
           </div>
         </div>
@@ -229,6 +239,13 @@ const Players = () => {
         <CreatePlayerModal
           clubs={clubs}
           onClose={onClosedModal}
+          getPlayers={getPlayers}
+        />
+      )}
+      {showModalPlayers && (
+        <CreatePlayersModal
+          clubs={clubs}
+          onClose={onClosePlayersModal}
           getPlayers={getPlayers}
         />
       )}
