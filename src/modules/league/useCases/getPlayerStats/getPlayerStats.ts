@@ -12,8 +12,9 @@ import {
 
 export interface GetPlayerStatsRequest {
     userId: string;
+    isDouble: boolean;
     season?: string;
-    last3?: string;
+    limit?: number;
 }
 
 type Response = Either<
@@ -45,6 +46,7 @@ export class GetPlayerStats
 
             const query: PlayerTrackerQuery = {
                 playerId: player.playerId.id.toString(),
+                isDouble: request.isDouble ?? true
             };
 
             for (const [key, value] of Object.entries(request)) {

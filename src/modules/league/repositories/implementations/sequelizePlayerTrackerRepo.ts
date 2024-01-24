@@ -44,9 +44,13 @@ export class SequelizePlayerTrackerRepository
         let _query: any = {
             where: {
                 playerId: query.playerId,
+                isDouble: query.isDouble,
             },
             order: [['createdAt', "DESC"]],
-            limit: query.limit,
+        }
+
+        if (query.limit) {
+            _query.limit = query.limit;
         }
 
         if (query.seasonId != null) {
