@@ -20,7 +20,7 @@ export class SequelizePlayerRepository implements PlayerRepository {
     async list(query?: PlayerQuery): Promise<Player[]> {
         const baseQuery = this.baseQuery();
 
-        baseQuery.where = query
+        baseQuery.where = query;
 
         let rawList = await PlayerModel.findAll(baseQuery);
 

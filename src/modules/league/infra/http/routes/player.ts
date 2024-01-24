@@ -8,7 +8,10 @@ import {
     getPlayerStatsByUserIdController,
     getPlayerStatsController,
 } from "../../../useCases/getPlayerStats";
-import { registerPlayerController } from "../../../useCases/registerPlayerFromAdmin";
+import {
+    registerPlayerBulkController,
+    registerPlayerController,
+} from "../../../../users/useCases/registerPlayerFromAdmin";
 
 const playerRoute = express.Router();
 
@@ -18,8 +21,14 @@ playerRoute.post("/", middleware.ensureAuthenticated() as any, (req, res) =>
 
 playerRoute.post(
     "/register",
-    middleware.ensureAuthenticated() as any,
+    middleware.adminAuthenticated() as any,
     (req, res) => registerPlayerController.execute(req, res)
+);
+
+playerRoute.post(
+    "/register-bulk",
+    middleware.adminAuthenticated() as any,
+    (req, res) => registerPlayerBulkController.execute(req, res)
 );
 
 playerRoute.get("/", middleware.ensureAuthenticated() as any, (req, res) =>
