@@ -64,6 +64,10 @@ export class GetPlayerStats
 
             const list = await this.playerTrackerRepo.getByPlayerId(query);
 
+            if (list.length == 0) {
+                return left(Result.fail<string>("No se han encontrado estadísticas"))
+            }
+
             return right(Result.ok(calculatePlayerStats(list)));
         } catch (error) {
             return left(new AppError.UnexpectedError(error));
