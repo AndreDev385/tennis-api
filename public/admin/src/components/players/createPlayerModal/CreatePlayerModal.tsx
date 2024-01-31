@@ -6,7 +6,6 @@ import { useState } from 'react';
 import validator from 'validator';
 import { VITE_SERVER_URL } from '../../../env/env.prod';
 import { toast } from 'react-toastify';
-import { cp } from 'fs';
 
 interface IProps {
   clubs: IClub[];

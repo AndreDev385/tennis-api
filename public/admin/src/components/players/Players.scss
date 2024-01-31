@@ -66,6 +66,61 @@
     margin-bottom: 1rem;
   }
 
+  .file {
+    background-color: #fbfbfb;
+    padding: 8px;
+    border-radius: 8px;
+    position: relative;
+  }
+
+  .file .file-x {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    cursor: pointer;
+    width: fit-content;
+    border: none;
+    background-color: transparent;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .file .file-x:hover {
+    color: #dc3545;
+  }
+
+  .file .file-wrapper {
+    display: flex;
+    gap: 24px;
+  }
+
+  .file .file-wrapper .file-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .file .file-wrapper .file-info p:first-child {
+    font-weight: bold;
+  }
+
+  .file .file-wrapper .file-info p:last-child {
+    font-size: 14px;
+    color: #6c757d;
+  }
+
+  .file-info p {
+    margin: 0;
+  }
+
+  .excel-icons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #e5e5e5;
+    width: fit-content;
+  }
+
   .uploader {
     .drop_area {
       /* tus estilos para la zona de arrastrar y soltar */
