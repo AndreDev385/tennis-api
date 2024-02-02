@@ -122,9 +122,12 @@
   }
 
   .uploader {
+    display: flex;
+    justify-content: center;
     .drop_area {
       /* tus estilos para la zona de arrastrar y soltar */
       height: 200px;
+      width: 100%;
       text-align: center;
       padding: 2rem;
       svg {

@@ -84,19 +84,19 @@ const CreatePlayerModal = ({ clubs, onClose, getPlayers }: IProps) => {
       }
 
       if (response.status !== 201) {
-        throw new Error(
-          response.status === 400
-            ? data.message
-            : 'Ha ocurrido un error al intentar agregar el jugador'
-        );
+        throw new Error(data?.message);
       }
 
       toast.success('Jugador agregado correctamente');
       onClose(true);
       await getPlayers();
     } catch (error) {
-      console.error(error);
-      toast.error(error.message);
+      toast.error(
+        `${
+          (error as Error).message ??
+          'Ha ocurrido un error al intentar agregar el jugador'
+        }`
+      );
     } finally {
       setLoading(false);
     }

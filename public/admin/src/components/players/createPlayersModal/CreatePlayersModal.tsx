@@ -5,46 +5,113 @@ import {
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Form, Modal } from 'react-bootstrap';
-import { IClub } from '../../../interfaces/interfaces';
+import { Button, Modal, Table } from 'react-bootstrap';
 import { useState } from 'react';
-import validator from 'validator';
 import { VITE_SERVER_URL } from '../../../env/env.prod';
 import { toast } from 'react-toastify';
 import { FileUploader } from 'react-drag-drop-files';
 import '../Players.scss';
+import * as XLSX from 'xlsx';
 
 interface IProps {
   onClose: (value: boolean) => void;
   getPlayers: () => Promise<void>;
 }
 
+type Player = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  clubSymbol: string;
+};
+
 const fileTypes = ['XLSX', 'XLS'];
 
-const CreatePlayersModal = ({ clubs, onClose, getPlayers }: IProps) => {
+const CreatePlayersModal = ({ onClose, getPlayers }: IProps) => {
   const token: string = localStorage.getItem('authorization') || '';
 
   const [loading, setLoading] = useState(false);
   const [file, setFile] = useState<File | null>(null);
+  const [data, setData] = useState<Player[]>([]);
 
   const handleChange = (file: File | null) => {
     if (file) {
-      setFile(file);
+      const newFile = file;
+      const reader = new FileReader();
+
+      reader.onload = (e) => {
+        const bstr = e.target?.result;
+        const wb = XLSX.read(bstr, { type: 'binary' });
+        const wsname = wb.SheetNames[0];
+        const ws = wb.Sheets[wsname];
+        const data = XLSX.utils.sheet_to_json<string[]>(ws, {
+          header: 1,
+          range: 1,
+          blankrows: false,
+        });
+
+        const formattedData = data.map((row: string[]) => {
+          return {
+            firstName: row[0],
+            lastName: row[1],
+            email: row[2],
+            clubSymbol: row[3],
+          };
+        });
+
+        setData(formattedData.filter((item) => item) as Player[]);
+      };
+      reader.readAsBinaryString(newFile);
+
+      setFile(newFile);
     }
   };
 
-  const fileSizeInMB = (size: number) => {
-    const mbSize = Math.round(size / 1024 / 1024);
+  const fileSizeInKB = (size: number) => {
+    const kbSize = Math.round(size / 1024);
 
-    if (mbSize <= 0) {
-      return '< 1 MB';
-    }
-
-    return `${mbSize} MB`;
+    return `${kbSize} KB`;
   };
 
   const handleDeleteFile = () => {
     setFile(null);
+    setData([]);
+  };
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    const url = `${VITE_SERVER_URL}/api/v1/player/register-bulk`;
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token,
+      },
+      body: JSON.stringify(data),
+    };
+
+    try {
+      const response = await fetch(url, requestOptions);
+      const data = await response.json();
+
+      if (response.status !== 201) {
+        throw new Error(data?.message);
+      }
+
+      toast.success('Jugadores agregados correctamente');
+
+      onClose(true);
+      await getPlayers();
+    } catch (error) {
+      toast.error(
+        `${
+          (error as Error).message ??
+          'Ha ocurrido un error al intentar agregar los jugadores'
+        }`
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -52,7 +119,7 @@ const CreatePlayersModal = ({ clubs, onClose, getPlayers }: IProps) => {
       <div className='overlay' />
 
       <div className='modal show wrap-modal'>
-        <Modal.Dialog>
+        <Modal.Dialog size='lg'>
           <Modal.Header>
             <Modal.Title>Agregar jugadores</Modal.Title>
           </Modal.Header>
@@ -81,12 +148,46 @@ const CreatePlayersModal = ({ clubs, onClose, getPlayers }: IProps) => {
                     </div>
                     <div className='file-info'>
                       <p>{file.name}</p>
-                      <p>{fileSizeInMB(file.size)}</p>
+                      <p>{fileSizeInKB(file.size)}</p>
                     </div>
                   </div>
                   <button className='file-x' onClick={handleDeleteFile}>
                     <FontAwesomeIcon icon={faXmark} />
                   </button>
+                </div>
+              )}
+              {data.length > 0 && (
+                <div
+                  style={{
+                    overflowY: 'auto',
+                    maxHeight: '300px',
+                  }}
+                >
+                  <Table
+                    responsive='sm'
+                    style={{
+                      marginTop: '30px',
+                    }}
+                  >
+                    <thead>
+                      <tr>
+                        <th className='text-center'>Nombre</th>
+                        <th className='text-center'>Apellido</th>
+                        <th className='text-center'>Email</th>
+                        <th className='text-center'>Club</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {data.map((player, index) => (
+                        <tr key={index}>
+                          <td className='text-center'>{player.firstName}</td>
+                          <td className='text-center'>{player.lastName}</td>
+                          <td className='text-center'>{player.email}</td>
+                          <td className='text-center'>{player.clubSymbol}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
                 </div>
               )}
             </section>
@@ -97,10 +198,10 @@ const CreatePlayersModal = ({ clubs, onClose, getPlayers }: IProps) => {
               justifyContent: 'center',
             }}
           >
-            <Button variant='secondary' onClick={() => onClose(false)}>
+            <Button variant='secondary' onClick={() => onClose(false)} disabled={loading}>
               Cancelar
             </Button>
-            <Button variant='primary'>
+            <Button variant='primary' disabled={loading} onClick={handleSubmit}>
               {loading ? (
                 <FontAwesomeIcon icon={faCircleNotch} spin />
               ) : (

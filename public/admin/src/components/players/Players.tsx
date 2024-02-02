@@ -243,11 +243,7 @@ const Players = () => {
         />
       )}
       {showModalPlayers && (
-        <CreatePlayersModal
-          clubs={clubs}
-          onClose={onClosePlayersModal}
-          getPlayers={getPlayers}
-        />
+        <CreatePlayersModal onClose={onClosePlayersModal} getPlayers={getPlayers} />
       )}
     </>
   );
