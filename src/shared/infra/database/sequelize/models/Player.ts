@@ -9,6 +9,7 @@ interface PlayerData extends Model<InferAttributes<PlayerData>> {
     clubId: string;
     userId: string;
     avatar?: string;
+    devices?: Array<string>;
 }
 
 const PlayerModel = sequelize.define<PlayerData>(
@@ -40,6 +41,10 @@ const PlayerModel = sequelize.define<PlayerData>(
             type: DataTypes.STRING,
             allowNull: true,
             defaultValue: null,
+        },
+        devices: {
+            type: DataTypes.ARRAY(DataTypes.STRING),
+            defaultValue: []
         }
     },
     { tableName: "player" }

@@ -3,6 +3,7 @@ import { Mapper } from "../../../shared/infra/Mapper";
 import { FirstName, LastName } from "../../users/domain/names";
 import { UserId } from "../../users/domain/userId";
 import { ClubId } from "../domain/clubId";
+import { Devices } from "../domain/devices";
 import { Player } from "../domain/player";
 import { PlayerDto } from "../dtos/playerDto";
 
@@ -21,6 +22,7 @@ export class PlayerMap implements Mapper<Player> {
                 userId: userIdOrError.getValue(),
                 firstName: firstNameOrError.getValue(),
                 lastName: lastNameOrError.getValue(),
+                devices: Devices.create(raw.devices),
             },
             new UniqueEntityID(raw.playerId)
         );
@@ -37,6 +39,7 @@ export class PlayerMap implements Mapper<Player> {
             playerId: player.playerId.id.toString(),
             clubId: player.clubId.id.toString(),
             userId: player.userId.id.toString(),
+            devices: player.devices.getItems(),
         };
     }
 
@@ -49,6 +52,7 @@ export class PlayerMap implements Mapper<Player> {
                 firstName: player.firstName.value,
                 lastName: player.lastName.value,
             },
+            devices: player.devices.getItems(),
         };
     }
 }

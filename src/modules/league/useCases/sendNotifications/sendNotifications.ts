@@ -34,7 +34,7 @@ export class SendNotifications
             const players = await this.repo.list(query);
 
             for (const p of players) {
-                tokens = tokens.concat(p.devices!.getItems());
+                tokens = tokens.concat(p.devices.getItems());
             }
 
             const result = await notificatePlayers({

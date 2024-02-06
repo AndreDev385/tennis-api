@@ -6,4 +6,5 @@ export interface PlayerDto {
         lastName: string;
     };
     clubId: string;
+    devices: Array<string>;
 }
