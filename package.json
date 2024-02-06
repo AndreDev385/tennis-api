@@ -45,12 +45,14 @@
         "nodemailer": "^6.9.1",
         "pg": "^8.11.0",
         "pg-hstore": "^2.3.4",
+        "react-drag-drop-files": "^2.3.10",
         "sequelize": "^6.31.1",
         "sequelize-cli": "^6.6.1",
         "socket.io": "^4.7.1",
         "typescript": "^5.1.6",
         "uuid": "^9.0.0",
-        "validator": "^13.9.0"
+        "validator": "^13.9.0",
+        "xlsx": "^0.18.5"
     },
     "devDependencies": {
         "@types/bcrypt": "^5.0.0",

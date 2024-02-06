@@ -1,8 +1,29 @@
 .players-container {
+  .title-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    flex-wrap: wrap;
+    margin: 2rem;
+
+    h1 {
+      margin: 0;
+      margin-bottom: 2rem;
+    }
+  }
+
+  .buttons-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
   .filter-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    margin: 1rem 3rem;
+    margin: 1rem 2rem;
     gap: 1rem;
 
     .search {
@@ -35,6 +56,91 @@
       color: #fff;
       text-align: center;
       display: block;
+    }
+  }
+}
+
+.create-players-section {
+  h2 {
+    font-size: 18px;
+    margin-bottom: 1rem;
+  }
+
+  .file {
+    background-color: #fbfbfb;
+    padding: 8px;
+    border-radius: 8px;
+    position: relative;
+  }
+
+  .file .file-x {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    cursor: pointer;
+    width: fit-content;
+    border: none;
+    background-color: transparent;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .file .file-x:hover {
+    color: #dc3545;
+  }
+
+  .file .file-wrapper {
+    display: flex;
+    gap: 24px;
+  }
+
+  .file .file-wrapper .file-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .file .file-wrapper .file-info p:first-child {
+    font-weight: bold;
+  }
+
+  .file .file-wrapper .file-info p:last-child {
+    font-size: 14px;
+    color: #6c757d;
+  }
+
+  .file-info p {
+    margin: 0;
+  }
+
+  .excel-icons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #e5e5e5;
+    width: fit-content;
+  }
+
+  .uploader {
+    display: flex;
+    justify-content: center;
+    .drop_area {
+      /* tus estilos para la zona de arrastrar y soltar */
+      height: 200px;
+      width: 100%;
+      text-align: center;
+      padding: 2rem;
+      svg {
+        display: none;
+      }
+    }
+
+    .drop_zone {
+      background-color: #f8f9fa; // Cambia el color de fondo
+      border: 2px dashed #6c757d; // Cambia el borde
+      color: #6c757d; // Cambia el color del texto
+      padding: 20px; // Añade padding
+      text-align: center; // Centra el texto
     }
   }
 }
