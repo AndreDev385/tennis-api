@@ -12,6 +12,7 @@ import {
     registerPlayerBulkController,
     registerPlayerController,
 } from "../../../../users/useCases/registerPlayerFromAdmin";
+import { addPlayerDeviceController } from "../../../useCases/addPlayerDevice";
 
 const playerRoute = express.Router();
 
@@ -41,6 +42,12 @@ playerRoute.get("/me", middleware.ensureAuthenticated() as any, (req, res) =>
 
 playerRoute.get("/stats", middleware.ensureAuthenticated() as any, (req, res) =>
     getPlayerStatsController.execute(req, res)
+);
+
+playerRoute.put(
+    "/device",
+    middleware.ensureAuthenticated() as any,
+    (req, res) => addPlayerDeviceController.execute(req, res)
 );
 
 playerRoute.get(
