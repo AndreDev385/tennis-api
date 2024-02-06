@@ -56,6 +56,9 @@ export class Player extends AggregateRoot<PlayerProps> {
     }
 
     public addDevice(token: string) {
+        if (this.devices.exists(token)) {
+            return;
+        }
         this.devices.add(token);
     }
 
