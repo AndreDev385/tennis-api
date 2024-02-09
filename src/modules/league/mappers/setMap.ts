@@ -15,7 +15,9 @@ export class SetMap implements Mapper<Set> {
     }
 
     private static statsToDomain(raw: any): SetStats | null {
+        console.log(raw, "STATS");
         if (!raw) {
+            console.log("settings stats to null in domain")
             return null
         }
         const playerStats = this.playerStatsToDomain(raw.me);
@@ -37,7 +39,9 @@ export class SetMap implements Mapper<Set> {
     }
 
     private static playerStatsToDto(stats: SetPlayerStats | null | undefined): SetPlayerStatsDto | null {
+        console.log(stats, "DOMAIN");
         if (!stats) {
+            console.log("settings stats to null in dto")
             return null
         }
         return {

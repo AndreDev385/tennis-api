@@ -29,8 +29,12 @@ export class PausedMatchMap implements Mapper<PausedMatch> {
             player3: obj.player3,
             player4: obj.player4,
             initialTeam: obj.initialTeam,
-            doubleServeFlow: JSON.stringify(DoubleServeFlowMap.toDto(obj.doubleServeFlow)),
-            singleServeFlow: JSON.stringify(SingleServeFlowMap.toDto(obj.singleServeFlow)),
+            doubleServeFlow: JSON.stringify(
+                DoubleServeFlowMap.toDto(obj.doubleServeFlow)
+            ),
+            singleServeFlow: JSON.stringify(
+                SingleServeFlowMap.toDto(obj.singleServeFlow)
+            ),
             sets: obj.sets.getItems().map((set) => SetMap.toPersistance(set)),
             currentSetIdx: obj.currentSetIdx,
             currentGame: JSON.stringify(GameMap.toDto(obj.currentGame)),
@@ -38,7 +42,7 @@ export class PausedMatchMap implements Mapper<PausedMatch> {
             setsLost: obj.setsLost,
             matchWon: obj.matchWon,
             matchFinish: obj.matchFinish,
-        }
+        };
     }
 
     public static toDomain(raw: any): PausedMatch | null {
@@ -78,15 +82,15 @@ export class PausedMatchMap implements Mapper<PausedMatch> {
             setsLost: raw.setsLost,
             matchWon: raw.matchWon,
             matchFinish: raw.matchFinish,
-        })
+        });
 
-        matchOrError.isFailure && console.log(matchOrError.getErrorValue())
+        matchOrError.isFailure && console.log(matchOrError.getErrorValue());
 
         return matchOrError.isSuccess ? matchOrError.getValue() : null;
     }
 
     public static toDto(obj: PausedMatch) {
-        console.log("toDto", obj.setsWon)
+        console.log("toDto", obj.setsWon);
         return {
             matchId: obj.matchId.id.toString(),
             mode: obj.mode.value,
@@ -111,6 +115,6 @@ export class PausedMatchMap implements Mapper<PausedMatch> {
             setsLost: obj.setsLost,
             matchWon: obj.matchWon,
             matchFinish: obj.matchFinish,
-        }
+        };
     }
 }

@@ -18,7 +18,7 @@ import { TrackerMap } from "./trackerMap";
 
 export interface MatchDataForMapper {
     matchId: string;
-    sets: string[]
+    sets: string[];
     clashId: string;
     mode: string;
     surface: string;
@@ -33,13 +33,12 @@ export interface MatchDataForMapper {
     player3?: Player | null;
     player4?: string | null;
     tracker: MatchTracker | null;
-    matchWon: boolean | null
+    matchWon: boolean | null;
 }
 
 export class MatchMap implements Mapper<Match> {
     public static toDomain(raw: MatchDataForMapper): Match | null {
         const setsArr = raw.sets.map((s: any) => SetMap.toDomain(s));
-
 
         const modeOrError = Mode.create({ value: raw.mode });
         const surfaceOrError = Surface.create({ value: raw.surface });
@@ -82,15 +81,13 @@ export class MatchMap implements Mapper<Match> {
     }
 
     public static toPersistance(match: Match) {
-        const raw = match.sets.getItems().map((s) => SetMap.toPersistance(s));
-
         return {
             matchId: match.matchId.id.toString(),
             clashId: match.clashId.toString(),
             mode: match.mode.value,
             categoryId: match.category.categoryId.id.toString(),
             setsQuantity: match.setsQuantity.value,
-            sets: raw,
+            sets: match.sets.getItems().map((s) => SetMap.toPersistance(s)),
             gamesPerSet: match.gamesPerSet.value,
             superTieBreak: match.superTieBreak,
             address: match.address,
@@ -123,9 +120,9 @@ export class MatchMap implements Mapper<Match> {
             player2: match.player2,
             player3: match.player3
                 ? {
-                    playerId: match.player3.playerId.id.toString(),
-                    name: `${match.player3.firstName.value} ${match.player3.lastName.value}`,
-                }
+                      playerId: match.player3.playerId.id.toString(),
+                      name: `${match.player3.firstName.value} ${match.player3.lastName.value}`,
+                  }
                 : null,
             player4: match.player4 ?? null,
             tracker: match.tracker ? TrackerMap.toDto(match.tracker) : null,
