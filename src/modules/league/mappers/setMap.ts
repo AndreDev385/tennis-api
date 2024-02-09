@@ -15,9 +15,8 @@ export class SetMap implements Mapper<Set> {
     }
 
     private static statsToDomain(raw: any): SetStats | null {
-        console.log(raw, "STATS");
+        console.log(raw, "STATS to domain");
         if (!raw) {
-            console.log("settings stats to null in domain")
             return null
         }
         const playerStats = this.playerStatsToDomain(raw.me);
@@ -39,12 +38,12 @@ export class SetMap implements Mapper<Set> {
     }
 
     private static playerStatsToDto(stats: SetPlayerStats | null | undefined): SetPlayerStatsDto | null {
-        console.log(stats, "DOMAIN");
+        console.log(stats, "stats to DOMAIN");
         if (!stats) {
-            console.log("settings stats to null in dto")
             return null
         }
         return {
+            isDouble: stats.isDouble,
             pointsWon: stats.pointsWon,
             pointsWonServing: stats.pointsWonServing,
             pointsWonReturning: stats.pointsWonReturning,
@@ -59,6 +58,8 @@ export class SetMap implements Mapper<Set> {
             pointsWinnedSecondServ: stats.pointsWinnedSecondServ,
             firstServIn: stats.firstServIn,
             secondServIn: stats.secondServIn,
+            firstServWon: stats.firstServWon,
+            secondServWon: stats.secondServWon,
             aces: stats.aces,
             dobleFaults: stats.dobleFaults,
             pointsWinnedFirstReturn: stats.pointsWinnedFirstReturn,
@@ -67,12 +68,18 @@ export class SetMap implements Mapper<Set> {
             secondReturnIn: stats.secondReturnIn,
             firstReturnOut: stats.firstReturnOut,
             secondReturnOut: stats.secondReturnOut,
+            firstReturnWon: stats.firstReturnWon,
+            secondReturnWon: stats.secondReturnWon,
+            firstReturnWinner: stats.firstReturnWinner,
+            secondReturnWinner: stats.secondReturnWinner,
             meshPointsWon: stats.meshPointsWon,
             meshPointsLost: stats.meshPointsLost,
+            meshError: stats.meshError,
+            meshWinner: stats.meshWinner,
             bckgPointsWon: stats.bckgPointsWon,
             bckgPointsLost: stats.bckgPointsLost,
-            winners: stats.winners,
-            noForcedErrors: stats.noForcedErrors,
+            bckgError: stats.bckgError,
+            bckgWinner: stats.bckgWinner,
         }
     }
 
@@ -83,27 +90,30 @@ export class SetMap implements Mapper<Set> {
         return {
             me: this.playerStatsToDto(stats.me)!,
             partner: this.playerStatsToDto(stats.partner),
+            breakPtsWinned: stats.breakPtsWinned,
+            winBreakPtsChances: stats.winBreakPtsChances,
             gamesWonReturning: stats.gamesWonReturning,
             gamesLostReturning: stats.gamesLostReturning,
-            winBreakPtsChances: stats.winBreakPtsChances,
-            breakPtsWinned: stats.breakPtsWinned,
-            rivalPointsWinnedFirstServ: stats.rivalPointsWinnedFirstServ,
-            rivalPointsWinnedSecondServ: stats.rivalPointsWinnedSecondServ,
-            rivalFirstServIn: stats.rivalFirstServIn,
-            rivalSecondServIn: stats.rivalSecondServIn,
-            rivalPointsWinnedFirstReturn: stats.rivalPointsWinnedFirstReturn,
-            rivalPointsWinnedSecondReturn: stats.rivalPointsWinnedSecondReturn,
-            rivalFirstReturnIn: stats.rivalFirstReturnIn,
-            rivalSecondReturnIn: stats.rivalSecondReturnIn,
             rivalAces: stats.rivalAces,
             rivalDobleFault: stats.rivalDobleFault,
-            rivalNoForcedErrors: stats.rivalNoForcedErrors,
+            rivalFirstServIn: stats.rivalFirstServIn,
+            rivalSecondServIn: stats.rivalSecondServIn,
+            rivalFirstServWon: stats.rivalFirstServWon,
+            rivalSecondServWon: stats.rivalSecondServWon,
             rivalWinners: stats.rivalWinners,
+            rivalNoForcedErrors: stats.rivalNoForcedErrors,
+            rivalFirstReturnIn: stats.rivalFirstReturnIn,
+            rivalSecondReturnIn: stats.rivalSecondReturnIn,
+            rivalPointsWinnedFirstServ: stats.rivalPointsWinnedFirstServ,
+            rivalPointsWinnedSecondServ: stats.rivalPointsWinnedSecondServ,
+            rivalPointsWinnedFirstReturn: stats.rivalPointsWinnedFirstReturn,
+            rivalPointsWinnedSecondReturn:
+                stats.rivalPointsWinnedSecondReturn,
             shortRallyWon: stats.shortRallyWon,
-            mediumRallyWon: stats.mediumRallyWon,
-            longRallyWon: stats.longRallyWon,
             shortRallyLost: stats.shortRallyLost,
+            mediumRallyWon: stats.mediumRallyWon,
             mediumRallyLost: stats.mediumRallyLost,
+            longRallyWon: stats.longRallyWon,
             longRallyLost: stats.longRallyLost,
         }
     }

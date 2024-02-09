@@ -90,7 +90,6 @@ export class PausedMatchMap implements Mapper<PausedMatch> {
     }
 
     public static toDto(obj: PausedMatch) {
-        console.log("toDto", obj.setsWon);
         return {
             matchId: obj.matchId.id.toString(),
             mode: obj.mode.value,

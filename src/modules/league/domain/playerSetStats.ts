@@ -3,6 +3,7 @@ import { Result } from "../../../shared/core/Result";
 import { ValueObject } from "../../../shared/domain/ValueObject";
 
 interface SetPlayerStatsProps {
+    isDouble: boolean;
     pointsWon: number;
     pointsWonServing: number;
     pointsWonReturning: number;
@@ -17,6 +18,8 @@ interface SetPlayerStatsProps {
     pointsWinnedSecondServ: number;
     firstServIn: number;
     secondServIn: number;
+    firstServWon: number;
+    secondServWon: number;
     aces: number;
     dobleFaults: number;
     pointsWinnedFirstReturn: number;
@@ -25,21 +28,65 @@ interface SetPlayerStatsProps {
     secondReturnIn: number;
     firstReturnOut: number;
     secondReturnOut: number;
+    firstReturnWon: number;
+    secondReturnWon: number;
+    firstReturnWinner: number;
+    secondReturnWinner: number;
     meshPointsWon: number;
     meshPointsLost: number;
+    meshWinner: number;
+    meshError: number;
     bckgPointsWon: number;
     bckgPointsLost: number;
-    winners: number;
-    noForcedErrors: number;
+    bckgWinner: number;
+    bckgError: number;
 }
 
 export class SetPlayerStats extends ValueObject<SetPlayerStatsProps> {
+    get isDouble(): boolean {
+        return this.props.isDouble;
+    }
+
+    get firstServWon(): number {
+        return this.props.firstServWon;
+    }
+
+    get secondServWon(): number {
+        return this.props.secondServWon;
+    }
+
+    get firstReturnWon(): number {
+        return this.props.firstReturnWon;
+    }
+
+    get secondReturnWon(): number {
+        return this.props.secondReturnWon;
+    }
+
+    get firstReturnWinner(): number {
+        return this.props.firstReturnWinner;
+    }
+
+    get secondReturnWinner(): number {
+        return this.props.secondReturnWinner;
+    }
+
     get pointsWon(): number {
         return this.props.pointsWon;
     }
+
     get pointsWonServing(): number {
         return this.props.pointsWonServing;
     }
+
+    get gamesWonServing(): number {
+        return this.props.gamesWonServing;
+    }
+
+    get gamesLostServing(): number {
+        return this.props.gamesLostServing;
+    }
+
     get pointsWonReturning(): number {
         return this.props.pointsWonReturning;
     }
@@ -57,12 +104,6 @@ export class SetPlayerStats extends ValueObject<SetPlayerStatsProps> {
     }
     get breakPtsSaved(): number {
         return this.props.breakPtsSaved;
-    }
-    get gamesWonServing(): number {
-        return this.props.gamesWonServing;
-    }
-    get gamesLostServing(): number {
-        return this.props.gamesLostServing;
     }
     get pointsWinnedFirstServ(): number {
         return this.props.pointsWinnedFirstServ;
@@ -106,17 +147,28 @@ export class SetPlayerStats extends ValueObject<SetPlayerStatsProps> {
     get meshPointsLost(): number {
         return this.props.meshPointsLost;
     }
+    get meshWinner(): number {
+        return this.props.meshWinner;
+    }
+
+    get meshError(): number {
+        return this.props.meshError;
+    }
+
     get bckgPointsWon(): number {
         return this.props.bckgPointsWon;
     }
+
     get bckgPointsLost(): number {
         return this.props.bckgPointsLost;
     }
-    get winners(): number {
-        return this.props.winners;
+
+    get bckgWinner(): number {
+        return this.props.bckgWinner;
     }
-    get noForcedErrors(): number {
-        return this.props.noForcedErrors;
+
+    get bckgError(): number {
+        return this.props.bckgError;
     }
 
     private constructor(props: SetPlayerStatsProps) {
@@ -124,8 +176,8 @@ export class SetPlayerStats extends ValueObject<SetPlayerStatsProps> {
     }
 
     public static create(props: SetPlayerStatsProps): Result<SetPlayerStats> {
-
         const guard = Guard.againstNullOrUndefinedBulk([
+            { argument: props.isDouble, argumentName: "" },
             { argument: props.pointsWon, argumentName: "" },
             { argument: props.pointsWonServing, argumentName: "" },
             { argument: props.pointsWonReturning, argumentName: "" },
@@ -140,6 +192,8 @@ export class SetPlayerStats extends ValueObject<SetPlayerStatsProps> {
             { argument: props.pointsWinnedSecondServ, argumentName: "" },
             { argument: props.firstServIn, argumentName: "" },
             { argument: props.secondServIn, argumentName: "" },
+            { argument: props.firstServWon, argumentName: "" },
+            { argument: props.secondServWon, argumentName: "" },
             { argument: props.aces, argumentName: "" },
             { argument: props.dobleFaults, argumentName: "" },
             { argument: props.pointsWinnedFirstReturn, argumentName: "" },
@@ -148,16 +202,22 @@ export class SetPlayerStats extends ValueObject<SetPlayerStatsProps> {
             { argument: props.secondReturnIn, argumentName: "" },
             { argument: props.firstReturnOut, argumentName: "" },
             { argument: props.secondReturnOut, argumentName: "" },
+            { argument: props.firstReturnWon, argumentName: "" },
+            { argument: props.secondReturnWon, argumentName: "" },
+            { argument: props.firstReturnWinner, argumentName: "" },
+            { argument: props.secondReturnWinner, argumentName: "" },
             { argument: props.meshPointsWon, argumentName: "" },
             { argument: props.meshPointsLost, argumentName: "" },
+            { argument: props.meshWinner, argumentName: "" },
+            { argument: props.meshError, argumentName: "" },
             { argument: props.bckgPointsWon, argumentName: "" },
             { argument: props.bckgPointsLost, argumentName: "" },
-            { argument: props.winners, argumentName: "" },
-            { argument: props.noForcedErrors, argumentName: "" },
-        ])
+            { argument: props.bckgWinner, argumentName: "" },
+            { argument: props.bckgError, argumentName: "" },
+        ]);
 
         if (guard.isFailure) {
-            return Result.fail<SetPlayerStats>(guard.getErrorValue())
+            return Result.fail<SetPlayerStats>(guard.getErrorValue());
         }
 
         return Result.ok<SetPlayerStats>(new SetPlayerStats(props));

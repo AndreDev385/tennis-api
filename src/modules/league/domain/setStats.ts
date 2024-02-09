@@ -14,6 +14,8 @@ interface SetStatsProps {
     rivalPointsWinnedSecondServ: number;
     rivalFirstServIn: number;
     rivalSecondServIn: number;
+    rivalFirstServWon: number;
+    rivalSecondServWon: number;
     rivalPointsWinnedFirstReturn: number;
     rivalPointsWinnedSecondReturn: number;
     rivalFirstReturnIn: number;
@@ -103,6 +105,12 @@ export class SetStats extends ValueObject<SetStatsProps> {
     get longRallyLost(): number {
         return this.props.longRallyLost;
     }
+    get rivalFirstServWon(): number {
+        return this.props.rivalFirstServWon;
+    }
+    get rivalSecondServWon(): number {
+        return this.props.rivalSecondServWon;
+    }
 
     private constructor(props: SetStatsProps) {
         super(props);
@@ -133,7 +141,7 @@ export class SetStats extends ValueObject<SetStatsProps> {
             { argument: props.shortRallyLost, argumentName: "" },
             { argument: props.mediumRallyLost, argumentName: "" },
             { argument: props.longRallyLost, argumentName: "" },
-        ])
+        ]);
 
         if (guard.isFailure) {
             return Result.fail<SetStats>(guard.getErrorValue());

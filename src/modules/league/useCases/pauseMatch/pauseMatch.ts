@@ -59,6 +59,7 @@ export class PauseMatch implements UseCase<PauseMatchRequest, Response> {
         let doubleServeFlow: DoubleServeFlow | null = null
         try {
             // sets
+            console.log("REQUEST SETS", request.sets);
             const setsArr = request.sets.map((s) => SetMap.toDomain(s));
 
             for (const set of setsArr) {
