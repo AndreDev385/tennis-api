@@ -43,6 +43,9 @@ async function notificatePlayers({
         //},
         //}
 
+        result.responses.forEach(r => {
+            console.log(r)
+        })
         console.log("Fails", result.failureCount);
         console.log("Successes", result.successCount);
         return Result.ok<void>();
