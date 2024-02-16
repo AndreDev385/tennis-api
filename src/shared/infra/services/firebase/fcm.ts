@@ -19,20 +19,29 @@ async function notificatePlayers({
     body,
 }: SendMessageArgs): Promise<Result<string | void>> {
     try {
-
         console.log("TOKENS", tokens);
 
         //if (tokens.length < 1) {
         //    return Result.ok<void>();
         //}
 
-        const result = await messaging().sendEachForMulticast({
-            tokens,
-            notification: {
-                title,
-                body,
-            },
-        });
+        const result = await messaging().sendEach(
+            tokens.map((t) => ({
+                token: t,
+                notification: {
+                    title,
+                    body,
+                },
+            }))
+        );
+
+        //{
+        //tokens,
+        //notification: {
+        //    title,
+        //    body,
+        //},
+        //}
 
         console.log("Fails", result.failureCount);
         console.log("Successes", result.successCount);
