@@ -19,6 +19,10 @@ async function notificatePlayers({
     body,
 }: SendMessageArgs): Promise<Result<string | void>> {
     try {
+        if (tokens.length < 1) {
+            return Result.ok<void>();
+        }
+
         const result = await messaging().sendEachForMulticast({
             tokens,
             notification: {
@@ -31,7 +35,7 @@ async function notificatePlayers({
         console.log("Successes", result.successCount);
         return Result.ok<void>();
     } catch (error) {
-        console.log(error)
+        console.log(error);
         return Result.fail("Error al enviar notificaciones");
     }
 }
