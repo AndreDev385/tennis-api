@@ -24,8 +24,6 @@ export class SendNotifications
     async execute(request: SendNotificationsReq): Promise<Response> {
         let tokens: Array<string> = [];
 
-        console.log(request);
-
         try {
             const query: PlayerQuery = {};
 
@@ -51,7 +49,6 @@ export class SendNotifications
 
             return right(Result.ok<void>());
         } catch (error) {
-            console.log(error);
             return left(new AppError.UnexpectedError(error));
         }
     }

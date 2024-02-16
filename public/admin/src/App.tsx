@@ -20,6 +20,7 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import Games from './components/results/games/Games'
 import GameStats from './components/results/stats/GameStats'
+import { Notifications } from './components/notifications/Notifications'
 
 const router = createBrowserRouter([
     {
@@ -77,6 +78,10 @@ const router = createBrowserRouter([
                 path: '/ranking',
                 element: <Ranking />
             },
+            {
+                path: '/notifications',
+                element: <Notifications />
+            },
         ],
     },
     {
@@ -100,22 +105,22 @@ const router = createBrowserRouter([
 
 function App() {
     return (
-    <>
-        <RouterProvider router={router} />
+        <>
+            <RouterProvider router={router} />
 
-        <ToastContainer 
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
-    </>
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
+        </>
     )
 }
 

@@ -31,6 +31,7 @@ async function notificatePlayers({
         console.log("Successes", result.successCount);
         return Result.ok<void>();
     } catch (error) {
+        console.log(error)
         return Result.fail("Error al enviar notificaciones");
     }
 }

@@ -5,7 +5,6 @@ import { MatchCancelled } from "../domain/events/matchCancelled";
 import { FinishClash } from "../useCases/finishClash/finishClash";
 
 export class AfterMatchCancelled implements IHandle<MatchCancelled> {
-
     private finishClash: FinishClash;
 
     constructor(finishClash: FinishClash) {
@@ -14,17 +13,27 @@ export class AfterMatchCancelled implements IHandle<MatchCancelled> {
     }
 
     setupSubscriptions(): void {
-        DomainEvents.register(this.onFinishClash.bind(this) as any, MatchCancelled.name);
+        DomainEvents.register(
+            this.onFinishClash.bind(this) as any,
+            MatchCancelled.name
+        );
     }
 
     private async onFinishClash(event: MatchCancelled): Promise<void> {
-        const { match } = event
+        const { match } = event;
 
         try {
-            await this.finishClash.execute({ clashId: match.clashId.toString(), matchId: match.matchId.id.toString() })
-            console.log(`[AfterMatchCancelled]: Successfully executed FinishClash use case AfterMatchCancelled`)
+            await this.finishClash.execute({
+                clashId: match.clashId.toString(),
+                matchId: match.matchId.id.toString(),
+            });
+            console.log(
+                `[AfterMatchCancelled]: Successfully executed FinishClash use case AfterMatchCancelled`
+            );
         } catch (error) {
-            console.log(`[AfterMatchCancelled]: Failer to execute FinishClash use case AfterMatchCancelled`)
+            console.log(
+                `[AfterMatchCancelled]: Failer to execute FinishClash use case AfterMatchCancelled`
+            );
         }
     }
 }
