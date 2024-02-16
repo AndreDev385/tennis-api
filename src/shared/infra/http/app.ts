@@ -35,6 +35,7 @@ app.use(morgan("combined"));
 app.use("/api/v1", v1Router);
 
 app.use(history())
+app.use("/public", express.static(path.resolve(__dirname, "../../../../public/")))
 app.use("/", express.static(path.resolve(__dirname, "../../../../public/admin/dist")))
 
 

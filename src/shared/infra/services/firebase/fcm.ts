@@ -3,7 +3,7 @@ import { Result } from "../../../core/Result";
 import { initializeApp } from "firebase-admin/app";
 
 initializeApp({
-    credential: credential.cert("./gamemind-fcm-firebase-adminsdk.json"),
+    credential: credential.cert("public/gamemind-fcm-firebase-adminsdk.json"),
 });
 
 type SendMessageArgs = {
