@@ -1,10 +1,9 @@
-import { messaging } from "firebase-admin";
+import { credential, messaging } from "firebase-admin";
 import { Result } from "../../../core/Result";
-import { applicationDefault, initializeApp } from "firebase-admin/app";
+import { initializeApp } from "firebase-admin/app";
 
 initializeApp({
-    credential: applicationDefault(),
-    projectId: "gamemind-fcm",
+    credential: credential.cert("./gamemind-fcm-firebase-adminsdk.json"),
 });
 
 type SendMessageArgs = {
