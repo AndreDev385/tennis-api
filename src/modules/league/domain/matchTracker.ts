@@ -61,78 +61,78 @@ export class MatchTracker extends Entity<MatchTrackerProps> {
 
     // internal gets
     get gamesWonReturning(): number {
-        return this.gamesWonReturning;
+        return this.props.gamesWonReturning;
     }
     get gamesLostReturning(): number {
-        return this.gamesLostReturning;
+        return this.props.gamesLostReturning;
     }
     get winBreakPtsChances(): number {
-        return this.winBreakPtsChances;
+        return this.props.winBreakPtsChances;
     }
     get breakPtsWinned(): number {
-        return this.breakPtsWinned;
+        return this.props.breakPtsWinned;
     }
 
     get rivalFirstServWon(): number {
-        return this.rivalFirstServWon;
+        return this.props.rivalFirstServWon;
     }
     get rivalSecondServWon(): number {
-        return this.rivalSecondServWon;
+        return this.props.rivalSecondServWon;
     }
     get rivalPointsWinnedFirstServ(): number {
-        return this.rivalPointsWinnedFirstServ;
+        return this.props.rivalPointsWinnedFirstServ;
     }
     get rivalPointsWinnedSecondServ(): number {
-        return this.rivalPointsWinnedSecondServ;
+        return this.props.rivalPointsWinnedSecondServ;
     }
     get rivalFirstServIn(): number {
-        return this.rivalFirstServIn;
+        return this.props.rivalFirstServIn;
     }
     get rivalSecondServIn(): number {
-        return this.rivalSecondServIn;
+        return this.props.rivalSecondServIn;
     }
     get rivalPointsWinnedFirstReturn(): number {
-        return this.rivalPointsWinnedFirstReturn;
+        return this.props.rivalPointsWinnedFirstReturn;
     }
     get rivalPointsWinnedSecondReturn(): number {
-        return this.rivalPointsWinnedSecondReturn;
+        return this.props.rivalPointsWinnedSecondReturn;
     }
     get rivalFirstReturnIn(): number {
-        return this.rivalFirstReturnIn;
+        return this.props.rivalFirstReturnIn;
     }
     get rivalSecondReturnIn(): number {
-        return this.rivalSecondReturnIn;
+        return this.props.rivalSecondReturnIn;
     }
 
     get rivalAces(): number {
-        return this.rivalAces;
+        return this.props.rivalAces;
     }
     get rivalDobleFault(): number {
-        return this.rivalDobleFault;
+        return this.props.rivalDobleFault;
     }
     get rivalNoForcedErrors(): number {
-        return this.rivalNoForcedErrors;
+        return this.props.rivalNoForcedErrors;
     }
     get rivalWinners(): number {
-        return this.rivalWinners;
+        return this.props.rivalWinners;
     }
     get shortRallyWon(): number {
-        return this.shortRallyWon;
+        return this.props.shortRallyWon;
     }
     get mediumRallyWon(): number {
-        return this.mediumRallyWon;
+        return this.props.mediumRallyWon;
     }
     get longRallyWon(): number {
-        return this.longRallyWon;
+        return this.props.longRallyWon;
     }
     get shortRallyLost(): number {
-        return this.shortRallyLost;
+        return this.props.shortRallyLost;
     }
     get mediumRallyLost(): number {
-        return this.mediumRallyLost;
+        return this.props.mediumRallyLost;
     }
     get longRallyLost(): number {
-        return this.longRallyLost;
+        return this.props.longRallyLost;
     }
     // end internal gets
 
