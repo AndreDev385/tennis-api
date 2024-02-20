@@ -1,26 +1,51 @@
-export interface FeaturePlayersRequest {
+export type FeaturePlayersRequest = {
     teamId: string;
+    isDouble: boolean;
     seasonId?: string;
     journey?: string;
-}
+};
 
-export interface FeaturePlayersRecords {
+export type FeaturePlayersRecords = {
     [index: string]: FeaturePlayerStats;
-}
+};
 
-export interface FeaturePlayerStats {
-    meshPointsWon: number;
-    meshPointsLost: number;
+export type FeaturePlayerStats = {
+    saveBreakPtsChances: number;
+    breakPtsSaved: number;
+    gamesWonServing: number;
+    gamesLostServing: number;
+    pointsWinnedFirstServ: number;
+    pointsWinnedSecondServ: number;
     firstServIn: number;
     secondServIn: number;
+    firstServWon: number;
+    secondServWon: number;
+    aces: number;
     dobleFaults: number;
-    pointsWinnedFirstServ: number;
-    pointsWinnedSecondServe: number;
-}
+    pointsWinnedFirstReturn: number;
+    pointsWinnedSecondReturn: number;
+    firstReturnIn: number;
+    secondReturnIn: number;
+    firstReturnOut: number;
+    secondReturnOut: number;
+    firstReturnWon: number;
+    secondReturnWon: number;
+    firstReturnWinner: number;
+    secondReturnWinner: number;
+    meshPointsWon: number;
+    meshPointsLost: number;
+    meshWinner: number;
+    meshError: number;
+    bckgPointsWon: number;
+    bckgPointsLost: number;
+    bckgWinner: number;
+    bckgError: number;
+};
 
-export interface FeaturePlayer extends FeaturePlayerStats {
+export type FeaturePlayer = FeaturePlayerStats & {
     playerId: string;
     firstName: string;
     lastName: string;
-}
+};
 
+export type FeaturePlayerKeys = keyof FeaturePlayerStats;

@@ -34,6 +34,8 @@ export interface MatchDataForMapper {
     player4?: string | null;
     tracker: MatchTracker | null;
     matchWon: boolean | null;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 export class MatchMap implements Mapper<Match> {
@@ -71,6 +73,8 @@ export class MatchMap implements Mapper<Match> {
                 category: CategoryMap.toDomain(raw.category)!,
                 status: status.getValue(),
                 matchWon: raw.matchWon,
+                createdAt: raw.createdAt,
+                updatedAt: raw.updatedAt,
             },
             new UniqueEntityID(raw.matchId)
         );
@@ -98,6 +102,8 @@ export class MatchMap implements Mapper<Match> {
             player4: match.player4 ?? null,
             status: match.status.value,
             matchWon: match.matchWon ?? null,
+            createdAt: match.createdAt,
+            updatedAt: match.updatedAt,
         };
     }
 
@@ -120,14 +126,16 @@ export class MatchMap implements Mapper<Match> {
             player2: match.player2,
             player3: match.player3
                 ? {
-                      playerId: match.player3.playerId.id.toString(),
-                      name: `${match.player3.firstName.value} ${match.player3.lastName.value}`,
-                  }
+                    playerId: match.player3.playerId.id.toString(),
+                    name: `${match.player3.firstName.value} ${match.player3.lastName.value}`,
+                }
                 : null,
             player4: match.player4 ?? null,
             tracker: match.tracker ? TrackerMap.toDto(match.tracker) : null,
             matchWon: match.matchWon ?? null,
             status: match.status.value,
+            createdAt: match.createdAt,
+            updatedAt: match.updatedAt,
         };
     }
 }

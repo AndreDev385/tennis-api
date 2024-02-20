@@ -35,6 +35,8 @@ interface MatchProps {
     tracker?: MatchTracker | null;
     status?: MatchStatus;
     matchWon?: boolean | null;
+    createdAt?: Date;
+    updatedAt?: Date;
 }
 
 export class Match extends AggregateRoot<MatchProps> {
@@ -106,6 +108,14 @@ export class Match extends AggregateRoot<MatchProps> {
         return this.props.matchWon
     }
 
+    get createdAt(): Date {
+        return this.props.createdAt!;
+    }
+
+    get updatedAt(): Date {
+        return this.props.updatedAt!;
+    }
+
     private setMatchWon() {
         let setsWon = this.sets
             .getItems()
@@ -119,6 +129,7 @@ export class Match extends AggregateRoot<MatchProps> {
 
     public goLive() {
         this.props.status = MatchStatus.createNew(MatchStatuses.Live)
+        this.props.updatedAt = new Date();
         this.addDomainEvent(new MatchGoesLive(this));
     }
 
@@ -127,6 +138,7 @@ export class Match extends AggregateRoot<MatchProps> {
         this.props.tracker = tracker;
         this.props.sets = sets;
         this.props.status = MatchStatus.createNew(MatchStatuses.Paused)
+        this.props.updatedAt = new Date();
         this.addDomainEvent(new MatchPaused(this));
     }
 
@@ -140,6 +152,7 @@ export class Match extends AggregateRoot<MatchProps> {
         } else {
             this.props.matchWon = matchWon;
         }
+        this.props.updatedAt = new Date();
         this.addDomainEvent(new MatchFinished(this));
     }
 
@@ -149,6 +162,7 @@ export class Match extends AggregateRoot<MatchProps> {
         this.props.sets = sets;
         this.props.status = MatchStatus.createNew(MatchStatuses.Canceled)
         this.props.matchWon = matchWon;
+        this.props.updatedAt = new Date();
         this.addDomainEvent(new MatchCancelled(this))
     }
 
@@ -184,7 +198,9 @@ export class Match extends AggregateRoot<MatchProps> {
                 ...props,
                 status: props.status ?? MatchStatus.createNew(MatchStatuses.Waiting),
                 matchWon: props.matchWon ?? null,
-                address: props.address ?? null
+                address: props.address ?? null,
+                createdAt: props.createdAt ?? new Date(),
+                updatedAt: props.updatedAt ?? new Date(),
             },
             id
         );

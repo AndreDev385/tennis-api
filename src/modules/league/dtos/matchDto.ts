@@ -25,4 +25,6 @@ export interface MatchDto {
     tracker: TrackerDto | null;
     status: number;
     matchWon: boolean | null;
+    createdAt: Date;
+    updatedAt: Date;
 }

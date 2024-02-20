@@ -24,6 +24,8 @@ interface MatchData extends Model<InferAttributes<MatchData>> {
     player4: string | null;
     status: number;
     matchWon: boolean | null;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 const MatchModel = sequelize.define<MatchData>(
@@ -99,7 +101,17 @@ const MatchModel = sequelize.define<MatchData>(
         matchWon: {
             type: DataTypes.BOOLEAN,
             allowNull: true,
-        }
+        },
+        createdAt: {
+            allowNull: true,
+            type: DataTypes.DATE,
+            defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+        },
+        updatedAt: {
+            allowNull: true,
+            type: DataTypes.DATE,
+            defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+        },
     },
     { tableName: "match" }
 );
