@@ -14,11 +14,9 @@ export class FeaturePlayersController extends BaseController {
 
     async executeImpl(req: Request, res: Response) {
 
-        console.log(req.query, "QUERY");
+        req.query['isDouble'] = JSON.parse(req.query.isDouble as string)
 
         const result = await this.usecase.execute(req.query as any);
-
-        console.log("RESULT", result);
 
         if (result.isLeft()) {
             const error = result.value;
