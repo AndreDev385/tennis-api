@@ -36,6 +36,7 @@ export class AddPlayerAvatar implements UseCase<any, Response> {
             try {
                 imgUrl = await this.uploadImgService.upload(request.file.path);
             } catch (error) {
+                console.log(error)
                 return left(
                     Result.fail<string>(
                         "Ha ocurrido un error al subir el archivo"
