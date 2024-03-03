@@ -72,6 +72,10 @@ export class CreatePlayer
                 return left(new AppError.UnexpectedError(error));
             }
 
+            if (!club.isSubscribed) {
+                return left(Result.fail<string>("El club no se encuentra subscrito"));
+            }
+
             const playerOrError = Player.create({
                 userId: user.userId,
                 clubId: club.clubId,

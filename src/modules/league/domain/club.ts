@@ -37,6 +37,11 @@ export class Club extends Entity<ClubProps> {
         // subscribe event
     }
 
+    public unsubscribe() {
+        this.props.isSubscribed = false;
+        // unsubscribe event
+    }
+
     private generateCode() {
         var characters =
             "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";

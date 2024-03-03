@@ -2,7 +2,7 @@ import { faCircleNotch, faStickyNote } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FormEvent, useEffect, useState } from "react";
 import { Button, Card, Form } from "react-bootstrap";
-import { getClubsList } from "../../services/getClubList";
+import { getClubsList } from "../../services/club/getClubList";
 import { Loading } from "../shared/loading";
 import { ErrorMessage } from "../shared/errorMessage";
 import { IClub } from "../../interfaces/interfaces";

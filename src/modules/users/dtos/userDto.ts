@@ -6,4 +6,5 @@ export interface UserDto {
     isAdmin: boolean;
     canTrack: boolean;
     isPlayer: boolean;
+    isDeleted: boolean;
 }

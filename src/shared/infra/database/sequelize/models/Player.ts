@@ -10,6 +10,7 @@ interface PlayerData extends Model<InferAttributes<PlayerData>> {
     userId: string;
     avatar?: string;
     devices?: Array<string>;
+    isDeleted: boolean;
 }
 
 const PlayerModel = sequelize.define<PlayerData>(
@@ -45,6 +46,10 @@ const PlayerModel = sequelize.define<PlayerData>(
         devices: {
             type: DataTypes.ARRAY(DataTypes.STRING),
             defaultValue: []
+        },
+        isDeleted: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false
         }
     },
     { tableName: "player" }

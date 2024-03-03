@@ -1,15 +1,36 @@
 import { faChartBar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
-import { Card, Form, Table } from "react-bootstrap";
+import { Button, Card, Form, Table } from "react-bootstrap";
 import { useParams } from "react-router";
 import "./PlayerStats.scss";
-import { ISetStatsIndiv } from "../../../interfaces/interfaces";
+import { ISeason, ISetStatsIndiv } from "../../../interfaces/interfaces";
 import { VITE_SERVER_URL } from "../../../env/env.prod";
+import { mapToUrlString } from "../../../utils/mapToUrlString";
+import { getSeasonList } from "../../../services/season/getSeasonList";
+import { Loading } from "../../shared/loading";
+import { ErrorMessage } from "../../shared/errorMessage";
+
+type SearchParams = {
+  isDouble: boolean;
+  season?: string;
+  limit?: number
+}
+
+const INITIAL_PARAMS = {
+  isDouble: true,
+}
 
 const PlayerStats = () => {
   const [stats, setStats] = useState<ISetStatsIndiv | undefined>(undefined);
-  const [param, setParam] = useState("last");
+  const [searchParams, setSearchParams] = useState<SearchParams>(INITIAL_PARAMS);
+  const [seasons, setSeasons] = useState<ISeason[]>([]);
+
+  const [state, setState] = useState({
+    loading: true,
+    error: "",
+  })
+
   const token: string = localStorage.getItem("authorization") || "";
   const { id } = useParams();
 
@@ -22,60 +43,57 @@ const PlayerStats = () => {
   };
 
   useEffect(() => {
+    getSeasons();
+  }, [])
+
+  useEffect(() => {
     getStats();
-  }, [id, param]);
+  }, [id, searchParams]);
+
+  const getSeasons = async () => {
+    setState(prev => ({ ...prev, loading: true }))
+    const result = await getSeasonList({});
+    setState(prev => ({ ...prev, loading: false }))
+
+    if (result.isFailure) {
+      setState(prev => ({ ...prev, error: result.getErrorValue() as string }))
+      return;
+    }
+
+    setSeasons(result.getValue() as ISeason[]);
+  }
 
   const getStats = async () => {
-    const params = {
-      ...(param === "last" && { last: "true" }),
-      ...(param === "last3" && { last3: "true" }),
-      ...(param === "season" && { season: "true" }),
-    };
     const url =
       `${VITE_SERVER_URL}/api/v1/player/stats-by-userid/` +
       id +
       "?" +
-      new URLSearchParams(params);
+      new URLSearchParams(mapToUrlString(searchParams));
 
     try {
+      setState((prev) => ({ ...prev, loading: true }));
       const response = await fetch(url, requestOptions);
       const data = await response.json();
 
-      if (response.status === 200) {
-        setStats(data);
+      if (response.status !== 200) {
+        setState({ loading: false, error: data["message"] })
+        return;
       }
+      setState({ loading: false, error: "" });
+      setStats(data);
     } catch (error) {
-      console.error(error);
+      setState(prev => ({ ...prev, error: "Ha ocurrido un error" }))
     }
   };
-  // filter
-  const onChangeParam = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    e.preventDefault();
-    setParam(e.target.value);
-  };
 
-  return (
-    <div className="player-stats-container">
-      <div>
-        <h1>
-          <FontAwesomeIcon icon={faChartBar} />
-          Estadísticas
-        </h1>
-      </div>
-
-      <div className="filter-container">
-        <Form.Select
-          onChange={onChangeParam}
-          value={param}
-          aria-label="Jornada"
-        >
-          <option value="last">Último</option>
-          <option value="last3">Últimos 3</option>
-          <option value="season">Temporada</option>
-          <option value="">Siempre</option>
-        </Form.Select>
-      </div>
-
+  function render() {
+    if (state.loading) {
+      return Loading();
+    }
+    if (state.error.length > 0) {
+      return ErrorMessage(state.error)
+    }
+    return (
       <Card>
         <Table responsive="sm">
           <thead>
@@ -284,6 +302,58 @@ const PlayerStats = () => {
           )}
         </Table>
       </Card>
+    )
+  }
+
+  return (
+    <div className="player-stats-container">
+      <div>
+        <h1>
+          <FontAwesomeIcon icon={faChartBar} />
+          Estadísticas
+        </h1>
+      </div>
+
+      <div className="filter-container">
+        <Form.Select
+          aria-label="Temporada"
+        >
+          <option value="">Selecciona una temporada</option>
+          {
+            seasons.map((season) => (
+              <option
+                value={season.seasonId}
+                key={season.seasonId}
+              >
+                {season.name}
+              </option>
+            ))
+          }
+        </Form.Select>
+        <Form.Control
+          placeholder="# partidos"
+          type="number"
+          aria-label="Últimos # partidos"
+          value={searchParams.limit ?? ""}
+          onChange={(e) => setSearchParams((prev) => ({ ...prev, limit: Number(e.target.value) }))}
+        />
+        <Form.Select
+          aria-label="Dobles/Single"
+          value={searchParams.isDouble ? "true" : ""}
+          onChange={(e) => setSearchParams(prev => ({ ...prev, isDouble: !!e.target.value }))}
+        >
+          <option value="true">Dobles</option>
+          <option value="">Single</option>
+        </Form.Select>
+        <Button
+          onClick={() => setSearchParams(INITIAL_PARAMS)}
+          type="button"
+          variant="secondary"
+        >
+          Limpiar filtro
+        </Button>
+      </div>
+      {render()}
     </div>
   );
 };

@@ -72,6 +72,7 @@ export class UserMap implements Mapper<User> {
             canTrack: user.canTrack,
             isAdmin: user.isAdmin,
             isPlayer: user.isPlayer,
+            isDeleted: user.isDeleted,
         };
     }
 }

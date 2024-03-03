@@ -23,6 +23,7 @@ export class PlayerMap implements Mapper<Player> {
                 firstName: firstNameOrError.getValue(),
                 lastName: lastNameOrError.getValue(),
                 devices: Devices.create(raw.devices),
+                isDeleted: raw.isDeleted,
             },
             new UniqueEntityID(raw.playerId)
         );
@@ -40,6 +41,7 @@ export class PlayerMap implements Mapper<Player> {
             clubId: player.clubId.id.toString(),
             userId: player.userId.id.toString(),
             devices: player.devices.getItems(),
+            isDeleted: player.isDeleted,
         };
     }
 

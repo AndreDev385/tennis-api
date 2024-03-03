@@ -19,22 +19,91 @@ import {
 import { listUserController } from "../../../useCases/listUsers";
 import { validatePasswordCodeController } from "../../../useCases/validatePasswordCode";
 import { editUserController } from "../../../useCases/editUser";
-import { deleteUserController } from "../../../useCases/deleteUser";
+import {
+    deleteUserController,
+    deleteUserFromAdminController,
+} from "../../../useCases/deleteUser";
 
 const userRouter = express.Router();
 
-userRouter.get("/", middleware.ensureAuthenticated() as any, (req, res) => listUserController.execute(req, res));
-
-userRouter.post("/", (req, res) => createUserController.execute(req, res));
-
-userRouter.put("/", middleware.ensureAuthenticated() as any, (req, res) => editUserController.execute(req, res))
-
-userRouter.post("/tracker", middleware.adminAuthenticated() as any, (req, res) =>
-    createTrackerController.execute(req, res)
+userRouter.get("/", middleware.ensureAuthenticated() as any, (req, res) =>
+    listUserController.execute(req, res)
 );
 
+/**
+ * @openapi
+ * /api/v1/users/:
+ *   post:
+ *     tags:
+ *       - Users
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/CreateUserDto'
+ *     responses:
+ *       201:
+ *         description: Logged In
+ *       400:
+ *         description: Bad Request
+ *       500:
+ *         description: Server Error
+ */
+userRouter.post("/", (req, res) => createUserController.execute(req, res));
+
+userRouter.put("/", middleware.ensureAuthenticated() as any, (req, res) =>
+    editUserController.execute(req, res)
+);
+
+userRouter.post(
+    "/tracker",
+    middleware.adminAuthenticated() as any,
+    (req, res) => createTrackerController.execute(req, res)
+);
+
+/**
+ * @openapi
+ * /api/v1/users/login:
+ *   post:
+ *     tags:
+ *       - Users
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/LoginDto'
+ *     responses:
+ *       201:
+ *         description: Logged In
+ *       400:
+ *         description: Bad Request
+ *       500:
+ *         description: Server Error
+ */
 userRouter.post("/login", (req, res) => loginController.execute(req, res));
 
+/**
+ * @openapi
+ * /api/v1/users/admin/login:
+ *   post:
+ *     tags:
+ *       - Users
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/LoginDto'
+ *     responses:
+ *       201:
+ *         description: Logged In
+ *       400:
+ *         description: Bad Request
+ *       500:
+ *         description: Server Error
+ */
 userRouter.post("/admin/login", (req, res) =>
     adminLoginController.execute(req, res)
 );
@@ -65,6 +134,15 @@ userRouter.get("/:email", (req, res) =>
     getUserByEmailController.execute(req, res)
 );
 
-userRouter.put("/delete", middleware.ensureAuthenticated() as any, (req, res) => deleteUserController.execute(req, res))
+userRouter.put(
+    "/delete/:userId",
+    middleware.adminAuthenticated() as any,
+    (req, res) => deleteUserFromAdminController.execute(req, res)
+);
+
+userRouter.put("/delete", middleware.ensureAuthenticated() as any, (req, res) =>
+    deleteUserController.execute(req, res)
+);
+
 
 export { userRouter };

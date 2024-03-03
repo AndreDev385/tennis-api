@@ -16,6 +16,7 @@ interface PlayerProps {
     lastName: LastName;
     avatar?: string | null;
     devices?: Devices;
+    isDeleted?: boolean;
 }
 
 export class Player extends AggregateRoot<PlayerProps> {
@@ -27,7 +28,7 @@ export class Player extends AggregateRoot<PlayerProps> {
         return this.props.userId;
     }
 
-    get clubId(): ClubId {
+    get clubId(): ClubId | null {
         return this.props.clubId;
     }
 
@@ -47,6 +48,10 @@ export class Player extends AggregateRoot<PlayerProps> {
         return this.props.devices!;
     }
 
+    get isDeleted(): boolean {
+        return this.props.isDeleted!;
+    }
+
     private constructor(props: PlayerProps, id?: UniqueEntityID) {
         super(props, id);
     }
@@ -60,6 +65,15 @@ export class Player extends AggregateRoot<PlayerProps> {
             return;
         }
         this.devices.add(token);
+    }
+
+    public delete() {
+        this.props.isDeleted = true;
+        // event
+    }
+
+    public changeClub(clubId: ClubId) {
+        this.props.clubId = clubId;
     }
 
     public static create(
@@ -83,6 +97,7 @@ export class Player extends AggregateRoot<PlayerProps> {
             {
                 ...props,
                 devices: props.devices ?? Devices.create(),
+                isDeleted: props.isDeleted ?? false,
             },
             id
         );

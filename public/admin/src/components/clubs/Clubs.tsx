@@ -16,6 +16,7 @@ import './Clubs.scss';
 import { VITE_SERVER_URL } from '../../env/env.prod';
 import ModalQuestion from '../modalQuestion/ModalQuestion';
 import { requestClubSubscription } from '../../utils/data';
+import { unsubscribeClub } from '../../services/club/removeClubSubscription';
 
 const Clubs = () => {
   const [clubs, setClubs] = useState<IClub[]>([]);
@@ -24,6 +25,7 @@ const Clubs = () => {
   const [search, setSearch] = useState('');
   const [selectedClub, setSelectedClub] = useState<IClub | null>(null);
   const [showSubscribed, setShowSubscribed] = useState(false);
+  const [showRemoveModal, setShowRemoveModal] = useState(false);
 
   useEffect(() => {
     getClubs();
@@ -97,6 +99,23 @@ const Clubs = () => {
     }
   };
 
+  const removeClubSubscription = async () => {
+    setLoading(true);
+    try {
+      const result = await unsubscribeClub(selectedClub!.clubId)
+
+      await getClubs();
+
+      if (result.isFailure) {
+        return toast.error(result.getErrorValue());
+      }
+
+      toast.success(result.getValue());
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const clubTable = filteredClubs.map((item) => {
     return (
       <tr key={item.clubId}>
@@ -139,6 +158,15 @@ const Clubs = () => {
               >
                 Suscribir
               </Dropdown.Item>
+              <Dropdown.Item
+                onClick={() => {
+                  handleSelectClub(item);
+                  setShowRemoveModal((prev) => !prev)
+                }}
+                disabled={!item.isSubscribed}
+              >
+                Remover
+              </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
         </td>
@@ -157,6 +185,18 @@ const Clubs = () => {
             setSelectedClub(null);
           }}
           accept={() => handleSuscribeClub()}
+        />
+      )}
+
+      {showRemoveModal && (
+        <ModalQuestion
+          title='Eliminar suscripción '
+          question={`¿Estás seguro que quieres remover la suscripción de ${selectedClub?.name || ''}?`}
+          dismiss={() => {
+            setShowRemoveModal(false);
+            setSelectedClub(null);
+          }}
+          accept={() => removeClubSubscription()}
         />
       )}
       <div className='clubs-container'>

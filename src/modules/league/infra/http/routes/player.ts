@@ -13,6 +13,8 @@ import {
     registerPlayerController,
 } from "../../../../users/useCases/registerPlayerFromAdmin";
 import { addPlayerDeviceController } from "../../../useCases/addPlayerDevice";
+import { deletePlayerController } from "../../../useCases/deletePlayer";
+import { changePlayerClubController } from "../../../useCases/changePlayerClub";
 
 const playerRoute = express.Router();
 
@@ -54,6 +56,18 @@ playerRoute.get(
     "/stats-by-userid/:userId",
     middleware.ensureAuthenticated() as any,
     (req, res) => getPlayerStatsByUserIdController.execute(req, res)
+);
+
+playerRoute.delete(
+    "/:playerId",
+    middleware.adminAuthenticated() as any,
+    (req, res) => deletePlayerController.execute(req, res)
+);
+
+playerRoute.put(
+    "/change-club",
+    middleware.adminAuthenticated() as any,
+    (req, res) => changePlayerClubController.execute(req, res)
 );
 
 export { playerRoute };

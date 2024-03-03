@@ -25,7 +25,9 @@ export class SequelizePlayerRepository implements PlayerRepository {
         let rawList = await PlayerModel.findAll(baseQuery);
 
         if (!query?.includeDeleted) {
-            rawList = rawList.filter((o: any) => o.user.isDeleted == false);
+            rawList = rawList.filter(
+                (o: any) => o.user.isDeleted == false && o.isDeleted == false
+            );
         }
 
         const list = rawList.map((p: any) => PlayerMap.toDomain(p)!);
