@@ -91,26 +91,37 @@ const Trackers = () => {
     setSearch(e.target.value);
   };
 
-  const trackersTable = filteredTrackers.map((item) => {
-    return (
-      <tr key={item.userId}>
-        <td>{item.firstName}</td>
-        <td className="text-center">{item.lastName}</td>
-        <td className="text-center">{item.email}</td>
-        <td className="text-center">
-          <Dropdown>
-            <Dropdown.Toggle as={Button} id="dropdown-basic" variant="link">
-              <FontAwesomeIcon className="ellipsis" icon={faEllipsisVertical} />
-            </Dropdown.Toggle>
+  const trackersTable = filteredTrackers
+    .filter((i) => i.isAdmin == false)
+    .map((item) => {
+      return (
+        <tr key={item.userId}>
+          <td>{item.firstName}</td>
+          <td className="text-center">{item.lastName}</td>
+          <td className="text-center">{item.email}</td>
+          <td className="text-center">
+            <Dropdown>
+              <Dropdown.Toggle as={Button} id="dropdown-basic" variant="link">
+                <FontAwesomeIcon
+                  className="ellipsis"
+                  icon={faEllipsisVertical}
+                />
+              </Dropdown.Toggle>
 
-            <Dropdown.Menu>
-              <Dropdown.Item>Eliminar</Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-        </td>
-      </tr>
-    );
-  });
+              <Dropdown.Menu>
+                <Dropdown.Item
+                  onClick={() =>
+                    setRemoveActiton({ user: item, showModal: true })
+                  }
+                >
+                  Eliminar
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          </td>
+        </tr>
+      );
+    });
 
   const dismissModal = () => {
     setSearch("");
@@ -147,11 +158,11 @@ const Trackers = () => {
           title="Eliminar"
           question={`¿Estás seguro que quieres eliminar a ${removeAction.user?.firstName} ${removeAction.user?.lastName}`}
           dismiss={() => {
-            setRemoveActiton(prev => ({
+            setRemoveActiton((prev) => ({
               ...prev,
               user: null,
-              showModal: false
-            }))
+              showModal: false,
+            }));
           }}
           accept={() => handleRemoveUser()}
         />

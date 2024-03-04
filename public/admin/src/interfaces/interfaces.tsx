@@ -60,6 +60,8 @@ export interface IUser {
   email: string;
   firstName: string;
   lastName: string;
+  isAdmin: boolean;
+  canTrack: boolean;
 }
 
 export interface IUserPlayer {

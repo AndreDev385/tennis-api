@@ -74,6 +74,7 @@ export class RegisterPlayerBulk implements UseCase<any, Response> {
                     lastName: lastNameResult.getValue(),
                     email: emailResult.getValue(),
                     password: passwordResult.getValue(),
+                    isPlayer: true,
                 });
 
                 if (createUserResult.isFailure) {
@@ -98,7 +99,7 @@ export class RegisterPlayerBulk implements UseCase<any, Response> {
                             )
                         );
                     }
-                } catch (error) {}
+                } catch (error) { }
 
                 try {
                     club = await this.clubRepo.find({
