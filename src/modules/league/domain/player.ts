@@ -28,7 +28,7 @@ export class Player extends AggregateRoot<PlayerProps> {
         return this.props.userId;
     }
 
-    get clubId(): ClubId | null {
+    get clubId(): ClubId {
         return this.props.clubId;
     }
 
@@ -74,6 +74,11 @@ export class Player extends AggregateRoot<PlayerProps> {
 
     public changeClub(clubId: ClubId) {
         this.props.clubId = clubId;
+    }
+
+    public restore(clubId: ClubId) {
+        this.props.clubId = clubId;
+        this.props.isDeleted = false;
     }
 
     public static create(
