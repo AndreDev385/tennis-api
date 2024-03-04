@@ -54,6 +54,7 @@ export class PlayerMap implements Mapper<Player> {
                 firstName: player.firstName.value,
                 lastName: player.lastName.value,
             },
+            isDeleted: player.isDeleted,
             devices: player.devices.getItems(),
         };
     }
