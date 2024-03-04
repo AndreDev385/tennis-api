@@ -28,7 +28,6 @@ export class LoginUseCase implements UseCase<LoginDto, Response> {
     }
 
     async execute(request: LoginDto): Promise<Response> {
-        console.log(request);
         const emailOrError = UserEmail.create(request.email);
         const passwordOrError = UserPassword.create({
             value: request.password,
@@ -58,6 +57,10 @@ export class LoginUseCase implements UseCase<LoginDto, Response> {
 
             if (!validPassword) {
                 return left(new LoginUseCaseErrors.PasswordDoesntMatchError());
+            }
+
+            if (user.isDeleted) {
+                return left(new LoginUseCaseErrors.DeletedPlayer());
             }
 
             try {

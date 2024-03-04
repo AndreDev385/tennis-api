@@ -92,7 +92,7 @@ export class CreateClashUseCase implements UseCase<CreateClashDto, Response> {
 
             // team 2
             const team2Creation = await this.teamCreationServ.execute({
-                teamName: request.team1Name,
+                teamName: request.team2Name,
                 club: club2,
                 category,
             })

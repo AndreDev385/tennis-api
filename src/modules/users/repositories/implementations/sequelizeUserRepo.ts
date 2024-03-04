@@ -21,6 +21,7 @@ export class SequelizeUserRepo implements UserRepository {
     }
 
     async getUserByEmail(email: UserEmail): Promise<User> {
+        console.log(email);
         const user = await UserModel.findOne({
             where: { email: email.value },
         });

@@ -64,6 +64,8 @@ export class SequelizeTrackerRepository implements TrackerRepository {
             rivalDobleFault: raw.rivalDobleFault,
             gamesWonReturning: raw.gamesWonReturning,
             rivalFirstServIn: raw.rivalFirstServIn,
+            rivalFirstServWon: raw.rivalFirstServWon,
+            rivalSecondServWon: raw.rivalSecondServWon,
             gamesLostReturning: raw.gamesLostReturning,
             winBreakPtsChances: raw.winBreakPtsChances,
             rivalSecondServIn: raw.rivalSecondServIn,

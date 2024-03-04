@@ -1,25 +1,25 @@
-.trackers-container{
-    .title-wrap{
+.trackers-container {
+    .title-wrap {
         display: flex;
         justify-content: space-between;
         align-items: center;
 
-        h1{
+        h1 {
             margin: 2rem;
         }
-        button{
+
+        button {
             margin-right: 5rem;
         }
     }
 
-    button{
-        color:#ffffff;
-        svg{
+    button {
+        svg {
             margin-right: .5rem;
         }
     }
 
-    .filter-container{
+    .filter-container {
         margin: 1rem 3rem;
         width: 40%;
     }

@@ -57,19 +57,30 @@ export class CreatePlayer
             }
 
             try {
-                const alreadyExist = await this.playerRepo.exist(
+                const alreadyExist = await this.playerRepo.getPlayerByUserId(
                     request.userId
                 );
 
-                if (alreadyExist) {
-                    return left(
-                        new CreatePlayerErrors.PlayerAlreadyExistError(
-                            user.firstName.value
-                        )
-                    );
+                /*
+                 * Case: user is a deleted player
+                 * restore player and assign clubId
+                 */
+                if (alreadyExist.isDeleted) {
+                    alreadyExist.restore(club.clubId);
+
+                    await this.playerRepo.save(alreadyExist);
+
+                    return right(Result.ok<void>());
+                } else {
+                    // this user is already a player and is not deleted
+                    return left(Result.fail<string>("Este jugador ya esta registrado!"));
                 }
-            } catch (error) {
-                return left(new AppError.UnexpectedError(error));
+            } catch (error) { }
+
+            if (!club.isSubscribed) {
+                return left(
+                    Result.fail<string>("El club no se encuentra subscrito")
+                );
             }
 
             const playerOrError = Player.create({

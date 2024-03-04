@@ -47,6 +47,6 @@ export class CreateClashController extends BaseController {
                     );
             }
         }
-        return this.ok(res, { matchId: result.value.getValue().id.toString() });
+        return this.ok(res, { clashId: result.value.getValue().id.toString() });
     }
 }

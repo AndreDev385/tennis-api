@@ -20,12 +20,14 @@ export class SequelizePlayerRepository implements PlayerRepository {
     async list(query?: PlayerQuery): Promise<Player[]> {
         const baseQuery = this.baseQuery();
 
-        baseQuery.where = query
+        baseQuery.where = query;
 
         let rawList = await PlayerModel.findAll(baseQuery);
 
         if (!query?.includeDeleted) {
-            rawList = rawList.filter((o: any) => o.user.isDeleted == false);
+            rawList = rawList.filter(
+                (o: any) => o.user.isDeleted == false && o.isDeleted == false
+            );
         }
 
         const list = rawList.map((p: any) => PlayerMap.toDomain(p)!);

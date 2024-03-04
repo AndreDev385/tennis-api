@@ -1,6 +1,6 @@
-.player-stats-container{
-    .title{
-        span{
+.player-stats-container {
+    .title {
+        span {
             background-color: #011755;
             color: #fff;
             text-align: center;
@@ -8,12 +8,14 @@
         }
     }
 
-    .filter-container{
+    .filter-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
         margin: 1rem 3rem;
-        width: 15%;
+        gap: 1rem;
     }
 
-    tbody{
+    tbody {
         height: auto !important;
     }
 }

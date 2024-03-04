@@ -17,7 +17,7 @@ import { adsRouter } from "../../../../modules/league/infra/http/routes/ad";
 
 const v1Router = express.Router();
 
-v1Router.get("/", (req, res) => {
+v1Router.get("/", (_, res) => {
     return res.json({ message: "Yo! we're up" });
 });
 

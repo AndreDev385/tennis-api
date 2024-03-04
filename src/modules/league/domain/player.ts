@@ -7,13 +7,16 @@ import { Result } from "../../../shared/core/Result";
 import { FirstName, LastName } from "../../users/domain/names";
 import { AggregateRoot } from "../../../shared/domain/AggregateRoot";
 import { PlayerCreated } from "./events/playerCreated";
+import { Devices } from "./devices";
 
 interface PlayerProps {
     userId: UserId;
     clubId: ClubId;
-    firstName: FirstName,
-    lastName: LastName,
+    firstName: FirstName;
+    lastName: LastName;
     avatar?: string | null;
+    devices?: Devices;
+    isDeleted?: boolean;
 }
 
 export class Player extends AggregateRoot<PlayerProps> {
@@ -41,12 +44,41 @@ export class Player extends AggregateRoot<PlayerProps> {
         return this.props.avatar;
     }
 
+    get devices(): Devices {
+        return this.props.devices!;
+    }
+
+    get isDeleted(): boolean {
+        return this.props.isDeleted!;
+    }
+
     private constructor(props: PlayerProps, id?: UniqueEntityID) {
         super(props, id);
     }
 
     public addAvatar(path: string) {
         this.props.avatar = path;
+    }
+
+    public addDevice(token: string) {
+        if (this.devices.exists(token)) {
+            return;
+        }
+        this.devices.add(token);
+    }
+
+    public delete() {
+        this.props.isDeleted = true;
+        // event
+    }
+
+    public changeClub(clubId: ClubId) {
+        this.props.clubId = clubId;
+    }
+
+    public restore(clubId: ClubId) {
+        this.props.clubId = clubId;
+        this.props.isDeleted = false;
     }
 
     public static create(
@@ -64,12 +96,19 @@ export class Player extends AggregateRoot<PlayerProps> {
             return Result.fail<Player>(guardResult.getErrorValue());
         }
 
-        const isNew = !!id == false
+        const isNew = !!id == false;
 
-        const player = new Player(props, id);
+        const player = new Player(
+            {
+                ...props,
+                devices: props.devices ?? Devices.create(),
+                isDeleted: props.isDeleted ?? false,
+            },
+            id
+        );
 
         if (isNew) {
-            player.addDomainEvent(new PlayerCreated(player))
+            player.addDomainEvent(new PlayerCreated(player));
         }
 
         return Result.ok<Player>(player);

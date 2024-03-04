@@ -101,7 +101,6 @@ const TrackerModel = sequelize.define<TrackerData>(
             type: DataTypes.INTEGER,
             defaultValue: 0,
             allowNull: true,
-
         },
         rivalFirstServIn: {
             type: DataTypes.INTEGER,

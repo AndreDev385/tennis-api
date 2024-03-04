@@ -128,7 +128,7 @@ const Ads = () => {
           {clubs.filter(club => club.clubId === item.clubId)[0]? clubs.filter(club => club.clubId === item.clubId)[0].name: "-"}
         </td>
         <td className='text-center'>
-          <img src={item.image} />
+          <img src={item.image} alt="ad" />
         </td>
         <td className='text-center'>
           <Button variant="danger" onClick={() => handleDeleteModal(item.adId)}>

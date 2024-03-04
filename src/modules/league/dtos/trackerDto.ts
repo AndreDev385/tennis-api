@@ -14,19 +14,21 @@ export interface TrackerDto {
 
     rivalPointsWinnedFirstServ: number;
     rivalPointsWinnedSecondServ: number;
+    rivalFirstServWon: number;
+    rivalSecondServWon: number;
     rivalFirstServIn: number;
     rivalSecondServIn: number;
+
     rivalPointsWinnedFirstReturn: number;
     rivalPointsWinnedSecondReturn: number;
     rivalFirstReturnIn: number;
     rivalSecondReturnIn: number;
-    rivalFirstServWon: number;
-    rivalSecondServWon: number;
 
     rivalAces: number;
     rivalDobleFault: number;
     rivalNoForcedErrors: number;
     rivalWinners: number;
+
     shortRallyWon: number;
     mediumRallyWon: number;
     longRallyWon: number;

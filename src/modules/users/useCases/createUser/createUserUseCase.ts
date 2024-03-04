@@ -8,7 +8,6 @@ import { UserPassword } from "../../domain/password";
 import { UserRepository } from "../../repositories/userRepo";
 import { CreateUserDto } from "./createUserDto";
 import { CreateUserErrors } from "./createUserErrors";
-import { LoginUseCase } from "../login/loginUseCase";
 
 type Response = Either<
     | CreateUserErrors.EmailAlreadyExistsError

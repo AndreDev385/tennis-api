@@ -49,7 +49,6 @@ interface TeamStatsProps {
 }
 
 export class TeamStats extends Entity<TeamStatsProps> {
-
     private SUPER_TIE_BREAK_POINTS = 10;
 
     get teamStatsId(): TeamStatsId {
@@ -123,36 +122,42 @@ export class TeamStats extends Entity<TeamStatsProps> {
     }
 
     get totalSuperTieBreaksWon(): number {
-        return this.props.superTieBreaksWonAsLocal + this.superTieBreaksWonAsVisitor;
+        return (
+            this.props.superTieBreaksWonAsLocal +
+            this.superTieBreaksWonAsVisitor
+        );
     }
 
     get totalSuperTieBreaksPlayed(): number {
-        return this.props.superTieBreaksPlayedAsLocal + this.superTieBreaksPlayedAsVisitor;
+        return (
+            this.props.superTieBreaksPlayedAsLocal +
+            this.superTieBreaksPlayedAsVisitor
+        );
     }
     // matchs
     get matchWonAsLocal(): number {
-        return this.props.matchWonAsLocal
+        return this.props.matchWonAsLocal;
     }
     get matchLostAsLocal(): number {
-        return this.props.matchLostAsLocal
+        return this.props.matchLostAsLocal;
     }
     get matchPlayedAsLocal(): number {
-        return this.props.matchPlayedAsLocal
+        return this.props.matchPlayedAsLocal;
     }
     get matchWonAsVisitor(): number {
-        return this.props.matchWonAsVisitor
+        return this.props.matchWonAsVisitor;
     }
     get matchLostAsVisitor(): number {
-        return this.props.matchLostAsVisitor
+        return this.props.matchLostAsVisitor;
     }
     get matchPlayedAsVisitor(): number {
-        return this.props.matchPlayedAsVisitor
+        return this.props.matchPlayedAsVisitor;
     }
     get totalMatchWon(): number {
-        return this.props.matchWonAsLocal + this.props.matchWonAsVisitor
+        return this.props.matchWonAsLocal + this.props.matchWonAsVisitor;
     }
     get totalMatchPlayed(): number {
-        return this.props.matchPlayedAsLocal + this.props.matchPlayedAsVisitor
+        return this.props.matchPlayedAsLocal + this.props.matchPlayedAsVisitor;
     }
     // matchs with first set
     get matchsWonWithFirstSetWonAsLocal(): number {
@@ -169,11 +174,17 @@ export class TeamStats extends Entity<TeamStatsProps> {
     }
 
     get totalMatchsWonWithFirstSetWon(): number {
-        return this.props.matchsWonWithFirstSetWonAsLocal + this.props.matchsWonWithFirstSetWonAsVisitor;
+        return (
+            this.props.matchsWonWithFirstSetWonAsLocal +
+            this.props.matchsWonWithFirstSetWonAsVisitor
+        );
     }
 
     get totalMatchsPlayedWithFirstSetWon(): number {
-        return this.props.matchsPlayedWithFirstSetWonAsLocal + this.props.matchsPlayedWithFirstSetWonAsVisitor;
+        return (
+            this.props.matchsPlayedWithFirstSetWonAsLocal +
+            this.props.matchsPlayedWithFirstSetWonAsVisitor
+        );
     }
 
     get clashWonAsLocal(): number {
@@ -206,11 +217,11 @@ export class TeamStats extends Entity<TeamStatsProps> {
 
     public addClashStats(clash: Clash) {
         for (const match of clash.matchs) {
-            this.addSuperTieBreaksStats(match, clash.isLocal)
-            this.addFirstSetWonStats(match, clash.isLocal)
-            this.addMatchStats(match, clash.isLocal)
-            this.addGamesStats(match.sets.getItems(), clash.isLocal)
-            this.addSetStats(match.sets.getItems(), clash.isLocal)
+            this.addSuperTieBreaksStats(match, clash.isLocal);
+            this.addFirstSetWonStats(match, clash.isLocal);
+            this.addMatchStats(match, clash.isLocal);
+            this.addGamesStats(match.sets.getItems(), clash.isLocal);
+            this.addSetStats(match.sets.getItems(), clash.isLocal);
         }
 
         if (clash.isLocal) {
@@ -218,11 +229,14 @@ export class TeamStats extends Entity<TeamStatsProps> {
             if (clash.wonClash) this.props.clashWonAsLocal += 1;
         } else {
             this.props.clashPlayedAsVisitor += 1;
-            if (clash.wonClash) this.props.clashWonAsVisitor += 1
+            if (clash.wonClash) this.props.clashWonAsVisitor += 1;
         }
     }
 
     private addMatchStats(match: Match, isLocal: boolean) {
+        if (match.matchWon === null) {
+            return
+        }
         if (isLocal) {
             this.props.matchPlayedAsLocal += 1;
             if (match.matchWon) this.props.matchWonAsLocal += 1;
@@ -237,14 +251,14 @@ export class TeamStats extends Entity<TeamStatsProps> {
     private addSuperTieBreaksStats(match: Match, isLocal: boolean) {
         if (match.superTieBreak) {
             if (isLocal) {
-                this.props.superTieBreaksPlayedAsLocal += 1
+                this.props.superTieBreaksPlayedAsLocal += 1;
                 if (match.matchWon) {
-                    this.props.superTieBreaksWonAsLocal += 1
+                    this.props.superTieBreaksWonAsLocal += 1;
                 }
             } else {
-                this.props.superTieBreaksPlayedAsVisitor += 1
+                this.props.superTieBreaksPlayedAsVisitor += 1;
                 if (match.matchWon) {
-                    this.props.superTieBreaksWonAsVisitor += 1
+                    this.props.superTieBreaksWonAsVisitor += 1;
                 }
             }
         }
@@ -272,14 +286,14 @@ export class TeamStats extends Entity<TeamStatsProps> {
                 if (set.setWon !== null) {
                     this.props.setsPlayedAsLocal += 1;
                     if (set.setWon) {
-                        this.props.setsWonAsLocal += 1
+                        this.props.setsWonAsLocal += 1;
                     }
                 }
             } else {
                 if (set.setWon !== null) {
                     this.props.setsPlayedAsVisitor += 1;
                     if (set.setWon) {
-                        this.props.setsWonAsVisitor += 1
+                        this.props.setsWonAsVisitor += 1;
                     }
                 }
             }
@@ -288,20 +302,27 @@ export class TeamStats extends Entity<TeamStatsProps> {
 
     private addGamesStats(sets: Set[], isLocal: boolean) {
         for (const set of sets) {
-            if (set.myGames >= this.SUPER_TIE_BREAK_POINTS || set.rivalGames >= this.SUPER_TIE_BREAK_POINTS) {
+            if (
+                set.myGames >= this.SUPER_TIE_BREAK_POINTS ||
+                set.rivalGames >= this.SUPER_TIE_BREAK_POINTS
+            ) {
                 return;
             }
             if (isLocal) {
-                this.props.gamesPlayedAsLocal += (set.myGames + set.rivalGames)
+                this.props.gamesPlayedAsLocal += set.myGames + set.rivalGames;
                 this.props.gamesWonAsLocal += set.myGames;
             } else {
-                this.props.gamesPlayedAsVisitor += (set.myGames + set.rivalGames)
+                this.props.gamesPlayedAsVisitor += set.myGames + set.rivalGames;
                 this.props.gamesWonAsVisitor += set.myGames;
             }
         }
     }
 
-    public static createEmptyTeamStats(seasonId: SeasonId, teamId: TeamId, journey: Journey): TeamStats {
+    public static createEmptyTeamStats(
+        seasonId: SeasonId,
+        teamId: TeamId,
+        journey: Journey
+    ): TeamStats {
         return new TeamStats({
             journey: journey,
             teamId: teamId,
@@ -338,47 +359,132 @@ export class TeamStats extends Entity<TeamStatsProps> {
             matchsPlayedWithFirstSetWonAsLocal: 0,
             matchsWonWithFirstSetWonAsVisitor: 0,
             matchsWonWithFirstSetWonAsLocal: 0,
-        })
+        });
     }
 
-    public static create(props: TeamStatsProps, id?: UniqueEntityID): Result<TeamStats> {
+    public static create(
+        props: TeamStatsProps,
+        id?: UniqueEntityID
+    ): Result<TeamStats> {
         const result = Guard.againstNullOrUndefinedBulk([
-            { argument: props.clashPlayedAsLocal, argumentName: 'encuentros como local' },
-            { argument: props.clashPlayedAsVisitor, argumentName: 'encuentros como visitante' },
-            { argument: props.clashWonAsLocal, argumentName: 'encuentros ganados como local' },
-            { argument: props.clashWonAsVisitor, argumentName: 'encuentros ganados como visitante' },
+            {
+                argument: props.clashPlayedAsLocal,
+                argumentName: "encuentros como local",
+            },
+            {
+                argument: props.clashPlayedAsVisitor,
+                argumentName: "encuentros como visitante",
+            },
+            {
+                argument: props.clashWonAsLocal,
+                argumentName: "encuentros ganados como local",
+            },
+            {
+                argument: props.clashWonAsVisitor,
+                argumentName: "encuentros ganados como visitante",
+            },
 
-            { argument: props.gamesPlayedAsLocal, argumentName: 'games como local' },
-            { argument: props.gamesPlayedAsVisitor, argumentName: 'games como visitante' },
-            { argument: props.gamesWonAsLocal, argumentName: 'games ganados como local' },
-            { argument: props.gamesWonAsVisitor, argumentName: 'games ganados como visitante' },
+            {
+                argument: props.gamesPlayedAsLocal,
+                argumentName: "games como local",
+            },
+            {
+                argument: props.gamesPlayedAsVisitor,
+                argumentName: "games como visitante",
+            },
+            {
+                argument: props.gamesWonAsLocal,
+                argumentName: "games ganados como local",
+            },
+            {
+                argument: props.gamesWonAsVisitor,
+                argumentName: "games ganados como visitante",
+            },
 
-            { argument: props.setsPlayedAsLocal, argumentName: 'sets como local' },
-            { argument: props.setsPlayedAsVisitor, argumentName: 'sets como visitante' },
-            { argument: props.setsWonAsLocal, argumentName: 'sets ganados como local' },
-            { argument: props.setsWonAsVisitor, argumentName: 'sets ganados como visitante' },
+            {
+                argument: props.setsPlayedAsLocal,
+                argumentName: "sets como local",
+            },
+            {
+                argument: props.setsPlayedAsVisitor,
+                argumentName: "sets como visitante",
+            },
+            {
+                argument: props.setsWonAsLocal,
+                argumentName: "sets ganados como local",
+            },
+            {
+                argument: props.setsWonAsVisitor,
+                argumentName: "sets ganados como visitante",
+            },
 
-            { argument: props.superTieBreaksPlayedAsLocal, argumentName: 'super tie-break como local' },
-            { argument: props.superTieBreaksPlayedAsVisitor, argumentName: 'super tie-break  como visitante' },
-            { argument: props.superTieBreaksWonAsLocal, argumentName: 'super tie-break  ganados como local' },
-            { argument: props.superTieBreaksWonAsVisitor, argumentName: 'super tie-break ganados como visitante' },
+            {
+                argument: props.superTieBreaksPlayedAsLocal,
+                argumentName: "super tie-break como local",
+            },
+            {
+                argument: props.superTieBreaksPlayedAsVisitor,
+                argumentName: "super tie-break  como visitante",
+            },
+            {
+                argument: props.superTieBreaksWonAsLocal,
+                argumentName: "super tie-break  ganados como local",
+            },
+            {
+                argument: props.superTieBreaksWonAsVisitor,
+                argumentName: "super tie-break ganados como visitante",
+            },
 
-            { argument: props.matchWonAsLocal, argumentName: 'paridos ganados como local' },
-            { argument: props.matchLostAsLocal, argumentName: 'paridos perdidos como local' },
-            { argument: props.matchPlayedAsLocal, argumentName: 'paridos jugados como local' },
-            { argument: props.matchWonAsVisitor, argumentName: 'paridos ganados como visitante' },
-            { argument: props.matchLostAsVisitor, argumentName: 'paridos perdidos como visitante' },
-            { argument: props.matchPlayedAsVisitor, argumentName: 'paridos jugados como visitante' },
+            {
+                argument: props.matchWonAsLocal,
+                argumentName: "paridos ganados como local",
+            },
+            {
+                argument: props.matchLostAsLocal,
+                argumentName: "paridos perdidos como local",
+            },
+            {
+                argument: props.matchPlayedAsLocal,
+                argumentName: "paridos jugados como local",
+            },
+            {
+                argument: props.matchWonAsVisitor,
+                argumentName: "paridos ganados como visitante",
+            },
+            {
+                argument: props.matchLostAsVisitor,
+                argumentName: "paridos perdidos como visitante",
+            },
+            {
+                argument: props.matchPlayedAsVisitor,
+                argumentName: "paridos jugados como visitante",
+            },
 
-            { argument: props.matchsPlayedWithFirstSetWonAsVisitor, argumentName: 'paridos jugados ganando el primer set como visitante' },
-            { argument: props.matchsPlayedWithFirstSetWonAsLocal, argumentName: 'partidos jugados ganando el primer sett como local' },
-            { argument: props.matchsWonWithFirstSetWonAsVisitor, argumentName: 'partidos ganados ganando el primer set como visitante' },
-            { argument: props.matchsWonWithFirstSetWonAsLocal, argumentName: 'partidos ganados ganando el primer set como local' },
+            {
+                argument: props.matchsPlayedWithFirstSetWonAsVisitor,
+                argumentName:
+                    "paridos jugados ganando el primer set como visitante",
+            },
+            {
+                argument: props.matchsPlayedWithFirstSetWonAsLocal,
+                argumentName:
+                    "partidos jugados ganando el primer sett como local",
+            },
+            {
+                argument: props.matchsWonWithFirstSetWonAsVisitor,
+                argumentName:
+                    "partidos ganados ganando el primer set como visitante",
+            },
+            {
+                argument: props.matchsWonWithFirstSetWonAsLocal,
+                argumentName:
+                    "partidos ganados ganando el primer set como local",
+            },
 
             { argument: props.journey, argumentName: "jornada" },
             { argument: props.seasonId, argumentName: "temporada" },
             { argument: props.teamId, argumentName: "equipo" },
-        ])
+        ]);
 
         if (result.isFailure) {
             return Result.fail<TeamStats>(result.getErrorValue());

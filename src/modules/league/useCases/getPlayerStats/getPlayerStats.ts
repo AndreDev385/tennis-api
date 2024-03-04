@@ -5,22 +5,28 @@ import { Player } from "../../domain/player";
 import { PlayerTracker } from "../../domain/playerTracker";
 import { PlayerTrackerDto } from "../../dtos/playerTrackerDto";
 import { PlayerRepository } from "../../repositories/playerRepo";
-import { PlayerTrackerQuery, PlayerTrackerRepository } from "../../repositories/playerTrackerRepo";
-
+import {
+    PlayerTrackerQuery,
+    PlayerTrackerRepository,
+} from "../../repositories/playerTrackerRepo";
 
 export interface GetPlayerStatsRequest {
     userId: string;
+    isDouble: boolean;
     season?: string;
-    last3?: string;
+    limit?: number;
 }
 
-type Response = Either<AppError.UnexpectedError | AppError.NotFoundError | Result<string>, Result<PlayerTrackerDto>>;
+type Response = Either<
+    AppError.UnexpectedError | AppError.NotFoundError | Result<string>,
+    Result<PlayerTrackerDto>
+>;
 
 export class GetPlayerStats
     implements UseCase<GetPlayerStatsRequest, Response>
 {
     private playerTrackerRepo: PlayerTrackerRepository;
-    private playerRepo: PlayerRepository
+    private playerRepo: PlayerRepository;
 
     constructor(repo: PlayerTrackerRepository, playerRepo: PlayerRepository) {
         this.playerTrackerRepo = repo;
@@ -30,47 +36,37 @@ export class GetPlayerStats
     async execute(request: GetPlayerStatsRequest): Promise<Response> {
         let player: Player;
         try {
-            const query: any = {};
+            try {
+                player = await this.playerRepo.getPlayerByUserId(
+                    request.userId
+                );
+            } catch (error) {
+                return left(new AppError.NotFoundError(error));
+            }
+
+            const query: PlayerTrackerQuery = {
+                playerId: player.playerId.id.toString(),
+                isDouble: request.isDouble ?? true
+            };
 
             for (const [key, value] of Object.entries(request)) {
                 if (key == "season") {
-                    query.season = value as string;
+                    query.seasonId = value as string;
                 }
-                if (key == "last") {
-                    query.last = true;
-                }
-                if (key == "last3" && !!value == true) {
-                    query.last3 = true;
+                if (key == "limit") {
+                    query.limit = value as number;
                 }
             }
 
-            try {
-                player = await this.playerRepo.getPlayerByUserId(request.userId);
-            } catch (error) {
-                return left(new AppError.NotFoundError(error))
-            }
-
-            if (query.season && !checkIfValidUUID(query.season)) {
+            if (query.seasonId && !checkIfValidUUID(query.seasonId)) {
                 return left(Result.fail<string>("Temporada invalida"));
             }
 
-            const statsQuery: PlayerTrackerQuery = {
-                playerId: player.playerId.id.toString(),
-            }
+            const list = await this.playerTrackerRepo.getByPlayerId(query);
 
-            if (query.last) {
-                statsQuery.limit = 1;
+            if (list.length == 0) {
+                return left(Result.fail<string>("No se han encontrado estadísticas"))
             }
-
-            if (query.last3) {
-                statsQuery.limit = 3;
-            }
-
-            if (query.season != null && query.season != "") {
-                statsQuery.seasonId = query.season;
-            }
-
-            const list = await this.playerTrackerRepo.getByPlayerId(statsQuery);
 
             return right(Result.ok(calculatePlayerStats(list)));
         } catch (error) {
@@ -121,7 +117,7 @@ function calculatePlayerStats(stats: Array<PlayerTracker>) {
         bckgPointsLost: 0,
         bckgError: 0,
         bckgWinner: 0,
-    }
+    };
 
     for (const matchStats of stats) {
         totalStats.pointsWon += matchStats.pointsWon;
@@ -140,8 +136,10 @@ function calculatePlayerStats(stats: Array<PlayerTracker>) {
         totalStats.secondServWon += matchStats.secondServWon;
         totalStats.aces += matchStats.aces;
         totalStats.dobleFaults += matchStats.dobleFaults;
-        totalStats.pointsWinnedFirstReturn += matchStats.pointsWinnedFirstReturn;
-        totalStats.pointsWinnedSecondReturn += matchStats.pointsWinnedSecondReturn;
+        totalStats.pointsWinnedFirstReturn +=
+            matchStats.pointsWinnedFirstReturn;
+        totalStats.pointsWinnedSecondReturn +=
+            matchStats.pointsWinnedSecondReturn;
         totalStats.firstReturnIn += matchStats.firstReturnIn;
         totalStats.secondReturnIn += matchStats.secondReturnIn;
         totalStats.firstReturnOut += matchStats.firstReturnOut;
@@ -158,15 +156,16 @@ function calculatePlayerStats(stats: Array<PlayerTracker>) {
         totalStats.bckgPointsLost += matchStats.bckgPointsLost;
         totalStats.bckgWinner += matchStats.bckgWinner;
         totalStats.bckgError += matchStats.bckgError;
-        totalStats.gamesWonServing += matchStats.gamesWonServing
-        totalStats.gamesLostServing += matchStats.gamesLostServing
+        totalStats.gamesWonServing += matchStats.gamesWonServing;
+        totalStats.gamesLostServing += matchStats.gamesLostServing;
     }
 
     return totalStats;
 }
 
 function checkIfValidUUID(str: string) {
-    const regexExp = /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/gi;
+    const regexExp =
+        /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/gi;
 
     return regexExp.test(str);
 }

@@ -17,6 +17,6 @@ export async function requestClubSubscription(clubId: string) {
 
     return data;
   } catch (error) {
-    throw new Error(error);
+    throw new Error(error as string);
   }
 }

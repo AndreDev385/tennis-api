@@ -32,13 +32,10 @@ export class ListClubs implements UseCase<any, Response> {
                 }
             }
 
-            console.log(query, "QUERY");
-
             const list = await this.repo.list(query);
 
             return right(Result.ok(list));
         } catch (error) {
-            console.log("error", error);
             return left(new AppError.UnexpectedError(error));
         }
     }

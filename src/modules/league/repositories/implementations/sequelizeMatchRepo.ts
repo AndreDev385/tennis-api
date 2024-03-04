@@ -41,6 +41,8 @@ export class SequelizeMatchRepository implements MatchRepository {
             where: { matchId: match.matchId.id.toString() },
         });
 
+        console.log(raw.sets);
+
         if (!!exist === true) {
             await MatchModel.update(raw, {
                 where: { matchId: match.matchId.id.toString() },
@@ -96,6 +98,8 @@ export class SequelizeMatchRepository implements MatchRepository {
             category: raw.category!,
             status: raw.status,
             matchWon: raw.matchWon,
+            createdAt: raw.createdAt,
+            updatedAt: raw.updatedAt,
         })!;
     }
 
@@ -146,13 +150,14 @@ export class SequelizeMatchRepository implements MatchRepository {
                 category: m.category!,
                 status: m.status,
                 matchWon: m.matchWon,
+                createdAt: m.createdAt,
+                updatedAt: m.updatedAt,
             })!
         );
 
         return matchs;
     }
-
-    async list(query: MatchQuery): Promise<Match[]> {
+async list(query: MatchQuery): Promise<Match[]> {
         const baseQuery = this.baseQuery();
         baseQuery.where = query;
 
@@ -188,6 +193,8 @@ export class SequelizeMatchRepository implements MatchRepository {
                 category: m.category!,
                 status: m.status,
                 matchWon: m.matchWon,
+                createdAt: m.createdAt,
+                updatedAt: m.updatedAt,
             })!
         );
 

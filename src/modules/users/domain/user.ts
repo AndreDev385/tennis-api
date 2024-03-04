@@ -10,6 +10,7 @@ import { JWTToken } from "./jwt";
 import { UserLoggedIn } from "./events/userLoggedIn";
 import { UserCreated } from "./events/userCreated";
 import { UserDeleted } from "./events/userDeleted";
+import { ProvisionalPasswordGranted } from "./events/provisionalPasswordGranted";
 
 interface UserProps {
     firstName: FirstName;
@@ -74,7 +75,15 @@ export class User extends AggregateRoot<UserProps> {
         return this.props.lastLogin;
     }
 
-    public editUser(firstName: FirstName, lastName: LastName, email: UserEmail) {
+    public provisionalPasswordGranted(password: string) {
+        this.addDomainEvent(new ProvisionalPasswordGranted(this, password));
+    }
+
+    public editUser(
+        firstName: FirstName,
+        lastName: LastName,
+        email: UserEmail
+    ) {
         this.props.firstName = firstName;
         this.props.lastName = lastName;
         this.props.email = email;

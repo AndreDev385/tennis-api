@@ -46,6 +46,17 @@ module.exports = {
                 createdAt: new Date(),
                 updatedAt: new Date(),
             },
+            {
+                userId: v4(),
+                email: "vivi.aure97@gmail.com",
+                password,
+                firstName: "Viviana",
+                lastName: "Aure",
+                canTrack: true,
+                isAdmin: true,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            },
             // end admins
             // trackers 
             {

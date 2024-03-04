@@ -59,67 +59,10 @@ export class MatchTracker extends Entity<MatchTrackerProps> {
         return this.props.partner;
     }
 
-    get firstServIn(): number {
-        if (this.partner != null) {
-            return this.me.firstServIn + this.partner.firstServIn;
-        }
-        return this.me.firstServIn
-    }
-
-    get secondServIn(): number {
-        if (this.partner != null) {
-            return this.me.secondServIn + this.partner.secondServIn;
-        }
-        return this.me.secondServIn
-    }
-
-    get rivalFirstServWon(): number {
-        return this.props.rivalFirstServWon;
-    }
-
-    get rivalSecondServWon(): number {
-        return this.props.rivalSecondServWon;
-    }
-
-    get dobleFaults(): number {
-        if (this.partner != null) {
-            return this.me.dobleFaults + this.partner.dobleFaults;
-        }
-        return this.me.dobleFaults
-    }
-
-    get pointsWinnedFirstServ(): number {
-        if (this.partner != null) {
-            return this.me.pointsWinnedFirstServ + this.partner.pointsWinnedFirstServ;
-        }
-        return this.me.pointsWinnedFirstServ
-    }
-
-    get pointsWinnedSecondServ(): number {
-        if (this.partner != null) {
-            return this.me.pointsWinnedSecondServ + this.partner.pointsWinnedSecondServ;
-        }
-        return this.me.pointsWinnedSecondServ
-    }
-
-    get meshPointsWon(): number {
-        if (this.partner != null) {
-            return this.me.meshPointsWon + this.partner.meshPointsWon;
-        }
-        return this.me.meshPointsWon;
-    }
-
-    get meshPointsLost(): number {
-        if (this.partner != null) {
-            return this.me.meshPointsLost + this.partner.meshPointsLost;
-        }
-        return this.me.meshPointsLost;
-    }
-
+    // internal gets
     get gamesWonReturning(): number {
         return this.props.gamesWonReturning;
     }
-
     get gamesLostReturning(): number {
         return this.props.gamesLostReturning;
     }
@@ -129,17 +72,12 @@ export class MatchTracker extends Entity<MatchTrackerProps> {
     get breakPtsWinned(): number {
         return this.props.breakPtsWinned;
     }
-    get rivalAces(): number {
-        return this.props.rivalAces;
+
+    get rivalFirstServWon(): number {
+        return this.props.rivalFirstServWon;
     }
-    get rivalDobleFault(): number {
-        return this.props.rivalDobleFault;
-    }
-    get rivalNoForcedErrors(): number {
-        return this.props.rivalNoForcedErrors;
-    }
-    get rivalWinners(): number {
-        return this.props.rivalWinners;
+    get rivalSecondServWon(): number {
+        return this.props.rivalSecondServWon;
     }
     get rivalPointsWinnedFirstServ(): number {
         return this.props.rivalPointsWinnedFirstServ;
@@ -165,6 +103,19 @@ export class MatchTracker extends Entity<MatchTrackerProps> {
     get rivalSecondReturnIn(): number {
         return this.props.rivalSecondReturnIn;
     }
+
+    get rivalAces(): number {
+        return this.props.rivalAces;
+    }
+    get rivalDobleFault(): number {
+        return this.props.rivalDobleFault;
+    }
+    get rivalNoForcedErrors(): number {
+        return this.props.rivalNoForcedErrors;
+    }
+    get rivalWinners(): number {
+        return this.props.rivalWinners;
+    }
     get shortRallyWon(): number {
         return this.props.shortRallyWon;
     }
@@ -183,6 +134,190 @@ export class MatchTracker extends Entity<MatchTrackerProps> {
     get longRallyLost(): number {
         return this.props.longRallyLost;
     }
+    // end internal gets
+
+    // player tracker results
+    get gamesWonServing(): number {
+        if (this.partner) {
+            return this.me.gamesWonServing + this.partner.gamesWonServing;
+        }
+        return this.me.gamesWonServing;
+    }
+    get gamesLostServing(): number {
+        if (this.partner) {
+            return this.me.gamesLostServing + this.partner.gamesLostServing;
+        }
+        return this.me.gamesLostServing;
+    }
+    get pointsWinnedFirstServ(): number {
+        if (this.partner) {
+            return (
+                this.me.pointsWinnedFirstServ +
+                this.partner.pointsWinnedFirstServ
+            );
+        }
+        return this.me.pointsWinnedFirstServ;
+    }
+    get pointsWinnedSecondServ(): number {
+        if (this.partner) {
+            return (
+                this.me.pointsWinnedSecondServ +
+                this.partner.pointsWinnedSecondServ
+            );
+        }
+        return this.me.pointsWinnedSecondServ;
+    }
+    get firstServIn(): number {
+        if (this.partner) {
+            return this.me.firstServIn + this.partner.firstServIn;
+        }
+        return this.me.firstServIn;
+    }
+    get secondServIn(): number {
+        if (this.partner) {
+            return this.me.secondServIn + this.partner.secondServIn;
+        }
+        return this.me.secondServIn;
+    }
+    get firstServWon(): number {
+        if (this.partner) {
+            return this.me.firstServWon + this.partner.firstServWon;
+        }
+        return this.me.firstServWon;
+    }
+    get secondServWon(): number {
+        if (this.partner) {
+            return this.me.secondServWon + this.partner.secondServWon;
+        }
+        return this.me.secondServWon;
+    }
+    get aces(): number {
+        if (this.partner) {
+            return this.me.aces + this.partner.aces;
+        }
+        return this.me.aces;
+    }
+    get dobleFaults(): number {
+        if (this.partner) {
+            return this.me.dobleFaults + this.partner.dobleFaults;
+        }
+        return this.me.dobleFaults;
+    }
+    get pointsWinnedFirstReturn(): number {
+        if (this.partner) {
+            return (
+                this.me.pointsWinnedFirstReturn +
+                this.partner.pointsWinnedFirstReturn
+            );
+        }
+        return this.me.pointsWinnedFirstReturn;
+    }
+    get pointsWinnedSecondReturn(): number {
+        if (this.partner) {
+            return (
+                this.me.pointsWinnedSecondReturn +
+                this.partner.pointsWinnedSecondReturn
+            );
+        }
+        return this.me.pointsWinnedSecondReturn;
+    }
+    get firstReturnIn(): number {
+        if (this.partner) {
+            return this.me.firstReturnIn + this.partner.firstReturnIn;
+        }
+        return this.me.firstReturnIn;
+    }
+    get secondReturnIn(): number {
+        if (this.partner) {
+            return this.me.secondReturnIn + this.partner.secondReturnIn;
+        }
+        return this.me.secondReturnIn;
+    }
+    get firstReturnOut(): number {
+        if (this.partner) {
+            return this.me.firstReturnOut + this.partner.firstReturnOut;
+        }
+        return this.me.firstReturnOut;
+    }
+    get secondReturnOut(): number {
+        if (this.partner) {
+            return this.me.secondReturnOut + this.partner.secondReturnOut;
+        }
+        return this.me.secondReturnOut;
+    }
+    get firstReturnWon(): number {
+        if (this.partner) {
+            return this.me.firstReturnWon + this.partner.firstReturnWon;
+        }
+        return this.me.firstReturnWon;
+    }
+    get secondReturnWon(): number {
+        if (this.partner) {
+            return this.me.secondReturnWon + this.partner.secondReturnWon;
+        }
+        return this.me.secondReturnWon;
+    }
+    get firstReturnWinner(): number {
+        if (this.partner) {
+            return this.me.firstReturnWinner + this.partner.firstReturnWinner;
+        }
+        return this.me.firstReturnWinner;
+    }
+    get secondReturnWinner(): number {
+        if (this.partner) {
+            return this.me.secondReturnWinner + this.partner.secondReturnWinner;
+        }
+        return this.me.secondReturnWinner;
+    }
+    get meshPointsWon(): number {
+        if (this.partner) {
+            return this.me.meshPointsWon + this.partner.meshPointsWon;
+        }
+        return this.me.meshPointsWon;
+    }
+    get meshPointsLost(): number {
+        if (this.partner) {
+            return this.me.meshPointsLost + this.partner.meshPointsLost;
+        }
+        return this.me.meshPointsLost;
+    }
+    get meshWinner(): number {
+        if (this.partner) {
+            return this.me.meshWinner + this.partner.meshWinner;
+        }
+        return this.me.meshWinner;
+    }
+    get meshError(): number {
+        if (this.partner) {
+            return this.me.meshError + this.partner.meshError;
+        }
+        return this.me.meshError;
+    }
+    get bckgPointsWon(): number {
+        if (this.partner) {
+            return this.me.bckgPointsWon + this.partner.bckgPointsWon;
+        }
+        return this.me.bckgPointsWon;
+    }
+    get bckgPointsLost(): number {
+        if (this.partner) {
+            return this.me.bckgPointsLost + this.partner.bckgPointsLost;
+        }
+        return this.me.bckgPointsLost;
+    }
+    get bckgWinner(): number {
+        if (this.partner) {
+            return this.me.bckgWinner + this.partner.bckgWinner;
+        }
+        return this.me.bckgWinner;
+    }
+    get bckgError(): number {
+        if (this.partner) {
+            return this.me.bckgError + this.partner.bckgError;
+        }
+        return this.me.bckgError;
+    }
+    // end player tracker results
 
     private constructor(props: MatchTrackerProps, id?: UniqueEntityID) {
         super(props, id);
@@ -193,9 +328,14 @@ export class MatchTracker extends Entity<MatchTrackerProps> {
         seasonId: SeasonId,
         playerId: PlayerId,
         isDouble: boolean,
-        partnerId?: PlayerId,
+        partnerId?: PlayerId
     ): Result<MatchTracker> {
-        const guard = Guard.againstNullOrUndefined(id, "match id");
+        const guard = Guard.againstNullOrUndefinedBulk([
+            { argument: id, argumentName: "matchId" },
+            { argument: seasonId, argumentName: "seasonId" },
+            { argument: playerId, argumentName: "playerId" },
+            { argument: isDouble, argumentName: "isDouble" },
+        ]);
 
         if (guard.isFailure) {
             return Result.fail<MatchTracker>(guard.getErrorValue());
@@ -204,7 +344,7 @@ export class MatchTracker extends Entity<MatchTrackerProps> {
         const meOrError = PlayerTracker.createNewPlayerTracker(
             playerId,
             seasonId,
-            isDouble,
+            isDouble
         );
 
         if (meOrError.isFailure) {
@@ -216,7 +356,7 @@ export class MatchTracker extends Entity<MatchTrackerProps> {
             const partnerOrError = PlayerTracker.createNewPlayerTracker(
                 partnerId!,
                 seasonId,
-                isDouble,
+                isDouble
             );
             if (partnerOrError.isFailure) {
                 return Result.fail(`${partnerOrError.getErrorValue()}`);
@@ -232,20 +372,24 @@ export class MatchTracker extends Entity<MatchTrackerProps> {
             gamesLostReturning: 0,
             winBreakPtsChances: 0,
             breakPtsWinned: 0,
+
             rivalPointsWinnedFirstServ: 0,
             rivalPointsWinnedSecondServ: 0,
             rivalFirstServIn: 0,
             rivalSecondServIn: 0,
             rivalFirstServWon: 0,
             rivalSecondServWon: 0,
+
             rivalPointsWinnedFirstReturn: 0,
             rivalPointsWinnedSecondReturn: 0,
             rivalFirstReturnIn: 0,
             rivalSecondReturnIn: 0,
+
             rivalAces: 0,
             rivalDobleFault: 0,
             rivalNoForcedErrors: 0,
             rivalWinners: 0,
+
             shortRallyWon: 0,
             mediumRallyWon: 0,
             longRallyWon: 0,
