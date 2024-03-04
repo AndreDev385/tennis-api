@@ -27,6 +27,8 @@ const Clubs = () => {
   const [showSubscribed, setShowSubscribed] = useState(false);
   const [showRemoveModal, setShowRemoveModal] = useState(false);
 
+  const token: string = localStorage.getItem("authorization") || "";
+
   useEffect(() => {
     getClubs();
   }, []);
@@ -102,7 +104,7 @@ const Clubs = () => {
   const removeClubSubscription = async () => {
     setLoading(true);
     try {
-      const result = await unsubscribeClub(selectedClub!.clubId)
+      const result = await unsubscribeClub(selectedClub!.clubId, token)
 
       await getClubs();
 

@@ -1,13 +1,14 @@
 import { VITE_SERVER_URL } from "../../env/env.prod";
 import { Result } from "../../shared/Result";
 
-async function unsubscribeClub(clubId: string): Promise<Result<string>> {
+async function unsubscribeClub(clubId: string, token: string): Promise<Result<string>> {
     const url = `${VITE_SERVER_URL}/api/v1/club/unsubscribe/${clubId}`;
 
     const requestOptions = {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
+            "Authorization": token,
         },
     };
 
