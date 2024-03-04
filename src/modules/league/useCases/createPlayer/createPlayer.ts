@@ -68,6 +68,8 @@ export class CreatePlayer
                 if (alreadyExist.isDeleted) {
                     alreadyExist.restore(club.clubId);
 
+                    await this.playerRepo.save(alreadyExist);
+
                     return right(Result.ok<void>());
                 } else {
                     // this user is already a player and is not deleted
