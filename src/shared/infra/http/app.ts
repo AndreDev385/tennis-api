@@ -39,11 +39,11 @@ swaggerDocs(app);
 app.use(history());
 app.use(
     "/public",
-    express.static(path.resolve(__dirname, "../../../../public/"))
+    express.static(path.resolve(__dirname, "../../../../../public/"))
 );
 app.use(
     "/",
-    express.static(path.resolve(__dirname, "../../../../public/admin/dist"))
+    express.static(path.resolve(__dirname, "../../../../../public/admin/dist"))
 );
 
 server.listen(environment.port, () => {
