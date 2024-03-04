@@ -20,6 +20,7 @@
     flex-wrap: wrap;
     gap: 1rem;
   }
+
   .filter-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -52,6 +53,7 @@
 
   .title {
     background-color: #011755;
+
     span {
       color: #fff;
       text-align: center;
@@ -124,24 +126,25 @@
   .uploader {
     display: flex;
     justify-content: center;
+
     .drop_area {
       /* tus estilos para la zona de arrastrar y soltar */
       height: 200px;
       width: 100%;
       text-align: center;
       padding: 2rem;
+
       svg {
         display: none;
       }
     }
   }
 
-    .drop_zone {
-      background-color: #f8f9fa; // Cambia el color de fondo
-      border: 2px dashed #6c757d; // Cambia el borde
-      color: #6c757d; // Cambia el color del texto
-      padding: 20px; // Añade padding
-      text-align: center; // Centra el texto
-    }
+  .drop_zone {
+    background-color: #f8f9fa; // Cambia el color de fondo
+    border: 2px dashed #6c757d; // Cambia el borde
+    color: #6c757d; // Cambia el color del texto
+    padding: 20px; // Añade padding
+    text-align: center; // Centra el texto
   }
 }
