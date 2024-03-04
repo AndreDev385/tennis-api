@@ -198,6 +198,11 @@ const Players = () => {
     }
 
     setLoading(true);
+    setPlayerActions((prev) => ({
+      ...prev,
+      showChangeClub: false,
+      player: null,
+    }))
     toast.success(result.getValue());
   };
 
@@ -315,7 +320,7 @@ const Players = () => {
               }
             >
               <option>Selecciona un club</option>
-              {clubs.map((c) => (
+              {clubs.filter((c) => c.isSubscribed).map((c) => (
                 <option key={c.clubId} value={c.clubId}>
                   {c.name}
                 </option>
