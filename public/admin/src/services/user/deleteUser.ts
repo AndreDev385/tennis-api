@@ -7,7 +7,7 @@ type DeleteUserParams = {
 };
 
 async function deleteUser({ userId, token }: DeleteUserParams) {
-    const url = `${VITE_SERVER_URL}/api/v1/user/delete/${userId}`;
+    const url = `${VITE_SERVER_URL}/api/v1/users/delete/${userId}`;
 
     const requestOptions: RequestInit = {
         method: "PUT",

@@ -8,7 +8,7 @@ type Params = {
 };
 
 async function changePlayerClub({ playerId, clubId, token }: Params) {
-    const url = `${VITE_SERVER_URL}/api/v1/player`;
+    const url = `${VITE_SERVER_URL}/api/v1/player/change-club`;
 
     const body = JSON.stringify({ playerId, clubId });
 

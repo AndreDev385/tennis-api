@@ -5,7 +5,7 @@ async function unsubscribeClub(clubId: string): Promise<Result<string>> {
     const url = `${VITE_SERVER_URL}/api/v1/club/unsubscribe/${clubId}`;
 
     const requestOptions = {
-        method: "GET",
+        method: "PUT",
         headers: {
             "Content-Type": "application/json",
         },
