@@ -5,7 +5,7 @@ import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
 import { Result } from "../../../shared/core/Result";
 import { Guard } from "../../../shared/core/Guard";
 import { AggregateRoot } from "../../../shared/domain/AggregateRoot";
-import { FirstName, LastName } from "./names";
+import { Name } from "./names";
 import { JWTToken } from "./jwt";
 import { UserLoggedIn } from "./events/userLoggedIn";
 import { UserCreated } from "./events/userCreated";
@@ -13,8 +13,8 @@ import { UserDeleted } from "./events/userDeleted";
 import { ProvisionalPasswordGranted } from "./events/provisionalPasswordGranted";
 
 interface UserProps {
-    firstName: FirstName;
-    lastName: LastName;
+    firstName: Name;
+    lastName: Name;
     email: UserEmail;
     password: UserPassword;
     recoverPasswordCode?: string | null;
@@ -31,11 +31,11 @@ export class User extends AggregateRoot<UserProps> {
         return UserId.create(this._id).getValue();
     }
 
-    get firstName(): FirstName {
+    get firstName(): Name {
         return this.props.firstName;
     }
 
-    get lastName(): LastName {
+    get lastName(): Name {
         return this.props.lastName;
     }
 
@@ -80,8 +80,8 @@ export class User extends AggregateRoot<UserProps> {
     }
 
     public editUser(
-        firstName: FirstName,
-        lastName: LastName,
+        firstName: Name,
+        lastName: Name,
         email: UserEmail
     ) {
         this.props.firstName = firstName;

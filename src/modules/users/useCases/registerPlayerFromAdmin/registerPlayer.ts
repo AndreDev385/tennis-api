@@ -6,7 +6,7 @@ import { Player } from "../../../league/domain/player";
 import { ClubRepository } from "../../../league/repositories/clubRepo";
 import { UserEmail } from "../../../users/domain/email";
 import { User } from "../../../users/domain/user";
-import { FirstName, LastName } from "../../domain/names";
+import { Name } from "../../domain/names";
 import { UserPassword } from "../../domain/password";
 import { PlayerRegisterRepository } from "../../repositories/playerRegisterRepo";
 import { UserRepository } from "../../repositories/userRepo";
@@ -44,8 +44,8 @@ export class RegisterPlayer implements UseCase<any, Response> {
         const randomPassword = generatePassword();
 
         try {
-            const firstNameResult = FirstName.create({ value: firstName });
-            const lastNameResult = LastName.create({ value: lastName });
+            const firstNameResult = Name.create({ value: firstName });
+            const lastNameResult = Name.create({ value: lastName });
             const emailResult = UserEmail.create(email);
             const passwordResult = UserPassword.create({
                 value: randomPassword,

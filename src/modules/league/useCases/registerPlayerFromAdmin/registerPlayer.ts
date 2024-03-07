@@ -2,7 +2,7 @@ import { AppError } from '../../../../shared/core/AppError';
 import { Either, Result, left, right } from '../../../../shared/core/Result';
 import { UseCase } from '../../../../shared/core/UseCase';
 import { UserEmail } from '../../../users/domain/email';
-import { FirstName, LastName } from '../../../users/domain/names';
+import { Name } from '../../../users/domain/names';
 import { UserPassword } from '../../../users/domain/password';
 import { User } from '../../../users/domain/user';
 import { UserRepository } from '../../../users/repositories/userRepo';
@@ -36,12 +36,10 @@ export class RegisterPlayer implements UseCase<any, Response> {
     let player: Player;
 
     try {
-      console.log('here ----', request);
-
-      const firstNameOrError = FirstName.create({
+      const firstNameOrError = Name.create({
         value: request.firstName,
       });
-      const lastNameOrError = LastName.create({
+      const lastNameOrError = Name.create({
         value: request.lastName,
       });
       const emailOrError = UserEmail.create(request.email);
