@@ -1,8 +1,6 @@
 import { VITE_SERVER_URL } from '../env/env.prod';
 
-const token: string = localStorage.getItem('authorization') || '';
-
-export async function requestClubSubscription(clubId: string) {
+export async function requestClubSubscription(clubId: string, token: string) {
   try {
     const response = await fetch(`${VITE_SERVER_URL}/api/v1/club/subscribe/${clubId}`, {
       method: 'PUT',
