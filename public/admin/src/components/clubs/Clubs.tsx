@@ -87,7 +87,7 @@ const Clubs = () => {
   const handleSuscribeClub = async () => {
     const toastId = toast.loading('Estamos suscribiendo el club...');
     try {
-      await requestClubSubscription(selectedClub?.clubId || '');
+      await requestClubSubscription(selectedClub!.clubId, token);
 
       await getClubs();
 
