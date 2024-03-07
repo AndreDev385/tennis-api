@@ -8,6 +8,7 @@ type TeamsConfigProps = {
 };
 
 export class TeamsConfig extends ValueObject<TeamsConfigProps> {
+    //TODO: matchesQty must be 3 | 5 | 7
     get matchesQty(): number {
         return this.props.matchesQty;
     }

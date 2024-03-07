@@ -2,10 +2,15 @@ import { Result } from "../../../shared/core/Result";
 import { Entity } from "../../../shared/domain/Entity";
 import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
 import { TournamentId } from "./tournamentId";
+import { TournamentRules } from "./tournamentRules";
+import { TournamentStatus } from "./tournamentStatus";
 
 type TournamentProps = {
     name: string;
-    rules: any;
+    rules: TournamentRules;
+    status: TournamentStatus;
+    createdAt?: Date;
+    updatedAt?: Date;
 };
 
 export class Tournament extends Entity<TournamentProps> {
@@ -25,6 +30,10 @@ export class Tournament extends Entity<TournamentProps> {
     }
 
     public static create(props: TournamentProps, id?: UniqueEntityID) {
-        return Result.ok<Tournament>(new Tournament(props, id));
+        return Result.ok<Tournament>(new Tournament({
+            ...props,
+            createdAt: props.createdAt ?? new Date(),
+            updatedAt: props.updatedAt ?? new Date(),
+        }, id));
     }
 }

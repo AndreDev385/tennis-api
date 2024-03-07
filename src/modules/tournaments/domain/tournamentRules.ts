@@ -6,17 +6,17 @@ import { GamesPerSet } from "../../league/domain/gamesPerSet";
 import { SetQuantity } from "../../league/domain/setQuantity";
 import { TeamsConfig } from "./teamsConfig";
 
-type CategoryType = "sumatoria" | "unica"; // category or summation 
+export type CategoryType = "sumatoria" | "unica"; // category or summation 
 
 type RulesProps = {
     setsQuantity: SetQuantity;
     gamesPerSet: GamesPerSet;
     categoryType: CategoryType;
-    category?: Category;
-    summation?: number;
+    category?: Category | null;
+    summation?: number | null;
     isTeamClash: boolean;
-    mode?: Mode;
-    teamsConfig?: TeamsConfig;
+    mode?: Mode | null;
+    teamsConfig?: TeamsConfig | null;
 };
 
 export class TournamentRules extends ValueObject<RulesProps> {
@@ -32,24 +32,24 @@ export class TournamentRules extends ValueObject<RulesProps> {
         return this.props.categoryType;
     }
 
-    get category(): Category | undefined {
-        return this.props.category;
+    get category(): Category | null {
+        return this.props.category!;
     }
 
-    get summation(): number | undefined {
-        return this.props.summation;
+    get summation(): number | null {
+        return this.props.summation!;
     }
 
     get isTeamClash(): boolean {
         return this.props.isTeamClash;
     }
 
-    get mode(): Mode | undefined {
-        return this.props.mode;
+    get mode(): Mode | null {
+        return this.props.mode!;
     }
 
-    get teamsConfig(): TeamsConfig | undefined {
-        return this.props.teamsConfig;
+    get teamsConfig(): TeamsConfig | null {
+        return this.props.teamsConfig!;
     }
 
     private constructor(props: RulesProps) {
@@ -57,6 +57,12 @@ export class TournamentRules extends ValueObject<RulesProps> {
     }
 
     public static create(props: RulesProps) {
-        return Result.ok<TournamentRules>(new TournamentRules(props));
+        return Result.ok<TournamentRules>(new TournamentRules({
+            ...props,
+            mode: props.mode ?? null,
+            category: props.category ?? null,
+            summation: props.summation ?? null,
+            teamsConfig: props.teamsConfig ?? null
+        }));
     }
 }
