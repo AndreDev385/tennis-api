@@ -44,21 +44,20 @@ export class NewTournament implements UseCase<NewTournamentDto, Response> {
             /* Validate data is present */
             const validInfo = Guard.againstNullOrUndefinedBulk([
                 { argument: req.name, argumentName: "nombre" },
-                { argument: req.rules, argumentName: "reglas" },
                 {
-                    argument: req.rules.setsQuantity,
+                    argument: req.setsQuantity,
                     argumentName: "cantidad de sets",
                 },
                 {
-                    argument: req.rules.gamesPerSet,
+                    argument: req.gamesPerSet,
                     argumentName: "games por set",
                 },
                 {
-                    argument: req.rules.categoryType,
+                    argument: req.categoryType,
                     argumentName: "tipo de categoria",
                 },
                 {
-                    argument: req.rules.isTeamClash,
+                    argument: req.isTeamClash,
                     argumentName: "encuentro en equipos",
                 },
             ]);
@@ -68,10 +67,10 @@ export class NewTournament implements UseCase<NewTournamentDto, Response> {
             }
 
             const mustSetsQty = SetQuantity.create({
-                value: req.rules.setsQuantity,
+                value: req.setsQuantity,
             });
             const mustGamesPerSet = GamesPerSet.create({
-                value: req.rules.gamesPerSet,
+                value: req.gamesPerSet,
             });
 
             const combine = Result.combine([mustSetsQty, mustGamesPerSet]);
@@ -85,12 +84,12 @@ export class NewTournament implements UseCase<NewTournamentDto, Response> {
             /* End Validate data is present */
 
             /* summation or category */
-            if (req.rules.categoryType == "summation") {
-                summation = req.rules.summation!;
+            if (req.categoryType == "summation") {
+                summation = req.summation!;
             } else {
                 try {
                     category = await this.categoryRepo.findById(
-                        req.rules.categoryId!
+                        req.categoryId!
                     );
                 } catch (error) {
                     return left(new AppError.NotFoundError(error));
@@ -99,22 +98,22 @@ export class NewTournament implements UseCase<NewTournamentDto, Response> {
             /* end: summation or category */
 
             /* tournamet by teams or single/double */
-            if (req.rules.isTeamClash) {
+            if (req.isTeamClash) {
                 const guard = Guard.againstNullOrUndefinedBulk([
                     {
-                        argument: req.rules.teamsConfig,
+                        argument: req.teamsConfig,
                         argumentName: "configuracion de partidos",
                     },
                     {
-                        argument: req.rules.teamsConfig?.doublesQty,
+                        argument: req.teamsConfig?.doublesQty,
                         argumentName: "cantidad de dobles",
                     },
                     {
-                        argument: req.rules.teamsConfig?.matchesQty,
+                        argument: req.teamsConfig?.matchesQty,
                         argumentName: "partidos",
                     },
                     {
-                        argument: req.rules.teamsConfig?.singlesQty,
+                        argument: req.teamsConfig?.singlesQty,
                         argumentName: "cantidad de singles",
                     },
                 ]);
@@ -124,9 +123,9 @@ export class NewTournament implements UseCase<NewTournamentDto, Response> {
                 }
 
                 if (
-                    req.rules.teamsConfig!.doublesQty +
-                    req.rules.teamsConfig!.singlesQty !=
-                    req.rules.teamsConfig?.matchesQty
+                    req.teamsConfig!.doublesQty +
+                    req.teamsConfig!.singlesQty !=
+                    req.teamsConfig?.matchesQty
                 ) {
                     return left(
                         Result.fail<string>(
@@ -136,9 +135,9 @@ export class NewTournament implements UseCase<NewTournamentDto, Response> {
                 }
 
                 const mustTeamsConfig = TeamsConfig.create({
-                    matchesQty: req.rules.teamsConfig.matchesQty,
-                    singlesQty: req.rules.teamsConfig.singlesQty,
-                    doublesQty: req.rules.teamsConfig.doublesQty,
+                    matchesQty: req.teamsConfig.matchesQty,
+                    singlesQty: req.teamsConfig.singlesQty,
+                    doublesQty: req.teamsConfig.doublesQty,
                 });
 
                 if (mustTeamsConfig.isFailure) {
@@ -151,7 +150,7 @@ export class NewTournament implements UseCase<NewTournamentDto, Response> {
 
                 teamsConfig = mustTeamsConfig.getValue();
             } else {
-                const mustMode = Mode.create({ value: req.rules.mode! });
+                const mustMode = Mode.create({ value: req.mode! });
                 if (mustMode.isFailure) {
                     return left(
                         Result.fail<string>(`${mustMode.getErrorValue()}`)
@@ -167,9 +166,9 @@ export class NewTournament implements UseCase<NewTournamentDto, Response> {
                 teamsConfig: teamsConfig!,
                 summation: summation!,
                 gamesPerSet: gamesPerset!,
-                categoryType: req.rules.categoryType as CategoryType,
+                categoryType: req.categoryType as CategoryType,
                 setsQuantity: setQty,
-                isTeamClash: req.rules.isTeamClash,
+                isTeamClash: req.isTeamClash,
                 category: category!,
             });
 

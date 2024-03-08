@@ -1,7 +1,7 @@
 import { Tournament } from "../domain/tournament";
 
-type TournamentQuery = {
-    tournamentId: string;
+export type TournamentQuery = {
+    tournamentId?: string;
     name?: string
 }
 

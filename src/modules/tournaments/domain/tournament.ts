@@ -21,8 +21,21 @@ export class Tournament extends Entity<TournamentProps> {
     get name(): string {
         return this.props.name;
     }
-    get rules(): any {
+
+    get rules(): TournamentRules {
         return this.props.rules;
+    }
+
+    get status(): TournamentStatus {
+        return this.props.status;
+    }
+
+    get createdAt(): Date {
+        return this.props.createdAt!;
+    }
+
+    get updatedAt(): Date {
+        return this.props.updatedAt!;
     }
 
     private constructor(props: TournamentProps, id?: UniqueEntityID) {

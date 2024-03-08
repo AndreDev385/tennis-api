@@ -3,7 +3,7 @@ import config from "../config/config";
 
 const sequelize: Sequelize = config.connection;
 
-interface TournamentData extends Model<InferAttributes<TournamentData>> {
+export interface TournamentData extends Model<InferAttributes<TournamentData>> {
     tournamentId: string;
     name: string;
     rules: string;
@@ -12,7 +12,7 @@ interface TournamentData extends Model<InferAttributes<TournamentData>> {
     updatedAt: Date;
 }
 
-const TeamModel = sequelize.define<TournamentData>(
+const TournamentModel = sequelize.define<TournamentData>(
     "tournament",
     {
         tournamentId: {
@@ -47,4 +47,4 @@ const TeamModel = sequelize.define<TournamentData>(
     { tableName: "tournament" }
 );
 
-export { TeamModel };
+export { TournamentModel };

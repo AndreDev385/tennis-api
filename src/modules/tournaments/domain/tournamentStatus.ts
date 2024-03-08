@@ -1,3 +1,4 @@
+import { Result } from "../../../shared/core/Result";
 import { ValueObject } from "../../../shared/domain/ValueObject";
 
 type StatusProps = {
@@ -17,6 +18,22 @@ export class TournamentStatus extends ValueObject<StatusProps> {
 
     private constructor(props: StatusProps) {
         super(props);
+    }
+
+    private static isValid(value: number): boolean {
+        for (const v of Object.values(tournamentStatuses)) {
+            if (v == value) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static create(props: StatusProps): Result<TournamentStatus> {
+        if (!this.isValid(props.value)) {
+            return Result.fail("Estado invalido");
+        }
+        return Result.ok<TournamentStatus>(new TournamentStatus(props));
     }
 
     public static waiting() {
