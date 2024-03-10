@@ -19,18 +19,11 @@ export class PaginateClash implements UseCase<any, Response> {
         try {
             const query: ClashQuery & PaginateQuery = {};
 
+            const validQueries = ["categoryId", "clubId", "isFinish", "journey", "seasonId"];
+
             for (const [key, value] of Object.entries(request)) {
-                if (key == "categoryId") {
-                    query.categoryId = value as string;
-                }
-                if (key == "isFinish") {
-                    query.isFinish = value as boolean;
-                }
-                if (key == "journey") {
-                    query.journey = value as string;
-                }
-                if (key == "seasonId") {
-                    query.seasonId = value as string;
+                if (validQueries.includes(key)) {
+                    query[key] = value;
                 }
             }
 
