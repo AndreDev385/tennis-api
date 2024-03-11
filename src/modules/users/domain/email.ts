@@ -25,7 +25,7 @@ export class UserEmail extends ValueObject<UserEmailProps> {
   }
 
   public static create (email: string): Result<UserEmail> {
-    if (!this.isValidEmail(email)) {
+    if (!this.isValidEmail(this.format(email))) {
       return Result.fail('Correo invalido');
     } else {
       return Result.ok<UserEmail>(
