@@ -3,7 +3,7 @@ import { Either, Result, left, right } from "../../../../shared/core/Result";
 import { UseCase } from "../../../../shared/core/UseCase";
 import { User } from "../../domain/user";
 import { UserEmail } from "../../domain/email";
-import { FirstName, LastName } from "../../domain/names";
+import { Name } from "../../domain/names";
 import { UserPassword } from "../../domain/password";
 import { UserRepository } from "../../repositories/userRepo";
 import { CreateUserDto } from "./createUserDto";
@@ -26,8 +26,8 @@ export class CreateUserUseCase
     }
 
     async execute(request: CreateUserDto): Promise<Response> {
-        const firstNameOrError = FirstName.create({ value: request.firstName });
-        const lastNameOrError = LastName.create({ value: request.lastName });
+        const firstNameOrError = Name.create({ value: request.firstName });
+        const lastNameOrError = Name.create({ value: request.lastName });
         const emailOrError = UserEmail.create(request.email);
         const passwordOrError = UserPassword.create({
             value: request.password,
@@ -46,8 +46,8 @@ export class CreateUserUseCase
             ) as Response;
         }
 
-        const firstName: FirstName = firstNameOrError.getValue();
-        const lastName: LastName = lastNameOrError.getValue();
+        const firstName: Name = firstNameOrError.getValue();
+        const lastName: Name = lastNameOrError.getValue();
         const email: UserEmail = emailOrError.getValue();
         const password: UserPassword = passwordOrError.getValue();
 

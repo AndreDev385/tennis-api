@@ -1,7 +1,7 @@
 import { UserEmail } from "../domain/email";
 import { User } from "../domain/user";
 import { Mapper } from "../../../shared/infra/Mapper";
-import { FirstName, LastName } from "../domain/names";
+import { Name } from "../domain/names";
 import { UserPassword } from "../domain/password";
 import { UserDto } from "../dtos/userDto";
 import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
@@ -34,8 +34,8 @@ export class UserMap implements Mapper<User> {
 
     public static toDomain(raw: any): User | null {
         const emailOrError = UserEmail.create(raw.email);
-        const firstNameOrError = FirstName.create({ value: raw.firstName });
-        const lastNameOrError = LastName.create({ value: raw.lastName });
+        const firstNameOrError = Name.create({ value: raw.firstName });
+        const lastNameOrError = Name.create({ value: raw.lastName });
         const passwordOrError = UserPassword.create({
             value: raw.password,
             hashed: true,

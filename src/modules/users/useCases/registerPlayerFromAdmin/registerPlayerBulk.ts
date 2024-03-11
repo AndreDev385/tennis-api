@@ -5,7 +5,7 @@ import { Club } from "../../../league/domain/club";
 import { Player } from "../../../league/domain/player";
 import { ClubRepository } from "../../../league/repositories/clubRepo";
 import { UserEmail } from "../../domain/email";
-import { FirstName, LastName } from "../../domain/names";
+import { Name } from "../../domain/names";
 import { UserPassword } from "../../domain/password";
 import { User } from "../../domain/user";
 import { PlayerRegisterRepository } from "../../repositories/playerRegisterRepo";
@@ -47,10 +47,10 @@ export class RegisterPlayerBulk implements UseCase<any, Response> {
 
                 const randomPassword = generatePassword();
 
-                const firstNameResult = FirstName.create({
+                const firstNameResult = Name.create({
                     value: dto.firstName,
                 });
-                const lastNameResult = LastName.create({
+                const lastNameResult = Name.create({
                     value: dto.lastName,
                 });
                 const emailResult = UserEmail.create(dto.email);

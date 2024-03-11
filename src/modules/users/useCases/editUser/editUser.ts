@@ -2,7 +2,7 @@ import { AppError } from "../../../../shared/core/AppError";
 import { Either, Result, left, right } from "../../../../shared/core/Result";
 import { UseCase } from "../../../../shared/core/UseCase";
 import { UserEmail } from "../../domain/email";
-import { FirstName, LastName } from "../../domain/names";
+import { Name } from "../../domain/names";
 import { User } from "../../domain/user";
 import { UserRepository } from "../../repositories/userRepo";
 import { CreateUserErrors } from "../createUser/createUserErrors";
@@ -33,11 +33,11 @@ export class EditUser implements UseCase<EditUserRequest, Response> {
                 return left(new AppError.NotFoundError(error));
             }
 
-            const firstNameOrError = FirstName.create({
+            const firstNameOrError = Name.create({
                 value: request.firstName,
             });
 
-            const lastNameOrError = LastName.create({
+            const lastNameOrError = Name.create({
                 value: request.lastName,
             });
 

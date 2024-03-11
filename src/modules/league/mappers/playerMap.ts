@@ -1,6 +1,6 @@
 import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
 import { Mapper } from "../../../shared/infra/Mapper";
-import { FirstName, LastName } from "../../users/domain/names";
+import { Name } from "../../users/domain/names";
 import { UserId } from "../../users/domain/userId";
 import { ClubId } from "../domain/clubId";
 import { Devices } from "../domain/devices";
@@ -9,10 +9,10 @@ import { PlayerDto } from "../dtos/playerDto";
 
 export class PlayerMap implements Mapper<Player> {
     public static toDomain(raw: any): Player | null {
-        const firstNameOrError = FirstName.create({
+        const firstNameOrError = Name.create({
             value: raw.user.firstName,
         });
-        const lastNameOrError = LastName.create({ value: raw.user.lastName });
+        const lastNameOrError = Name.create({ value: raw.user.lastName });
         const clubIdOrError = ClubId.create(new UniqueEntityID(raw.clubId));
         const userIdOrError = UserId.create(new UniqueEntityID(raw.userId));
 

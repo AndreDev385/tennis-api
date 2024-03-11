@@ -4,7 +4,7 @@ import { ClubId } from "./clubId";
 import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
 import { Guard } from "../../../shared/core/Guard";
 import { Result } from "../../../shared/core/Result";
-import { FirstName, LastName } from "../../users/domain/names";
+import { Name } from "../../users/domain/names";
 import { AggregateRoot } from "../../../shared/domain/AggregateRoot";
 import { PlayerCreated } from "./events/playerCreated";
 import { Devices } from "./devices";
@@ -12,8 +12,8 @@ import { Devices } from "./devices";
 interface PlayerProps {
     userId: UserId;
     clubId: ClubId;
-    firstName: FirstName;
-    lastName: LastName;
+    firstName: Name;
+    lastName: Name;
     avatar?: string | null;
     devices?: Devices;
     isDeleted?: boolean;
@@ -32,11 +32,11 @@ export class Player extends AggregateRoot<PlayerProps> {
         return this.props.clubId;
     }
 
-    get firstName(): FirstName {
+    get firstName(): Name {
         return this.props.firstName;
     }
 
-    get lastName(): LastName {
+    get lastName(): Name {
         return this.props.lastName;
     }
 
