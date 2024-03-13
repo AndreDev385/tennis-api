@@ -18,7 +18,10 @@ import {
 } from "../../../useCases/changePassword";
 import { listUserController } from "../../../useCases/listUsers";
 import { validatePasswordCodeController } from "../../../useCases/validatePasswordCode";
-import { editUserController } from "../../../useCases/editUser";
+import {
+    editUserController,
+    editUserFromAdminCtrl,
+} from "../../../useCases/editUser";
 import {
     deleteUserController,
     deleteUserFromAdminController,
@@ -144,5 +147,8 @@ userRouter.put("/delete", middleware.ensureAuthenticated() as any, (req, res) =>
     deleteUserController.execute(req, res)
 );
 
+userRouter.put("/:userId", middleware.adminAuthenticated() as any, (req, res) =>
+    editUserFromAdminCtrl.execute(req, res)
+);
 
 export { userRouter };
