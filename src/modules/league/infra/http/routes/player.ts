@@ -34,9 +34,7 @@ playerRoute.post(
     (req, res) => registerPlayerBulkController.execute(req, res)
 );
 
-playerRoute.get("/", middleware.adminAuthenticated() as any, (req, res) =>
-    listPlayersController.execute(req, res)
-);
+playerRoute.get("/", (req, res) => listPlayersController.execute(req, res));
 
 playerRoute.get("/me", middleware.ensureAuthenticated() as any, (req, res) =>
     getPlayerByUserIdController.execute(req, res)
