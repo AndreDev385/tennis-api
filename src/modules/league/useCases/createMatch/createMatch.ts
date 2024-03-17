@@ -114,12 +114,12 @@ export class CreateMatch
                     sets,
                     gamesPerSet,
                     clashId: clash.clashId.id,
-                    player2: matchData.player2,
+                    player2: matchData.player2.trim(),
                     category: clash.category,
                     address: clash.host.name,
                     player4:
                         matchData.mode == GameMode.double
-                            ? matchData.player4
+                            ? matchData.player4?.trim()
                             : null,
                     setsQuantity,
                     superTieBreak: false,
