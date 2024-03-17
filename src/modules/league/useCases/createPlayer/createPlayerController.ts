@@ -19,6 +19,7 @@ export class CreatePlayerController extends BaseController {
         const dto: CreatePlayerDto = {
             ...req.body,
             userId: req.decoded.userId,
+            code: req.body.code.trim(),
         };
 
         const result = await this.usecase.execute(dto);

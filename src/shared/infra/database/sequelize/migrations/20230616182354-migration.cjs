@@ -1,7 +1,5 @@
 "use strict";
 
-const { Sequelize } = require("sequelize");
-
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
     async up(queryInterface, Sequelize) {
@@ -983,7 +981,7 @@ module.exports = {
         await CREATE_RANKING_TABLE();
     },
 
-    async down(queryInterface, Sequelize) {
+    async down(queryInterface, _) {
         await queryInterface.dropTable("users");
         await queryInterface.dropTable("club");
         await queryInterface.dropTable("category");

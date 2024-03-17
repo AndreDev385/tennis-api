@@ -31,20 +31,28 @@ async function notificatePlayers({
                     title,
                     body,
                 },
+                android: {
+                    priority: "high",
+                },
+                apns: {
+                    payload: {
+                        aps: {
+                            contentAvailable: true,
+                        },
+                    },
+                    headers: {
+                        "apns-push-type": "background",
+                        "apns-priority": "5",
+                        "apns-topic": "io.flutter.plugins.firebase.messaging",
+                    },
+                },
             }))
         );
 
-        //{
-        //tokens,
-        //notification: {
-        //    title,
-        //    body,
-        //},
-        //}
+        result.responses.forEach((r) => {
+            console.log(r);
+        });
 
-        result.responses.forEach(r => {
-            console.log(r)
-        })
         console.log("Fails", result.failureCount);
         console.log("Successes", result.successCount);
         return Result.ok<void>();
