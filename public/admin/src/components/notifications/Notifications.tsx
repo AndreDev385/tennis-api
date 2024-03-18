@@ -80,7 +80,7 @@ const Notifications = () => {
             return;
         }
         toast.success(
-            `Exito al enviar ${value.fails} notificaci${value.fails > 1 ? "ones" : "ón"}`
+            `Exito al enviar ${value.successes} notificaci${value.successes > 1 ? "ones" : "ón"}`
         );
     };
 
