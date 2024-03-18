@@ -43,6 +43,7 @@ async function notificatePlayers({
                     Authorization: `Bearer 585becec37431357281750997578da4b84212a6d`,
                     Host: "fcm.googleapis.com",
                 },
+                method: "POST",
                 body: JSON.stringify(content),
             };
 
