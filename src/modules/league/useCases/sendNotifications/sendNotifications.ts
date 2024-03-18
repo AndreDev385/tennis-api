@@ -1,7 +1,10 @@
 import { AppError } from "../../../../shared/core/AppError";
 import { Either, Result, left, right } from "../../../../shared/core/Result";
 import { UseCase } from "../../../../shared/core/UseCase";
-import { notificatePlayers } from "../../../../shared/infra/services/firebase/fcm";
+import {
+    NotificationResults,
+    notificatePlayers,
+} from "../../../../shared/infra/services/firebase/fcm";
 import { PlayerQuery, PlayerRepository } from "../../repositories/playerRepo";
 
 type SendNotificationsReq = {
@@ -10,7 +13,10 @@ type SendNotificationsReq = {
     body: string;
 };
 
-type Response = Either<AppError.UnexpectedError | Result<string>, Result<void>>;
+type Response = Either<
+    AppError.UnexpectedError | Result<string>,
+    Result<NotificationResults>
+>;
 
 export class SendNotifications
     implements UseCase<SendNotificationsReq, Response>
@@ -47,7 +53,7 @@ export class SendNotifications
                 return left(result as Result<string>);
             }
 
-            return right(Result.ok<void>());
+            return right(result as Result<NotificationResults>);
         } catch (error) {
             return left(new AppError.UnexpectedError(error));
         }

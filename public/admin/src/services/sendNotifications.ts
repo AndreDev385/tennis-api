@@ -28,7 +28,7 @@ async function sendNotifications(
             return Result.fail(data["message"]);
         }
 
-        return Result.ok(data["message"]);
+        return Result.ok(data);
     } catch (error) {
         console.log(error);
         return Result.fail("Ha ocurrido un error");

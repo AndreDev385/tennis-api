@@ -32,6 +32,6 @@ export class SendClubNotificationController extends BaseController {
             }
         }
 
-        return this.ok(res, { message: "Notificaciones enviadas!" });
+        return this.ok(res, result.value.getValue());
     }
 }
