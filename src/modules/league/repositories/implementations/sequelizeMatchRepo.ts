@@ -41,8 +41,6 @@ export class SequelizeMatchRepository implements MatchRepository {
             where: { matchId: match.matchId.id.toString() },
         });
 
-        console.log(raw.sets);
-
         if (!!exist === true) {
             await MatchModel.update(raw, {
                 where: { matchId: match.matchId.id.toString() },

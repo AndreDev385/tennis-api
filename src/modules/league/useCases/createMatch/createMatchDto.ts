@@ -1,10 +1,10 @@
 export interface CreateClashMatchsDto {
     clashId: string;
     surface: string;
-    matchs: Array<MatcData>
+    matchs: Array<MatchData>
 }
 
-interface MatcData {
+interface MatchData {
     mode: string;
     player1: string;
     player2: string;
