@@ -77,11 +77,12 @@ const Notifications = () => {
             toast.warning(
                 `Error al enviar ${value.fails} notificaci${value.fails > 1 ? "ones" : "ón"}`
             );
-            return;
         }
-        toast.success(
-            `Exito al enviar ${value.successes} notificaci${value.successes > 1 ? "ones" : "ón"}`
-        );
+        if (value.successes > 0) {
+            toast.success(
+                `Exito al enviar ${value.successes} notificaci${value.successes > 1 ? "ones" : "ón"}`
+            );
+        }
     };
 
     function renderState() {
