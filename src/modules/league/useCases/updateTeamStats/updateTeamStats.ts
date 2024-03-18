@@ -25,7 +25,6 @@ export class UpdateTeamStats implements UseCase<any, any> {
     }
 
     async execute(req: UpdateTeamStatsRequest): Promise<Response> {
-        let clashes: Array<Clash>;
         let clash: Clash;
         let teamStats: TeamStats;
         try {
@@ -34,11 +33,6 @@ export class UpdateTeamStats implements UseCase<any, any> {
             } catch (error) {
                 return left(new AppError.NotFoundError(error));
             }
-
-            clashes = await this.clashRepo.list({
-                team1: clash.team1.id.toString(),
-                seasonId: clash.seasonId.id.toString(),
-            });
 
             try {
                 teamStats = await this.teamStatsRepo.getStats(
@@ -54,7 +48,7 @@ export class UpdateTeamStats implements UseCase<any, any> {
                 );
             }
 
-            teamStats.addTeamStats(clashes);
+            teamStats.addTeamStats([clash]);
 
             await this.teamStatsRepo.save(teamStats);
 
