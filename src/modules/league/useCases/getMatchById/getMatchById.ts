@@ -27,7 +27,7 @@ export class GetMatchById implements UseCase<string, Response> {
             } catch (error) {
                 return left(new AppError.NotFoundError(error));
             }
-            const data = MatchMap.toDto(match)
+            const data = MatchMap.toDto(match);
             return right(Result.ok(data));
         } catch (error) {
             return left(new AppError.UnexpectedError(error));

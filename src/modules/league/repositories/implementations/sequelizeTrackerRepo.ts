@@ -49,6 +49,7 @@ export class SequelizeTrackerRepository implements TrackerRepository {
         }
 
         return TrackerMap.toDomain({
+            trackerId: raw.trackerId,
             matchId: raw.matchId,
             me,
             partner,

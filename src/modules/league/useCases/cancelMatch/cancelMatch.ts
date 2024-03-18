@@ -120,11 +120,7 @@ export class CancelMatch implements UseCase<CancelMatchRequest, Response> {
 
             tracker = trackerOrError.getValue();
 
-            console.log('matchWon', request.matchWon);
-
             match.cancelMatch(sets, tracker, request.superTieBreak, request.matchWon);
-
-            console.log('matchWon obj', match.matchWon);
 
             await this.matchRepo.save(match);
             await this.trackerRepo.save(match.tracker!);

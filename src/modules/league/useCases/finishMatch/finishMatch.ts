@@ -45,8 +45,6 @@ export class FinishMatch implements UseCase<any, Response> {
         let sets: Sets;
         let tracker: MatchTracker;
 
-        console.log(JSON.stringify(request.sets, null, 2));
-
         try {
             try {
                 const seasons = await this.seasonRepo.list({
@@ -129,6 +127,7 @@ export class FinishMatch implements UseCase<any, Response> {
 
             return right(Result.ok<void>());
         } catch (error) {
+            console.log(error);
             return left(new AppError.UnexpectedError(error));
         }
     }
