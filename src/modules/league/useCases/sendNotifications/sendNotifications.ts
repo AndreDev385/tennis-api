@@ -53,7 +53,7 @@ export class SendNotifications
                 return left(result as Result<string>);
             }
 
-            return right(Result.ok(result.getValue() as NotificationResults));
+            return right(result as Result<NotificationResults>);
         } catch (error) {
             return left(new AppError.UnexpectedError(error));
         }
