@@ -135,7 +135,7 @@ export class Clash extends AggregateRoot<ClubClashProps> {
         const isNew = !!id == false;
 
         const clash = new Clash(
-            { ...props, isFinish: props.isFinish || false },
+            { ...props, isFinish: props.isFinish ?? false },
             id
         );
 

@@ -66,6 +66,7 @@ export class ClashMap implements Mapper<Clash> {
             journey: clash.journey.value,
             host: clash.host.name,
             matchs: clash.matchs.map((match) => MatchMap.toDto(match)),
+            wonClash: clash.wonClash,
             isFinish: clash.isFinish,
         };
     }

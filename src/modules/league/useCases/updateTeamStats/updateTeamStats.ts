@@ -2,7 +2,7 @@ import { AppError } from "../../../../shared/core/AppError";
 import { Either, Result, left, right } from "../../../../shared/core/Result";
 import { UseCase } from "../../../../shared/core/UseCase";
 import { Clash } from "../../domain/clubClash";
-import { TeamStats, calculateTeamStats } from "../../domain/teamStats";
+import { TeamStats } from "../../domain/teamStats";
 import { ClashRepository } from "../../repositories/clashRepo";
 import { TeamStatsRepository } from "../../repositories/teamStatsRepo";
 import { UpdateTeamStatsRequest } from "./dtos";
@@ -54,9 +54,7 @@ export class UpdateTeamStats implements UseCase<any, any> {
                 );
             }
 
-            const stats = calculateTeamStats(clashes);
-
-            teamStats.addTeamStats(stats);
+            teamStats.addTeamStats(clashes);
 
             await this.teamStatsRepo.save(teamStats);
 

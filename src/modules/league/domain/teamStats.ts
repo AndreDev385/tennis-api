@@ -254,8 +254,33 @@ export class TeamStats extends Entity<TeamStatsProps> {
         super(props, id);
     }
 
-    addTeamStats(stats: Stats) {
-        for (const [key, value] of Object.entries(stats)) {
+    private calculateTeamStats(clashes: Array<Clash>): Stats {
+        const stats = newTeamStats();
+
+        for (const c of clashes) {
+            for (const m of c.matchs) {
+                addSuperTieBreaksStats(m, c.isLocal, stats);
+                addFirstSetWonStats(m, c.isLocal, stats);
+                addMatchStats(m, c.isLocal, stats);
+                addGamesStats(m.sets.getItems(), c.isLocal, stats);
+                addSetStats(m.sets.getItems(), c.isLocal, stats);
+            }
+
+            if (c.isLocal) {
+                stats.clashPlayedAsLocal += 1;
+                if (c.wonClash) stats.clashWonAsLocal += 1;
+            } else {
+                stats.clashPlayedAsVisitor += 1;
+                if (c.wonClash) stats.clashWonAsVisitor += 1;
+            }
+        }
+
+        return stats
+    }
+
+    addTeamStats(clashes: Array<Clash>) {
+        const newStats = this.calculateTeamStats(clashes);
+        for (const [key, value] of Object.entries(newStats)) {
             this.props[key as keyof Stats] = value
         }
     }
@@ -511,27 +536,3 @@ function addGamesStats(sets: Set[], isLocal: boolean, stats: Stats) {
     }
 }
 
-export function calculateTeamStats(clashes: Array<Clash>): Stats {
-    const stats = newTeamStats();
-
-    for (const clash of clashes) {
-
-        for (const match of clash.matchs) {
-            addSuperTieBreaksStats(match, clash.isLocal, stats);
-            addFirstSetWonStats(match, clash.isLocal, stats);
-            addMatchStats(match, clash.isLocal, stats);
-            addGamesStats(match.sets.getItems(), clash.isLocal, stats);
-            addSetStats(match.sets.getItems(), clash.isLocal, stats);
-        }
-
-        if (clash.isLocal) {
-            stats.clashPlayedAsLocal += 1;
-            if (clash.wonClash) stats.clashWonAsLocal += 1;
-        } else {
-            stats.clashPlayedAsVisitor += 1;
-            if (clash.wonClash) stats.clashWonAsVisitor += 1;
-        }
-    }
-
-    return stats
-}

@@ -1,5 +1,8 @@
 import { CategoryModel } from "../../../../shared/infra/database/sequelize/models/Category";
-import { ClashData, ClashModel } from "../../../../shared/infra/database/sequelize/models/ClubClash";
+import {
+    ClashData,
+    ClashModel,
+} from "../../../../shared/infra/database/sequelize/models/ClubClash";
 import { Club } from "../../domain/club";
 import { Clash } from "../../domain/clubClash";
 import { Matchs } from "../../domain/matchs";
@@ -18,7 +21,7 @@ export class SequelizeClashRepo implements ClashRepository {
     constructor(
         matchRepo: MatchRepository,
         teamRepo: TeamRepository,
-        clubRepo: ClubRepository,
+        clubRepo: ClubRepository
     ) {
         this.matchRepo = matchRepo;
         this.teamRepo = teamRepo;
@@ -36,7 +39,7 @@ export class SequelizeClashRepo implements ClashRepository {
         team1: string,
         team2: string,
         journey: string,
-        category: string,
+        category: string
     ): Promise<boolean> {
         const exist = await ClashModel.findOne({
             where: { team1, team2, journey, categoryId: category },
@@ -82,7 +85,7 @@ export class SequelizeClashRepo implements ClashRepository {
         const team1 = await this.teamRepo.getById(clashRaw.team1);
         const team2 = await this.teamRepo.getById(clashRaw.team2);
 
-        const club = await this.clubRepo.findById(clashRaw.host)
+        const club = await this.clubRepo.findById(clashRaw.host);
 
         const matchs = Matchs.create(matchsArr);
 
@@ -96,6 +99,7 @@ export class SequelizeClashRepo implements ClashRepository {
                 clubId: clashRaw.clubId,
                 host: club,
                 clashId: clashRaw.clashId,
+                isFinish: clashRaw.isFinish,
             },
             matchs
         )!;
@@ -106,47 +110,69 @@ export class SequelizeClashRepo implements ClashRepository {
 
         query.where = filters;
 
-        query.order = [['createdAt', "DESC"]];
+        query.order = [["createdAt", "DESC"]];
 
         const clashes = await ClashModel.findAll(query);
 
-        let list: any = clashes
+        let list: any = clashes;
 
         for (const clash of list) {
             const team1 = await this.teamRepo.getById(clash.team1);
             const team2 = await this.teamRepo.getById(clash.team2);
             const hostDomain = await this.clubRepo.findById(clash.host);
 
+            const matchsArr = await this.matchRepo.getMatchsByClashId(
+                clash.clashId
+            );
+
+            const matches = Matchs.create(matchsArr);
+
             clash.team1Domain = team1;
             clash.team2Domain = team2;
-            clash.hostDomain = hostDomain
+            clash.hostDomain = hostDomain;
+            clash.matches = matches;
         }
 
-        return list.map((clash: ClashData & { team1Domain: Team, team2Domain: Team, hostDomain: Club }) =>
-            ClashMap.toDomain({
-                clashId: clash.clashId,
-                category: clash.category,
-                seasonId: clash.seasonId,
-                team1: clash.team1Domain,
-                team2: clash.team2Domain,
-                clubId: clash.clubId,
-                host: clash.hostDomain,
-                journey: clash.journey,
-            })
+        return list.map(
+            (
+                clash: ClashData & {
+                    team1Domain: Team;
+                    team2Domain: Team;
+                    hostDomain: Club;
+                    matches: Matchs;
+                }
+            ) =>
+                ClashMap.toDomain(
+                    {
+                        clashId: clash.clashId,
+                        category: clash.category,
+                        seasonId: clash.seasonId,
+                        team1: clash.team1Domain,
+                        team2: clash.team2Domain,
+                        clubId: clash.clubId,
+                        host: clash.hostDomain,
+                        journey: clash.journey,
+                        isFinish: clash.isFinish,
+                    },
+                    clash.matches
+                )
         );
     }
 
-    async paginate(filters: ClashQuery, pagination: PaginateQuery): Promise<any> {
+    async paginate(
+        filters: ClashQuery,
+        pagination: PaginateQuery
+    ): Promise<any> {
         const query = this.baseQuery();
 
-        query.where = filters
+        query.where = filters;
         query.limit = pagination.limit ?? 6;
         query.offset = pagination.offset ?? 0;
-        query.order = [['createdAt', "DESC"]];
+        query.order = [["createdAt", "DESC"]];
 
         const result = await ClashModel.findAndCountAll(query);
 
-        let list: any = result
+        let list: any = result;
 
         for (const clash of list.rows) {
             const team1 = await this.teamRepo.getById(clash.team1);
@@ -155,7 +181,7 @@ export class SequelizeClashRepo implements ClashRepository {
 
             clash.team1Domain = team1;
             clash.team2Domain = team2;
-            clash.hostDomain = hostDomain
+            clash.hostDomain = hostDomain;
         }
 
         list.rows = result.rows.map((clash: any) =>
@@ -168,6 +194,7 @@ export class SequelizeClashRepo implements ClashRepository {
                 team2: clash.team2Domain,
                 host: clash.hostDomain,
                 journey: clash.journey,
+                isFinish: clash.isFinish,
             })
         );
 
@@ -175,7 +202,7 @@ export class SequelizeClashRepo implements ClashRepository {
     }
 
     async delete(clashId: string): Promise<void> {
-        const exist = await ClashModel.findOne({ where: { clashId } })
+        const exist = await ClashModel.findOne({ where: { clashId } });
 
         if (!!exist == false) {
             throw new Error("El encuentro no existe");
@@ -189,6 +216,6 @@ export class SequelizeClashRepo implements ClashRepository {
             }
         }
 
-        await ClashModel.destroy({ where: { clashId } })
+        await ClashModel.destroy({ where: { clashId } });
     }
 }
