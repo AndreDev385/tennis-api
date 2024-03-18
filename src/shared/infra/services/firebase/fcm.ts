@@ -1,4 +1,4 @@
-import { credential, messaging } from "firebase-admin";
+import { credential } from "firebase-admin";
 import { Result } from "../../../core/Result";
 import { initializeApp } from "firebase-admin/app";
 
@@ -18,38 +18,47 @@ async function notificatePlayers({
     body,
 }: SendMessageArgs): Promise<Result<string | void>> {
     try {
+        let results = {
+            successes: 0,
+            errors: 0,
+        };
+        const projectId = "gamemind-fcm";
+        const fcmURL = `https://fcm.googleapis.com/v1/projects/${projectId}/messages:send`;
 
-        const result = await messaging().sendEach(
-            tokens.map((t) => ({
-                token: t,
-                notification: {
-                    title,
-                    body,
-                },
-                android: {
-                    priority: "high",
-                },
-                apns: {
-                    payload: {
-                        aps: {
-                            contentAvailable: true,
-                        },
+        for (const token of tokens) {
+            const content = {
+                message: {
+                    token: token,
+                    notification: {
+                        title,
+                        body,
                     },
-                    headers: {
-                        "apns-push-type": "background",
-                        "apns-priority": "5",
-                        "apns-topic": "io.flutter.plugins.firebase.messaging",
-                    },
+                    data: {},
                 },
-            }))
-        );
+            };
 
-        result.responses.forEach((r) => {
-            console.log(r);
-        });
+            const options: RequestInit = {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer 585becec37431357281750997578da4b84212a6d`,
+                    Host: "fcm.googleapis.com",
+                },
+                body: JSON.stringify(content),
+            };
 
-        console.log("Fails", result.failureCount);
-        console.log("Successes", result.successCount);
+            const response = await fetch(fcmURL, options);
+
+            console.log(response);
+
+            if (response.status != 200) {
+                results.errors += 1;
+            } else {
+                results.successes += 1;
+            }
+        }
+
+        console.log("Fails", results.errors);
+        console.log("Successes", results.successes);
         return Result.ok<void>();
     } catch (error) {
         console.log(error);
