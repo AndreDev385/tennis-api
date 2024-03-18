@@ -67,19 +67,7 @@ async function notificatePlayers({
                         body,
                     },
                     data: {},
-                },
-                android: {
-                    notification: {
-                        click_action: "TOP_STORY_ACTIVITY",
-                    },
-                },
-                apns: {
-                    payload: {
-                        aps: {
-                            category: "NEW_MESSAGE_CATEGORY",
-                        },
-                    },
-                },
+                }
             };
 
             const options: RequestInit = {
