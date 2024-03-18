@@ -82,7 +82,9 @@ async function notificatePlayers({
 
             const response = await fetch(fcmURL, options);
 
-            console.log(response.status);
+            const data = await response.json()
+
+            console.log(response.status, data);
 
             if (response.status != 200) {
                 results.fails += 1;
