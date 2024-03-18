@@ -68,14 +68,16 @@ const Notifications = () => {
 
         if (result.isFailure) {
             toast.error(result.getErrorValue());
+            return
         }
 
         const value: { fails: number; successes: number } = result.getValue();
 
         if (value.fails > 0) {
-            toast.error(
+            toast.warning(
                 `Error al enviar ${value.fails} notificaci${value.fails > 1 ? "ones" : "ón"}`
             );
+            return;
         }
         toast.success(
             `Exito al enviar ${value.fails} notificaci${value.fails > 1 ? "ones" : "ón"}`
