@@ -16,18 +16,28 @@ export class UpdateMatchController extends BaseController {
         const result = await this.usecase.execute(req.body);
 
         if (result.isLeft()) {
-            const error = result.value
+            const error = result.value;
             switch (error.constructor) {
                 case AppError.UnexpectedError:
-                    return this.fail(res, (error as AppError.UnexpectedError).getErrorValue().message)
+                    return this.fail(
+                        res,
+                        (error as AppError.UnexpectedError).getErrorValue()
+                            .message
+                    );
                 case AppError.NotFoundError:
-                    return this.notFound(res, (error as AppError.UnexpectedError).getErrorValue().message)
+                    return this.notFound(
+                        res,
+                        (error as AppError.UnexpectedError).getErrorValue()
+                            .message
+                    );
                 default:
-                    return this.clientError(res, (error as Result<string>).getErrorValue())
+                    return this.clientError(
+                        res,
+                        (error as Result<string>).getErrorValue()
+                    );
             }
-
         }
 
-        return this.ok(res, { message: "Nombres de rivales actualizados" })
+        return this.ok(res, { message: "Nombres de rivales actualizados" });
     }
 }
