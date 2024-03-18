@@ -11,7 +11,7 @@ function getAccessToken() {
     const firebaseMessagingScope =
         "https://www.googleapis.com/auth/firebase.messaging";
 
-    return new Promise(function (resolve, reject) {
+    return new Promise(function(resolve, reject) {
         const jwtClient = new google.auth.JWT(
             "firebase-adminsdk-d8d6l@gamemind-fcm.iam.gserviceaccount.com",
             undefined,
@@ -20,7 +20,7 @@ function getAccessToken() {
             undefined
         );
 
-        jwtClient.authorize(function (err, tokens) {
+        jwtClient.authorize(function(err, tokens) {
             if (err) {
                 reject(err);
                 return;
@@ -56,6 +56,8 @@ async function notificatePlayers({
 
         const accessToken = await getAccessToken();
 
+        console.log(`access_token: ${accessToken}\n`)
+
         for (const token of tokens) {
             const content = {
                 message: {
@@ -80,7 +82,7 @@ async function notificatePlayers({
 
             const response = await fetch(fcmURL, options);
 
-            console.log(response);
+            console.log(response.status);
 
             if (response.status != 200) {
                 results.fails += 1;
