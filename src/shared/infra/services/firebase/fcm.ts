@@ -2,6 +2,7 @@ import { google } from "googleapis";
 import { credential } from "firebase-admin";
 import { Result } from "../../../core/Result";
 import { initializeApp } from "firebase-admin/app";
+import path from "path";
 
 initializeApp({
     credential: credential.cert("public/gamemind-fcm-firebase-adminsdk.json"),
@@ -12,7 +13,11 @@ function getAccessToken() {
         "https://www.googleapis.com/auth/firebase.messaging";
 
     return new Promise(function (resolve, reject) {
-        const key = require("public/gamemind-fcm-firebase-adminsdk.json");
+        const adminjson = path.join(
+            __dirname,
+            "../../../../../public/gamemind-fcm-firebase-adminsdk.json"
+        );
+        const key = require(adminjson);
         const jwtClient = new google.auth.JWT(
             key.client_email,
             undefined,
