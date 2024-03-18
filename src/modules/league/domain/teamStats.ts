@@ -48,8 +48,47 @@ interface TeamStatsProps {
     clashPlayedAsVisitor: number;
 }
 
+type Stats = Omit<TeamStatsProps, "seasonId" | "journey" | "teamId">
+
+function newTeamStats(): Stats {
+    return {
+        gamesWonAsLocal: 0,
+        gamesPlayedAsLocal: 0,
+        gamesWonAsVisitor: 0,
+        gamesPlayedAsVisitor: 0,
+        //sets
+        setsWonAsLocal: 0,
+        setsPlayedAsLocal: 0,
+        setsWonAsVisitor: 0,
+        setsPlayedAsVisitor: 0,
+        // super tie-break
+        superTieBreaksWonAsLocal: 0,
+        superTieBreaksPlayedAsLocal: 0,
+        superTieBreaksWonAsVisitor: 0,
+        superTieBreaksPlayedAsVisitor: 0,
+        // matchs
+        matchWonAsLocal: 0,
+        matchLostAsLocal: 0,
+        matchPlayedAsLocal: 0,
+        matchWonAsVisitor: 0,
+        matchLostAsVisitor: 0,
+        matchPlayedAsVisitor: 0,
+        // match won with first set won
+        matchsWonWithFirstSetWonAsLocal: 0,
+        matchsPlayedWithFirstSetWonAsLocal: 0,
+        matchsWonWithFirstSetWonAsVisitor: 0,
+        matchsPlayedWithFirstSetWonAsVisitor: 0,
+        // clash won
+        clashWonAsLocal: 0,
+        clashPlayedAsLocal: 0,
+        clashWonAsVisitor: 0,
+        clashPlayedAsVisitor: 0,
+    }
+}
+
+const SUPER_TIE_BREAK_POINTS = 10;
+
 export class TeamStats extends Entity<TeamStatsProps> {
-    private SUPER_TIE_BREAK_POINTS = 10;
 
     get teamStatsId(): TeamStatsId {
         return TeamStatsId.create(this._id).getValue();
@@ -215,7 +254,13 @@ export class TeamStats extends Entity<TeamStatsProps> {
         super(props, id);
     }
 
-    public addClashStats(clash: Clash) {
+    addTeamStats(stats: Stats) {
+        for (const [key, value] of Object.entries(stats)) {
+            this.props[key as keyof Stats] = value
+        }
+    }
+
+    /*public addClashStats(clash: Clash) {
         for (const match of clash.matchs) {
             this.addSuperTieBreaksStats(match, clash.isLocal);
             this.addFirstSetWonStats(match, clash.isLocal);
@@ -231,92 +276,8 @@ export class TeamStats extends Entity<TeamStatsProps> {
             this.props.clashPlayedAsVisitor += 1;
             if (clash.wonClash) this.props.clashWonAsVisitor += 1;
         }
-    }
+    }*/
 
-    private addMatchStats(match: Match, isLocal: boolean) {
-        if (match.matchWon === null) {
-            return
-        }
-        if (isLocal) {
-            this.props.matchPlayedAsLocal += 1;
-            if (match.matchWon) this.props.matchWonAsLocal += 1;
-            else this.props.matchLostAsLocal += 1;
-        } else {
-            this.props.matchPlayedAsVisitor += 1;
-            if (match.matchWon) this.props.matchWonAsVisitor += 1;
-            else this.props.matchLostAsVisitor += 1;
-        }
-    }
-
-    private addSuperTieBreaksStats(match: Match, isLocal: boolean) {
-        if (match.superTieBreak) {
-            if (isLocal) {
-                this.props.superTieBreaksPlayedAsLocal += 1;
-                if (match.matchWon) {
-                    this.props.superTieBreaksWonAsLocal += 1;
-                }
-            } else {
-                this.props.superTieBreaksPlayedAsVisitor += 1;
-                if (match.matchWon) {
-                    this.props.superTieBreaksWonAsVisitor += 1;
-                }
-            }
-        }
-    }
-
-    private addFirstSetWonStats(match: Match, isLocal: boolean) {
-        if (match.sets.getItems()[0].setWon) {
-            if (isLocal) {
-                this.props.matchsPlayedWithFirstSetWonAsLocal += 1;
-                if (match.matchWon) {
-                    this.props.matchsWonWithFirstSetWonAsLocal += 1;
-                }
-            } else {
-                this.props.matchsPlayedWithFirstSetWonAsVisitor += 1;
-                if (match.matchWon) {
-                    this.props.matchsWonWithFirstSetWonAsVisitor += 1;
-                }
-            }
-        }
-    }
-
-    private addSetStats(sets: Set[], isLocal: boolean) {
-        for (const set of sets) {
-            if (isLocal) {
-                if (set.setWon !== null) {
-                    this.props.setsPlayedAsLocal += 1;
-                    if (set.setWon) {
-                        this.props.setsWonAsLocal += 1;
-                    }
-                }
-            } else {
-                if (set.setWon !== null) {
-                    this.props.setsPlayedAsVisitor += 1;
-                    if (set.setWon) {
-                        this.props.setsWonAsVisitor += 1;
-                    }
-                }
-            }
-        }
-    }
-
-    private addGamesStats(sets: Set[], isLocal: boolean) {
-        for (const set of sets) {
-            if (
-                set.myGames >= this.SUPER_TIE_BREAK_POINTS ||
-                set.rivalGames >= this.SUPER_TIE_BREAK_POINTS
-            ) {
-                return;
-            }
-            if (isLocal) {
-                this.props.gamesPlayedAsLocal += set.myGames + set.rivalGames;
-                this.props.gamesWonAsLocal += set.myGames;
-            } else {
-                this.props.gamesPlayedAsVisitor += set.myGames + set.rivalGames;
-                this.props.gamesWonAsVisitor += set.myGames;
-            }
-        }
-    }
 
     public static createEmptyTeamStats(
         seasonId: SeasonId,
@@ -327,38 +288,7 @@ export class TeamStats extends Entity<TeamStatsProps> {
             journey: journey,
             teamId: teamId,
             seasonId: seasonId,
-
-            clashPlayedAsLocal: 0,
-            clashPlayedAsVisitor: 0,
-            clashWonAsLocal: 0,
-            clashWonAsVisitor: 0,
-
-            matchPlayedAsLocal: 0,
-            matchPlayedAsVisitor: 0,
-            matchWonAsLocal: 0,
-            matchWonAsVisitor: 0,
-            matchLostAsVisitor: 0,
-            matchLostAsLocal: 0,
-
-            gamesPlayedAsLocal: 0,
-            gamesPlayedAsVisitor: 0,
-            gamesWonAsLocal: 0,
-            gamesWonAsVisitor: 0,
-
-            setsPlayedAsLocal: 0,
-            setsPlayedAsVisitor: 0,
-            setsWonAsLocal: 0,
-            setsWonAsVisitor: 0,
-
-            superTieBreaksPlayedAsLocal: 0,
-            superTieBreaksPlayedAsVisitor: 0,
-            superTieBreaksWonAsLocal: 0,
-            superTieBreaksWonAsVisitor: 0,
-
-            matchsPlayedWithFirstSetWonAsVisitor: 0,
-            matchsPlayedWithFirstSetWonAsLocal: 0,
-            matchsWonWithFirstSetWonAsVisitor: 0,
-            matchsWonWithFirstSetWonAsLocal: 0,
+            ...newTeamStats(),
         });
     }
 
@@ -494,4 +424,114 @@ export class TeamStats extends Entity<TeamStatsProps> {
 
         return Result.ok(instance);
     }
+}
+
+function addMatchStats(match: Match, isLocal: boolean, stats: Stats) {
+    if (match.matchWon === null) {
+        return
+    }
+    if (isLocal) {
+        stats.matchPlayedAsLocal += 1;
+        if (match.matchWon) stats.matchWonAsLocal += 1;
+        else stats.matchLostAsLocal += 1;
+    } else {
+        stats.matchPlayedAsVisitor += 1;
+        if (match.matchWon) stats.matchWonAsVisitor += 1;
+        else stats.matchLostAsVisitor += 1;
+    }
+}
+
+function addSuperTieBreaksStats(match: Match, isLocal: boolean, stats: Stats) {
+    if (match.superTieBreak) {
+        if (isLocal) {
+            stats.superTieBreaksPlayedAsLocal += 1;
+            if (match.matchWon) {
+                stats.superTieBreaksWonAsLocal += 1;
+            }
+        } else {
+            stats.superTieBreaksPlayedAsVisitor += 1;
+            if (match.matchWon) {
+                stats.superTieBreaksWonAsVisitor += 1;
+            }
+        }
+    }
+}
+
+function addFirstSetWonStats(match: Match, isLocal: boolean, stats: Stats) {
+    if (match.sets.getItems()[0].setWon) {
+        if (isLocal) {
+            stats.matchsPlayedWithFirstSetWonAsLocal += 1;
+            if (match.matchWon) {
+                stats.matchsWonWithFirstSetWonAsLocal += 1;
+            }
+        } else {
+            stats.matchsPlayedWithFirstSetWonAsVisitor += 1;
+            if (match.matchWon) {
+                stats.matchsWonWithFirstSetWonAsVisitor += 1;
+            }
+        }
+    }
+}
+
+function addSetStats(sets: Set[], isLocal: boolean, stats: Stats) {
+    for (const set of sets) {
+        if (isLocal) {
+            if (set.setWon !== null) {
+                stats.setsPlayedAsLocal += 1;
+                if (set.setWon) {
+                    stats.setsWonAsLocal += 1;
+                }
+            }
+        } else {
+            if (set.setWon !== null) {
+                stats.setsPlayedAsVisitor += 1;
+                if (set.setWon) {
+                    stats.setsWonAsVisitor += 1;
+                }
+            }
+        }
+    }
+}
+
+function addGamesStats(sets: Set[], isLocal: boolean, stats: Stats) {
+    for (const set of sets) {
+        if (
+            set.myGames >= SUPER_TIE_BREAK_POINTS ||
+            set.rivalGames >= SUPER_TIE_BREAK_POINTS
+        ) {
+            return;
+        }
+        if (isLocal) {
+            stats.gamesPlayedAsLocal += set.myGames + set.rivalGames;
+            stats.gamesWonAsLocal += set.myGames;
+        } else {
+            stats.gamesPlayedAsVisitor += set.myGames + set.rivalGames;
+            stats.gamesWonAsVisitor += set.myGames;
+        }
+    }
+}
+
+export function calculateTeamStats(clashes: Array<Clash>): Stats {
+    const stats = newTeamStats();
+
+    for (const clash of clashes) {
+
+        for (const match of clash.matchs) {
+            addSuperTieBreaksStats(match, clash.isLocal, stats);
+            addFirstSetWonStats(match, clash.isLocal, stats);
+            addMatchStats(match, clash.isLocal, stats);
+            addGamesStats(match.sets.getItems(), clash.isLocal, stats);
+            addSetStats(match.sets.getItems(), clash.isLocal, stats);
+        }
+
+        if (clash.isLocal) {
+            stats.clashPlayedAsLocal += 1;
+            if (clash.wonClash) stats.clashWonAsLocal += 1;
+        } else {
+            stats.clashPlayedAsVisitor += 1;
+            if (clash.wonClash) stats.clashWonAsVisitor += 1;
+        }
+    }
+
+    return stats
 }
