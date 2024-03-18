@@ -70,7 +70,16 @@ const Notifications = () => {
             toast.error(result.getErrorValue());
         }
 
-        toast.success(result.getValue());
+        const value: { fails: number; successes: number } = result.getValue();
+
+        if (value.fails > 0) {
+            toast.error(
+                `Error al enviar ${value.fails} notificaci${value.fails > 1 ? "ones" : "ón"}`
+            );
+        }
+        toast.success(
+            `Exito al enviar ${value.fails} notificaci${value.fails > 1 ? "ones" : "ón"}`
+        );
     };
 
     function renderState() {

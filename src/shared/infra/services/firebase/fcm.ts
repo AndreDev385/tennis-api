@@ -1,3 +1,4 @@
+import { google } from "googleapis";
 import { credential } from "firebase-admin";
 import { Result } from "../../../core/Result";
 import { initializeApp } from "firebase-admin/app";
@@ -6,24 +7,55 @@ initializeApp({
     credential: credential.cert("public/gamemind-fcm-firebase-adminsdk.json"),
 });
 
+function getAccessToken() {
+    const firebaseMessagingScope =
+        "https://www.googleapis.com/auth/firebase.messaging";
+
+    return new Promise(function (resolve, reject) {
+        const key = require("public/gamemind-fcm-firebase-adminsdk.json");
+        const jwtClient = new google.auth.JWT(
+            key.client_email,
+            undefined,
+            key.private_key,
+            [firebaseMessagingScope],
+            undefined
+        );
+
+        jwtClient.authorize(function (err, tokens) {
+            if (err) {
+                reject(err);
+                return;
+            }
+            resolve(tokens!.access_token);
+        });
+    });
+}
+
 type SendMessageArgs = {
     tokens: Array<string>;
     title: string;
     body: string;
 };
 
+export type NotificationResults = {
+    successes: number;
+    fails: number;
+};
+
 async function notificatePlayers({
     tokens,
     title,
     body,
-}: SendMessageArgs): Promise<Result<string | void>> {
+}: SendMessageArgs): Promise<Result<string | NotificationResults>> {
     try {
-        let results = {
+        let results: NotificationResults = {
             successes: 0,
-            errors: 0,
+            fails: 0,
         };
         const projectId = "gamemind-fcm";
         const fcmURL = `https://fcm.googleapis.com/v1/projects/${projectId}/messages:send`;
+
+        const accessToken = await getAccessToken();
 
         for (const token of tokens) {
             const content = {
@@ -40,7 +72,7 @@ async function notificatePlayers({
             const options: RequestInit = {
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer 585becec37431357281750997578da4b84212a6d`,
+                    Authorization: `Bearer ${accessToken}`,
                     Host: "fcm.googleapis.com",
                 },
                 method: "POST",
@@ -52,15 +84,15 @@ async function notificatePlayers({
             console.log(response);
 
             if (response.status != 200) {
-                results.errors += 1;
+                results.fails += 1;
             } else {
                 results.successes += 1;
             }
         }
 
-        console.log("Fails", results.errors);
+        console.log("Fails", results.fails);
         console.log("Successes", results.successes);
-        return Result.ok<void>();
+        return Result.ok(results);
     } catch (error) {
         console.log(error);
         return Result.fail("Error al enviar notificaciones");
