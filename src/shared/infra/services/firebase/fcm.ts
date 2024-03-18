@@ -56,7 +56,7 @@ async function notificatePlayers({
 
         const accessToken = await getAccessToken();
 
-        console.log(`access_token: ${accessToken}\n`)
+        console.log(`access_token: ${accessToken}\n`);
 
         for (const token of tokens) {
             const content = {
@@ -67,6 +67,18 @@ async function notificatePlayers({
                         body,
                     },
                     data: {},
+                },
+                android: {
+                    notification: {
+                        click_action: "TOP_STORY_ACTIVITY",
+                    },
+                },
+                apns: {
+                    payload: {
+                        aps: {
+                            category: "NEW_MESSAGE_CATEGORY",
+                        },
+                    },
                 },
             };
 
@@ -82,11 +94,12 @@ async function notificatePlayers({
 
             const response = await fetch(fcmURL, options);
 
-            const data = await response.json()
+            const data = await response.json();
 
             console.log(response.status, data);
 
             if (response.status != 200) {
+                console.log('details', data?.error?.details)
                 results.fails += 1;
             } else {
                 results.successes += 1;
