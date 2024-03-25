@@ -1,38 +1,29 @@
 import { Result } from "../../../shared/core/Result";
 import { Entity } from "../../../shared/domain/Entity";
 import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
-import { Devices } from "../../league/domain/devices";
-import { Name } from "../../users/domain/names";
-import { UserId } from "../../users/domain/userId";
+import { User } from "../../users/domain/user";
+import { ParticipantId } from "./participantId";
 
 export type ParticipantProps = {
-    userId: UserId;
-    firstName: Name;
-    lastName: Name;
+    user: User;
     avatar?: string | null;
-    devices?: Devices;
+    device?: string;
     isDeleted?: boolean;
 };
 
 export class Participant extends Entity<ParticipantProps> {
-    get userId(): UserId {
-        return this.props.userId;
+    get participantId(): ParticipantId {
+        return ParticipantId.create(this._id).getValue();
     }
-    get firstName(): Name {
-        return this.props.firstName;
+    get user(): User {
+        return this.props.user;
     }
-    get lastName(): Name {
-        return this.props.lastName;
-    }
-
     get avatar(): string | null {
         return this.props.avatar!;
     }
-
-    get devices(): Devices {
-        return this.props.devices!;
+    get device(): string {
+        return this.props.device!;
     }
-
     get isDeleted(): boolean {
         return this.props.isDeleted!;
     }
@@ -48,7 +39,6 @@ export class Participant extends Entity<ParticipantProps> {
                     ...props,
                     avatar: props.avatar ?? null,
                     isDeleted: props.isDeleted ?? false,
-                    devices: props.devices ?? Devices.create(),
                 },
                 id
             )

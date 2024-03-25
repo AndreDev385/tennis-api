@@ -1,12 +1,13 @@
 import { Result } from "../../../shared/core/Result";
 import { Entity } from "../../../shared/domain/Entity";
 import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
-import { PlayerId } from "../../league/domain/playerId";
+import { ParticipantId } from "./participantId";
 import { TournamentId } from "./tournamentId";
 
 type ParticipantTrackerProps = {
-    playerId: PlayerId;
+    participantId: ParticipantId;
     tournamentId: TournamentId;
+
     isDouble: boolean;
     pointsWon: number;
     pointsWonServing: number;
@@ -47,8 +48,8 @@ type ParticipantTrackerProps = {
 };
 
 export class ParticipantTracker extends Entity<ParticipantTrackerProps> {
-    get playerId(): PlayerId {
-        return this.props.playerId;
+    get participantId(): ParticipantId {
+        return this.props.participantId;
     }
 
     get tournamentId(): TournamentId {

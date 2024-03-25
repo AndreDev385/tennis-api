@@ -1,16 +1,20 @@
+export type NewContestDto = {
+    mode: string;
+    categoryType: number;
+    categoryId?: string;
+    summation?: {
+        letter: string,
+        value: number,
+    };
+}
+
 export type NewTournamentDto = {
     name: string;
+    startDate: Date;
+    endDate: Date;
     // rules
     setsQuantity: number;
     gamesPerSet: number;
-    categoryType: string;
-    categoryId: string;
-    summation?: number;
-    isTeamClash: boolean;
-    mode?: string;
-    teamsConfig?: {
-        matchesQty: number;
-        singlesQty: number;
-        doublesQty: number;
-    };
+    // contests
+    contests: Array<NewContestDto>
 }

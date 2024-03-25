@@ -1,5 +1,7 @@
 import { TournamentModel } from "../../../../shared/infra/database/sequelize/models/Tournament";
+import { PaginateQuery, PaginateResponse } from "../../../../shared/infra/database/sequelize/queries/sequelizeQueries";
 import { Tournament } from "../../domain/tournament";
+import { TournamentDto } from "../../dtos/tournamentDto";
 import { TournamentMap } from "../../mapper/TournamentMap";
 import { TournamentQuery, TournamentRepository } from "../tournamentRepo";
 
@@ -10,6 +12,20 @@ export class SequelizeTournamentRepository implements TournamentRepository {
         });
 
         return !!exist;
+    }
+
+    async paginate(
+        filters: TournamentQuery,
+        pagination: PaginateQuery = { limit: 10, offset: 0 }
+    ): Promise<PaginateResponse<TournamentDto>> {
+        const result = await TournamentModel.findAndCountAll({
+            where: filters,
+            ...pagination,
+        });
+
+        const dtos = result.rows.map((d) => TournamentMap.forQuery(d));
+
+        return { rows: dtos, count: result.count };
     }
 
     async save(tournament: Tournament): Promise<void> {

@@ -7,8 +7,8 @@ export type TournamentMatchTrackerProps = {
     matchId: TournamentMatchId;
     player1: PlayerTracker;
     player2: PlayerTracker;
-    player3?: PlayerTracker;
-    player4?: PlayerTracker;
+    player3?: PlayerTracker | null;
+    player4?: PlayerTracker | null;
     shortRallyWon: number;
     shortRallyLost: number;
     mediumRallyWon: number;
@@ -27,11 +27,11 @@ export class TournamentMatchTracker extends ValueObject<TournamentMatchTrackerPr
     get player2(): PlayerTracker {
         return this.props.player2;
     }
-    get player3(): PlayerTracker | undefined {
-        return this.props.player3;
+    get player3(): PlayerTracker | null {
+        return this.props.player3!;
     }
-    get player4(): PlayerTracker | undefined {
-        return this.props.player4;
+    get player4(): PlayerTracker | null {
+        return this.props.player4!;
     }
     get shortRallyWon(): number {
         return this.props.shortRallyWon;

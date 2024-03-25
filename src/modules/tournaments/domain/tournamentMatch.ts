@@ -7,13 +7,13 @@ import { Sets } from "../../league/domain/sets";
 import { Surface } from "../../league/domain/surface";
 import { MatchInfo } from "./matchInfo";
 import { Participant } from "./participant";
-import { TournamentClashId } from "./tournamentClashId";
+import { TournamentId } from "./tournamentId";
 import { TournamentMatchId } from "./tournamentMatchId";
 import { TournamentMatchTracker } from "./tournamentMatchTracker";
 import { TournamentRules } from "./tournamentRules";
 
 type TournamentMatchProps = {
-    clashId: TournamentClashId;
+    tournamentId: TournamentId;
     rules: TournamentRules;
     mode: Mode;
     surface: Surface;
@@ -36,8 +36,8 @@ export class TournamentMatch extends AggregateRoot<TournamentMatchProps> {
         return TournamentMatchId.create(this._id).getValue();
     }
 
-    get clashId(): TournamentClashId {
-        return this.props.clashId;
+    get tournamentId(): TournamentId {
+        return this.props.tournamentId;
     }
 
     get rules(): TournamentRules {

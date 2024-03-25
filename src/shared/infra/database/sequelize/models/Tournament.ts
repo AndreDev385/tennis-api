@@ -8,6 +8,10 @@ export interface TournamentData extends Model<InferAttributes<TournamentData>> {
     name: string;
     rules: string;
     status: number;
+    startDate: Date;
+    endDate: Date;
+    participants: Array<string>;
+    contests: string[];
     createdAt: Date;
     updatedAt: Date;
 }
@@ -22,7 +26,7 @@ const TournamentModel = sequelize.define<TournamentData>(
             primaryKey: true,
         },
         name: {
-            type: DataTypes.UUID,
+            type: DataTypes.STRING,
             allowNull: false,
         },
         rules: {
@@ -32,6 +36,22 @@ const TournamentModel = sequelize.define<TournamentData>(
         status: {
             type: DataTypes.INTEGER,
             allowNull: false,
+        },
+        startDate: {
+            type: DataTypes.DATE,
+            allowNull: false,
+        },
+        endDate: {
+            type: DataTypes.DATE,
+            allowNull: false,
+        },
+        contests: {
+            type: DataTypes.ARRAY(DataTypes.JSON),
+            defaultValue: [],
+        },
+        participants: {
+            type: DataTypes.ARRAY(DataTypes.JSON),
+            defaultValue: [],
         },
         createdAt: {
             allowNull: true,

@@ -3,12 +3,13 @@ import {
     ClashData,
     ClashModel,
 } from "../../../../shared/infra/database/sequelize/models/ClubClash";
+import { PaginateQuery } from "../../../../shared/infra/database/sequelize/queries/sequelizeQueries";
 import { Club } from "../../domain/club";
 import { Clash } from "../../domain/clubClash";
 import { Matchs } from "../../domain/matchs";
 import { Team } from "../../domain/team";
 import { ClashMap } from "../../mappers/clashMap";
-import { ClashQuery, ClashRepository, PaginateQuery } from "../clashRepo";
+import { ClashQuery, ClashRepository } from "../clashRepo";
 import { ClubRepository } from "../clubRepo";
 import { MatchRepository } from "../matchRepo";
 import { TeamRepository } from "../teamRepo";
