@@ -22,7 +22,7 @@ export class AfterProvisionalPasswordGranted implements IHandle<ProvisionalPassw
     private async onSendProvisionalPassword(event: ProvisionalPasswordGranted) {
         const { user, password } = event;
         try {
-            const result = await this.usecase.execute({ email: user.email.value, password })
+            const result = await this.usecase.execute({ email: user.email!.value, password })
             if (result.isLeft()) {
                 console.log(
                     `[AfterProvisionalPasswordGranted]: Fail to execute use case`

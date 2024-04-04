@@ -51,7 +51,7 @@ export class AdminLogin implements UseCase<LoginDto, Response> {
                 return left(new LoginUseCaseErrors.EmailDoesNotExist());
             }
 
-            const validPassword = await user.password.comparePassword(
+            const validPassword = await user.password!.comparePassword(
                 password.value
             );
 
@@ -68,7 +68,8 @@ export class AdminLogin implements UseCase<LoginDto, Response> {
                     userId: user.id.toString(),
                     firstName: user.firstName.value,
                     lastName: user.lastName.value,
-                    email: user.email.value,
+                    email: user.email?.value ?? null,
+                    ci: user.ci?.value ?? null,
                     canTrack: user.canTrack,
                     isAdmin: user.isAdmin,
                     isPlayer: user.isPlayer,

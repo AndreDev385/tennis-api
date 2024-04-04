@@ -28,7 +28,7 @@ export class GetPlayerByUserId implements UseCase<string, Promise<Response>> {
 
         try {
             try {
-                user = await this.userRepo.getUserByUserId(userId);
+                user = await this.userRepo.get({ userId });
             } catch (error) {
                 return left(new AppError.NotFoundError(error));
             }

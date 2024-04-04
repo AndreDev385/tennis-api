@@ -5,6 +5,19 @@ import { UserMap } from "../../mappers/userMap";
 import { UserQuery, UserRepository } from "../userRepo";
 
 export class SequelizeUserRepo implements UserRepository {
+
+    async get(q: UserQuery): Promise<User> {
+        const user = await UserModel.findOne({
+            where: q as any,
+        });
+
+        if (!!user == false) {
+            throw new Error("Usuario no encontrado");
+        }
+
+        return UserMap.toDomain(user)!
+    }
+
     async exists(email: UserEmail): Promise<boolean> {
         const user = await UserModel.findOne({
             where: { email: email.value },
@@ -21,7 +34,6 @@ export class SequelizeUserRepo implements UserRepository {
     }
 
     async getUserByEmail(email: UserEmail): Promise<User> {
-        console.log(email);
         const user = await UserModel.findOne({
             where: { email: email.value },
         });

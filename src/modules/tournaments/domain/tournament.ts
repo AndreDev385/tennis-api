@@ -1,8 +1,6 @@
 import { Result } from "../../../shared/core/Result";
 import { Entity } from "../../../shared/domain/Entity";
 import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
-import { Contests } from "./contests";
-import { ParticipantId } from "./participantId";
 import { TournamentId } from "./tournamentId";
 import { TournamentRules } from "./tournamentRules";
 import { TournamentStatus } from "./tournamentStatus";
@@ -13,8 +11,6 @@ type TournamentProps = {
     status: TournamentStatus;
     startDate: Date;
     endDate: Date;
-    contests: Contests;
-    participants?: Array<ParticipantId>;
     createdAt?: Date;
     updatedAt?: Date;
 };
@@ -41,17 +37,8 @@ export class Tournament extends Entity<TournamentProps> {
     }
 
     get endDate() {
-        return this.props.endDate
+        return this.props.endDate;
     }
-
-    get contests() {
-        return this.props.contests
-    }
-
-    get participants(): Array<ParticipantId> {
-        return this.props.participants!;
-    }
-
     get createdAt(): Date {
         return this.props.createdAt!;
     }
@@ -65,12 +52,15 @@ export class Tournament extends Entity<TournamentProps> {
     }
 
     public static create(props: TournamentProps, id?: UniqueEntityID) {
-        return Result.ok<Tournament>(new Tournament({
-            ...props,
-            participants: props.participants ?? [],
-            contests: props.contests ?? Contests.create(),
-            createdAt: props.createdAt ?? new Date(),
-            updatedAt: props.updatedAt ?? new Date(),
-        }, id));
+        return Result.ok<Tournament>(
+            new Tournament(
+                {
+                    ...props,
+                    createdAt: props.createdAt ?? new Date(),
+                    updatedAt: props.updatedAt ?? new Date(),
+                },
+                id
+            )
+        );
     }
 }

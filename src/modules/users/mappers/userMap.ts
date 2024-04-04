@@ -5,6 +5,7 @@ import { Name } from "../domain/names";
 import { UserPassword } from "../domain/password";
 import { UserDto } from "../dtos/userDto";
 import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
+import { CI } from "../domain/ci";
 
 export class UserMap implements Mapper<User> {
     public static async toPersistance(user: User) {
@@ -19,7 +20,8 @@ export class UserMap implements Mapper<User> {
 
         return {
             userId: user.userId.id.toString(),
-            email: user.email.value,
+            email: user.email?.value ?? null,
+            ci: user.ci?.value ?? null,
             password: password,
             firstName: user.firstName.value,
             lastName: user.lastName.value,
@@ -33,20 +35,33 @@ export class UserMap implements Mapper<User> {
     }
 
     public static toDomain(raw: any): User | null {
-        const emailOrError = UserEmail.create(raw.email);
         const firstNameOrError = Name.create({ value: raw.firstName });
         const lastNameOrError = Name.create({ value: raw.lastName });
-        const passwordOrError = UserPassword.create({
-            value: raw.password,
-            hashed: true,
-        });
+
+        let email: UserEmail | null = null;
+        let password: UserPassword | null = null;
+        let ci: CI | null = null;
+
+        if (raw.email) {
+            email = UserEmail.create(raw.email).getValue();
+        }
+        if (raw.password) {
+            password = UserPassword.create({
+                value: raw.password,
+                hashed: true,
+            }).getValue();
+        }
+        if (raw.ci) {
+            ci = CI.create({ value: raw.ci }).getValue();
+        }
 
         const userOrError = User.create(
             {
-                email: emailOrError.getValue(),
+                email,
                 firstName: firstNameOrError.getValue(),
                 lastName: lastNameOrError.getValue(),
-                password: passwordOrError.getValue(),
+                ci,
+                password,
                 recoverPasswordCode: raw.recoverPasswordCode,
                 isDeleted: raw.isDeleted,
                 lastLogin: raw.lastLogin,
@@ -66,7 +81,8 @@ export class UserMap implements Mapper<User> {
     public static toDto(user: User): UserDto {
         return {
             userId: user.userId.id.toString(),
-            email: user.email.value,
+            ci: user.ci?.value ?? null,
+            email: user.email?.value ?? null,
             firstName: user.firstName.value,
             lastName: user.lastName.value,
             canTrack: user.canTrack,

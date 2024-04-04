@@ -7,7 +7,7 @@ import { ParticipantId } from "./participantId";
 export type ParticipantProps = {
     user: User;
     avatar?: string | null;
-    device?: string;
+    device?: string | null;
     isDeleted?: boolean;
 };
 
@@ -21,7 +21,7 @@ export class Participant extends Entity<ParticipantProps> {
     get avatar(): string | null {
         return this.props.avatar!;
     }
-    get device(): string {
+    get device(): string | null {
         return this.props.device!;
     }
     get isDeleted(): boolean {

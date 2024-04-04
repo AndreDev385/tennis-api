@@ -81,12 +81,12 @@ export class RegisterPlayer implements UseCase<any, Response> {
 
             try {
                 const userAlreadyExist = await this.userRepo.getUserByEmail(
-                    user.email
+                    user.email!
                 );
                 if (userAlreadyExist) {
                     return left(
                         new CreateUserErrors.EmailAlreadyExistsError(
-                            user.email.value
+                            user.email!.value
                         )
                     );
                 }

@@ -5,13 +5,13 @@ const sequelize: Sequelize = config.connection;
 
 interface BracketData extends Model<InferAttributes<BracketData>> {
     id: string;
-    tournamentId: string;
+    contestId: string;
     matchId: string | null;
     left: string | null;
     right: string | null;
     parent: string | null;
-    rightPlace: number;
-    leftPlace: number;
+    rightPlace: string;
+    leftPlace: string;
     deep: number;
 }
 
@@ -21,7 +21,7 @@ const BracketModel = sequelize.define<BracketData>("bracket", {
         allowNull: false,
         primaryKey: true,
     },
-    tournamentId: {
+    contestId: {
         type: DataTypes.UUID,
         allowNull: false,
     },
@@ -42,11 +42,11 @@ const BracketModel = sequelize.define<BracketData>("bracket", {
         allowNull: true,
     },
     rightPlace: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: false,
     },
     leftPlace: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: false,
     },
     deep: {

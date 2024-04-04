@@ -10,8 +10,6 @@ export interface TournamentData extends Model<InferAttributes<TournamentData>> {
     status: number;
     startDate: Date;
     endDate: Date;
-    participants: Array<string>;
-    contests: string[];
     createdAt: Date;
     updatedAt: Date;
 }
@@ -44,14 +42,6 @@ const TournamentModel = sequelize.define<TournamentData>(
         endDate: {
             type: DataTypes.DATE,
             allowNull: false,
-        },
-        contests: {
-            type: DataTypes.ARRAY(DataTypes.JSON),
-            defaultValue: [],
-        },
-        participants: {
-            type: DataTypes.ARRAY(DataTypes.JSON),
-            defaultValue: [],
         },
         createdAt: {
             allowNull: true,

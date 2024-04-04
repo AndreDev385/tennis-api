@@ -1,13 +1,3 @@
-export type NewContestDto = {
-    mode: string;
-    categoryType: number;
-    categoryId?: string;
-    summation?: {
-        letter: string,
-        value: number,
-    };
-}
-
 export type NewTournamentDto = {
     name: string;
     startDate: Date;
@@ -15,6 +5,4 @@ export type NewTournamentDto = {
     // rules
     setsQuantity: number;
     gamesPerSet: number;
-    // contests
-    contests: Array<NewContestDto>
-}
+};

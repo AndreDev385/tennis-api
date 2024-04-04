@@ -1,5 +1,8 @@
 import { TournamentModel } from "../../../../shared/infra/database/sequelize/models/Tournament";
-import { PaginateQuery, PaginateResponse } from "../../../../shared/infra/database/sequelize/queries/sequelizeQueries";
+import {
+    PaginateQuery,
+    PaginateResponse,
+} from "../../../../shared/infra/database/sequelize/queries/sequelizeQueries";
 import { Tournament } from "../../domain/tournament";
 import { TournamentDto } from "../../dtos/tournamentDto";
 import { TournamentMap } from "../../mapper/TournamentMap";

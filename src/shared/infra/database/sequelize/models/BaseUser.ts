@@ -5,7 +5,8 @@ const sequelize: Sequelize = config.connection;
 
 interface UserData extends Model<InferAttributes<UserData>> {
     userId: string;
-    email: string;
+    email: string | null;
+    ci: string | null;
     password: string | null;
     firstName: string;
     lastName: string;
@@ -26,7 +27,10 @@ const UserModel = sequelize.define<UserData>("users", {
     },
     email: {
         type: DataTypes.STRING(250),
-        allowNull: false,
+        unique: true,
+    },
+    ci: {
+        type: DataTypes.STRING,
         unique: true,
     },
     password: {
@@ -72,4 +76,4 @@ const UserModel = sequelize.define<UserData>("users", {
     },
 });
 
-export { UserModel, UserData }
+export { UserModel, UserData };

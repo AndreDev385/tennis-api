@@ -23,9 +23,12 @@ export class SequelizePlayerRegisterRepository
         try {
             for (let i = 0; i < users.length; i++) {
                 const rawUser = await UserMap.toPersistance(users[i]);
-                const rawPlayer = PlayerMap.toPersistance(players[i]);
 
                 await UserModel.create(rawUser, { transaction: t });
+            }
+            for (let i = 0; i < players.length; i++) {
+                const rawPlayer = PlayerMap.toPersistance(players[i]);
+
                 await PlayerModel.create(rawPlayer, { transaction: t });
             }
             await t.commit();

@@ -15,6 +15,10 @@ export class GetUserByEmailWithToken extends BaseController {
     async executeImpl(req: DecodedRequest, res: Response) {
         const email = req.decoded.email;
 
+        if (!email) {
+            return this.unauthorized(res)
+        }
+
         const result = await this.usecase.execute(email);
 
         if (result.isLeft()) {

@@ -11,12 +11,14 @@ import { UserLoggedIn } from "./events/userLoggedIn";
 import { UserCreated } from "./events/userCreated";
 import { UserDeleted } from "./events/userDeleted";
 import { ProvisionalPasswordGranted } from "./events/provisionalPasswordGranted";
+import { CI } from "./ci";
 
 interface UserProps {
     firstName: Name;
     lastName: Name;
-    email: UserEmail;
-    password: UserPassword;
+    ci?: CI | null;
+    email?: UserEmail | null;
+    password?: UserPassword | null;
     recoverPasswordCode?: string | null;
     isAdmin?: boolean;
     isPlayer?: boolean;
@@ -39,12 +41,16 @@ export class User extends AggregateRoot<UserProps> {
         return this.props.lastName;
     }
 
-    get email(): UserEmail {
-        return this.props.email;
+    get ci(): CI | null {
+        return this.props.ci!
     }
 
-    get password(): UserPassword {
-        return this.props.password;
+    get email(): UserEmail | null {
+        return this.props.email!;
+    }
+
+    get password(): UserPassword | null {
+        return this.props.password!;
     }
 
     get accessToken(): string | null {
@@ -126,9 +132,8 @@ export class User extends AggregateRoot<UserProps> {
 
     public static create(props: UserProps, id?: UniqueEntityID): Result<User> {
         const guardResult = Guard.againstNullOrUndefinedBulk([
-            { argument: props.email, argumentName: "firstName" },
-            { argument: props.email, argumentName: "lastName" },
-            { argument: props.email, argumentName: "email" },
+            { argument: props.firstName, argumentName: "firstName" },
+            { argument: props.lastName, argumentName: "lastName" },
         ]);
 
         if (guardResult.isFailure) {
@@ -139,12 +144,14 @@ export class User extends AggregateRoot<UserProps> {
         const user = new User(
             {
                 ...props,
-                isDeleted: props.isDeleted || false,
-                isAdmin: props.isAdmin || false,
-                canTrack: props.canTrack || false,
-                isPlayer: props.isPlayer || false,
-                accessToken: props.accessToken || null,
-                recoverPasswordCode: props.recoverPasswordCode || null,
+                email: props.email ?? null,
+                password: props.password ?? null,
+                isDeleted: props.isDeleted ?? false,
+                isAdmin: props.isAdmin ?? false,
+                canTrack: props.canTrack ?? false,
+                isPlayer: props.isPlayer ?? false,
+                accessToken: props.accessToken ?? null,
+                recoverPasswordCode: props.recoverPasswordCode ?? null,
             },
             id
         );

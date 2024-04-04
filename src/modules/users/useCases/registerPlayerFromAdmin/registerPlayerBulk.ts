@@ -4,6 +4,7 @@ import { UseCase } from "../../../../shared/core/UseCase";
 import { Club } from "../../../league/domain/club";
 import { Player } from "../../../league/domain/player";
 import { ClubRepository } from "../../../league/repositories/clubRepo";
+import { PlayerRepository } from "../../../league/repositories/playerRepo";
 import { UserEmail } from "../../domain/email";
 import { Name } from "../../domain/names";
 import { UserPassword } from "../../domain/password";
@@ -24,15 +25,18 @@ type Response = Either<
 export class RegisterPlayerBulk implements UseCase<any, Response> {
     private readonly userRepo: UserRepository;
     private readonly clubRepo: ClubRepository;
+    private readonly playerRepo: PlayerRepository;
     private readonly playerRegisterRepo: PlayerRegisterRepository;
 
     constructor(
         userRepo: UserRepository,
         clubRepo: ClubRepository,
+        playerRepo: PlayerRepository,
         playerRegisterRepo: PlayerRegisterRepository
     ) {
         this.userRepo = userRepo;
         this.clubRepo = clubRepo;
+        this.playerRepo = playerRepo;
         this.playerRegisterRepo = playerRegisterRepo;
     }
 
@@ -44,6 +48,19 @@ export class RegisterPlayerBulk implements UseCase<any, Response> {
                 let user: User;
                 let club: Club;
                 let player: Player;
+
+                try {
+                    club = await this.clubRepo.find({
+                        symbol: dto.clubSymbol,
+                        isSubscribed: true,
+                    });
+                } catch (error) {
+                    return left(
+                        new AppError.NotFoundError(
+                            `${error}, asegurate de que el club ${dto.clubSymbol} se encuentra subscrito`
+                        )
+                    );
+                }
 
                 const randomPassword = generatePassword();
 
@@ -88,32 +105,6 @@ export class RegisterPlayerBulk implements UseCase<any, Response> {
                 user = createUserResult.getValue();
                 user.provisionalPasswordGranted(randomPassword);
 
-                try {
-                    const userAlreadyExist = await this.userRepo.getUserByEmail(
-                        user.email
-                    );
-                    if (userAlreadyExist) {
-                        return left(
-                            new CreateUserErrors.EmailAlreadyExistsError(
-                                user.email.value
-                            )
-                        );
-                    }
-                } catch (error) { }
-
-                try {
-                    club = await this.clubRepo.find({
-                        symbol: dto.clubSymbol,
-                        isSubscribed: true,
-                    });
-                } catch (error) {
-                    return left(
-                        new AppError.NotFoundError(
-                            `${error}, asegurate de que el club ${dto.clubSymbol} se encuentra subscrito`
-                        )
-                    );
-                }
-
                 const playerResult = Player.create({
                     firstName: firstNameResult.getValue(),
                     lastName: lastNameResult.getValue(),
@@ -129,8 +120,35 @@ export class RegisterPlayerBulk implements UseCase<any, Response> {
 
                 player = playerResult.getValue();
 
-                users.push(user);
-                players.push(player);
+                let userAlreadyExist: User;
+                let playerAlreadyExist: Player;
+
+                try {
+                    userAlreadyExist = await this.userRepo.getUserByEmail(
+                        user.email!
+                    );
+
+                    try {
+                        playerAlreadyExist =
+                            await this.playerRepo.getPlayerByUserId(
+                                userAlreadyExist.userId.id.toString()
+                            );
+
+                        // both user and player already exist
+                        return left(
+                            new CreateUserErrors.EmailAlreadyExistsError(
+                                user.email!.value
+                            )
+                        );
+                    } catch (error) {
+                        // user exist but player dont
+                        players.push(player);
+                    }
+                } catch (error) {
+                    // both user and player dont exist
+                    users.push(user);
+                    players.push(player);
+                }
             }
 
             const result = await this.playerRegisterRepo.registerBulk(

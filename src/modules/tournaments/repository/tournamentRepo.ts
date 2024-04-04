@@ -16,7 +16,6 @@ export type TournamentRepository = {
         filters: TournamentQuery,
         pagination: PaginateQuery
     ): Promise<PaginateResponse<TournamentDto>>;
-
     save(tournament: Tournament): Promise<void>;
     get(q: TournamentQuery): Promise<Tournament>;
 };

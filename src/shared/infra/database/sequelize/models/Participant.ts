@@ -24,6 +24,10 @@ export const ParticipantModel = sequelize.define<ParticipantData>(
         userId: {
             type: DataTypes.UUID,
             allowNull: false,
+            references: {
+                model: "users",
+                key: "userId",
+            },
         },
         avatar: {
             type: DataTypes.STRING,
@@ -44,5 +48,5 @@ export const ParticipantModel = sequelize.define<ParticipantData>(
 ParticipantModel.belongsTo(UserModel, {
     foreignKey: "userId",
     targetKey: "userId",
-    as: "User",
+    as: "user",
 });

@@ -1,29 +1,41 @@
 import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
 import { Mapper } from "../../../shared/infra/Mapper";
 import { TournamentData } from "../../../shared/infra/database/sequelize/models/Tournament";
+import { GamesPerSet } from "../../league/domain/gamesPerSet";
+import { SetQuantity } from "../../league/domain/setQuantity";
 import { Tournament } from "../domain/tournament";
+import { TournamentRules } from "../domain/tournamentRules";
 import { TournamentStatus } from "../domain/tournamentStatus";
-import { ContestsMap } from "./ContestsMap";
-import { TournamentRulesMap } from "./TournamentRulesMap";
 
 export class TournamentMap implements Mapper<Tournament> {
     public static forQuery(raw: TournamentData) {
+        const rules = JSON.parse(raw.rules);
         return {
             tournamentId: raw.tournamentId,
             name: raw.name,
             status: raw.status,
-            rules: TournamentRulesMap.forQuery(raw.rules)!,
-            contests: ContestsMap.forQuery(raw.contests),
+            rules: rules,
             startDate: raw.startDate,
             endDate: raw.endDate,
             createdAt: raw.createdAt,
             updatedAt: raw.updatedAt,
-        }
+        };
     }
 
     public static toDomain(raw: TournamentData) {
         const mustTournamentStatus = TournamentStatus.create({
             value: raw.status,
+        });
+
+        const rulesObj = JSON.parse(raw.rules);
+
+        const mustRules = TournamentRules.create({
+            setsQuantity: SetQuantity.create({
+                value: rulesObj.setsQuantity,
+            }).getValue(),
+            gamesPerSet: GamesPerSet.create({
+                value: rulesObj.gamesPerSet,
+            }).getValue(),
         });
 
         const mustTournament = Tournament.create(
@@ -32,10 +44,9 @@ export class TournamentMap implements Mapper<Tournament> {
                 status: mustTournamentStatus.getValue(),
                 startDate: raw.startDate,
                 endDate: raw.endDate,
-                contests: ContestsMap.toDomain(raw.contests),
                 createdAt: raw.createdAt,
                 updatedAt: raw.updatedAt,
-                rules: TournamentRulesMap.toDomain(raw.rules)!,
+                rules: mustRules.getValue(),
             },
             new UniqueEntityID(raw.tournamentId)
         );
@@ -52,15 +63,18 @@ export class TournamentMap implements Mapper<Tournament> {
     }
 
     public static toPersistance(t: Tournament) {
+        const rules = JSON.stringify({
+            setsQuantity: t.rules.setsQuantity.value,
+            gamesPerSet: t.rules.gamesPerSet.value,
+        });
+
         return {
             tournamentId: t.tournamentId.id.toString(),
             name: t.name,
-            rules: TournamentRulesMap.toPersistance(t.rules),
+            rules,
             status: t.status.value,
             startDate: t.startDate,
             endDate: t.endDate,
-            contests: ContestsMap.toPersistance(t.contests),
-            participants: t.participants.map(p => p.id.toString()),
             createdAt: t.createdAt,
             updatedAt: t.updatedAt,
         };

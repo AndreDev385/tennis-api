@@ -1,26 +1,73 @@
+import { Guard } from "../../../shared/core/Guard";
 import { Result } from "../../../shared/core/Result";
 import { Entity } from "../../../shared/domain/Entity";
 import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
+import { ValueObject } from "../../../shared/domain/ValueObject";
+import { ContestId } from "./contestId";
+import { Couple } from "./couple";
+import { Participant } from "./participant";
 import { TournamentId } from "./tournamentId";
 import { TournamentMatch } from "./tournamentMatch";
 
 type BracketNodeProps = {
-    tournamentId: TournamentId;
+    contestId: ContestId;
     match?: TournamentMatch | null;
     left?: BracketNode | null;
     right?: BracketNode | null;
     parent?: BracketNode | null;
-    rightPlace: number;
-    leftPlace: number;
+    rightPlace: BracketPlace;
+    leftPlace: BracketPlace;
     deep: number;
 };
+
+type BracketPlaceProps = {
+    value: number;
+    participant?: Participant | null;
+    couple?: Couple | null;
+};
+
+export class BracketPlace extends ValueObject<BracketPlaceProps> {
+    get value(): number {
+        return this.props.value;
+    }
+
+    get participant(): Participant | null {
+        return this.props.participant!;
+    }
+
+    get couple(): Couple | null {
+        return this.props.couple!;
+    }
+
+    setParticipant(p: Participant) {
+        this.props.participant = p;
+    }
+
+    setCouple(c: Couple) {
+        this.props.couple = c;
+    }
+
+    private constructor(props: BracketPlaceProps) {
+        super(props);
+    }
+
+    public static create(props: BracketPlaceProps): Result<BracketPlace> {
+        const guard = Guard.againstNullOrUndefined(props.value, "position");
+
+        if (guard.isFailure) {
+            return Result.fail(guard.getErrorValue());
+        }
+
+        return Result.ok<BracketPlace>(new BracketPlace(props));
+    }
+}
 
 export class BracketNode extends Entity<BracketNodeProps> {
     get id() {
         return this._id;
     }
-    get tournamentId(): TournamentId {
-        return this.props.tournamentId;
+    get contestId(): TournamentId {
+        return this.props.contestId;
     }
     get match(): TournamentMatch | null {
         return this.props.match!;
@@ -34,22 +81,22 @@ export class BracketNode extends Entity<BracketNodeProps> {
     get parent(): BracketNode | null {
         return this.props.parent!;
     }
-    get rightPlace(): number {
-        return this.props.rightPlace
+    get rightPlace(): BracketPlace {
+        return this.props.rightPlace;
     }
-    get leftPlace(): number {
-        return this.props.leftPlace
+    get leftPlace(): BracketPlace {
+        return this.props.leftPlace;
     }
     get deep(): number {
         return this.props.deep;
     }
 
-    set right(node: BracketNode) {
-        this.props.right = node
+    setRight(node: BracketNode): void {
+        this.props.right = node;
     }
 
-    set left(node: BracketNode) {
-        this.props.left = node
+    setLeft(node: BracketNode): void {
+        this.props.left = node;
     }
 
     public setMatch(match: TournamentMatch) {

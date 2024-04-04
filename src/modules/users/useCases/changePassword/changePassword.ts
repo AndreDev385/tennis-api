@@ -23,7 +23,7 @@ export class ChangePassword implements UseCase<any, Response> {
 
         try {
             try {
-                user = await this.userRepo.getUserByUserId(request.userId);
+                user = await this.userRepo.get({ userId: request.userId });
             } catch (error) {
                 return left(new AppError.NotFoundError(error));
             }

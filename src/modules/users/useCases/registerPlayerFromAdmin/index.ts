@@ -1,4 +1,4 @@
-import { sequelizeClubRepo } from "../../../league/repositories";
+import { sequelizeClubRepo, sequelizePlayerRepo } from "../../../league/repositories";
 import {
     sequelizePlayerRegisterRepo,
     sequelizeUserRepo,
@@ -16,6 +16,7 @@ const registerPlayer = new RegisterPlayer(
 const registerPlayerBulk = new RegisterPlayerBulk(
     sequelizeUserRepo,
     sequelizeClubRepo,
+    sequelizePlayerRepo,
     sequelizePlayerRegisterRepo
 );
 

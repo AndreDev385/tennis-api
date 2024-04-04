@@ -21,7 +21,7 @@ export class DeleteUser implements UseCase<string, Response> {
 
         try {
             try {
-                user = await this.userRepo.getUserByUserId(userId);
+                user = await this.userRepo.get({ userId });
             } catch (error) {
                 return left(new AppError.NotFoundError(error));
             }
