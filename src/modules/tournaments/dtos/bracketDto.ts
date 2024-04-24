@@ -8,12 +8,14 @@ type Place = {
 };
 
 export type BracketDto = {
+    //TODO: add Tournamnet match dto
     id: string;
     contestId: string;
-    match: string;
-    left: string;
-    right: string;
-    parent: string;
+    matchId: string | null;
+    match: any | null;
+    left: string | null;
+    right: string | null;
+    parent: string | null;
     rightPlace: Place;
     leftPlace: Place;
     deep: number;

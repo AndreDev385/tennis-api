@@ -1,12 +1,8 @@
 import { AppError } from "../../../../shared/core/AppError";
 import { Either, left, right } from "../../../../shared/core/Result";
 import { UseCase } from "../../../../shared/core/UseCase";
-import { GameMode } from "../../../league/domain/gameMode";
-import { CategoryMap } from "../../../league/mappers/categoryMap";
 import { Contest } from "../../domain/contest";
 import { ContestMap } from "../../mapper/ContestMap";
-import { CoupleMap } from "../../mapper/CoupleMap";
-import { ParticipantMap } from "../../mapper/ParticipantMap";
 import { ContestQuery, ContestRepository } from "../../repository/contestRepo";
 
 type Response = Either<AppError.UnexpectedError, any>;

@@ -1,6 +1,7 @@
 import { AppError } from "../../../../shared/core/AppError";
 import { Either, Result, left, right } from "../../../../shared/core/Result";
 import { UseCase } from "../../../../shared/core/UseCase";
+import { GameMode } from "../../../league/domain/gameMode";
 import { CI } from "../../../users/domain/ci";
 import { Name } from "../../../users/domain/names";
 import { User } from "../../../users/domain/user";
@@ -57,6 +58,14 @@ export class AddContestCouples
                 });
             } catch (error) {
                 return left(new AppError.NotFoundError(error));
+            }
+
+            if (contest.mode.value != GameMode.double) {
+                return left(
+                    Result.fail<string>(
+                        "Debes inscribir parejas para un concurso de dobles"
+                    )
+                );
             }
 
             for (const r of req.couples) {
@@ -186,7 +195,7 @@ export class AddContestCouples
 
                     console.log("EXIST COUPLE", couple);
                 } catch (error) {
-                    console.log(error, "ENTER error")
+                    console.log(error, "ENTER error");
                     const mustCouple = Couple.create({
                         p1: participant1,
                         p2: participant2,
@@ -202,7 +211,7 @@ export class AddContestCouples
                     couple = mustCouple.getValue();
                 }
 
-                console.log(couple, "before inscribe")
+                console.log(couple, "before inscribe");
 
                 const inscribe = Inscribed.create({
                     couple: couple,
@@ -217,7 +226,7 @@ export class AddContestCouples
 
                 inscribedList.push(inscribe.getValue());
 
-                console.log("RECORD", newRecord)
+                console.log("RECORD", newRecord);
 
                 newRecords.push(newRecord);
             }
@@ -234,7 +243,7 @@ export class AddContestCouples
                     !coupleIdsWithErr.includes(i.couple!.coupleId.id.toString())
             );
 
-            contest.inscribeParticipants(inscribedList);
+            contest.inscribe(inscribedList);
 
             await this.contestRepo.save(contest);
 

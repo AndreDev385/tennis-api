@@ -17,6 +17,7 @@ export class TournamentMap implements Mapper<Tournament> {
             rules: rules,
             startDate: raw.startDate,
             endDate: raw.endDate,
+            image: raw.image,
             createdAt: raw.createdAt,
             updatedAt: raw.updatedAt,
         };
@@ -44,6 +45,7 @@ export class TournamentMap implements Mapper<Tournament> {
                 status: mustTournamentStatus.getValue(),
                 startDate: raw.startDate,
                 endDate: raw.endDate,
+                image: raw.image,
                 createdAt: raw.createdAt,
                 updatedAt: raw.updatedAt,
                 rules: mustRules.getValue(),
@@ -75,6 +77,7 @@ export class TournamentMap implements Mapper<Tournament> {
             status: t.status.value,
             startDate: t.startDate,
             endDate: t.endDate,
+            image: t.image,
             createdAt: t.createdAt,
             updatedAt: t.updatedAt,
         };

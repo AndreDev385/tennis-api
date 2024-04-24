@@ -26,7 +26,6 @@ export class ContestMap implements Mapper<Contest> {
     }
 
     public static toDto(c: Contest) {
-        console.log(c.inscribed.getItems()[0].position, "DOMAIN OBJ");
         return {
             contestId: c.contestId.id.toString(),
             tournamentId: c.tournamentId.id.toString(),

@@ -4,6 +4,7 @@ import { BracketData } from "../../../shared/infra/database/sequelize/models/Bra
 import { BracketNode, BracketPlace } from "../domain/brackets";
 import { ContestId } from "../domain/contestId";
 import { TournamentMatch } from "../domain/tournamentMatch";
+import { BracketDto } from "../dtos/bracketDto";
 
 export type BuildBracketData = {
     id: string;
@@ -20,10 +21,11 @@ export type BuildBracketData = {
 export class BracketMap implements Mapper<BracketNode> {
     public static forQuery(
         node: BracketData & { match: TournamentMatch | null }
-    ) {
+    ): BracketDto {
         return {
             id: node.id,
             contestId: node.contestId,
+            matchId: node.matchId,
             match: node.match,
             left: node.left,
             right: node.right,

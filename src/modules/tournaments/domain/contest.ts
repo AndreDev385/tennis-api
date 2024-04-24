@@ -49,7 +49,7 @@ export class Contest extends Entity<ContestProps> {
         return this.props.inscribed!;
     }
 
-    public inscribeParticipants(values: Inscribed[]) {
+    public inscribe(values: Inscribed[]) {
         for (const p of values) {
             if (!this.inscribed.exists(p)) {
                 this.inscribed.add(p);

@@ -4,41 +4,44 @@ import { SequelizeCoupleRegisterRepository } from "./impl/sequelizeCoupleRegiste
 import { SequelizeCoupleRepository } from "./impl/sequelizeCoupleRepo";
 import { SequelizeRegisterParticipantsRepository } from "./impl/sequelizeParticipantRegisterRepo";
 import { SequelizeParticipantRepository } from "./impl/sequelizeParticipantRepo";
+import { SequelizeParticipantTrackerRepository } from "./impl/sequelizeParticipantTrackerRepo";
 import { SequelizeTournamentMatchRepository } from "./impl/sequelizeTournamentMatchRepo";
 import { SequelizeTournamentRepository } from "./impl/sequelizeTournamentRepo";
+import { SequelizeTournamentMatchTrackerRepo } from "./impl/sequelizeTrackerRepo";
 
-const sequelizeTournamentRepo = new SequelizeTournamentRepository();
+export const sequelizeTournamentRepo = new SequelizeTournamentRepository();
 
-const sequelizeRegisterParticipantRepo =
+export const sequelizeRegisterParticipantRepo =
     new SequelizeRegisterParticipantsRepository();
 
-const sequelizeParticipantRepo = new SequelizeParticipantRepository();
+export const sequelizeParticipantRepo = new SequelizeParticipantRepository();
 
-const sequelizeCoupleRepo = new SequelizeCoupleRepository(
+export const sequelizeCoupleRepo = new SequelizeCoupleRepository(
     sequelizeParticipantRepo
 );
 
-const sequelizeContestRepo = new SequlizeContestRepository(
+export const sequelizeContestRepo = new SequlizeContestRepository(
     sequelizeParticipantRepo,
     sequelizeCoupleRepo
 );
 
-const sequelizeTournamentMatchRepo = new SequelizeTournamentMatchRepository();
+export const sequelizeParticipantTrackerRepo =
+    new SequelizeParticipantTrackerRepository();
 
-const sequelizeBracketRepo = new SequelizeBracketRepository(
+export const sequelizeTournamentMatchTrackerRepo =
+    new SequelizeTournamentMatchTrackerRepo(sequelizeParticipantTrackerRepo);
+
+export const sequelizeTournamentMatchRepo =
+    new SequelizeTournamentMatchRepository(
+        sequelizeParticipantRepo,
+        sequelizeTournamentMatchTrackerRepo
+    );
+
+export const sequelizeBracketRepo = new SequelizeBracketRepository(
     sequelizeParticipantRepo,
     sequelizeCoupleRepo,
     sequelizeTournamentMatchRepo
 );
 
-const sequelizeRegisterCouplesRepo = new SequelizeCoupleRegisterRepository()
-
-export {
-    sequelizeTournamentRepo,
-    sequelizeRegisterParticipantRepo,
-    sequelizeParticipantRepo,
-    sequelizeContestRepo,
-    sequelizeBracketRepo,
-    sequelizeCoupleRepo,
-    sequelizeRegisterCouplesRepo,
-};
+export const sequelizeRegisterCouplesRepo =
+    new SequelizeCoupleRegisterRepository();

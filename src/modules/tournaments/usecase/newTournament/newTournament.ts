@@ -9,6 +9,7 @@ import { TournamentRules } from "../../domain/tournamentRules";
 import { TournamentRepository } from "../../repository/tournamentRepo";
 import { NewTournamentDto } from "./newTournamentDto";
 import { TournamentStatus } from "../../domain/tournamentStatus";
+import { UploadImageServices } from "../../../league/services/uploadImageService";
 
 type Response = Either<
     AppError.UnexpectedError | AppError.NotFoundError | Result<string>,
@@ -17,14 +18,20 @@ type Response = Either<
 
 export class NewTournament implements UseCase<NewTournamentDto, Response> {
     private readonly tournametRepo: TournamentRepository;
+    private uploadImgService: UploadImageServices;
 
-    constructor(tournametRepo: TournamentRepository) {
+    constructor(
+        tournametRepo: TournamentRepository,
+        uploadImageService: UploadImageServices
+    ) {
         this.tournametRepo = tournametRepo;
+        this.uploadImgService = uploadImageService;
     }
 
-    async execute(req: NewTournamentDto): Promise<Response> {
+    async execute(req: any): Promise<Response> {
         let rules: TournamentRules;
         let tournamet: Tournament;
+        let imgURL: string;
 
         try {
             /* Validate data is present */
@@ -82,10 +89,23 @@ export class NewTournament implements UseCase<NewTournamentDto, Response> {
 
             rules = mustRules.getValue();
 
+
+            try {
+                imgURL = await this.uploadImgService.upload(req.file.path);
+            } catch (error) {
+                console.log(error);
+                return left(
+                    Result.fail<string>(
+                        "Ha ocurrido un error al subir el archivo"
+                    )
+                );
+            }
+
             tournamet = Tournament.create({
                 name: req.name,
                 startDate: new Date(req.startDate),
                 endDate: new Date(req.endDate),
+                image: imgURL,
                 rules,
                 status: TournamentStatus.waiting(),
             }).getValue();

@@ -10,6 +10,7 @@ export interface TournamentData extends Model<InferAttributes<TournamentData>> {
     status: number;
     startDate: Date;
     endDate: Date;
+    image: string;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -41,6 +42,10 @@ const TournamentModel = sequelize.define<TournamentData>(
         },
         endDate: {
             type: DataTypes.DATE,
+            allowNull: false,
+        },
+        image: {
+            type: DataTypes.STRING,
             allowNull: false,
         },
         createdAt: {

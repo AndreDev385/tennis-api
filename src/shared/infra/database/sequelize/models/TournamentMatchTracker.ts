@@ -5,23 +5,23 @@ const sequelize: Sequelize = config.connection;
 
 export interface TournamentMatchTrackerData
     extends Model<InferAttributes<TournamentMatchTrackerData>> {
+    trackerId: string;
     matchId: string;
     player1: string;
     player2: string;
     player3?: string | null;
     player4?: string | null;
-    shortRallyWon: number;
-    shortRallyLost: number;
-    mediumRallyWon: number;
-    mediumRallyLost: number;
-    longRallyWon: number;
-    longRallyLost: number;
 }
 
 export const TournamentMatchTrackerModel =
     sequelize.define<TournamentMatchTrackerData>(
         "tournamentMatchTracker",
         {
+            trackerId: {
+                type: DataTypes.UUID,
+                allowNull: false,
+                primaryKey: true
+            },
             matchId: {
                 type: DataTypes.UUID,
                 allowNull: false,
@@ -41,30 +41,6 @@ export const TournamentMatchTrackerModel =
             player4: {
                 type: DataTypes.UUID,
                 allowNull: true,
-            },
-            shortRallyWon: {
-                type: DataTypes.INTEGER,
-                allowNull: false,
-            },
-            shortRallyLost: {
-                type: DataTypes.INTEGER,
-                allowNull: false,
-            },
-            mediumRallyWon: {
-                type: DataTypes.INTEGER,
-                allowNull: false,
-            },
-            mediumRallyLost: {
-                type: DataTypes.INTEGER,
-                allowNull: false,
-            },
-            longRallyWon: {
-                type: DataTypes.INTEGER,
-                allowNull: false,
-            },
-            longRallyLost: {
-                type: DataTypes.INTEGER,
-                allowNull: false,
             },
         },
         { tableName: "tournamentMatchTracker" }

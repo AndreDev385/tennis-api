@@ -2,54 +2,66 @@ import { Result } from "../../../shared/core/Result";
 import { Entity } from "../../../shared/domain/Entity";
 import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
 import { ParticipantId } from "./participantId";
+import { ParticipantTrackerId } from "./participantTrackerId";
 import { TournamentId } from "./tournamentId";
 import { TournamentMatchId } from "./tournamentMatchId";
 
 type ParticipantTrackerProps = {
     participantId: ParticipantId;
     tournamentId: TournamentId;
-    trackerId: TournamentMatchId;
+    matchId: TournamentMatchId;
 
     isDouble: boolean;
-    pointsWon: number;
-    pointsWonServing: number;
-    pointsWonReturning: number;
-    pointsLost: number;
-    pointsLostReturning: number;
-    pointsLostServing: number;
-    saveBreakPtsChances: number;
-    breakPtsSaved: number;
-    gamesWonServing: number;
-    gamesLostServing: number;
-    pointsWinnedFirstServ: number;
-    pointsWinnedSecondServ: number;
+
+    // serv
     firstServIn: number;
     secondServIn: number;
-    firstServWon: number;
-    secondServWon: number;
     aces: number;
     dobleFaults: number;
-    pointsWinnedFirstReturn: number;
-    pointsWinnedSecondReturn: number;
+    firstServWon: number; // Saque no devuelto
+    secondServWon: number; // Saque no devuelto
+    pointsWinnedFirstServ: number;
+    pointsWinnedSecondServ: number;
+    gamesWonServing: number;
+    gamesLostServing: number;
+    gamesWonReturning: number;
+    gamesLostReturning: number;
+    // return
+    firstReturnWon: number; // boton devolucion ganada
+    secondReturnWon: number; // botton devolucion ganada
+    firstReturnWinner: number; // winner con devolucion ganada
+    secondReturnWinner: number; // winner con devolucion ganada
     firstReturnIn: number;
     secondReturnIn: number;
     firstReturnOut: number;
     secondReturnOut: number;
-    firstReturnWon: number;
-    secondReturnWon: number;
-    firstReturnWinner: number;
-    secondReturnWinner: number;
-    meshPointsWon: number;
-    meshPointsLost: number;
+    pointsWinnedFirstReturn: number;
+    pointsWinnedSecondReturn: number;
+    // places
+    meshPointsWon: number; // malla
+    meshPointsLost: number; // malla
     meshWinner: number;
     meshError: number;
-    bckgPointsWon: number;
-    bckgPointsLost: number;
+    bckgPointsWon: number; // fondo/approach
+    bckgPointsLost: number; // fondo/approach
     bckgWinner: number;
     bckgError: number;
+    // rally
+    shortRallyWon: number;
+    shortRallyLost: number;
+    mediumRallyWon: number;
+    mediumRallyLost: number;
+    longRallyWon: number;
+    longRallyLost: number;
+    createdAt?: Date;
+    updatedAt?: Date;
 };
 
 export class ParticipantTracker extends Entity<ParticipantTrackerProps> {
+    get participantTrackerId() {
+        return ParticipantTrackerId.create(this._id).getValue();
+    }
+
     get participantId(): ParticipantId {
         return this.props.participantId;
     }
@@ -58,44 +70,12 @@ export class ParticipantTracker extends Entity<ParticipantTrackerProps> {
         return this.props.tournamentId;
     }
 
-    get trackerId(): TournamentMatchId {
-        return this.props.trackerId
+    get matchId(): TournamentMatchId {
+        return this.props.matchId;
     }
 
     get isDouble(): boolean {
         return this.props.isDouble;
-    }
-
-    get pointsWon(): number {
-        return this.props.pointsWon;
-    }
-
-    get pointsWonServing(): number {
-        return this.props.pointsWonServing;
-    }
-
-    get pointsWonReturning(): number {
-        return this.props.pointsWonReturning;
-    }
-
-    get pointsLost(): number {
-        return this.props.pointsLost;
-    }
-
-    get pointsLostReturning(): number {
-        return this.props.pointsLostReturning;
-    }
-
-    get pointsLostServing(): number {
-        return this.props.pointsLostServing;
-    }
-
-    get saveBreakPtsChances(): number {
-        return this.props.saveBreakPtsChances;
-    }
-
-    get breakPtsSaved(): number {
-        return this.props.breakPtsSaved;
     }
 
     get gamesWonServing(): number {
@@ -210,11 +190,98 @@ export class ParticipantTracker extends Entity<ParticipantTrackerProps> {
         return this.props.bckgError;
     }
 
+    get shortRallyWon(): number {
+        return this.props.shortRallyWon;
+    }
+    get shortRallyLost(): number {
+        return this.props.shortRallyLost;
+    }
+    get mediumRallyWon(): number {
+        return this.props.mediumRallyWon;
+    }
+    get mediumRallyLost(): number {
+        return this.props.mediumRallyLost;
+    }
+    get longRallyWon(): number {
+        return this.props.longRallyWon;
+    }
+    get longRallyLost(): number {
+        return this.props.longRallyLost;
+    }
+    get createdAt(): Date {
+        return this.props.createdAt!;
+    }
+    get updatedAt(): Date {
+        return this.props.updatedAt!;
+    }
+
     private constructor(props: ParticipantTrackerProps, id?: UniqueEntityID) {
         super(props, id);
     }
 
+    public static newEmptyTracker(
+        isDouble: boolean,
+        matchId: TournamentMatchId,
+        tournamentId: TournamentId,
+        participantId: ParticipantId
+    ) {
+        return new ParticipantTracker({
+            isDouble,
+            matchId,
+            tournamentId,
+            participantId,
+            firstServIn: 0,
+            secondServIn: 0,
+            aces: 0,
+            dobleFaults: 0,
+            firstServWon: 0,
+            secondServWon: 0,
+            pointsWinnedFirstServ: 0,
+            pointsWinnedSecondServ: 0,
+            gamesWonServing: 0,
+            gamesLostServing: 0,
+            gamesWonReturning: 0,
+            gamesLostReturning: 0,
+            // return
+            firstReturnWon: 0,
+            secondReturnWon: 0,
+            firstReturnWinner: 0,
+            secondReturnWinner: 0,
+            firstReturnIn: 0,
+            secondReturnIn: 0,
+            firstReturnOut: 0,
+            secondReturnOut: 0,
+            pointsWinnedFirstReturn: 0,
+            pointsWinnedSecondReturn: 0,
+            // places
+            meshPointsWon: 0,
+            meshPointsLost: 0,
+            meshWinner: 0,
+            meshError: 0,
+            bckgPointsWon: 0,
+            bckgPointsLost: 0,
+            bckgWinner: 0,
+            bckgError: 0,
+            // rally
+            shortRallyWon: 0,
+            shortRallyLost: 0,
+            mediumRallyWon: 0,
+            mediumRallyLost: 0,
+            longRallyWon: 0,
+            longRallyLost: 0,
+        });
+    }
+
     public static create(props: ParticipantTrackerProps, id?: UniqueEntityID) {
-        return Result.ok<ParticipantTracker>(new ParticipantTracker(props, id));
+        return Result.ok<ParticipantTracker>(
+            new ParticipantTracker(
+                {
+                    ...props,
+                    createdAt: props.createdAt ?? new Date(),
+                    updatedAt: props.updatedAt ?? new Date(),
+                },
+                id
+            )
+        );
     }
 }

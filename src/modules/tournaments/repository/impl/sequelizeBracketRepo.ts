@@ -3,6 +3,8 @@ import { BracketNode, BracketPlace } from "../../domain/brackets";
 import { Couple } from "../../domain/couple";
 import { Participant } from "../../domain/participant";
 import { BracketMap, BuildBracketData } from "../../mapper/BracketMap";
+import { CoupleMap } from "../../mapper/CoupleMap";
+import { ParticipantMap } from "../../mapper/ParticipantMap";
 import { BracketsQuery, BracketsRepository } from "../bracketsRepo";
 import { CoupleRepository } from "../coupleRepo";
 import { ParticipantRepo } from "../participantRepo";
@@ -48,6 +50,25 @@ export class SequelizeBracketRepository implements BracketsRepository {
             leftPlace: JSON.parse(b.leftPlace),
             rightPlace: JSON.parse(b.rightPlace),
         }));
+
+        for (const node of list) {
+            if (node.rightPlace.participantId) {
+                let participant = await this.participantRepo.get({ participantId: node.rightPlace.participantId });
+                node.rightPlace.participant = ParticipantMap.toDto(participant);
+            }
+            if (node.leftPlace.participantId) {
+                let participant = await this.participantRepo.get({ participantId: node.leftPlace.participantId });
+                node.leftPlace.participant = ParticipantMap.toDto(participant);
+            }
+            if (node.rightPlace.coupleId) {
+                let couple = await this.coupleRepo.get({ coupleId: node.rightPlace.coupleId });
+                node.rightPlace.coupleId = CoupleMap.toDto(couple);
+            }
+            if (node.leftPlace.coupleId) {
+                let couple = await this.coupleRepo.get({ coupleId: node.leftPlace.coupleId });
+                node.leftPlace.coupleId = CoupleMap.toDto(couple);
+            }
+        }
 
         //for (const node of result) {
         //    if (node.matchId) {

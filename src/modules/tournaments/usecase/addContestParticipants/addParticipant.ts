@@ -1,6 +1,7 @@
 import { AppError } from "../../../../shared/core/AppError";
 import { Either, Result, left, right } from "../../../../shared/core/Result";
 import { UseCase } from "../../../../shared/core/UseCase";
+import { GameMode } from "../../../league/domain/gameMode";
 import { CI } from "../../../users/domain/ci";
 import { Name } from "../../../users/domain/names";
 import { User } from "../../../users/domain/user";
@@ -55,6 +56,14 @@ export class AddContestParticipants
                 });
             } catch (error) {
                 return left(new AppError.NotFoundError(error));
+            }
+
+            if (contest.mode.value != GameMode.single) {
+                return left(
+                    Result.fail(
+                        "Debes inscribir jugadores para un concurso de single"
+                    )
+                );
             }
 
             for (const p of req.participants) {
@@ -138,11 +147,11 @@ export class AddContestParticipants
             const ciWithError = result.errors.map((e) => e.ci);
 
             // remove participants that fail in creation
-            inscribedList = inscribedList.filter((p) =>
-                !ciWithError.includes(p.participant!.user.ci!.value)
+            inscribedList = inscribedList.filter(
+                (p) => !ciWithError.includes(p.participant!.user.ci!.value)
             );
 
-            contest.inscribeParticipants(inscribedList);
+            contest.inscribe(inscribedList);
 
             await this.contestRepo.save(contest);
 

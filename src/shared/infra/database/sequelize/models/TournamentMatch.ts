@@ -5,7 +5,9 @@ const sequelize: Sequelize = config.connection;
 
 export interface TournamentMatchData
     extends Model<InferAttributes<TournamentMatchData>> {
+    matchId: string;
     tournamentId: string;
+    contestId: string;
     rules: string;
     mode: string;
     surface: string;
@@ -26,7 +28,16 @@ export interface TournamentMatchData
 export const TournamentMatchModel = sequelize.define<TournamentMatchData>(
     "tournamentMatch",
     {
+        matchId: {
+            type: DataTypes.UUID,
+            allowNull: false,
+            primaryKey: true,
+        },
         tournamentId: {
+            type: DataTypes.UUID,
+            allowNull: false,
+        },
+        contestId: {
             type: DataTypes.UUID,
             allowNull: false,
         },

@@ -1,34 +1,23 @@
 import { Request, Response } from "express";
-import { BaseController } from "../../../../shared/infra/http/models/BaseController";
-import { NewTournament } from "./newTournament";
+import { StartMatch } from "./startMatch";
 import { AppError } from "../../../../shared/core/AppError";
+import { BaseController } from "../../../../shared/infra/http/models/BaseController";
 import { Result } from "../../../../shared/core/Result";
 
-export class NewTournamentController extends BaseController {
-    private readonly usecase: NewTournament;
+export class StartTournamentMatchCtrl extends BaseController {
+    private usecase: StartMatch;
 
-    constructor(usecase: NewTournament) {
+    constructor(usecase: StartMatch) {
         super();
         this.usecase = usecase;
     }
 
     async executeImpl(req: Request, res: Response) {
-
-        const { name, gamesPerSet, setsQuantity, startDate, endDate } = req.body;
-
-        console.log(req.body);
-
-        const result = await this.usecase.execute({
-            name,
-            gamesPerSet: Number(gamesPerSet),
-            setsQuantity: Number(setsQuantity),
-            startDate,
-            endDate,
-            file: req.file,
-        });
+        const result = await this.usecase.execute(req.body);
 
         if (result.isLeft()) {
             const error = result.value;
+
             switch (error.constructor) {
                 case AppError.UnexpectedError:
                     return this.fail(
@@ -37,9 +26,9 @@ export class NewTournamentController extends BaseController {
                             .message
                     );
                 case AppError.NotFoundError:
-                    return this.clientError(
+                    return this.notFound(
                         res,
-                        (error as AppError.UnexpectedError).getErrorValue()
+                        (error as AppError.NotFoundError).getErrorValue()
                             .message
                     );
                 default:
@@ -50,6 +39,6 @@ export class NewTournamentController extends BaseController {
             }
         }
 
-        return this.ok(res, { message: "Nuevo torneo agregado" });
+        return this.ok(res, { message: "ok" });
     }
 }

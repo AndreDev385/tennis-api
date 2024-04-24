@@ -5,6 +5,7 @@ import { Mode } from "../../league/domain/gameMode";
 import { MatchStatus, MatchStatuses } from "../../league/domain/matchStatus";
 import { Sets } from "../../league/domain/sets";
 import { Surface } from "../../league/domain/surface";
+import { ContestId } from "./contestId";
 import { MatchInfo } from "./matchInfo";
 import { Participant } from "./participant";
 import { TournamentId } from "./tournamentId";
@@ -14,6 +15,7 @@ import { TournamentRules } from "./tournamentRules";
 
 type TournamentMatchProps = {
     tournamentId: TournamentId;
+    contestId: ContestId;
     rules: TournamentRules;
     mode: Mode;
     surface: Surface;
@@ -38,6 +40,10 @@ export class TournamentMatch extends AggregateRoot<TournamentMatchProps> {
 
     get tournamentId(): TournamentId {
         return this.props.tournamentId;
+    }
+
+    get contestId(): ContestId {
+        return this.props.contestId;
     }
 
     get rules(): TournamentRules {

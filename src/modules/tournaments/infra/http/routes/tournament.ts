@@ -13,8 +13,11 @@ import { addContestCouplesCtrl } from "../../../usecase/addContestCouples";
 
 const tournamentRouter = express.Router();
 
-tournamentRouter.post("/", middleware.adminAuthenticated() as any, (req, res) =>
-    newTournamentCtrl.execute(req, res)
+tournamentRouter.post(
+    "/",
+    middleware.adminAuthenticated() as any,
+    middleware.uploadImageHandler.single("image"),
+    (req, res) => newTournamentCtrl.execute(req, res)
 );
 
 tournamentRouter.get("/", (req, res) =>
