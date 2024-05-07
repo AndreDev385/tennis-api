@@ -1,13 +1,13 @@
 import { Request, Response } from "express";
-import { StartMatch } from "./startMatch";
 import { AppError } from "../../../../shared/core/AppError";
 import { BaseController } from "../../../../shared/infra/http/models/BaseController";
 import { Result } from "../../../../shared/core/Result";
+import { CreateBracketMatch } from "./createBracketMatch";
 
-export class StartTournamentMatchCtrl extends BaseController {
-    private usecase: StartMatch;
+export class CreateBracketMatchCtrl extends BaseController {
+    private usecase: CreateBracketMatch;
 
-    constructor(usecase: StartMatch) {
+    constructor(usecase: CreateBracketMatch) {
         super();
         this.usecase = usecase;
     }
@@ -39,6 +39,6 @@ export class StartTournamentMatchCtrl extends BaseController {
             }
         }
 
-        return this.ok(res, { message: "ok" });
+        return this.ok(res, result.value.getValue());
     }
 }

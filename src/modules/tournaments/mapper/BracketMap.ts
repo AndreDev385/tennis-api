@@ -3,11 +3,14 @@ import { Mapper } from "../../../shared/infra/Mapper";
 import { BracketData } from "../../../shared/infra/database/sequelize/models/Bracket";
 import { BracketNode, BracketPlace } from "../domain/brackets";
 import { ContestId } from "../domain/contestId";
+import { Phase, PhaseValues } from "../domain/phase";
 import { TournamentMatch } from "../domain/tournamentMatch";
 import { BracketDto } from "../dtos/bracketDto";
+import { TournamentMatchMap } from "./TournamentMatchMap";
 
 export type BuildBracketData = {
     id: string;
+    phase: PhaseValues;
     contestId: string;
     match?: TournamentMatch | null;
     left?: BracketNode | null;
@@ -26,12 +29,13 @@ export class BracketMap implements Mapper<BracketNode> {
             id: node.id,
             contestId: node.contestId,
             matchId: node.matchId,
-            match: node.match,
+            match: node.match != null ? TournamentMatchMap.toDto(node.match) : null,
             left: node.left,
             right: node.right,
             parent: node.parent,
             rightPlace: JSON.parse(node.rightPlace),
             leftPlace: JSON.parse(node.leftPlace),
+            phase: node.phase,
             deep: node.deep,
         };
     }
@@ -40,6 +44,7 @@ export class BracketMap implements Mapper<BracketNode> {
         const mustNode = BracketNode.create(
             {
                 ...raw,
+                phase: Phase.create(raw.phase).getValue(),
                 match: raw.match ?? null,
                 parent: raw.parent ?? null,
                 right: raw.right ?? null,
@@ -60,15 +65,18 @@ export class BracketMap implements Mapper<BracketNode> {
         return {
             id: node.id.toString(),
             contestId: node.contestId.id.toString(),
+            phase: node.phase.value,
             deep: node.deep,
             rightPlace: JSON.stringify({
                 value: node.rightPlace.value,
-                participantId: node.rightPlace.participant?.participantId.id.toString(),
+                participantId:
+                    node.rightPlace.participant?.participantId.id.toString(),
                 coupleId: node.rightPlace.couple?.coupleId.id.toString(),
             }),
             leftPlace: JSON.stringify({
                 value: node.leftPlace.value,
-                participantId: node.leftPlace.participant?.participantId.id.toString(),
+                participantId:
+                    node.leftPlace.participant?.participantId.id.toString(),
                 coupleId: node.leftPlace.couple?.coupleId.id.toString(),
             }),
             right: node.right?.id.toString() ?? null,

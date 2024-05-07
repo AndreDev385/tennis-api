@@ -11,7 +11,7 @@ interface SetProps {
     myTiebreakPoints: number;
     rivalTiebreakPoints: number;
     setWon: boolean | null;
-    stats: SetStats | null;
+    stats: any | null;
 }
 
 export class Set extends ValueObject<SetProps> {

@@ -1,9 +1,10 @@
 import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
 import { Mapper } from "../../../shared/infra/Mapper";
-import { TournamentMatchData } from "../../../shared/infra/database/sequelize/models/TournamentMatch";
 import { Mode } from "../../league/domain/gameMode";
+import { GamesPerSet } from "../../league/domain/gamesPerSet";
 import { MatchStatus } from "../../league/domain/matchStatus";
 import { Set } from "../../league/domain/set";
+import { SetQuantity } from "../../league/domain/setQuantity";
 import { Sets } from "../../league/domain/sets";
 import { Surface } from "../../league/domain/surface";
 import { GameMap } from "../../league/mappers/gameMap";
@@ -19,6 +20,9 @@ import { TournamentId } from "../domain/tournamentId";
 import { TournamentMatch } from "../domain/tournamentMatch";
 import { TournamentMatchTracker } from "../domain/tournamentMatchTracker";
 import { TournamentRules } from "../domain/tournamentRules";
+import { TournamentMatchDto } from "../dtos/matchDto";
+import { ParticipantMap } from "./ParticipantMap";
+import { TournamentMatchTrackerMap } from "./TournamentMatchTrackerMap";
 
 type BuildMatch = {
     player1: Participant;
@@ -42,43 +46,46 @@ type BuildMatch = {
 };
 
 export class TournamentMatchMap implements Mapper<TournamentMatch> {
-    public static toDto(match: TournamentMatch) {
+    public static toDto(match: TournamentMatch): TournamentMatchDto {
         return {
             matchId: match.matchId.id.toString(),
             tournamentId: match.tournamentId.id.toString(),
             contestId: match.contestId.id.toString(),
-            rules: JSON.stringify({
+            rules: {
                 gamesPerSet: match.rules.gamesPerSet.value,
                 setsQuantity: match.rules.setsQuantity.value,
-            }),
+            },
             mode: match.mode.value,
             surface: match.surface.value,
-            sets: match.sets.getItems().map((s) => SetMap.toPersistance(s)),
+            sets: match.sets.getItems().map((s) => SetMap.toDto(s)),
             superTieBreak: match.superTieBreak,
-            player1Id: match.player1.participantId.id.toString(),
-            player2Id: match.player2.participantId.id.toString(),
-            player3Id: match.player3?.participantId.id.toString(),
-            player4Id: match.player4?.participantId.id.toString(),
-            //TODO: Impl tracker Map
-            //tracker:
+            participant1: ParticipantMap.toDto(match.player1),
+            participant2: ParticipantMap.toDto(match.player2),
+            participant3: match.player3
+                ? ParticipantMap.toDto(match.player3)
+                : null,
+            participant4: match.player4
+                ? ParticipantMap.toDto(match.player4)
+                : null,
+            tracker: TournamentMatchTrackerMap.toDto(match.tracker)!,
             status: match.status.value,
-            matchInfo: JSON.stringify({
-                currentSetIdx: match.matchInfo?.currentSetIdx,
-                currentGame: JSON.stringify(
-                    GameMap.toDto(match.matchInfo?.currentGame!)
+            matchInfo: {
+                currentSetIdx: match.matchInfo?.currentSetIdx ?? null,
+                currentGame: GameMap.toDto(
+                    match.matchInfo?.currentGame ?? null
                 ),
                 setsWon: match.matchInfo?.setsWon,
                 setsLost: match.matchInfo?.setsLost,
-                matchFinish: match.matchInfo?.matchFinish,
-                superTiebreak: match.matchInfo?.superTiebreak,
+                matchFinish: match.matchInfo?.matchFinish ?? null,
+                superTiebreak: match.matchInfo?.superTieBreak,
                 initialTeam: match.matchInfo?.initialTeam,
-                doubleServeFlow: JSON.stringify(
-                    DoubleServeFlowMap.toDto(match.matchInfo?.doubleServeFlow)
+                doubleServeFlow: DoubleServeFlowMap.toDto(
+                    match.matchInfo?.doubleServeFlow
                 ),
-                singleServeFlow: JSON.stringify(
-                    SingleServeFlowMap.toDto(match.matchInfo?.singleServeFlow)
+                singleServeFlow: SingleServeFlowMap.toDto(
+                    match.matchInfo?.singleServeFlow
                 ),
-            }),
+            },
             matchWon: match.matchWon,
             createdAt: match.createdAt,
             updatedAt: match.updatedAt,
@@ -106,19 +113,17 @@ export class TournamentMatchMap implements Mapper<TournamentMatch> {
             status: match.status.value,
             matchInfo: JSON.stringify({
                 currentSetIdx: match.matchInfo?.currentSetIdx,
-                currentGame: JSON.stringify(
-                    GameMap.toDto(match.matchInfo?.currentGame!)
-                ),
+                currentGame: GameMap.toDto(match.matchInfo?.currentGame!),
                 setsWon: match.matchInfo?.setsWon,
                 setsLost: match.matchInfo?.setsLost,
                 matchFinish: match.matchInfo?.matchFinish,
-                superTiebreak: match.matchInfo?.superTiebreak,
+                superTieBreak: match.matchInfo?.superTieBreak,
                 initialTeam: match.matchInfo?.initialTeam,
-                doubleServeFlow: JSON.stringify(
-                    DoubleServeFlowMap.toDto(match.matchInfo?.doubleServeFlow)
+                doubleServeFlow: DoubleServeFlowMap.toDto(
+                    match.matchInfo?.doubleServeFlow
                 ),
-                singleServeFlow: JSON.stringify(
-                    SingleServeFlowMap.toDto(match.matchInfo?.singleServeFlow)
+                singleServeFlow: SingleServeFlowMap.toDto(
+                    match.matchInfo?.singleServeFlow
                 ),
             }),
             matchWon: match.matchWon,
@@ -151,8 +156,12 @@ export class TournamentMatchMap implements Mapper<TournamentMatch> {
                 mode: Mode.create({ value: raw.mode }).getValue(),
                 sets,
                 rules: TournamentRules.create({
-                    gamesPerSet: rawRules.gamesPerSet,
-                    setsQuantity: rawRules.setsQuantity,
+                    gamesPerSet: GamesPerSet.create({
+                        value: rawRules.gamesPerSet,
+                    }).getValue(),
+                    setsQuantity: SetQuantity.create({
+                        value: rawRules.setsQuantity,
+                    }).getValue(),
                 }).getValue(),
                 status: MatchStatus.create({ value: raw.status }).getValue(),
                 player1: raw.player1,
@@ -168,7 +177,7 @@ export class TournamentMatchMap implements Mapper<TournamentMatch> {
                         setsWon: matchInfo?.setsWon,
                         setsLost: matchInfo?.setsLost,
                         matchFinish: matchInfo?.matchFinish,
-                        superTiebreak: matchInfo?.superTiebreak,
+                        superTieBreak: matchInfo?.superTieBreak,
                         initialTeam: matchInfo?.initialTeam,
                         doubleServeFlow: DoubleServeFlowMap.toDomain(
                             matchInfo.doubleServeFlow

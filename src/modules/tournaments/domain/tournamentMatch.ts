@@ -6,6 +6,7 @@ import { MatchStatus, MatchStatuses } from "../../league/domain/matchStatus";
 import { Sets } from "../../league/domain/sets";
 import { Surface } from "../../league/domain/surface";
 import { ContestId } from "./contestId";
+import { TournamentMatchFinished } from "./events/tournamentMatchFinished";
 import { MatchInfo } from "./matchInfo";
 import { Participant } from "./participant";
 import { TournamentId } from "./tournamentId";
@@ -135,6 +136,7 @@ export class TournamentMatch extends AggregateRoot<TournamentMatchProps> {
         superTieBreak: boolean,
         matchInfo: MatchInfo
     ) {
+        this.props.matchWon = null;
         this.props.superTieBreak = superTieBreak;
         this.props.tracker = tracker;
         this.props.sets = sets;
@@ -147,7 +149,8 @@ export class TournamentMatch extends AggregateRoot<TournamentMatchProps> {
         sets: Sets,
         tracker: TournamentMatchTracker,
         superTieBreak: boolean,
-        matchWon: boolean | null
+        matchWon: boolean | null,
+        matchInfo: MatchInfo,
     ) {
         this.props.superTieBreak = superTieBreak;
         this.props.status = MatchStatus.createNew(MatchStatuses.Finished);
@@ -158,13 +161,15 @@ export class TournamentMatch extends AggregateRoot<TournamentMatchProps> {
         } else {
             this.props.matchWon = matchWon;
         }
+        this.props.matchInfo = matchInfo;
         this.props.updatedAt = new Date();
-        //this.addDomainEvent(new MatchFinished(this));
+        this.addDomainEvent(new TournamentMatchFinished(this))
     }
 
     public cancelMatch(
         sets: Sets,
         tracker: TournamentMatchTracker,
+        matchInfo: MatchInfo,
         superTieBreak?: boolean,
         matchWon: boolean | null = null
     ) {
@@ -173,7 +178,8 @@ export class TournamentMatch extends AggregateRoot<TournamentMatchProps> {
         this.props.sets = sets;
         this.props.status = MatchStatus.createNew(MatchStatuses.Canceled);
         this.props.matchWon = matchWon;
+        this.props.matchInfo = matchInfo;
         this.props.updatedAt = new Date();
-        //this.addDomainEvent(new MatchCancelled(this))
+        this.addDomainEvent(new TournamentMatchFinished(this))
     }
 }

@@ -8,9 +8,9 @@ export interface DoubleServeFlowDto {
     initialServingPlayer: number;
     initialReturningPlayer: number;
     setNextFlow: boolean;
-    firstGameFlow: Array<number>;
-    secondGameFlow: Array<number>;
-    thirdGameFlow: Array<number>;
-    fourGameFlow: Array<number>;
+    firstGameFlow?: Array<number>;
+    secondGameFlow?: Array<number>;
+    thirdGameFlow?: Array<number>;
+    fourGameFlow?: Array<number>;
     order: Array<Array<number>>;
 }

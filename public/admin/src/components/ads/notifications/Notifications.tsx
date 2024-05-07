@@ -35,7 +35,6 @@ const Notifications = ({dismiss}: INotificationsProps) => {
     setSubmitted(true);
     if (!form.title || !form.description) return;
     setLoading(true)
-    // TODO fetch data
     dismiss(true)
 }
 

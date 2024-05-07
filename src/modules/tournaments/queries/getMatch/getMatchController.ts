@@ -33,6 +33,8 @@ export class GetTournamentMatchCtrl extends BaseController {
             }
         }
 
+        console.log(result.value.getValue().tracker);
+
         return this.ok(res, result.value.getValue());
     }
 }

@@ -6,11 +6,13 @@ import { ValueObject } from "../../../shared/domain/ValueObject";
 import { ContestId } from "./contestId";
 import { Couple } from "./couple";
 import { Participant } from "./participant";
+import { Phase } from "./phase";
 import { TournamentId } from "./tournamentId";
 import { TournamentMatch } from "./tournamentMatch";
 
 type BracketNodeProps = {
     contestId: ContestId;
+    phase: Phase;
     match?: TournamentMatch | null;
     left?: BracketNode | null;
     right?: BracketNode | null;
@@ -47,6 +49,11 @@ export class BracketPlace extends ValueObject<BracketPlaceProps> {
         this.props.couple = c;
     }
 
+    setInscribed(p: Participant | null, c: Couple | null) {
+        this.props.participant = p;
+        this.props.couple = c;
+    }
+
     private constructor(props: BracketPlaceProps) {
         super(props);
     }
@@ -69,6 +76,9 @@ export class BracketNode extends Entity<BracketNodeProps> {
     get contestId(): TournamentId {
         return this.props.contestId;
     }
+    get phase() {
+        return this.props.phase;
+    }
     get match(): TournamentMatch | null {
         return this.props.match!;
     }
@@ -89,6 +99,12 @@ export class BracketNode extends Entity<BracketNodeProps> {
     }
     get deep(): number {
         return this.props.deep;
+    }
+
+    get placeThatAdvance(): number {
+        return this.props.rightPlace.value < this.props.leftPlace.value
+            ? this.props.rightPlace.value
+            : this.props.leftPlace.value;
     }
 
     setRight(node: BracketNode): void {

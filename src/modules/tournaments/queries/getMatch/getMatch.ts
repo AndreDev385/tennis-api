@@ -1,7 +1,6 @@
 import { AppError } from "../../../../shared/core/AppError";
 import { Either, Result, left, right } from "../../../../shared/core/Result";
 import { UseCase } from "../../../../shared/core/UseCase";
-import { TournamentMatch } from "../../domain/tournamentMatch";
 import { TournamentMatchMap } from "../../mapper/TournamentMatchMap";
 import { TournamentMatchQuery, TournamentMatchRepo } from "../../repository/tournamentMatchRepo";
 

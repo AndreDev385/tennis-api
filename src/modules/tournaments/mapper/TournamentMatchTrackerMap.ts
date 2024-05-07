@@ -4,6 +4,8 @@ import { ParticipantTracker } from "../domain/participantTracker";
 import { TournamentMatch } from "../domain/tournamentMatch";
 import { TournamentMatchId } from "../domain/tournamentMatchId";
 import { TournamentMatchTracker } from "../domain/tournamentMatchTracker";
+import { TournamentMatchTrackerDto } from "../dtos/trackerDto";
+import { ParticipantTrackerMap } from "./ParticipantTrackerMap";
 
 type BuildTracker = {
     trackerId: string;
@@ -12,25 +14,38 @@ type BuildTracker = {
     player2: ParticipantTracker;
     player3: ParticipantTracker | null;
     player4: ParticipantTracker | null;
-}
+};
 
 export class TournamentMatchTrackerMap implements Mapper<TournamentMatch> {
-
-
     public static toDomain(raw: BuildTracker) {
-        const tracker = TournamentMatchTracker.create({
-            matchId: TournamentMatchId.create(new UniqueEntityID(raw.matchId)).getValue(),
-            player1: raw.player1,
-            player2: raw.player2,
-            player3: raw.player3,
-            player4: raw.player4,
-        }, new UniqueEntityID(raw.trackerId)).getValue()
+        const tracker = TournamentMatchTracker.create(
+            {
+                matchId: TournamentMatchId.create(
+                    new UniqueEntityID(raw.matchId)
+                ).getValue(),
+                player1: raw.player1,
+                player2: raw.player2,
+                player3: raw.player3,
+                player4: raw.player4,
+            },
+            new UniqueEntityID(raw.trackerId)
+        ).getValue();
 
         return tracker;
     }
 
-    public static toDto() {
-
+    public static toDto(
+        t: TournamentMatchTracker | null
+    ): TournamentMatchTrackerDto | null {
+        if (!t) return null;
+        return {
+            trackerId: t.trackerId.id.toString(),
+            matchId: t.matchId.id.toString(),
+            player1: ParticipantTrackerMap.toDto(t.player1),
+            player2: ParticipantTrackerMap.toDto(t.player2),
+            player3: ParticipantTrackerMap.toDto(t.player3),
+            player4: ParticipantTrackerMap.toDto(t.player4),
+        };
     }
 
     public static toPersitance(tracker: TournamentMatchTracker) {
@@ -41,6 +56,6 @@ export class TournamentMatchTrackerMap implements Mapper<TournamentMatch> {
             player2: tracker.player2.participantId.id.toString(),
             player3: tracker.player3?.participantId.id.toString(),
             player4: tracker.player4?.participantId.id.toString(),
-        }
+        };
     }
 }

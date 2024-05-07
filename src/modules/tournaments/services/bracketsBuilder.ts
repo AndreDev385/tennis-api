@@ -19,29 +19,29 @@ export function buildBracketsBuilder(
             (i) => i.position == node.rightPlace.value
         );
         if (rightP) {
-            node.rightPlace.setParticipant(rightP.participant!);
+            node.rightPlace.setInscribed(rightP.participant, rightP.couple);
         }
 
         const leftP = inscribed.find((i) => i.position == node.leftPlace.value);
         if (leftP) {
-            node.leftPlace.setParticipant(leftP.participant!);
+            node.leftPlace.setInscribed(leftP.participant, leftP.couple);
         }
 
         if (!!rightP === true && !leftP) {
             const isRightChildren = node.parent?.right?.equals(node);
             if (isRightChildren) {
-                node.parent?.rightPlace.setParticipant(rightP.participant!);
+                node.parent?.rightPlace.setInscribed(rightP.participant, rightP.couple);
             } else {
-                node.parent?.leftPlace.setParticipant(rightP.participant!);
+                node.parent?.leftPlace.setInscribed(rightP.participant, rightP.couple);
             }
         }
 
         if (!!leftP === true && !rightP) {
             const isRightChildren = node.parent?.right?.equals(node);
             if (isRightChildren) {
-                node.parent?.rightPlace.setParticipant(leftP.participant!);
+                node.parent?.rightPlace.setInscribed(leftP.participant, leftP.couple);
             } else {
-                node.parent?.leftPlace.setParticipant(leftP.participant!);
+                node.parent?.leftPlace.setInscribed(leftP.participant, leftP.couple);
             }
         }
 
@@ -64,6 +64,7 @@ export function buildBracketsBuilder(
 
     if (node.right == null) {
         const right = BracketNode.create({
+            phase: node.phase,
             parent: node,
             deep: nextDeep,
             contestId: node.contestId,
@@ -82,6 +83,7 @@ export function buildBracketsBuilder(
 
     if (node.left == null) {
         const left = BracketNode.create({
+            phase: node.phase,
             parent: node,
             deep: nextDeep,
             contestId: node.contestId,
@@ -121,6 +123,5 @@ export function calculateDeepByParticipants(participants: number): number {
         deep++;
         table = 2 ** deep;
     }
-    console.log(deep, table);
     return deep;
 }

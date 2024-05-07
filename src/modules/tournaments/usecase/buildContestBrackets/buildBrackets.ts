@@ -3,6 +3,7 @@ import { Either, Result, left, right } from "../../../../shared/core/Result";
 import { UseCase } from "../../../../shared/core/UseCase";
 import { BracketNode, BracketPlace } from "../../domain/brackets";
 import { Contest } from "../../domain/contest";
+import { Phase, Phases, mapPhaseToString } from "../../domain/phase";
 import { BracketsRepository } from "../../repository/bracketsRepo";
 import { ContestRepository } from "../../repository/contestRepo";
 import {
@@ -49,8 +50,32 @@ export class BuildBrackets implements UseCase<BuildBracketsDto, Response> {
                 );
             }
 
+            const maybePhase = Phase.create(req.phase);
+
+            if (maybePhase.isFailure) {
+                return left(
+                    Result.fail<string>(`${maybePhase.getErrorValue()}`)
+                );
+            }
+
+            const phase = maybePhase.getValue();
+
+            const bracketsAlreadyExist = await this.bracketRepo.list({
+                contestId: req.contestId,
+                phase: phase.value,
+            });
+
+            if (bracketsAlreadyExist.length > 0) {
+                return left(
+                    Result.fail<string>(
+                        `Las llaves de la tabla ${mapPhaseToString(phase)} ya han sido creadas`
+                    )
+                );
+            }
+
             const mustNode = BracketNode.create({
                 deep: 1,
+                phase: phase,
                 rightPlace: BracketPlace.create({ value: 1 }).getValue(),
                 leftPlace: BracketPlace.create({ value: 2 }).getValue(),
                 contestId: contest.contestId,
@@ -62,6 +87,8 @@ export class BuildBrackets implements UseCase<BuildBracketsDto, Response> {
 
             rootNode = mustNode.getValue();
 
+            // TODO: fix participants for build the brackets
+            // it must be dinamic depending on the phase
             const deep = calculateDeepByParticipants(
                 contest.inscribed.getItems().length
             );

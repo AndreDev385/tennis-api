@@ -13,45 +13,45 @@ type ParticipantTrackerProps = {
 
     isDouble: boolean;
 
-    // serv
+    saveBreakPtsChances: number;
+    breakPtsSaved: number;
+    breakPtsChances: number;
+    breakPts: number;
+    gamesWonServing: number;
+    gamesLostServing: number;
+    pointsWinnedFirstServ: number;
+    pointsWinnedSecondServ: number;
     firstServIn: number;
     secondServIn: number;
     aces: number;
     dobleFaults: number;
-    firstServWon: number; // Saque no devuelto
-    secondServWon: number; // Saque no devuelto
-    pointsWinnedFirstServ: number;
-    pointsWinnedSecondServ: number;
-    gamesWonServing: number;
-    gamesLostServing: number;
-    gamesWonReturning: number;
-    gamesLostReturning: number;
-    // return
-    firstReturnWon: number; // boton devolucion ganada
-    secondReturnWon: number; // botton devolucion ganada
-    firstReturnWinner: number; // winner con devolucion ganada
-    secondReturnWinner: number; // winner con devolucion ganada
+    firstServWon: number;
+    secondServWon: number;
+    pointsWinnedFirstReturn: number;
+    pointsWinnedSecondReturn: number;
+    firstReturnWon: number;
+    secondReturnWon: number;
+    firstReturnWinner: number;
+    secondReturnWinner: number;
     firstReturnIn: number;
     secondReturnIn: number;
     firstReturnOut: number;
     secondReturnOut: number;
-    pointsWinnedFirstReturn: number;
-    pointsWinnedSecondReturn: number;
-    // places
-    meshPointsWon: number; // malla
-    meshPointsLost: number; // malla
+    gamesWonReturning: number;
+    gamesLostReturning: number;
+    meshPointsWon: number;
+    meshPointsLost: number;
     meshWinner: number;
     meshError: number;
-    bckgPointsWon: number; // fondo/approach
-    bckgPointsLost: number; // fondo/approach
+    bckgPointsWon: number;
+    bckgPointsLost: number;
     bckgWinner: number;
     bckgError: number;
-    // rally
     shortRallyWon: number;
-    shortRallyLost: number;
     mediumRallyWon: number;
-    mediumRallyLost: number;
     longRallyWon: number;
+    shortRallyLost: number;
+    mediumRallyLost: number;
     longRallyLost: number;
     createdAt?: Date;
     updatedAt?: Date;
@@ -78,132 +78,122 @@ export class ParticipantTracker extends Entity<ParticipantTrackerProps> {
         return this.props.isDouble;
     }
 
+    get saveBreakPtsChances(): number {
+        return this.props.saveBreakPtsChances;
+    }
+    get breakPtsSaved(): number {
+        return this.props.breakPtsSaved;
+    }
+    get breakPtsChances(): number {
+        return this.props.breakPtsChances;
+    }
+    get breakPts(): number {
+        return this.props.breakPts;
+    }
     get gamesWonServing(): number {
         return this.props.gamesWonServing;
     }
-
     get gamesLostServing(): number {
         return this.props.gamesLostServing;
     }
-
     get pointsWinnedFirstServ(): number {
         return this.props.pointsWinnedFirstServ;
     }
-
     get pointsWinnedSecondServ(): number {
         return this.props.pointsWinnedSecondServ;
     }
-
     get firstServIn(): number {
         return this.props.firstServIn;
     }
-
     get secondServIn(): number {
         return this.props.secondServIn;
     }
-
-    get firstServWon(): number {
-        return this.props.firstServWon;
-    }
-
-    get secondServWon(): number {
-        return this.props.secondServWon;
-    }
-
     get aces(): number {
         return this.props.aces;
     }
-
     get dobleFaults(): number {
         return this.props.dobleFaults;
     }
-
+    get firstServWon(): number {
+        return this.props.firstServWon;
+    }
+    get secondServWon(): number {
+        return this.props.secondServWon;
+    }
     get pointsWinnedFirstReturn(): number {
         return this.props.pointsWinnedFirstReturn;
     }
-
     get pointsWinnedSecondReturn(): number {
         return this.props.pointsWinnedSecondReturn;
     }
-
-    get firstReturnIn(): number {
-        return this.props.firstReturnIn;
-    }
-
-    get secondReturnIn(): number {
-        return this.props.secondReturnIn;
-    }
-
-    get firstReturnOut(): number {
-        return this.props.firstReturnOut;
-    }
-
-    get secondReturnOut(): number {
-        return this.props.secondReturnOut;
-    }
-
     get firstReturnWon(): number {
         return this.props.firstReturnWon;
     }
-
     get secondReturnWon(): number {
         return this.props.secondReturnWon;
     }
-
     get firstReturnWinner(): number {
         return this.props.firstReturnWinner;
     }
-
     get secondReturnWinner(): number {
         return this.props.secondReturnWinner;
     }
-
+    get firstReturnIn(): number {
+        return this.props.firstReturnIn;
+    }
+    get secondReturnIn(): number {
+        return this.props.secondReturnIn;
+    }
+    get firstReturnOut(): number {
+        return this.props.firstReturnOut;
+    }
+    get secondReturnOut(): number {
+        return this.props.secondReturnOut;
+    }
+    get gamesWonReturning(): number {
+        return this.props.gamesWonReturning;
+    }
+    get gamesLostReturning(): number {
+        return this.props.gamesLostReturning;
+    }
     get meshPointsWon(): number {
         return this.props.meshPointsWon;
     }
-
     get meshPointsLost(): number {
         return this.props.meshPointsLost;
     }
-
     get meshWinner(): number {
         return this.props.meshWinner;
     }
-
     get meshError(): number {
         return this.props.meshError;
     }
-
     get bckgPointsWon(): number {
         return this.props.bckgPointsWon;
     }
-
     get bckgPointsLost(): number {
         return this.props.bckgPointsLost;
     }
-
     get bckgWinner(): number {
         return this.props.bckgWinner;
     }
-
     get bckgError(): number {
         return this.props.bckgError;
     }
-
     get shortRallyWon(): number {
         return this.props.shortRallyWon;
-    }
-    get shortRallyLost(): number {
-        return this.props.shortRallyLost;
     }
     get mediumRallyWon(): number {
         return this.props.mediumRallyWon;
     }
-    get mediumRallyLost(): number {
-        return this.props.mediumRallyLost;
-    }
     get longRallyWon(): number {
         return this.props.longRallyWon;
+    }
+    get shortRallyLost(): number {
+        return this.props.shortRallyLost;
+    }
+    get mediumRallyLost(): number {
+        return this.props.mediumRallyLost;
     }
     get longRallyLost(): number {
         return this.props.longRallyLost;
@@ -230,6 +220,10 @@ export class ParticipantTracker extends Entity<ParticipantTrackerProps> {
             matchId,
             tournamentId,
             participantId,
+            breakPts: 0,
+            breakPtsSaved: 0,
+            breakPtsChances: 0,
+            saveBreakPtsChances: 0,
             firstServIn: 0,
             secondServIn: 0,
             aces: 0,

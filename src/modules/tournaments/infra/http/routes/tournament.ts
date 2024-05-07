@@ -10,6 +10,12 @@ import { listContestCtrl } from "../../../queries/listContest";
 import { getContestCtrl } from "../../../queries/getContest";
 import { listContestBracketsCtrl } from "../../../queries/listContestBrackets";
 import { addContestCouplesCtrl } from "../../../usecase/addContestCouples";
+import { paginateMatchesCtrl } from "../../../queries/paginateMatches";
+import { createBracketMatchCtrl } from "../../../usecase/createBracketMatch";
+import { updateTournamentMatchCtrl } from "../../../usecase/updateMatch";
+import { getTournamentMatchCtrl } from "../../../queries/getMatch";
+import { Tournament } from "../../../domain/tournament";
+import { deleteBracketsCtrl } from "../../../usecase/deleteBrackets";
 
 const tournamentRouter = express.Router();
 
@@ -24,6 +30,20 @@ tournamentRouter.get("/", (req, res) =>
     paginateTournamentsController.execute(req, res)
 );
 
+// matches
+tournamentRouter.get("/matches-pagination", (req, res) =>
+    paginateMatchesCtrl.execute(req, res)
+);
+
+tournamentRouter.put("/match", (req, res) =>
+    updateTournamentMatchCtrl.execute(req, res)
+);
+
+tournamentRouter.get("/match", (req, res) =>
+    getTournamentMatchCtrl.execute(req, res)
+);
+// end matches
+
 tournamentRouter.put("/brackets", (req, res) =>
     buildBracketCtrl.execute(req, res)
 );
@@ -34,6 +54,15 @@ tournamentRouter.get("/contest", (req, res) =>
 
 tournamentRouter.get("/brackets/:contestId", (req, res) =>
     listContestBracketsCtrl.execute(req, res)
+);
+
+tournamentRouter.put("/create-bracket-match", (req, res) =>
+    createBracketMatchCtrl.execute(req, res)
+);
+
+//TODO: just for admin
+tournamentRouter.delete("/brackets", (req, res) =>
+    deleteBracketsCtrl.execute(req, res)
 );
 
 tournamentRouter.get("/contest/:contestId", (req, res) =>

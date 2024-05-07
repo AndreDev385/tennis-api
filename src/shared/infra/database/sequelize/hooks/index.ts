@@ -1,6 +1,7 @@
 import { UniqueEntityID } from "../../../../domain/UniqueEntityID";
 import { DomainEvents } from "../../../../domain/events/DomainEvents";
 import models from "../models";
+import { TournamentMatchModel } from "../models/TournamentMatch";
 
 export const dispatchEventsCallback = (model: any, primaryKeyField: string) => {
     const aggregateId = new UniqueEntityID(model[primaryKeyField]);
@@ -109,6 +110,25 @@ export const dispatchEventsCallback = (model: any, primaryKeyField: string) => {
     );
     PlayerModel.addHook("afterBulkUpdate", (m: any) =>
         dispatchEventsCallback(m.attributes, "playerId")
+    );
+
+    TournamentMatchModel.addHook("afterCreate", (m: any) =>
+        dispatchEventsCallback(m, "matchId")
+    );
+    TournamentMatchModel.addHook("afterDestroy", (m: any) =>
+        dispatchEventsCallback(m, "matchId")
+    );
+    TournamentMatchModel.addHook("afterUpdate", (m: any) =>
+        dispatchEventsCallback(m, "matchId")
+    );
+    TournamentMatchModel.addHook("afterSave", (m: any) =>
+        dispatchEventsCallback(m, "matchId")
+    );
+    TournamentMatchModel.addHook("afterUpsert", (m: any) =>
+        dispatchEventsCallback(m, "matchId")
+    );
+    TournamentMatchModel.addHook("afterBulkUpdate", (m: any) =>
+        dispatchEventsCallback(m.attributes, "matchId")
     );
 
     console.log("[Hooks]: Sequelize hooks setup.");

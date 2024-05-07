@@ -3,8 +3,8 @@ import config from "../config/config";
 
 const sequelize: Sequelize = config.connection;
 
-export interface TournamentMatchTrackerData
-    extends Model<InferAttributes<TournamentMatchTrackerData>> {
+export interface ParticipantTrackerData
+    extends Model<InferAttributes<ParticipantTrackerData>> {
     participantTrackerId: string;
     participantId: string;
     tournamentId: string;
@@ -12,6 +12,10 @@ export interface TournamentMatchTrackerData
 
     isDouble: boolean;
     // serv
+    saveBreakPtsChances: number;
+    breakPtsChances: number;
+    breakPtsSaved: number;
+    breakPts: number;
     firstServIn: number;
     secondServIn: number;
     aces: number;
@@ -55,190 +59,205 @@ export interface TournamentMatchTrackerData
     updatedAt: Date;
 }
 
-export const ParticipantTracker =
-    sequelize.define<TournamentMatchTrackerData>(
-        "participantTracker",
-        {
-            participantTrackerId: {
-                type: DataTypes.UUID,
-                allowNull: false,
-                primaryKey: true
-            },
-            participantId: {
-                type: DataTypes.UUID,
-                allowNull: false,
-            },
-            tournamentId: {
-                type: DataTypes.UUID,
-                allowNull: false,
-            },
-            matchId: {
-                type: DataTypes.UUID,
-                allowNull: false,
-            },
-
-            isDouble: {
-                type: DataTypes.BOOLEAN,
-                allowNull: false,
-            },
-            // serv
-            firstServIn: {
-                type: DataTypes.NUMBER,
-                allowNull: false,
-            },
-            secondServIn: {
-                type: DataTypes.NUMBER,
-                allowNull: false,
-            },
-            aces: {
-                type: DataTypes.NUMBER,
-                allowNull: false,
-            },
-            dobleFaults: {
-                type: DataTypes.NUMBER,
-                allowNull: false,
-            },
-            firstServWon: {
-                type: DataTypes.NUMBER,
-                allowNull: false,
-            },
-            secondServWon: {
-                type: DataTypes.NUMBER,
-                allowNull: false,
-            },
-            pointsWinnedFirstServ: {
-                type: DataTypes.NUMBER,
-                allowNull: false,
-            },
-            pointsWinnedSecondServ: {
-                type: DataTypes.NUMBER,
-                allowNull: false,
-            },
-            gamesWonServing: {
-                type: DataTypes.NUMBER,
-                allowNull: false,
-            },
-            gamesLostServing: {
-                type: DataTypes.NUMBER,
-                allowNull: false,
-            },
-            gamesWonReturning: {
-                type: DataTypes.NUMBER,
-                allowNull: false,
-            },
-            gamesLostReturning: {
-                type: DataTypes.NUMBER,
-                allowNull: false,
-            },
-            // return
-            firstReturnWon: {
-                type: DataTypes.NUMBER,
-                allowNull: false,
-            },
-            secondReturnWon: {
-                type: DataTypes.NUMBER,
-                allowNull: false,
-            },
-            firstReturnWinner: {
-                type: DataTypes.NUMBER,
-                allowNull: false,
-            },
-            secondReturnWinner: {
-                type: DataTypes.NUMBER,
-                allowNull: false,
-            },
-            firstReturnIn: {
-                type: DataTypes.NUMBER,
-                allowNull: false,
-            },
-            secondReturnIn: {
-                type: DataTypes.NUMBER,
-                allowNull: false,
-            },
-            firstReturnOut: {
-                type: DataTypes.NUMBER,
-                allowNull: false,
-            },
-            secondReturnOut: {
-                type: DataTypes.NUMBER,
-                allowNull: false,
-            },
-            pointsWinnedFirstReturn: {
-                type: DataTypes.NUMBER,
-                allowNull: false,
-            },
-            pointsWinnedSecondReturn: {
-                type: DataTypes.NUMBER,
-                allowNull: false,
-            },
-            // places
-            meshPointsWon: {
-                type: DataTypes.NUMBER,
-                allowNull: false,
-            },
-            meshPointsLost: {
-                type: DataTypes.NUMBER,
-                allowNull: false,
-            },
-            meshWinner: {
-                type: DataTypes.NUMBER,
-                allowNull: false,
-            },
-            meshError: {
-                type: DataTypes.NUMBER,
-                allowNull: false,
-            },
-            bckgPointsWon: {
-                type: DataTypes.NUMBER,
-                allowNull: false,
-            },
-            bckgPointsLost: {
-                type: DataTypes.NUMBER,
-                allowNull: false,
-            },
-            bckgWinner: {
-                type: DataTypes.NUMBER,
-                allowNull: false,
-            },
-            bckgError: {
-                type: DataTypes.NUMBER,
-                allowNull: false,
-            },
-            // rally
-            shortRallyWon: {
-                type: DataTypes.NUMBER,
-                allowNull: false,
-            },
-            shortRallyLost: {
-                type: DataTypes.NUMBER,
-                allowNull: false,
-            },
-            mediumRallyWon: {
-                type: DataTypes.NUMBER,
-                allowNull: false,
-            },
-            mediumRallyLost: {
-                type: DataTypes.NUMBER,
-                allowNull: false,
-            },
-            longRallyWon: {
-                type: DataTypes.NUMBER,
-                allowNull: false,
-            },
-            longRallyLost: {
-                type: DataTypes.NUMBER,
-                allowNull: false,
-            },
-            createdAt: {
-                allowNull: true,
-                type: DataTypes.DATE,
-                defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
-            },
-            updatedAt: {
-                allowNull: true,
-                type: DataTypes.DATE,
-                defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
-            },
+export const ParticipantTrackerModel = sequelize.define<ParticipantTrackerData>(
+    "participantTracker",
+    {
+        participantTrackerId: {
+            type: DataTypes.UUID,
+            allowNull: false,
+            primaryKey: true,
         },
-        { tableName: "participantTracker" }
-    );
+        participantId: {
+            type: DataTypes.UUID,
+            allowNull: false,
+        },
+        tournamentId: {
+            type: DataTypes.UUID,
+            allowNull: false,
+        },
+        matchId: {
+            type: DataTypes.UUID,
+            allowNull: false,
+        },
+
+        isDouble: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+        },
+        // serv
+        saveBreakPtsChances: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        breakPtsChances: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        breakPtsSaved: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        breakPts: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        firstServIn: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        secondServIn: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        aces: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        dobleFaults: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        firstServWon: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        secondServWon: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        pointsWinnedFirstServ: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        pointsWinnedSecondServ: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        gamesWonServing: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        gamesLostServing: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        gamesWonReturning: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        gamesLostReturning: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        // return
+        firstReturnWon: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        secondReturnWon: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        firstReturnWinner: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        secondReturnWinner: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        firstReturnIn: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        secondReturnIn: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        firstReturnOut: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        secondReturnOut: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        pointsWinnedFirstReturn: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        pointsWinnedSecondReturn: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        // places
+        meshPointsWon: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        meshPointsLost: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        meshWinner: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        meshError: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        bckgPointsWon: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        bckgPointsLost: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        bckgWinner: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        bckgError: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        // rally
+        shortRallyWon: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        shortRallyLost: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        mediumRallyWon: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        mediumRallyLost: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        longRallyWon: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        longRallyLost: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        createdAt: {
+            allowNull: true,
+            type: DataTypes.DATE,
+            defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+        },
+        updatedAt: {
+            allowNull: true,
+            type: DataTypes.DATE,
+            defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+        },
+    },
+    { tableName: "participantTracker" }
+);

@@ -1,10 +1,12 @@
 import { DataTypes, InferAttributes, Model, Sequelize } from "sequelize";
 import config from "../config/config";
+import { PhaseValues } from "../../../../../modules/tournaments/domain/phase";
 
 const sequelize: Sequelize = config.connection;
 
 interface BracketData extends Model<InferAttributes<BracketData>> {
     id: string;
+    phase: PhaseValues;
     contestId: string;
     matchId: string | null;
     left: string | null;
@@ -22,7 +24,10 @@ const BracketModel = sequelize.define<BracketData>("bracket", {
         primaryKey: true,
     },
     contestId: {
-        type: DataTypes.UUID,
+        type: DataTypes.UUID, allowNull: false,
+    },
+    phase: {
+        type: DataTypes.INTEGER,
         allowNull: false,
     },
     matchId: {
