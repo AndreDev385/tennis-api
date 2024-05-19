@@ -13,15 +13,20 @@ export class NewTournamentController extends BaseController {
     }
 
     async executeImpl(req: Request, res: Response) {
-
-        const { name, gamesPerSet, setsQuantity, startDate, endDate } = req.body;
-
-        console.log(req.body);
+        const {
+            name,
+            gamesPerSet,
+            setsQuantity,
+            matchesPerClash,
+            startDate,
+            endDate,
+        } = req.body;
 
         const result = await this.usecase.execute({
             name,
             gamesPerSet: Number(gamesPerSet),
             setsQuantity: Number(setsQuantity),
+            matchesPerClash: Number(matchesPerClash),
             startDate,
             endDate,
             file: req.file,

@@ -21,7 +21,7 @@ type TournamentMatchProps = {
     mode: Mode;
     surface: Surface;
     sets: Sets;
-    superTieBreak: boolean;
+    superTieBreak: boolean | null;
     player1: Participant;
     player2: Participant;
     player3?: Participant | null;
@@ -63,7 +63,7 @@ export class TournamentMatch extends AggregateRoot<TournamentMatchProps> {
         return this.props.sets;
     }
 
-    get superTieBreak(): boolean {
+    get superTieBreak(): boolean | null {
         return this.props.superTieBreak;
     }
 
@@ -133,7 +133,7 @@ export class TournamentMatch extends AggregateRoot<TournamentMatchProps> {
     public pauseMatch(
         tracker: TournamentMatchTracker,
         sets: Sets,
-        superTieBreak: boolean,
+        superTieBreak: boolean | null,
         matchInfo: MatchInfo
     ) {
         this.props.matchWon = null;
@@ -170,10 +170,10 @@ export class TournamentMatch extends AggregateRoot<TournamentMatchProps> {
         sets: Sets,
         tracker: TournamentMatchTracker,
         matchInfo: MatchInfo,
-        superTieBreak?: boolean,
+        superTieBreak: boolean | null,
         matchWon: boolean | null = null
     ) {
-        this.props.superTieBreak = superTieBreak || false;
+        this.props.superTieBreak = superTieBreak;
         this.props.tracker = tracker;
         this.props.sets = sets;
         this.props.status = MatchStatus.createNew(MatchStatuses.Canceled);

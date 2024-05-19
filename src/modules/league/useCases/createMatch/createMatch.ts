@@ -7,7 +7,7 @@ import { GamesPerSet } from "../../domain/gamesPerSet";
 import { Match } from "../../domain/match";
 import { Matchs } from "../../domain/matchs";
 import { Player } from "../../domain/player";
-import { SetQuantity } from "../../domain/setQuantity";
+import { SetQuantity, ValidQuantities } from "../../domain/setQuantity";
 import { Sets } from "../../domain/sets";
 import { Surface } from "../../domain/surface";
 import { CategoryRepository } from "../../repositories/categoryRepo";
@@ -56,7 +56,7 @@ export class CreateMatch
 
         const setsQuantity = SetQuantity.createLeagueDefault();
         const gamesPerSet = GamesPerSet.createLeagueDefault();
-        const sets = Sets.createDefaultLeague();
+        const sets = Sets.createDefault(ValidQuantities.three);
         try {
             const surfaceOrError = Surface.create({ value: request.surface });
 

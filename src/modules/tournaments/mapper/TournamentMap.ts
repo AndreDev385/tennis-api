@@ -1,8 +1,9 @@
 import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
 import { Mapper } from "../../../shared/infra/Mapper";
-import { TournamentData } from "../../../shared/infra/database/sequelize/models/Tournament";
+import { TournamentData } from "../../../shared/infra/database/sequelize/models/tournaments/Tournament";
 import { GamesPerSet } from "../../league/domain/gamesPerSet";
 import { SetQuantity } from "../../league/domain/setQuantity";
+import { MatchesPerClash } from "../domain/matchesPerClash";
 import { Tournament } from "../domain/tournament";
 import { TournamentRules } from "../domain/tournamentRules";
 import { TournamentStatus } from "../domain/tournamentStatus";
@@ -37,6 +38,11 @@ export class TournamentMap implements Mapper<Tournament> {
             gamesPerSet: GamesPerSet.create({
                 value: rulesObj.gamesPerSet,
             }).getValue(),
+            matchesPerClash: rulesObj.matchesPerClash
+                ? MatchesPerClash.create({
+                      value: rulesObj.matchesPerClash,
+                  }).getValue()
+                : null,
         });
 
         const mustTournament = Tournament.create(
@@ -68,6 +74,7 @@ export class TournamentMap implements Mapper<Tournament> {
         const rules = JSON.stringify({
             setsQuantity: t.rules.setsQuantity.value,
             gamesPerSet: t.rules.gamesPerSet.value,
+            matchesPerClash: t.rules.matchesPerClash?.value,
         });
 
         return {

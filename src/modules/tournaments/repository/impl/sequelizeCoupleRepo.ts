@@ -1,4 +1,4 @@
-import { CoupleModel } from "../../../../shared/infra/database/sequelize/models/Couple";
+import models from "../../../../shared/infra/database/sequelize/models";
 import { Couple } from "../../domain/couple";
 import { CoupleMap } from "../../mapper/CoupleMap";
 import { CoupleQuery, CoupleRepository } from "../coupleRepo";
@@ -13,26 +13,21 @@ export class SequelizeCoupleRepository implements CoupleRepository {
 
     async get(q: CoupleQuery): Promise<Couple> {
         if (q.participantsId) {
-            const firstWay = await CoupleModel.findOne({
+            const firstWay = await models.CoupleModel.findOne({
                 where: {
                     p1Id: q.participantsId.p1Id,
                     p2Id: q.participantsId.p2Id,
                 },
             });
 
-            console.log(firstWay, 'firstWay');
-
-            const secondWay = await CoupleModel.findOne({
+            const secondWay = await models.CoupleModel.findOne({
                 where: {
                     p1Id: q.participantsId.p2Id,
                     p2Id: q.participantsId.p1Id,
                 },
             });
 
-            console.log(secondWay, 'secondWay');
-
             if (!firstWay && !secondWay) {
-                console.log("Not found");
                 throw new Error("Pareja no encontrada");
             }
 
@@ -45,7 +40,6 @@ export class SequelizeCoupleRepository implements CoupleRepository {
             });
 
             if (firstWay) {
-                console.log('return first')
                 return CoupleMap.toDomain({
                     p1,
                     p2,
@@ -53,7 +47,6 @@ export class SequelizeCoupleRepository implements CoupleRepository {
                 })!;
             }
 
-            console.log('return second')
             return CoupleMap.toDomain({
                 p1: p2,
                 p2: p1,
@@ -61,7 +54,7 @@ export class SequelizeCoupleRepository implements CoupleRepository {
             })!;
         }
 
-        const coupleData = await CoupleModel.findOne({
+        const coupleData = await models.CoupleModel.findOne({
             where: { coupleId: q.coupleId },
         });
 
@@ -87,14 +80,14 @@ export class SequelizeCoupleRepository implements CoupleRepository {
     async save(couple: Couple): Promise<void> {
         const raw = CoupleMap.toPersistance(couple);
 
-        const exist = await CoupleModel.findByPk(raw.coupleId);
+        const exist = await models.CoupleModel.findByPk(raw.coupleId);
 
         if (exist) {
-            await CoupleModel.update(raw, {
+            await models.CoupleModel.update(raw, {
                 where: { coupleId: raw.coupleId },
             });
         } else {
-            const instance = await CoupleModel.create(raw);
+            const instance = await models.CoupleModel.create(raw);
             await instance.save();
         }
     }

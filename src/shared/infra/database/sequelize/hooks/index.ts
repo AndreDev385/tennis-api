@@ -1,7 +1,6 @@
 import { UniqueEntityID } from "../../../../domain/UniqueEntityID";
 import { DomainEvents } from "../../../../domain/events/DomainEvents";
 import models from "../models";
-import { TournamentMatchModel } from "../models/TournamentMatch";
 
 export const dispatchEventsCallback = (model: any, primaryKeyField: string) => {
     const aggregateId = new UniqueEntityID(model[primaryKeyField]);
@@ -9,8 +8,14 @@ export const dispatchEventsCallback = (model: any, primaryKeyField: string) => {
 };
 
 (async function createHooksForAggregateRoots() {
-    const { UserModel, MatchModel, ClashModel, SeasonModel, PlayerModel } =
-        models;
+    const {
+        UserModel,
+        MatchModel,
+        ClashModel,
+        SeasonModel,
+        PlayerModel,
+        TournamentMatchModel,
+    } = models;
 
     MatchModel.addHook("afterCreate", (m: any) =>
         dispatchEventsCallback(m, "matchId")

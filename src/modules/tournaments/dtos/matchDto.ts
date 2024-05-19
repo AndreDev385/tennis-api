@@ -16,7 +16,7 @@ export type TournamentMatchDto = {
     mode: string;
     surface: string;
     sets: SetDto[];
-    superTieBreak: boolean;
+    superTieBreak: boolean | null;
     participant1: ParticipantDto;
     participant2: ParticipantDto;
     participant3: ParticipantDto | null;

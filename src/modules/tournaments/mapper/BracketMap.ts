@@ -1,6 +1,6 @@
 import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
 import { Mapper } from "../../../shared/infra/Mapper";
-import { BracketData } from "../../../shared/infra/database/sequelize/models/Bracket";
+import { BracketData } from "../../../shared/infra/database/sequelize/models/tournaments/Bracket";
 import { BracketNode, BracketPlace } from "../domain/brackets";
 import { ContestId } from "../domain/contestId";
 import { Phase, PhaseValues } from "../domain/phase";

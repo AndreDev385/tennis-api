@@ -1,43 +1,49 @@
-import { ContestModel } from "../../../../shared/infra/database/sequelize/models/Contest";
-import { CoupleModel } from "../../../../shared/infra/database/sequelize/models/Couple";
-import { ParticipantModel } from "../../../../shared/infra/database/sequelize/models/Participant";
+import models from "../../../../shared/infra/database/sequelize/models";
 import { GameMode } from "../../../league/domain/gameMode";
 import { Contest } from "../../domain/contest";
 import { Inscribed } from "../../domain/inscribed";
 import { ContestDto } from "../../dtos/contestsDto";
 import { ContestMap } from "../../mapper/ContestMap";
 import { ContestQuery, ContestRepository } from "../contestRepo";
+import { ContestTeamRepository } from "../contestTeamRepo";
 import { CoupleRepository } from "../coupleRepo";
 import { ParticipantRepo } from "../participantRepo";
 
 export class SequlizeContestRepository implements ContestRepository {
     private readonly participantRepo: ParticipantRepo;
     private readonly coupleRepo: CoupleRepository;
+    private readonly teamRepo: ContestTeamRepository;
 
     constructor(
         participantRepo: ParticipantRepo,
-        coupleRepo: CoupleRepository
+        coupleRepo: CoupleRepository,
+        teamRepo: ContestTeamRepository,
     ) {
         this.participantRepo = participantRepo;
         this.coupleRepo = coupleRepo;
+        this.teamRepo = teamRepo;
     }
 
     async list(q: ContestQuery): Promise<ContestDto[]> {
-        const contests = await ContestModel.findAll({ where: q });
+        const contests = await models.ContestModel.findAll({ where: q });
 
         return contests.map((c) => ContestMap.forQuery(c));
     }
 
     async get(q: ContestQuery): Promise<Contest> {
-        const contestData = await ContestModel.findOne({
+        const contestData = await models.ContestModel.findOne({
             where: q,
             include: [
                 {
-                    model: ParticipantModel,
+                    model: models.ParticipantModel,
                     through: { attributes: ["position"] },
                 },
                 {
-                    model: CoupleModel,
+                    model: models.CoupleModel,
+                    through: { attributes: ["position"] },
+                },
+                {
+                    model: models.ContestTeamModel,
                     through: { attributes: ["position"] },
                 },
             ],
@@ -68,12 +74,28 @@ export class SequlizeContestRepository implements ContestRepository {
                 const couple = await this.coupleRepo.get({
                     coupleId: c.coupleId,
                 });
-                console.log(c.coupleInscription.position, 'coupleInscription')
+                console.log(c.coupleInscription.position, "coupleInscription");
                 const mustInscribed = Inscribed.create({
                     position: c.coupleInscription.position,
                     couple: couple,
                 }).getValue();
                 inscribed.push(mustInscribed);
+            }
+        }
+
+        if (contestData.mode == GameMode.team) {
+            console.log(`ENTER IF MODE = TEAM ${contestData}`)
+            for (const t of contestData.contestTeams ?? []) {
+                const team = await this.teamRepo.get({
+                    contestTeamId: t.contestTeamId,
+                });
+
+                console.log(`t: ${t}\nteam: ${team.getValue()}\n`);
+                const mustInscribed = Inscribed.create({
+                    position: t.teamInscription.position,
+                    team: team.getValue(),
+                }).getValue();
+                inscribed.push(mustInscribed)
             }
         }
 
@@ -83,24 +105,25 @@ export class SequlizeContestRepository implements ContestRepository {
     async save(contest: Contest): Promise<void> {
         const raw = ContestMap.toPersistance(contest);
 
-        const dbData = await ContestModel.findByPk(raw.contestId, {
+        const dbData = await models.ContestModel.findByPk(raw.contestId, {
             include: [
                 {
-                    model: ParticipantModel,
+                    model: models.ParticipantModel,
                     through: { attributes: ["position"] },
                 },
                 {
-                    model: CoupleModel,
+                    model: models.CoupleModel,
+                    through: { attributes: ["position"] },
+                },
+                {
+                    model: models.ContestTeamModel,
                     through: { attributes: ["position"] },
                 },
             ],
         });
 
         if (dbData) {
-            if (
-                contest.inscribed.getRemovedItems().length > 0 ||
-                contest.inscribed.getNewItems().length > 0
-            ) {
+            if (contest.inscribed.getNewItems().length > 0) {
                 if (contest.mode.value == GameMode.single) {
                     await Promise.all(
                         contest.inscribed
@@ -112,7 +135,9 @@ export class SequlizeContestRepository implements ContestRepository {
                                 )
                             )
                     );
-                } else {
+                }
+
+                if (contest.mode.value == GameMode.double) {
                     await Promise.all(
                         contest.inscribed
                             .getItems()
@@ -124,13 +149,65 @@ export class SequlizeContestRepository implements ContestRepository {
                             )
                     );
                 }
+
+                if (contest.mode.value == GameMode.team) {
+                    await Promise.all(
+                        contest.inscribed
+                            .getItems()
+                            .map((i) =>
+                                (dbData as any).addContestTeam(
+                                    i.team!.contestTeamId.id.toString(),
+                                    { through: { position: i.position } }
+                                )
+                            )
+                    );
+                }
             }
-            await ContestModel.update(raw, {
+            if (contest.inscribed.getRemovedItems().length > 0) {
+                if (contest.mode.value == GameMode.single) {
+                    await Promise.all(
+                        contest.inscribed
+                            .getItems()
+                            .map((i) =>
+                                (dbData as any).removeParticipant(
+                                    i.participant!.participantId.id.toString(),
+                                    { through: { position: i.position } }
+                                )
+                            )
+                    );
+                }
+                if (contest.mode.value == GameMode.double) {
+                    await Promise.all(
+                        contest.inscribed
+                            .getItems()
+                            .map((i) =>
+                                (dbData as any).removeCouple(
+                                    i.couple!.coupleId.id.toString(),
+                                    { through: { position: i.position } }
+                                )
+                            )
+                    );
+                }
+
+                if (contest.mode.value == GameMode.team) {
+                    await Promise.all(
+                        contest.inscribed
+                            .getItems()
+                            .map((i) =>
+                                (dbData as any).removeContestTeam(
+                                    i.team!.contestTeamId.id.toString(),
+                                    { through: { position: i.position } }
+                                )
+                            )
+                    );
+                }
+            }
+            await models.ContestModel.update(raw, {
                 where: { contestId: raw.contestId },
             });
         } else {
-            const instance = await ContestModel.create(raw, {
-                include: ParticipantModel,
+            const instance = await models.ContestModel.create(raw, {
+                include: models.ParticipantModel,
             });
             await instance.save();
         }

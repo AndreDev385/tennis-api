@@ -10,12 +10,14 @@ export class Sets extends WatchedList<Set> {
         return a.equals(b);
     }
 
-    public static createDefaultLeague(): Sets {
-        return new Sets([
-            Set.createDefaultLeague(),
-            Set.createDefaultLeague(),
-            Set.createDefaultLeague(),
-        ]);
+    public static createDefault(quantity: number): Sets {
+        const setArr = [];
+
+        for (let index = 0; index < quantity; index++) {
+            setArr.push(Set.createEmptySet());
+        }
+
+        return new Sets(setArr);
     }
 
     public static create(seasons: Array<Set> = []): Sets {

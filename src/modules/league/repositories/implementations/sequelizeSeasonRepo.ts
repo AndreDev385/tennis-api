@@ -1,4 +1,4 @@
-import { SeasonModel } from "../../../../shared/infra/database/sequelize/models/Season";
+import models from "../../../../shared/infra/database/sequelize/models";
 import { Season } from "../../domain/season";
 import { SeasonDto } from "../../dtos/seasonDto";
 import { SeasonMap } from "../../mappers/seasonMap";
@@ -6,7 +6,7 @@ import { SeasonQuery, SeasonRepository } from "../seasonRepo";
 
 export class SequelizeSeasonRepository implements SeasonRepository {
     async currentSeason(): Promise<Season> {
-        const currentSeason = await SeasonModel.findOne({
+        const currentSeason = await models.SeasonModel.findOne({
             where: { isCurrentSeason: true },
         });
 
@@ -20,28 +20,30 @@ export class SequelizeSeasonRepository implements SeasonRepository {
     async save(season: Season): Promise<void> {
         const rawSeason = SeasonMap.toDto(season);
 
-        const exists = await SeasonModel.findOne({
+        const exists = await models.SeasonModel.findOne({
             where: { seasonId: rawSeason.seasonId },
         });
 
         if (exists) {
-            await SeasonModel.update(rawSeason, {
+            await models.SeasonModel.update(rawSeason, {
                 where: { seasonId: rawSeason.seasonId },
             });
         } else {
-            const instance = await SeasonModel.create(rawSeason);
+            const instance = await models.SeasonModel.create(rawSeason);
             await instance.save();
         }
     }
 
     async list(query: SeasonQuery): Promise<SeasonDto[]> {
-        const list = await SeasonModel.findAll({ where: query as any });
+        const list = await models.SeasonModel.findAll({ where: query as any });
 
         return list;
     }
 
     async findById(seasonId: string): Promise<Season> {
-        const season = await SeasonModel.findOne({ where: { seasonId } });
+        const season = await models.SeasonModel.findOne({
+            where: { seasonId },
+        });
         if (!season) {
             throw new Error("Temporada no encontrada");
         }

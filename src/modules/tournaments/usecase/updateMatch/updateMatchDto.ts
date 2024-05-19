@@ -9,17 +9,20 @@ export type Req = {
     status: number;
     sets: Array<SetDto>;
     tracker: any;
-    superTieBreak: boolean;
     matchWon: boolean | null;
+    superTieBreak: boolean | null;
     // optional for pause 
-    currentSetIdx?: number;
-    currentGame?: GameDto;
-    setsWon?: number;
-    setsLost?: number;
-    matchFinish?: boolean;
-    initialTeam?: number;
-    doubleServeFlow?: DoubleServeFlowDto;
-    singleServeFlow?: SingleServeFlowDto;
+    matchInfo: {
+
+        currentSetIdx: number;
+        currentGame: GameDto;
+        setsWon: number;
+        setsLost: number;
+        matchFinish: boolean;
+        initialTeam?: number;
+        doubleServeFlow?: DoubleServeFlowDto;
+        singleServeFlow?: SingleServeFlowDto;
+    }
 };
 
 export type LiveReq = {

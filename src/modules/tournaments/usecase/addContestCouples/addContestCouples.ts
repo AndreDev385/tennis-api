@@ -192,10 +192,7 @@ export class AddContestCouples
                             p2Id: participant2.participantId.id.toString(),
                         },
                     });
-
-                    console.log("EXIST COUPLE", couple);
                 } catch (error) {
-                    console.log(error, "ENTER error");
                     const mustCouple = Couple.create({
                         p1: participant1,
                         p2: participant2,
@@ -211,8 +208,6 @@ export class AddContestCouples
                     couple = mustCouple.getValue();
                 }
 
-                console.log(couple, "before inscribe");
-
                 const inscribe = Inscribed.create({
                     couple: couple,
                     position: r.position,
@@ -226,8 +221,6 @@ export class AddContestCouples
 
                 inscribedList.push(inscribe.getValue());
 
-                console.log("RECORD", newRecord);
-
                 newRecords.push(newRecord);
             }
 
@@ -235,8 +228,6 @@ export class AddContestCouples
                 await this.registerCouplesRepo.registerBulk(newRecords);
 
             const coupleIdsWithErr = result.errors.map((r) => r.coupleId);
-
-            console.log(inscribedList, "inscribedList");
 
             inscribedList.filter(
                 (i) =>

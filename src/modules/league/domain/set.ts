@@ -51,7 +51,7 @@ export class Set extends ValueObject<SetProps> {
         super(props);
     }
 
-    public static createDefaultLeague(): Set {
+    public static createEmptySet(): Set {
         return new Set({
             myGames: 0,
             rivalGames: 0,

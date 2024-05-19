@@ -1,5 +1,5 @@
 import { Result } from "../../../../shared/core/Result";
-import { TournamentMatchModel } from "../../../../shared/infra/database/sequelize/models/TournamentMatch";
+import models from "../../../../shared/infra/database/sequelize/models";
 import {
     PaginateQuery,
     PaginateResponse,
@@ -35,16 +35,13 @@ export class SequelizeTournamentMatchRepository implements TournamentMatchRepo {
         query.where = q;
         query.limit = p.limit ?? 10;
         query.offset = p.offset ?? 0;
-        query.order = [['status', 'ASC']];
+        query.order = [["status", "ASC"]];
 
-        const data = await TournamentMatchModel.findAndCountAll(query);
-
-        data.rows.map(d => console.log(d));
+        const data = await models.TournamentMatchModel.findAndCountAll(query);
 
         const rows = [];
 
         for (const match of data.rows) {
-
             match.sets = match.sets.map((s) => JSON.parse(s));
 
             let p1 = await this.participantRepo.get({
@@ -97,7 +94,7 @@ export class SequelizeTournamentMatchRepository implements TournamentMatchRepo {
     }
 
     async get(q: TournamentMatchQuery): Promise<Result<TournamentMatch>> {
-        const data = await TournamentMatchModel.findOne({ where: q });
+        const data = await models.TournamentMatchModel.findOne({ where: q });
 
         if (!data) {
             return Result.fail("Partido no encontrado");
@@ -151,20 +148,18 @@ export class SequelizeTournamentMatchRepository implements TournamentMatchRepo {
     async save(match: TournamentMatch): Promise<void> {
         const raw = TournamentMatchMap.toPersistance(match);
 
-        const exist = await TournamentMatchModel.findOne({
+        const exist = await models.TournamentMatchModel.findOne({
             where: {
                 matchId: raw.matchId,
             },
         });
 
-        console.log(raw.status, "STATUS");
-
         if (exist) {
-            TournamentMatchModel.update(raw, {
+            models.TournamentMatchModel.update(raw, {
                 where: { matchId: raw.matchId },
             });
         } else {
-            const instance = await TournamentMatchModel.create(raw);
+            const instance = await models.TournamentMatchModel.create(raw);
             await instance.save();
         }
     }

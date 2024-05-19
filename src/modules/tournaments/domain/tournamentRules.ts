@@ -2,10 +2,12 @@ import { Result } from "../../../shared/core/Result";
 import { ValueObject } from "../../../shared/domain/ValueObject";
 import { GamesPerSet } from "../../league/domain/gamesPerSet";
 import { SetQuantity } from "../../league/domain/setQuantity";
+import { MatchesPerClash } from "./matchesPerClash";
 
 type RulesProps = {
     setsQuantity: SetQuantity;
     gamesPerSet: GamesPerSet;
+    matchesPerClash?: MatchesPerClash | null;
 };
 
 export class TournamentRules extends ValueObject<RulesProps> {
@@ -17,11 +19,20 @@ export class TournamentRules extends ValueObject<RulesProps> {
         return this.props.gamesPerSet;
     }
 
+    get matchesPerClash(): MatchesPerClash | null {
+        return this.props.matchesPerClash!;
+    }
+
     private constructor(props: RulesProps) {
         super(props);
     }
 
     public static create(props: RulesProps) {
-        return Result.ok<TournamentRules>(new TournamentRules(props));
+        return Result.ok<TournamentRules>(
+            new TournamentRules({
+                ...props,
+                matchesPerClash: props.matchesPerClash ?? null,
+            })
+        );
     }
 }

@@ -3,7 +3,9 @@ import { Result } from "../../../shared/core/Result";
 import { Entity } from "../../../shared/domain/Entity";
 import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
 import { ValueObject } from "../../../shared/domain/ValueObject";
+import { ContestClash } from "./contestClash";
 import { ContestId } from "./contestId";
+import { ContestTeam } from "./contestTeam";
 import { Couple } from "./couple";
 import { Participant } from "./participant";
 import { Phase } from "./phase";
@@ -14,6 +16,7 @@ type BracketNodeProps = {
     contestId: ContestId;
     phase: Phase;
     match?: TournamentMatch | null;
+    clash?: ContestClash | null;
     left?: BracketNode | null;
     right?: BracketNode | null;
     parent?: BracketNode | null;
@@ -26,6 +29,7 @@ type BracketPlaceProps = {
     value: number;
     participant?: Participant | null;
     couple?: Couple | null;
+    contestTeam?: ContestTeam | null;
 };
 
 export class BracketPlace extends ValueObject<BracketPlaceProps> {
@@ -41,6 +45,10 @@ export class BracketPlace extends ValueObject<BracketPlaceProps> {
         return this.props.couple!;
     }
 
+    get contestTeam(): ContestTeam | null {
+        return this.props.contestTeam!;
+    }
+
     setParticipant(p: Participant) {
         this.props.participant = p;
     }
@@ -49,9 +57,18 @@ export class BracketPlace extends ValueObject<BracketPlaceProps> {
         this.props.couple = c;
     }
 
-    setInscribed(p: Participant | null, c: Couple | null) {
+    setTeam(t: ContestTeam) {
+        this.props.contestTeam = t;
+    }
+
+    setInscribed(
+        p: Participant | null,
+        c: Couple | null,
+        t: ContestTeam | null
+    ) {
         this.props.participant = p;
         this.props.couple = c;
+        this.props.contestTeam = t;
     }
 
     private constructor(props: BracketPlaceProps) {

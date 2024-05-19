@@ -5,15 +5,13 @@ import { PlayerRegisterRepository } from "../playerRegisterRepo";
 import config from "../../../../shared/infra/database/sequelize/config/config";
 import { PlayerMap } from "../../../league/mappers/playerMap";
 import { UserMap } from "../../mappers/userMap";
-import { UserModel } from "../../../../shared/infra/database/sequelize/models/BaseUser";
-import { PlayerModel } from "../../../../shared/infra/database/sequelize/models/Player";
 import { Result } from "../../../../shared/core/Result";
+import models from "../../../../shared/infra/database/sequelize/models";
 
 const sequelize: Sequelize = config.connection;
 
 export class SequelizePlayerRegisterRepository
-    implements PlayerRegisterRepository
-{
+    implements PlayerRegisterRepository {
     async registerBulk(
         users: User[],
         players: Player[]
@@ -24,12 +22,12 @@ export class SequelizePlayerRegisterRepository
             for (let i = 0; i < users.length; i++) {
                 const rawUser = await UserMap.toPersistance(users[i]);
 
-                await UserModel.create(rawUser, { transaction: t });
+                await models.UserModel.create(rawUser, { transaction: t });
             }
             for (let i = 0; i < players.length; i++) {
                 const rawPlayer = PlayerMap.toPersistance(players[i]);
 
-                await PlayerModel.create(rawPlayer, { transaction: t });
+                await models.PlayerModel.create(rawPlayer, { transaction: t });
             }
             await t.commit();
             return Result.ok<void>();
@@ -46,8 +44,8 @@ export class SequelizePlayerRegisterRepository
         const rawUser = await UserMap.toPersistance(user);
 
         try {
-            await UserModel.create(rawUser, { transaction: t });
-            await PlayerModel.create(rawPlayer, { transaction: t });
+            await models.UserModel.create(rawUser, { transaction: t });
+            await models.PlayerModel.create(rawPlayer, { transaction: t });
 
             await t.commit();
 

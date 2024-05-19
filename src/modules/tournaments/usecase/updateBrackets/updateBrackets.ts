@@ -70,24 +70,28 @@ export class UpdateBrackets implements UseCase<Req, Res> {
                 if (bracket.match?.matchWon) {
                     bracket.parent!.leftPlace.setInscribed(
                         bracket.rightPlace.participant,
-                        bracket.rightPlace.couple
+                        bracket.rightPlace.couple,
+                        bracket.rightPlace.contestTeam
                     );
                 } else {
                     bracket.parent!.leftPlace.setInscribed(
                         bracket.leftPlace.participant,
-                        bracket.leftPlace.couple
+                        bracket.leftPlace.couple,
+                        bracket.leftPlace.contestTeam
                     );
                 }
             } else {
                 if (bracket.match?.matchWon) {
                     bracket.parent!.rightPlace.setInscribed(
                         bracket.rightPlace.participant,
-                        bracket.rightPlace.couple
+                        bracket.rightPlace.couple,
+                        bracket.rightPlace.contestTeam
                     );
                 } else {
                     bracket.parent!.rightPlace.setInscribed(
                         bracket.leftPlace.participant,
-                        bracket.leftPlace.couple
+                        bracket.leftPlace.couple,
+                        bracket.leftPlace.contestTeam
                     );
                 }
             }

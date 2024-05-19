@@ -1,14 +1,16 @@
 import { BracketNode, BracketPlace } from "../domain/brackets";
 import { Inscribed } from "../domain/inscribed";
 
-/*
- * @param: node
+/**
+ * @param node
  * root tree node for tournament's brackets on first call
  *
- * @param: deep
+ * @param deep
  * multiples of 2 for reach the brackets tree lenght
  *
- * */
+ * @param inscribed
+ * teams, couples or participants, needed for setting places inside the brackets
+ */
 export function buildBracketsBuilder(
     deep: number,
     node: BracketNode,
@@ -19,29 +21,53 @@ export function buildBracketsBuilder(
             (i) => i.position == node.rightPlace.value
         );
         if (rightP) {
-            node.rightPlace.setInscribed(rightP.participant, rightP.couple);
+            node.rightPlace.setInscribed(
+                rightP.participant,
+                rightP.couple,
+                rightP.team
+            );
         }
 
         const leftP = inscribed.find((i) => i.position == node.leftPlace.value);
         if (leftP) {
-            node.leftPlace.setInscribed(leftP.participant, leftP.couple);
+            node.leftPlace.setInscribed(
+                leftP.participant,
+                leftP.couple,
+                leftP.team
+            );
         }
 
         if (!!rightP === true && !leftP) {
             const isRightChildren = node.parent?.right?.equals(node);
             if (isRightChildren) {
-                node.parent?.rightPlace.setInscribed(rightP.participant, rightP.couple);
+                node.parent?.rightPlace.setInscribed(
+                    rightP.participant,
+                    rightP.couple,
+                    rightP.team
+                );
             } else {
-                node.parent?.leftPlace.setInscribed(rightP.participant, rightP.couple);
+                node.parent?.leftPlace.setInscribed(
+                    rightP.participant,
+                    rightP.couple,
+                    rightP.team
+                );
             }
         }
 
         if (!!leftP === true && !rightP) {
             const isRightChildren = node.parent?.right?.equals(node);
             if (isRightChildren) {
-                node.parent?.rightPlace.setInscribed(leftP.participant, leftP.couple);
+                node.parent?.rightPlace.setInscribed(
+                    leftP.participant,
+                    leftP.couple,
+                    leftP.team
+                );
             } else {
-                node.parent?.leftPlace.setInscribed(leftP.participant, leftP.couple);
+                node.parent?.leftPlace.setInscribed(
+                    leftP.participant,
+                    leftP.couple,
+                    leftP.team
+                );
             }
         }
 
@@ -101,17 +127,16 @@ export function buildBracketsBuilder(
     }
 }
 
-/*
- * @param: deep
+/**
+ * @param deep
  * multiples of 2 for reach the brackets tree lenght
  *
- * @param: firstNumber
+ * @param firstNumber
  * number of table to calculate by deep
  *
- * @return:
+ * @returns {number}
  * position of the oponent player
- *
- **/
+ */
 function calculateBracketOponent(deep: number, firstNumber: number): number {
     return 2 ** deep + 1 - firstNumber;
 }

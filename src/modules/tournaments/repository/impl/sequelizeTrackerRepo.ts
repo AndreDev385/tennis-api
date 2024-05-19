@@ -1,5 +1,5 @@
 import { Result } from "../../../../shared/core/Result";
-import { TournamentMatchTrackerModel } from "../../../../shared/infra/database/sequelize/models/TournamentMatchTracker";
+import models from "../../../../shared/infra/database/sequelize/models";
 import { ParticipantTracker } from "../../domain/participantTracker";
 import { TournamentMatchTracker } from "../../domain/tournamentMatchTracker";
 import { TournamentMatchTrackerMap } from "../../mapper/TournamentMatchTrackerMap";
@@ -22,23 +22,24 @@ export class SequelizeTournamentMatchTrackerRepo
         await this.participantTrackerRepo.save(tracker.player1);
         await this.participantTrackerRepo.save(tracker.player2);
 
-        if (tracker.player1.isDouble) {
+        if (tracker.player3 != null && tracker.player4 != null) {
             await this.participantTrackerRepo.save(tracker.player3!);
             await this.participantTrackerRepo.save(tracker.player4!);
         }
 
         const raw = TournamentMatchTrackerMap.toPersitance(tracker);
 
-        const exist = await TournamentMatchTrackerModel.findOne({
+        const exist = await models.TournamentMatchTrackerModel.findOne({
             where: { matchId: raw.matchId },
         });
 
         if (exist) {
-            TournamentMatchTrackerModel.update(raw, {
+            models.TournamentMatchTrackerModel.update(raw, {
                 where: { matchId: raw.matchId },
             });
         } else {
-            const instance = await TournamentMatchTrackerModel.create(raw);
+            const instance =
+                await models.TournamentMatchTrackerModel.create(raw);
             await instance.save();
         }
     }
@@ -46,7 +47,7 @@ export class SequelizeTournamentMatchTrackerRepo
     async get(
         q: TournamentMatchTrackerQuery
     ): Promise<Result<TournamentMatchTracker>> {
-        const data = await TournamentMatchTrackerModel.findOne({
+        const data = await models.TournamentMatchTrackerModel.findOne({
             where: q,
         });
 
@@ -55,10 +56,10 @@ export class SequelizeTournamentMatchTrackerRepo
         }
 
         const mustPlayer1 = await this.participantTrackerRepo.get({
-            participantId: data.player1,
+            participantTrackerId: data.playerTracker1,
         });
         const mustPlayer2 = await this.participantTrackerRepo.get({
-            participantId: data.player2,
+            participantTrackerId: data.playerTracker2,
         });
 
         const player1 = mustPlayer1.getValue();
@@ -67,12 +68,12 @@ export class SequelizeTournamentMatchTrackerRepo
         let player3: ParticipantTracker | null = null;
         let player4: ParticipantTracker | null = null;
 
-        if (player1.isDouble) {
+        if (player1.isDouble && player2.isDouble) {
             const mustPlayer3 = await this.participantTrackerRepo.get({
-                participantId: data.player3!,
+                participantTrackerId: data.playerTracker3!,
             });
             const mustPlayer4 = await this.participantTrackerRepo.get({
-                participantId: data.player4!,
+                participantTrackerId: data.playerTracker4!,
             });
 
             player3 = mustPlayer3.getValue();

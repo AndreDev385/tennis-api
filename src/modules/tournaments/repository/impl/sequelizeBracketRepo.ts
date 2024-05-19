@@ -1,4 +1,4 @@
-import { BracketModel } from "../../../../shared/infra/database/sequelize/models/Bracket";
+import models from "../../../../shared/infra/database/sequelize/models";
 import { BracketNode, BracketPlace } from "../../domain/brackets";
 import { Couple } from "../../domain/couple";
 import { Participant } from "../../domain/participant";
@@ -27,7 +27,7 @@ export class SequelizeBracketRepository implements BracketsRepository {
     }
 
     async delete(q: BracketsQuery): Promise<void> {
-        await BracketModel.destroy({ where: q });
+        await models.BracketModel.destroy({ where: q });
     }
 
     async saveTree(node: BracketNode): Promise<void> {
@@ -42,7 +42,7 @@ export class SequelizeBracketRepository implements BracketsRepository {
     }
 
     async list(q: BracketsQuery): Promise<any> {
-        const result = await BracketModel.findAll({
+        const result = await models.BracketModel.findAll({
             where: q,
             order: [["createdAt", "ASC"]],
         });
@@ -99,13 +99,11 @@ export class SequelizeBracketRepository implements BracketsRepository {
 
     // get function search de whole tree
     async get(q: BracketsQuery, getTree: boolean): Promise<BracketNode> {
-        const raw = await BracketModel.findOne({ where: q });
+        const raw = await models.BracketModel.findOne({ where: q });
 
         if (!raw) {
             throw new Error("Llave no encontrada");
         }
-
-        console.log(raw, "BRACKET DATA");
 
         const rightPlaceData = JSON.parse(raw.rightPlace);
         const leftPlaceData = JSON.parse(raw.leftPlace);
@@ -187,10 +185,12 @@ export class SequelizeBracketRepository implements BracketsRepository {
     async save(node: BracketNode): Promise<void> {
         const raw = BracketMap.toPersistance(node);
 
-        const exist = await BracketModel.findOne({ where: { id: raw.id } });
+        const exist = await models.BracketModel.findOne({
+            where: { id: raw.id },
+        });
 
         if (!!exist === true) {
-            await BracketModel.update(
+            await models.BracketModel.update(
                 {
                     //update
                     matchId: raw.matchId,
@@ -208,7 +208,7 @@ export class SequelizeBracketRepository implements BracketsRepository {
                 { where: { id: raw.id } }
             );
         } else {
-            const instance = await BracketModel.create(raw);
+            const instance = await models.BracketModel.create(raw);
             await instance.save();
         }
     }

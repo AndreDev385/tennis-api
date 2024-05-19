@@ -10,6 +10,7 @@ import { TournamentRepository } from "../../repository/tournamentRepo";
 import { NewTournamentDto } from "./newTournamentDto";
 import { TournamentStatus } from "../../domain/tournamentStatus";
 import { UploadImageServices } from "../../../league/services/uploadImageService";
+import { MatchesPerClash } from "../../domain/matchesPerClash";
 
 type Response = Either<
     AppError.UnexpectedError | AppError.NotFoundError | Result<string>,
@@ -53,6 +54,10 @@ export class NewTournament implements UseCase<NewTournamentDto, Response> {
                     argument: req.gamesPerSet,
                     argumentName: "games por set",
                 },
+                {
+                    argument: req.matchesPerClash,
+                    argumentName: "partidos por encuentro",
+                },
             ]);
 
             if (validInfo.isFailure) {
@@ -65,8 +70,11 @@ export class NewTournament implements UseCase<NewTournamentDto, Response> {
             const mustGamesPerSet = GamesPerSet.create({
                 value: req.gamesPerSet,
             });
+            const mustMatchesPerClash = MatchesPerClash.create({
+                value: req.matchesPerClash,
+            })
 
-            const combine = Result.combine([mustSetsQty, mustGamesPerSet]);
+            const combine = Result.combine([mustSetsQty, mustGamesPerSet, mustMatchesPerClash]);
 
             if (combine.isFailure) {
                 return left(combine);
@@ -74,11 +82,13 @@ export class NewTournament implements UseCase<NewTournamentDto, Response> {
 
             const setQty = mustSetsQty.getValue();
             const gamesPerset = mustGamesPerSet.getValue();
+            const matchesPerClash = mustMatchesPerClash.getValue();
             /* End Validate data is present */
 
             const mustRules = TournamentRules.create({
                 gamesPerSet: gamesPerset!,
                 setsQuantity: setQty,
+                matchesPerClash: matchesPerClash,
             });
 
             if (mustRules.isFailure) {
@@ -88,7 +98,6 @@ export class NewTournament implements UseCase<NewTournamentDto, Response> {
             }
 
             rules = mustRules.getValue();
-
 
             try {
                 imgURL = await this.uploadImgService.upload(req.file.path);

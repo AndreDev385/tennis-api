@@ -1,15 +1,17 @@
 import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
 import { Mapper } from "../../../shared/infra/Mapper";
-import { ContestData } from "../../../shared/infra/database/sequelize/models/Contest";
+import { ContestData } from "../../../shared/infra/database/sequelize/models/tournaments/Contest";
 import { Category } from "../../league/domain/category";
 import { GameMode, Mode } from "../../league/domain/gameMode";
 import { CategoryMap } from "../../league/mappers/categoryMap";
 import { Contest } from "../domain/contest";
+import { ContestTeam } from "../domain/contestTeam";
 import { Inscribed } from "../domain/inscribed";
 import { InscribedList } from "../domain/inscribedList";
 import { Summation } from "../domain/summation";
 import { TournamentId } from "../domain/tournamentId";
 import { ContestDto } from "../dtos/contestsDto";
+import { ContestTeamMap } from "./ContestTeamMap";
 import { CoupleMap } from "./CoupleMap";
 import { ParticipantMap } from "./ParticipantMap";
 
@@ -38,17 +40,25 @@ export class ContestMap implements Mapper<Contest> {
                       letter: c.summation.letter,
                   }
                 : null,
-            inscribed: c.inscribed.getItems().map((i) =>
-                c.mode.value == GameMode.single
-                    ? {
-                          position: i.position,
-                          participant: ParticipantMap.toDto(i.participant!),
-                      }
-                    : {
-                          position: i.position,
-                          couple: CoupleMap.toDto(i.couple!),
-                      }
-            ),
+            inscribed: c.inscribed.getItems().map((i) => {
+                switch (c.mode.value) {
+                    case GameMode.single:
+                        return {
+                            position: i.position,
+                            participant: ParticipantMap.toDto(i.participant!),
+                        };
+                    case GameMode.double:
+                        return {
+                            position: i.position,
+                            couple: CoupleMap.toDto(i.couple!),
+                        };
+                    case GameMode.team:
+                        return {
+                            position: i.position,
+                            contestTeam: ContestTeamMap.toDto(i.team),
+                        };
+                }
+            }),
         };
     }
 
@@ -101,13 +111,16 @@ export class ContestMap implements Mapper<Contest> {
                       value: contest.summation.value,
                   })
                 : null,
-            inscribed: contest.inscribed
-                .getItems()
-                .map((i) =>
-                    contest.mode.value == GameMode.single
-                        ? i.participant?.participantId.id.toString()
-                        : i.couple?.coupleId.id.toString()
-                ),
+            inscribed: contest.inscribed.getItems().map((i) => {
+                switch (contest.mode.value) {
+                    case GameMode.single:
+                        return i.participant?.participantId.id.toString();
+                    case GameMode.double:
+                        return i.couple?.coupleId.id.toString();
+                    case GameMode.single:
+                        return i.team?.contestTeamId.id.toString();
+                }
+            }),
         };
     }
 

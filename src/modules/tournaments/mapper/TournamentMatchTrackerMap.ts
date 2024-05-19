@@ -52,10 +52,10 @@ export class TournamentMatchTrackerMap implements Mapper<TournamentMatch> {
         return {
             trackerId: tracker.trackerId.id.toString(),
             matchId: tracker.matchId.id.toString(),
-            player1: tracker.player1.participantId.id.toString(),
-            player2: tracker.player2.participantId.id.toString(),
-            player3: tracker.player3?.participantId.id.toString(),
-            player4: tracker.player4?.participantId.id.toString(),
+            playerTracker1: tracker.player1.participantTrackerId.id.toString(),
+            playerTracker2: tracker.player2.participantTrackerId.id.toString(),
+            playerTracker3: tracker.player3?.participantTrackerId.id.toString(),
+            playerTracker4: tracker.player4?.participantTrackerId.id.toString(),
         };
     }
 }

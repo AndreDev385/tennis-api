@@ -102,15 +102,14 @@ export class UpdateMatch implements UseCase<Req | LiveReq, Response> {
 
     private buildObjects(req: Req) {
         let matchInfo = MatchInfo.create({
-            setsWon: req.setsWon!,
-            setsLost: req.setsLost!,
-            currentGame: GameMap.toDomain(req.currentGame),
-            matchFinish: req.matchFinish!,
-            initialTeam: req.initialTeam,
-            currentSetIdx: req.currentSetIdx!,
-            superTieBreak: req.superTieBreak,
-            doubleServeFlow: DoubleServeFlowMap.toDomain(req.doubleServeFlow),
-            singleServeFlow: SingleServeFlowMap.toDomain(req.singleServeFlow),
+            ...req.matchInfo,
+            currentGame: GameMap.toDomain(req.matchInfo.currentGame),
+            doubleServeFlow: DoubleServeFlowMap.toDomain(
+                req.matchInfo.doubleServeFlow
+            ),
+            singleServeFlow: SingleServeFlowMap.toDomain(
+                req.matchInfo.singleServeFlow
+            ),
         }).getValue();
 
         req.tracker.player1 = ParticipantTrackerMap.toDomain(
@@ -159,7 +158,7 @@ export class UpdateMatch implements UseCase<Req | LiveReq, Response> {
         const { tracker, matchWon, sets, superTieBreak, matchInfo } =
             this.buildObjects(req);
 
-        match.finishMatch(sets, tracker, superTieBreak, matchWon, matchInfo);
+        match.finishMatch(sets, tracker, superTieBreak!, matchWon, matchInfo);
 
         await this.trackerRepo.save(tracker);
         await this.matchRepo.save(match);

@@ -1,4 +1,4 @@
-import { UserModel } from "../../../../shared/infra/database/sequelize/models/BaseUser";
+import models from "../../../../shared/infra/database/sequelize/models";
 import { UserEmail } from "../../domain/email";
 import { User } from "../../domain/user.js";
 import { UserMap } from "../../mappers/userMap";
@@ -7,7 +7,7 @@ import { UserQuery, UserRepository } from "../userRepo";
 export class SequelizeUserRepo implements UserRepository {
 
     async get(q: UserQuery): Promise<User> {
-        const user = await UserModel.findOne({
+        const user = await models.UserModel.findOne({
             where: q as any,
         });
 
@@ -19,7 +19,7 @@ export class SequelizeUserRepo implements UserRepository {
     }
 
     async exists(email: UserEmail): Promise<boolean> {
-        const user = await UserModel.findOne({
+        const user = await models.UserModel.findOne({
             where: { email: email.value },
         });
 
@@ -27,14 +27,14 @@ export class SequelizeUserRepo implements UserRepository {
     }
 
     async getUserByUserId(userId: string): Promise<User> {
-        const user = await UserModel.findOne({ where: { userId: userId } });
+        const user = await models.UserModel.findOne({ where: { userId: userId } });
         if (!!user == false) throw new Error("User not found");
 
         return UserMap.toDomain(user)!;
     }
 
     async getUserByEmail(email: UserEmail): Promise<User> {
-        const user = await UserModel.findOne({
+        const user = await models.UserModel.findOne({
             where: { email: email.value },
         });
         if (!!user == false) throw new Error("User not found");
@@ -47,11 +47,11 @@ export class SequelizeUserRepo implements UserRepository {
 
         try {
             await this.getUserByUserId(user.userId.id.toString());
-            await UserModel.update(rawUser, {
+            await models.UserModel.update(rawUser, {
                 where: { userId: user.userId.id.toString() },
             });
         } catch (error) {
-            const user = await UserModel.create(rawUser);
+            const user = await models.UserModel.create(rawUser);
             await user.save();
             return;
 
@@ -59,7 +59,7 @@ export class SequelizeUserRepo implements UserRepository {
     }
 
     async list(query: UserQuery): Promise<User[]> {
-        const rawList = await UserModel.findAll({
+        const rawList = await models.UserModel.findAll({
             where: query as any
         });
 
@@ -68,7 +68,7 @@ export class SequelizeUserRepo implements UserRepository {
 
     async getUserByRecoveryPasswordCode(code: string): Promise<User> {
 
-        const user = await UserModel.findOne({
+        const user = await models.UserModel.findOne({
             where: { recoverPasswordCode: code },
         });
 
@@ -78,7 +78,7 @@ export class SequelizeUserRepo implements UserRepository {
     }
 
     async delete(userId: string): Promise<void> {
-        await UserModel.destroy({
+        await models.UserModel.destroy({
             where: { userId }
         })
     }

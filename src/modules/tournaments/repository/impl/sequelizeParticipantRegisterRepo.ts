@@ -7,14 +7,14 @@ import {
 } from "../registerParticipantsRepo";
 import config from "../../../../shared/infra/database/sequelize/config/config";
 import { UserMap } from "../../../users/mappers/userMap";
-import { UserModel } from "../../../../shared/infra/database/sequelize/models/BaseUser";
 import { ParticipantMap } from "../../mapper/ParticipantMap";
-import { ParticipantModel } from "../../../../shared/infra/database/sequelize/models/Participant";
+import models from "../../../../shared/infra/database/sequelize/models";
 
 const sequelize: Sequelize = config.connection;
 
 export class SequelizeRegisterParticipantsRepository
-    implements RegisterParticipantsRepository {
+    implements RegisterParticipantsRepository
+{
     async registerBulk(
         records: NewParticipantRecord[]
     ): Promise<BulkRegisterResponse> {
@@ -28,12 +28,12 @@ export class SequelizeRegisterParticipantsRepository
                 if (r.user) {
                     const raw = await UserMap.toPersistance(r.user);
 
-                    await UserModel.create(raw, { transaction: t });
+                    await models.UserModel.create(raw, { transaction: t });
                 }
 
                 const raw = ParticipantMap.toPersistance(r.participant);
 
-                await ParticipantModel.create(raw, { transaction: t });
+                await models.ParticipantModel.create(raw, { transaction: t });
 
                 await t.commit();
 

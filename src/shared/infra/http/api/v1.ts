@@ -18,6 +18,8 @@ import { adsRouter } from "../../../../modules/league/infra/http/routes/ad";
 import {
     tournamentRouter,
     particpantsRouter,
+    tournamentMatchRouter,
+    contestRouter,
 } from "../../../../modules/tournaments/infra/http/routes/";
 
 const v1Router = express.Router();
@@ -43,5 +45,7 @@ v1Router.use("/team", teamRouter);
 //tournaments
 v1Router.use("/tournament", tournamentRouter);
 v1Router.use("/participants", particpantsRouter);
+v1Router.use("/contest", contestRouter);
+v1Router.use("/tournament-match", tournamentMatchRouter);
 
 export { v1Router };

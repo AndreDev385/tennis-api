@@ -37,7 +37,7 @@ type BuildMatch = {
     mode: string;
     surface: string;
     sets: string[];
-    superTieBreak: boolean;
+    superTieBreak: boolean | null;
     status: number;
     matchInfo?: string;
     matchWon?: boolean | null;

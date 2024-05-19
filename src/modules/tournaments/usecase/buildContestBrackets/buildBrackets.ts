@@ -3,7 +3,7 @@ import { Either, Result, left, right } from "../../../../shared/core/Result";
 import { UseCase } from "../../../../shared/core/UseCase";
 import { BracketNode, BracketPlace } from "../../domain/brackets";
 import { Contest } from "../../domain/contest";
-import { Phase, Phases, mapPhaseToString } from "../../domain/phase";
+import { Phase, mapPhaseToString } from "../../domain/phase";
 import { BracketsRepository } from "../../repository/bracketsRepo";
 import { ContestRepository } from "../../repository/contestRepo";
 import {

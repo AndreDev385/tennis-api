@@ -1,6 +1,6 @@
 import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
 import { Mapper } from "../../../shared/infra/Mapper";
-import { ParticipantTrackerData } from "../../../shared/infra/database/sequelize/models/ParticipantTracker";
+import { ParticipantTrackerData } from "../../../shared/infra/database/sequelize/models/tournaments/ParticipantTracker";
 import { MatchId } from "../../league/domain/matchId";
 import { ParticipantId } from "../domain/participantId";
 import { ParticipantTracker } from "../domain/participantTracker";

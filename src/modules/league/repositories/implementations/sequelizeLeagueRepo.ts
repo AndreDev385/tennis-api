@@ -1,4 +1,4 @@
-import { LeagueModel } from "../../../../shared/infra/database/sequelize/models/League";
+import models from "../../../../shared/infra/database/sequelize/models";
 import { League } from "../../domain/league";
 import { LeagueMap } from "../../mappers/leagueMap";
 import { LeagueRepository } from "../leagueRepo";
@@ -7,22 +7,22 @@ export class SequelizeLeagueRepository implements LeagueRepository {
     async save(league: League): Promise<void> {
         const raw = LeagueMap.toPersistance(league);
 
-        const exists = await LeagueModel.findOne({
+        const exists = await models.LeagueModel.findOne({
             where: { leagueId: raw.leagueId },
         });
 
         if (exists) {
-            await LeagueModel.update(raw, {
+            await models.LeagueModel.update(raw, {
                 where: { leagueId: raw.leagueId },
             });
         } else {
-            const instance = await LeagueModel.create(raw);
+            const instance = await models.LeagueModel.create(raw);
             await instance.save();
         }
     }
 
     async list(): Promise<any[]> {
-        const list = await LeagueModel.findAll({});
+        const list = await models.LeagueModel.findAll({});
 
         return list;
     }
