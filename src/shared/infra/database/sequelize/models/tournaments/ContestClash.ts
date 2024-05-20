@@ -6,6 +6,7 @@ const sequelize: Sequelize = config.connection;
 export interface ContestClashData
     extends Model<InferAttributes<ContestClashData>> {
     contestClashId: string;
+    contestId: string;
     team1Id: string;
     team2Id: string;
     matchIds: string[];
@@ -20,6 +21,10 @@ export const ContestClashModel = sequelize.define<ContestClashData>(
             type: DataTypes.UUID,
             allowNull: false,
             primaryKey: true,
+        },
+        contestId: {
+            type: DataTypes.UUID,
+            allowNull: false,
         },
         team1Id: {
             type: DataTypes.UUID,

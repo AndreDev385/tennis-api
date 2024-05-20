@@ -134,7 +134,7 @@ export class AddParticipantsToTeam implements UseCase<Req, Res> {
             let count = 0;
             const maybeParticipantAlreadyRegistered = await this.ctr.get({
                 contestId: team.contestId.id.toString(),
-                partiticipantsIds: participants.map((p, idx) => {
+                participantsIds: participants.map((p, idx) => {
                     count = idx;
 
                     return p.participantId.id.toString();
@@ -144,12 +144,11 @@ export class AddParticipantsToTeam implements UseCase<Req, Res> {
             if (maybeParticipantAlreadyRegistered.isSuccess) {
                 return left(
                     Result.fail<string>(
-                        `El participante ${participants[count].user.firstName.value} ${participants[count].user.lastName.value} ya esta inscrito en otro equipo`
+                        `El participante ${participants[count].user.firstName.value} ${participants[count].user.lastName.value} ya esta inscrito en un equipo`
                     )
                 );
             }
 
-            //TODO: add participants to team
             team.addParticipantsIds(participants.map((p) => p.participantId));
 
             await this.ctr.save(team);

@@ -12,6 +12,8 @@ import { listContestBracketsCtrl } from "../../../queries/listContestBrackets";
 import { addParticipantsToTeamCtrl } from "../../../usecase/addParticipantsToTeam";
 import { removeParticipantFromTeamCtrl } from "../../../usecase/removeParticipantFromTeam";
 import { createBracketClashCtrl } from "../../../usecase/createBracketClash";
+import { paginateContestClashesCtrl } from "../../../queries/paginateClashes";
+import { deleteContestClashCtrl } from "../../../usecase/deleteContestClash";
 
 export const contestRouter = express.Router();
 
@@ -37,10 +39,6 @@ contestRouter.get("/teams", (req, res) =>
     listContestTeamsCtrl.execute(req, res)
 );
 
-contestRouter.get("/:contestId", (req, res) =>
-    getContestCtrl.execute(req, res)
-);
-
 contestRouter.delete("/brackets", (req, res) =>
     deleteBracketsCtrl.execute(req, res)
 );
@@ -63,4 +61,16 @@ contestRouter.put("/remove-participant-from-team", (req, res) =>
 
 contestRouter.post("/create-bracket-clash", (req, res) =>
     createBracketClashCtrl.execute(req, res)
+);
+
+contestRouter.get("/clash", (req, res) =>
+    paginateContestClashesCtrl.execute(req, res)
+);
+
+contestRouter.delete("/clash/:contestClashId", (req, res) =>
+    deleteContestClashCtrl.execute(req, res)
+);
+
+contestRouter.get("/:contestId", (req, res) =>
+    getContestCtrl.execute(req, res)
 );

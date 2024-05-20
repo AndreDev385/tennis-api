@@ -5,6 +5,7 @@ import {
     PaginateResponse,
 } from "../../../../shared/infra/database/sequelize/queries/sequelizeQueries";
 import { ContestClash } from "../../domain/contestClash";
+import { ContestClashDto } from "../../dtos/contestClashDto";
 import { ContestClashMap } from "../../mapper/ContestClashMap";
 import { ContestClashQuery, ContestClashRepository } from "../contestClashRepo";
 import { ContestTeamRepository } from "../contestTeamRepo";
@@ -16,10 +17,23 @@ export class SequelizeContestClashRepository implements ContestClashRepository {
         this.contestTeamRepo = ctr;
     }
 
+    async delete(q: ContestClashQuery): Promise<Result<void>> {
+        try {
+            const result = await models.ContestClashModel.destroy({ where: q });
+            if (result < 1) {
+                return Result.fail("No encontrado");
+            }
+
+            return Result.ok();
+        } catch (error) {
+            return Result.fail("Ha ocurrido un error");
+        }
+    }
+
     async paginate(
         q: ContestClashQuery,
         pq: PaginateQuery
-    ): Promise<PaginateResponse<ContestClash[]>> {
+    ): Promise<PaginateResponse<ContestClashDto[]>> {
         const query: any = {};
 
         query.where = q;
@@ -52,7 +66,10 @@ export class SequelizeContestClashRepository implements ContestClashRepository {
             ContestClashMap.toDomain(clash)
         );
 
-        return list;
+        return {
+            rows: list.rows.map((r: any) => ContestClashMap.toDto(r)),
+            count: result.count,
+        };
     }
 
     async get(q: ContestClashQuery): Promise<Result<ContestClash>> {
@@ -84,6 +101,8 @@ export class SequelizeContestClashRepository implements ContestClashRepository {
     async save(clash: ContestClash): Promise<Result<void>> {
         try {
             const raw = ContestClashMap.toPersistance(clash);
+
+            console.log(`${raw} raw to save`)
 
             const exist = await models.ContestClashModel.findOne({
                 where: { contestClashId: raw.contestClashId },

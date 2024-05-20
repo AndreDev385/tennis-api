@@ -99,6 +99,9 @@ export class BracketNode extends Entity<BracketNodeProps> {
     get match(): TournamentMatch | null {
         return this.props.match!;
     }
+    get clash(): ContestClash | null {
+        return this.props.clash!;
+    }
     get left(): BracketNode | null {
         return this.props.left!;
     }
@@ -136,6 +139,10 @@ export class BracketNode extends Entity<BracketNodeProps> {
         this.props.match = match;
     }
 
+    public setClash(clash: ContestClash) {
+        this.props.clash = clash;
+    }
+
     private constructor(props: BracketNodeProps, id?: UniqueEntityID) {
         super(props, id);
     }
@@ -149,6 +156,7 @@ export class BracketNode extends Entity<BracketNodeProps> {
                 {
                     ...props,
                     match: props.match ?? null,
+                    clash: props.clash ?? null,
                     parent: props.parent ?? null,
                     left: props.left ?? null,
                     right: props.right ?? null,

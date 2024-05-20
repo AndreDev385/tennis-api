@@ -9,6 +9,7 @@ interface BracketData extends Model<InferAttributes<BracketData>> {
     phase: PhaseValues;
     contestId: string;
     matchId: string | null;
+    clashId: string | null;
     left: string | null;
     right: string | null;
     parent: string | null;
@@ -31,6 +32,10 @@ const BracketModel = sequelize.define<BracketData>("bracket", {
         allowNull: false,
     },
     matchId: {
+        type: DataTypes.UUID,
+        allowNull: true,
+    },
+    clashId: {
         type: DataTypes.UUID,
         allowNull: true,
     },

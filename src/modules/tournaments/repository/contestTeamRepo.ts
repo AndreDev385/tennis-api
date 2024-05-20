@@ -4,7 +4,7 @@ import { ContestTeam } from "../domain/contestTeam";
 export type ContestTeamQuery = {
     contestTeamId?: string;
     contestId?: string;
-    partiticipantsIds?: string[];
+    participantsIds?: string[];
     name?: string;
 };
 

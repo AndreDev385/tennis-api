@@ -4,9 +4,10 @@ import { ContestId } from "../domain/contestId";
 import { ContestTeam } from "../domain/contestTeam";
 import { ParticipantId } from "../domain/participantId";
 import { ParticipantsIds } from "../domain/participantsIds";
+import { ContestTeamDto } from "../dtos/contestTeamDto";
 
 export class ContestTeamMap implements Mapper<ContestTeam> {
-    static toDto(c: ContestTeam | null) {
+    static toDto(c: ContestTeam | null): ContestTeamDto | null {
         if (c == null) return null;
 
         return {

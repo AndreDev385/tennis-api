@@ -35,18 +35,12 @@ export const sequelizeTournamentMatchRepo =
         sequelizeTournamentMatchTrackerRepo
     );
 
-export const sequelizeBracketRepo = new SequelizeBracketRepository(
-    sequelizeParticipantRepo,
-    sequelizeCoupleRepo,
-    sequelizeTournamentMatchRepo
-);
+export const sequelizeContestTeamRepo = new SequelizeContestTeamRepository();
 
 export const sequelizeRegisterCouplesRepo =
     new SequelizeCoupleRegisterRepository();
 
 export const sequelizeTournamentAdsRepo = new SequelizeTournamentAdRepository();
-
-export const sequelizeContestTeamRepo = new SequelizeContestTeamRepository();
 
 export const sequelizeContestRepo = new SequlizeContestRepository(
     sequelizeParticipantRepo,
@@ -56,4 +50,12 @@ export const sequelizeContestRepo = new SequlizeContestRepository(
 
 export const sequelizeContestClashRepo = new SequelizeContestClashRepository(
     sequelizeContestTeamRepo
+);
+
+export const sequelizeBracketRepo = new SequelizeBracketRepository(
+    sequelizeParticipantRepo,
+    sequelizeCoupleRepo,
+    sequelizeTournamentMatchRepo,
+    sequelizeContestTeamRepo,
+    sequelizeContestClashRepo
 );

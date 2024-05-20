@@ -1,6 +1,7 @@
 import { AppError } from "../../../../shared/core/AppError";
 import {
     Either,
+    Left,
     Result,
     left,
     right,
@@ -43,13 +44,20 @@ export class CreateBracketClash implements UseCase<Req, Res> {
         }
 
         const INCOMPLETE_BRACKET =
-            !bracket.rightPlace.contestTeam ||
-            !bracket.leftPlace.contestTeam;
+            !bracket.rightPlace.contestTeam || !bracket.leftPlace.contestTeam;
 
         if (INCOMPLETE_BRACKET) {
             return left(
                 Result.fail<string>(
                     "No se puede crear el partido de la llave seleccionada"
+                )
+            );
+        }
+
+        if (bracket.clash != null) {
+            return left(
+                Result.fail<string>(
+                    "La llave seleccionada ya cuenta con un encuentro"
                 )
             );
         }
@@ -63,12 +71,17 @@ export class CreateBracketClash implements UseCase<Req, Res> {
         });
 
         if (maybeClash.isFailure) {
-            return left(
-                Result.fail<string>(`${maybeClash.getErrorValue()}`)
-            );
+            return left(Result.fail<string>(`${maybeClash.getErrorValue()}`));
         }
 
         clash = maybeClash.getValue();
+        bracket.setClash(clash);
+
+        try {
+            await this.bracketRepo.save(bracket);
+        } catch (e) {
+            return left(new AppError.UnexpectedError(e));
+        }
 
         const result = await this.repo.save(clash);
 

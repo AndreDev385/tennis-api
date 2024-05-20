@@ -9,7 +9,9 @@ import { ContestId } from "../../domain/contestId";
 
 export class SequelizeContestTeamRepository implements ContestTeamRepository {
     async get(q: ContestTeamQuery): Promise<Result<ContestTeam>> {
-        const data = await models.ContestTeamModel.findOne({ where: q });
+        const data = await models.ContestTeamModel.findOne({
+            where: q,
+        });
 
         if (!data) {
             return Result.fail("Equipo no encontrado");
@@ -56,6 +58,7 @@ export class SequelizeContestTeamRepository implements ContestTeamRepository {
 
             return Result.ok();
         } catch (error) {
+            console.log(`SAVE TEAM ${error}`);
             return Result.fail("Error al guardar equipo");
         }
     }

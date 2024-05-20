@@ -20,7 +20,7 @@ export class ListContestTeams implements UseCase<Req, Res> {
         const validQueries: Array<keyof ContestTeamQuery> = [
             "contestId",
             "contestTeamId",
-            "partiticipantsIds",
+            "participantsIds",
             "name",
         ];
 

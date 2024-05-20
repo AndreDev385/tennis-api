@@ -1,12 +1,17 @@
 import models from "../../../../shared/infra/database/sequelize/models";
 import { BracketNode, BracketPlace } from "../../domain/brackets";
+import { ContestTeam } from "../../domain/contestTeam";
 import { Couple } from "../../domain/couple";
 import { Participant } from "../../domain/participant";
 import { BracketMap, BuildBracketData } from "../../mapper/BracketMap";
+import { ContestClashMap } from "../../mapper/ContestClashMap";
+import { ContestTeamMap } from "../../mapper/ContestTeamMap";
 import { CoupleMap } from "../../mapper/CoupleMap";
 import { ParticipantMap } from "../../mapper/ParticipantMap";
 import { TournamentMatchMap } from "../../mapper/TournamentMatchMap";
 import { BracketsQuery, BracketsRepository } from "../bracketsRepo";
+import { ContestClashRepository } from "../contestClashRepo";
+import { ContestTeamRepository } from "../contestTeamRepo";
 import { CoupleRepository } from "../coupleRepo";
 import { ParticipantRepo } from "../participantRepo";
 import { TournamentMatchRepo } from "../tournamentMatchRepo";
@@ -15,15 +20,21 @@ export class SequelizeBracketRepository implements BracketsRepository {
     private readonly participantRepo: ParticipantRepo;
     private readonly coupleRepo: CoupleRepository;
     private readonly matchRepo: TournamentMatchRepo;
+    private readonly contestTeamRepo: ContestTeamRepository;
+    private readonly clashRepo: ContestClashRepository;
 
     constructor(
         participantRepo: ParticipantRepo,
         coupleRepo: CoupleRepository,
-        matchRepo: TournamentMatchRepo
+        matchRepo: TournamentMatchRepo,
+        contestTeamRepo: ContestTeamRepository,
+        clashRepo: ContestClashRepository,
     ) {
         this.participantRepo = participantRepo;
         this.coupleRepo = coupleRepo;
         this.matchRepo = matchRepo;
+        this.contestTeamRepo = contestTeamRepo;
+        this.clashRepo = clashRepo;
     }
 
     async delete(q: BracketsQuery): Promise<void> {
@@ -78,6 +89,22 @@ export class SequelizeBracketRepository implements BracketsRepository {
                 });
                 node.leftPlace.couple = CoupleMap.toDto(couple);
             }
+            if (node.rightPlace.contestTeamId) {
+                let team = await this.contestTeamRepo.get({
+                    contestTeamId: node.rightPlace.contestTeamId,
+                });
+                node.rightPlace.contestTeam = ContestTeamMap.toDto(
+                    team.getValue()
+                );
+            }
+            if (node.leftPlace.contestTeamId) {
+                let team = await this.contestTeamRepo.get({
+                    contestTeamId: node.rightPlace.contestTeamId,
+                });
+                node.leftPlace.contestTeam = ContestTeamMap.toDto(
+                    team.getValue()
+                );
+            }
         }
 
         for (const node of list) {
@@ -90,6 +117,14 @@ export class SequelizeBracketRepository implements BracketsRepository {
                     node.match = TournamentMatchMap.toDto(mustMatch.getValue());
                     // remove tracker from match obj
                     node.match.tracker = null;
+                }
+            }
+
+            if (node.clashId) {
+                const clash = await this.clashRepo.get({ contestClashId: node.clashId })
+
+                if (clash.isSuccess) {
+                    node.clash = ContestClashMap.toDto(clash.getValue());
                 }
             }
         }
@@ -112,6 +147,8 @@ export class SequelizeBracketRepository implements BracketsRepository {
         let leftP: Participant | null = null;
         let rightC: Couple | null = null;
         let leftC: Couple | null = null;
+        let rightT: ContestTeam | null = null;
+        let leftT: ContestTeam | null = null;
 
         if (rightPlaceData.participantId) {
             rightP = await this.participantRepo.get({
@@ -133,6 +170,18 @@ export class SequelizeBracketRepository implements BracketsRepository {
                 coupleId: leftPlaceData.coupleId,
             });
         }
+        if (rightPlaceData.contestTeamId) {
+            const result = await this.contestTeamRepo.get({
+                contestTeamId: rightPlaceData.contestTeamId,
+            });
+            rightT = result.getValue();
+        }
+        if (leftPlaceData.contestTeamId) {
+            const result = await this.contestTeamRepo.get({
+                contestTeamId: leftPlaceData.contestTeamId,
+            });
+            leftT = result.getValue();
+        }
 
         const obj: BuildBracketData = {
             deep: raw.deep,
@@ -140,6 +189,7 @@ export class SequelizeBracketRepository implements BracketsRepository {
             phase: raw.phase,
             contestId: raw.contestId,
             match: null,
+            clash: null,
             right: null,
             left: null,
             parent: null,
@@ -147,11 +197,13 @@ export class SequelizeBracketRepository implements BracketsRepository {
                 value: rightPlaceData.value,
                 participant: rightP,
                 couple: rightC,
+                contestTeam: rightT,
             }).getValue(),
             leftPlace: BracketPlace.create({
                 value: leftPlaceData.value,
                 participant: leftP,
                 couple: leftC,
+                contestTeam: leftT,
             }).getValue(),
         };
 
@@ -161,6 +213,14 @@ export class SequelizeBracketRepository implements BracketsRepository {
             });
             if (mustMatch.isSuccess) {
                 obj.match = mustMatch.getValue();
+            }
+        }
+
+        if (raw.clashId) {
+            const clash = await this.clashRepo.get({ contestClashId: raw.clashId })
+
+            if (clash.isSuccess) {
+                obj.clash = clash.getValue();
             }
         }
 
@@ -185,26 +245,15 @@ export class SequelizeBracketRepository implements BracketsRepository {
     async save(node: BracketNode): Promise<void> {
         const raw = BracketMap.toPersistance(node);
 
+        console.log(raw, "BRACK TO SAVE")
+
         const exist = await models.BracketModel.findOne({
             where: { id: raw.id },
         });
 
         if (!!exist === true) {
             await models.BracketModel.update(
-                {
-                    //update
-                    matchId: raw.matchId,
-                    leftPlace: raw.leftPlace,
-                    rightPlace: raw.rightPlace,
-                    // keep the same
-                    phase: exist.phase,
-                    deep: exist.deep,
-                    left: exist.left,
-                    right: exist.right,
-                    contestId: exist.contestId,
-                    parent: exist.parent,
-                    id: exist.id,
-                },
+                raw,
                 { where: { id: raw.id } }
             );
         } else {
