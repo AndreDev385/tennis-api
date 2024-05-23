@@ -99,7 +99,7 @@ export class SequelizeBracketRepository implements BracketsRepository {
             }
             if (node.leftPlace.contestTeamId) {
                 let team = await this.contestTeamRepo.get({
-                    contestTeamId: node.rightPlace.contestTeamId,
+                    contestTeamId: node.leftPlace.contestTeamId,
                 });
                 node.leftPlace.contestTeam = ContestTeamMap.toDto(
                     team.getValue()

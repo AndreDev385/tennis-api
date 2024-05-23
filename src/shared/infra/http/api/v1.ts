@@ -44,7 +44,7 @@ v1Router.use("/team", teamRouter);
 
 //tournaments
 v1Router.use("/tournament", tournamentRouter);
-v1Router.use("/participants", particpantsRouter);
+v1Router.use("/participant", particpantsRouter);
 v1Router.use("/contest", contestRouter);
 v1Router.use("/tournament-match", tournamentMatchRouter);
 

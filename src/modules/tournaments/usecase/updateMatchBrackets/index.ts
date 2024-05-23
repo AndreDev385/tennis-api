@@ -2,9 +2,9 @@ import {
     sequelizeBracketRepo,
     sequelizeTournamentMatchRepo,
 } from "../../repository";
-import { UpdateBrackets } from "./updateBrackets";
+import { UpdateMatchBrackets } from "./updateBrackets";
 
-export const updateBracketTree = new UpdateBrackets(
+export const updateMatchBracketTree = new UpdateMatchBrackets(
     sequelizeBracketRepo,
     sequelizeTournamentMatchRepo
 );

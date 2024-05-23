@@ -12,6 +12,7 @@ export type ContestClashQuery = {
     team1Id?: string;
     team2Id?: string;
     deep?: number;
+    matchIds?: string[];
 };
 
 export type ContestClashRepository = {

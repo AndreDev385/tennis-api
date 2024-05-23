@@ -1,3 +1,4 @@
+import { Op } from "sequelize";
 import { Result } from "../../../../shared/core/Result";
 import models from "../../../../shared/infra/database/sequelize/models";
 import {
@@ -73,7 +74,11 @@ export class SequelizeContestClashRepository implements ContestClashRepository {
     }
 
     async get(q: ContestClashQuery): Promise<Result<ContestClash>> {
-        const data = await models.ContestClashModel.findOne({ where: q });
+        const query: any = q;
+        if (q.matchIds) {
+            query.matchIds = { [Op.contains]: q.matchIds };
+        }
+        const data = await models.ContestClashModel.findOne({ where: query });
 
         if (!data) {
             return Result.fail("No encontrado");

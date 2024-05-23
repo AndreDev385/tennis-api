@@ -11,7 +11,12 @@ export class PaginateParticipantsCtrl extends BaseController {
     }
 
     async executeImpl(req: Request, res: Response) {
+
+        console.log(req.query, "QUERY");
+
         const result = await this.usecase.execute(req.query);
+
+        console.log(result, "Result");
 
         if (result.isLeft()) {
             return this.fail(res, result.value.getErrorValue().message);

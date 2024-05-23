@@ -7,9 +7,10 @@ import { MatchesPerClash } from "../domain/matchesPerClash";
 import { Tournament } from "../domain/tournament";
 import { TournamentRules } from "../domain/tournamentRules";
 import { TournamentStatus } from "../domain/tournamentStatus";
+import { TournamentDto } from "../dtos/tournamentDto";
 
 export class TournamentMap implements Mapper<Tournament> {
-    public static forQuery(raw: TournamentData) {
+    public static forQuery(raw: TournamentData): TournamentDto {
         const rules = JSON.parse(raw.rules);
         return {
             tournamentId: raw.tournamentId,
@@ -40,8 +41,8 @@ export class TournamentMap implements Mapper<Tournament> {
             }).getValue(),
             matchesPerClash: rulesObj.matchesPerClash
                 ? MatchesPerClash.create({
-                      value: rulesObj.matchesPerClash,
-                  }).getValue()
+                    value: rulesObj.matchesPerClash,
+                }).getValue()
                 : null,
         });
 

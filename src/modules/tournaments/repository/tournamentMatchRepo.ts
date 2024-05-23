@@ -6,7 +6,7 @@ import {
 import { TournamentMatch } from "../domain/tournamentMatch";
 
 export type TournamentMatchQuery = {
-    matchId?: string;
+    matchId?: string | string[];
     tournamentId?: string;
     contestId?: string;
 };

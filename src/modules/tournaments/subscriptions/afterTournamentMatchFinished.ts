@@ -1,15 +1,21 @@
 import { DomainEvents } from "../../../shared/domain/events/DomainEvents";
 import { IHandle } from "../../../shared/domain/events/IHandle";
 import { TournamentMatchFinished } from "../domain/events/tournamentMatchFinished";
-import { UpdateBrackets } from "../usecase/updateBrackets/updateBrackets";
+import { CheckClashIsFinished } from "../usecase/checkBracketClash/check";
+import { UpdateMatchBrackets } from "../usecase/updateMatchBrackets/updateBrackets";
 
 export class AfterTournemntMatchFinished
-    implements IHandle<AfterTournemntMatchFinished>
+    implements IHandle<TournamentMatchFinished>
 {
-    private updateBracketTree: UpdateBrackets;
+    private updateBracketTree: UpdateMatchBrackets;
+    private checkIfClashFinished: CheckClashIsFinished;
 
-    constructor(usecase: UpdateBrackets) {
-        this.updateBracketTree = usecase;
+    constructor(
+        updateBracket: UpdateMatchBrackets,
+        checkClashFinish: CheckClashIsFinished
+    ) {
+        this.updateBracketTree = updateBracket;
+        this.checkIfClashFinished = checkClashFinish;
         this.setupSubscriptions();
     }
 
@@ -17,6 +23,29 @@ export class AfterTournemntMatchFinished
         DomainEvents.register(
             this.updateTree.bind(this) as any,
             TournamentMatchFinished.name
+        );
+        DomainEvents.register(
+            this.checkIsFinish.bind(this) as any,
+            TournamentMatchFinished.name
+        );
+    }
+
+    private async checkIsFinish(event: TournamentMatchFinished): Promise<void> {
+        const { match } = event;
+
+        const result = await this.checkIfClashFinished.execute({
+            matchId: match.matchId.id.toString(),
+        });
+
+        if (result.isLeft()) {
+            console.log(
+                `[AfterTournamentMatchFinished | CheckClash]: Failed to execute`
+            );
+            return;
+        }
+
+        console.log(
+            `[AfterTournamentMatchFinished | CheckClash]: Successfully executed`
         );
     }
 
@@ -28,10 +57,14 @@ export class AfterTournemntMatchFinished
         });
 
         if (result.isLeft()) {
-            console.log(`[AfterTournamentMatchFinished]: Failed to execute`);
+            console.log(
+                `[AfterTournamentMatchFinished | BracketTree]: Failed to execute`
+            );
             return;
         }
 
-        console.log(`[AfterTournamentMatchFinished]: Successfully executed`);
+        console.log(
+            `[AfterTournamentMatchFinished | BracketTree]: Successfully executed`
+        );
     }
 }

@@ -21,7 +21,7 @@ export class PaginateParticipants implements UseCase<any, Response> {
     }
 
     async execute(req: any): Promise<Response> {
-        const validQueries: Array<keyof ParticipantQuery> = ["userId"];
+        const validQueries: Array<keyof ParticipantQuery> = ["userId", "participantId"];
 
         const query: ParticipantQuery = {};
 
@@ -33,8 +33,8 @@ export class PaginateParticipants implements UseCase<any, Response> {
             }
 
             const result = await this.participantRepo.paginate(query, {
-                limit: req.limit,
-                offset: req.offset,
+                limit: Number(req.limit),
+                offset: Number(req.offset),
             });
 
             return right(result);

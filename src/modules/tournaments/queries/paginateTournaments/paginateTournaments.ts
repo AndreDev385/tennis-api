@@ -31,6 +31,8 @@ export async function paginateTournaments(q: any): Promise<Response> {
             limit: q.limit,
         });
 
+        console.log(result);
+
         return right(Result.ok(result));
     } catch (error) {
         return left(new AppError.UnexpectedError(error));

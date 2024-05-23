@@ -1,6 +1,8 @@
 export type TournamentDto = {
+    tournamentId: string;
     name: string;
     rules: TournamentRulesDto;
+    image: string;
     status: number;
     startDate: Date;
     endDate: Date;
@@ -11,4 +13,5 @@ export type TournamentDto = {
 export type TournamentRulesDto = {
     setsQuantity: number;
     gamesPerSet: number;
+    matchesPerClash: number;
 };

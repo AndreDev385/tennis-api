@@ -7,7 +7,7 @@ import { ParticipantDto } from "../dtos/participantDto";
 
 export type ParticipantQuery = {
     userId?: string;
-    participantId?: string;
+    participantId?: string | string[];
 };
 
 export type ParticipantRepo = {

@@ -6,6 +6,7 @@ export type BracketsQuery = {
     phase?: number;
     id?: string;
     matchId?: string;
+    clashId?: string;
     rightPlace?: number;
     leftPlace?: number;
     deep?: number;

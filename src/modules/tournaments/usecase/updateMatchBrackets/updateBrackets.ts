@@ -15,7 +15,7 @@ type Res = Either<
     Result<void>
 >;
 
-export class UpdateBrackets implements UseCase<Req, Res> {
+export class UpdateMatchBrackets implements UseCase<Req, Res> {
     private readonly bracketRepo: BracketsRepository;
     private readonly matchRepo: TournamentMatchRepo;
 

@@ -33,6 +33,7 @@ export class BracketMap implements Mapper<BracketNode> {
             contestId: node.contestId,
             matchId: node.matchId,
             match: node.match != null ? TournamentMatchMap.toDto(node.match) : null,
+            clashId: node.clashId,
             clash: node.clash != null ? ContestClashMap.toDto(node.clash) : null,
             left: node.left,
             right: node.right,

@@ -15,6 +15,7 @@ export const dispatchEventsCallback = (model: any, primaryKeyField: string) => {
         SeasonModel,
         PlayerModel,
         TournamentMatchModel,
+        ContestClashModel,
     } = models;
 
     MatchModel.addHook("afterCreate", (m: any) =>
@@ -134,6 +135,25 @@ export const dispatchEventsCallback = (model: any, primaryKeyField: string) => {
     );
     TournamentMatchModel.addHook("afterBulkUpdate", (m: any) =>
         dispatchEventsCallback(m.attributes, "matchId")
+    );
+
+    ContestClashModel.addHook("afterCreate", (m: any) =>
+        dispatchEventsCallback(m, "contestClashId")
+    );
+    ContestClashModel.addHook("afterDestroy", (m: any) =>
+        dispatchEventsCallback(m, "contestClashId")
+    );
+    ContestClashModel.addHook("afterUpdate", (m: any) =>
+        dispatchEventsCallback(m, "contestClashId")
+    );
+    ContestClashModel.addHook("afterSave", (m: any) =>
+        dispatchEventsCallback(m, "contestClashId")
+    );
+    ContestClashModel.addHook("afterUpsert", (m: any) =>
+        dispatchEventsCallback(m, "contestClashId")
+    );
+    ContestClashModel.addHook("afterBulkUpdate", (m: any) =>
+        dispatchEventsCallback(m.attributes, "contestClashId")
     );
 
     console.log("[Hooks]: Sequelize hooks setup.");

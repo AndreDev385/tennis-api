@@ -9,7 +9,7 @@ import { ContestTeamMap } from "./ContestTeamMap";
 
 export class ContestClashMap implements Mapper<ContestClash> {
     public static toDomain(raw: any) {
-        console.log(`${JSON.stringify(raw)} RAW to domain`)
+        console.log(`${JSON.stringify(raw)} RAW to domain`);
         const maybeClash = ContestClash.create(
             {
                 t1WonClash: raw.t1WonClash,
@@ -19,7 +19,9 @@ export class ContestClashMap implements Mapper<ContestClash> {
                 isFinish: raw.isFinish,
                 matchIds: TournamentMatchesIds.create(
                     raw.matchIds.map((i: string) =>
-                        TournamentMatchId.create(new UniqueEntityID(i))
+                        TournamentMatchId.create(
+                            new UniqueEntityID(i)
+                        ).getValue()
                     )
                 ),
                 team1: raw.team1,
