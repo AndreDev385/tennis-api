@@ -47,8 +47,6 @@ export class PaginateClashes implements UseCase<Req, Res> {
                 limit: request.limit,
             });
 
-            console.log(`RESULT ${result}`)
-
             return right(Result.ok(result));
         } catch (error) {
             return left(new AppError.UnexpectedError(error));

@@ -41,7 +41,7 @@ export class SequelizeContestClashRepository implements ContestClashRepository {
         query.limit = pq.limit ?? 10;
         query.offset = pq.offset ?? 0;
 
-        const result = await models.ContestClashModel.findAndCountAll(q as any);
+        const result = await models.ContestClashModel.findAndCountAll(query);
 
         let list: any = result;
 

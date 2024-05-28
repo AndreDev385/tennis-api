@@ -121,6 +121,8 @@ export class SequelizeTournamentMatchRepository implements TournamentMatchRepo {
 
         let mustTracker = await this.trackerRepo.get({ matchId: data.matchId });
 
+        console.log(mustTracker, "MUST TRACKER");
+
         return Result.ok(
             TournamentMatchMap.toDomain({
                 player1: p1,

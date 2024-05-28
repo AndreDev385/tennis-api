@@ -27,8 +27,6 @@ export class SequelizeParticipantRepository implements ParticipantRepo {
 
         const data = await models.ParticipantModel.findAndCountAll(query);
 
-        console.log("DATA", data);
-
         return {
             rows: data.rows.map((p) => ParticipantMap.forQuery(p)),
             count: data.count,

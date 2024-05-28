@@ -1,24 +1,22 @@
 import { Request, Response } from "express";
 import { BaseController } from "../../../../shared/infra/http/models/BaseController";
-import { CreateClashMatches } from "./createMatches";
+import { NewHomeAd } from "./newHomeAd";
 import { AppError } from "../../../../shared/core/AppError";
 import { Result } from "../../../../shared/core/Result";
 
-export class CreateClashMatchesCtrl extends BaseController {
-    private readonly uc: CreateClashMatches;
+export class NewHomeAdCtrl extends BaseController {
+    private readonly uc: NewHomeAd;
 
-    constructor(uc: CreateClashMatches) {
+    constructor(uc: NewHomeAd) {
         super();
         this.uc = uc;
     }
 
     async executeImpl(req: Request, res: Response) {
-        // Just for dart problem to map json
-        if (req.body['body'] != null) {
-            req.body = JSON.parse(req.body['body']);
-        }
-
-        const result = await this.uc.execute(req.body);
+        const result = await this.uc.execute({
+            ...req.body,
+            file: req.file,
+        });
 
         if (result.isLeft()) {
             const error = result.value;
@@ -30,12 +28,6 @@ export class CreateClashMatchesCtrl extends BaseController {
                         (error as AppError.UnexpectedError).getErrorValue()
                             .message
                     );
-                case AppError.NotFoundError:
-                    return this.notFound(
-                        res,
-                        (error as AppError.NotFoundError).getErrorValue()
-                            .message
-                    );
                 default:
                     return this.clientError(
                         res,
@@ -44,6 +36,6 @@ export class CreateClashMatchesCtrl extends BaseController {
             }
         }
 
-        return this.ok(res, { message: "Partidos creados exitosamente!" });
+        return this.ok(res, { message: "Publicidad agreagada con exito" });
     }
 }

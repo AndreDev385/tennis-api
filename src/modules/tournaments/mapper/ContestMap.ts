@@ -5,7 +5,6 @@ import { Category } from "../../league/domain/category";
 import { GameMode, Mode } from "../../league/domain/gameMode";
 import { CategoryMap } from "../../league/mappers/categoryMap";
 import { Contest } from "../domain/contest";
-import { ContestTeam } from "../domain/contestTeam";
 import { Inscribed } from "../domain/inscribed";
 import { InscribedList } from "../domain/inscribedList";
 import { Summation } from "../domain/summation";
@@ -28,6 +27,28 @@ export class ContestMap implements Mapper<Contest> {
     }
 
     public static toDto(c: Contest) {
+        const inscribed = c.inscribed.getItems().map((i) => {
+            switch (c.mode.value) {
+                case GameMode.single:
+                    return {
+                        position: i.position,
+                        participant: ParticipantMap.toDto(i.participant!),
+                    };
+                case GameMode.double:
+                    return {
+                        position: i.position,
+                        couple: CoupleMap.toDto(i.couple!),
+                    };
+                case GameMode.team:
+                    return {
+                        position: i.position,
+                        contestTeam: ContestTeamMap.toDto(i.team),
+                    };
+            }
+        })
+
+        inscribed.sort((a, b) => (a?.position ?? 99) - (b?.position ?? 99));
+
         return {
             contestId: c.contestId.id.toString(),
             tournamentId: c.tournamentId.id.toString(),
@@ -36,29 +57,11 @@ export class ContestMap implements Mapper<Contest> {
             category: c.category ? CategoryMap.toDto(c.category) : null,
             summation: c.summation
                 ? {
-                      value: c.summation.value,
-                      letter: c.summation.letter,
-                  }
-                : null,
-            inscribed: c.inscribed.getItems().map((i) => {
-                switch (c.mode.value) {
-                    case GameMode.single:
-                        return {
-                            position: i.position,
-                            participant: ParticipantMap.toDto(i.participant!),
-                        };
-                    case GameMode.double:
-                        return {
-                            position: i.position,
-                            couple: CoupleMap.toDto(i.couple!),
-                        };
-                    case GameMode.team:
-                        return {
-                            position: i.position,
-                            contestTeam: ContestTeamMap.toDto(i.team),
-                        };
+                    value: c.summation.value,
+                    letter: c.summation.letter,
                 }
-            }),
+                : null,
+            inscribed,
         };
     }
 
@@ -100,16 +103,16 @@ export class ContestMap implements Mapper<Contest> {
             categoryType: contest.categoryType,
             category: contest.category
                 ? JSON.stringify({
-                      name: contest.category.name,
-                      fullName: contest.category.fullName,
-                      categoryId: contest.category.categoryId.id.toString(),
-                  })
+                    name: contest.category.name,
+                    fullName: contest.category.fullName,
+                    categoryId: contest.category.categoryId.id.toString(),
+                })
                 : null,
             summation: contest.summation
                 ? JSON.stringify({
-                      letter: contest.summation.letter,
-                      value: contest.summation.value,
-                  })
+                    letter: contest.summation.letter,
+                    value: contest.summation.value,
+                })
                 : null,
             inscribed: contest.inscribed.getItems().map((i) => {
                 switch (contest.mode.value) {

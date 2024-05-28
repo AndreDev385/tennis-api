@@ -64,7 +64,10 @@ export class SequelizeContestTeamRepository implements ContestTeamRepository {
     }
 
     async list(q: ContestTeamQuery): Promise<ContestTeam[]> {
-        const list = await models.ContestTeamModel.findAll({ where: q });
+        const list = await models.ContestTeamModel.findAll({
+            where: q,
+            order: [["createdAt", "ASC"]],
+        });
 
         return list.map((r) =>
             ContestTeam.create(

@@ -32,10 +32,14 @@ export class PaginateParticipants implements UseCase<any, Response> {
                 }
             }
 
+            console.log(`Query: ${JSON.stringify(query)}`);
+
             const result = await this.participantRepo.paginate(query, {
                 limit: Number(req.limit),
                 offset: Number(req.offset),
             });
+
+            console.log(`RESULT ${result.count}`);
 
             return right(result);
         } catch (error) {

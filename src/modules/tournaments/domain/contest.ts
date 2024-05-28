@@ -75,24 +75,32 @@ export class Contest extends Entity<ContestProps> {
         mode,
         category,
     }: ContestProps): Result<string | void> {
-        if (
-            (categoryType === CategoryTypes.SUMMATION && !summation) ||
-            (categoryType === CategoryTypes.SUMMATION &&
-                mode.value != GameMode.double)
-        )
+        const MISSING_SUMMATION =
+            categoryType === CategoryTypes.SUMMATION && !summation;
+
+        const INVALID_MODE =
+            categoryType === CategoryTypes.SUMMATION &&
+            mode.value != GameMode.double &&
+            mode.value != GameMode.team;
+
+        if (MISSING_SUMMATION || INVALID_MODE)
             return Result.fail<string>("Un concurso de suma debe ser doble");
 
-        if (categoryType === CategoryTypes.CATEGORY && !category)
+        const MISSING_CATEGORY =
+            categoryType === CategoryTypes.CATEGORY && !category;
+
+        if (MISSING_CATEGORY)
             return Result.fail<string>(
                 "Selecciona una categoria para el consurso"
             );
 
-        if (
+        const INVALID_CATEGORY =
             categoryType != CategoryTypes.CATEGORY &&
             categoryType != CategoryTypes.SUMMATION &&
             categoryType &&
-            categoryType != CategoryTypes.OPEN
-        )
+            categoryType != CategoryTypes.OPEN;
+
+        if (INVALID_CATEGORY)
             return Result.fail<string>("Tipo de concurso invalido");
 
         return Result.ok<void>();

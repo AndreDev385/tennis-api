@@ -96,7 +96,7 @@ export class UpdateMatch implements UseCase<Req | LiveReq, Response> {
             match.addTracker(tracker);
         }
 
-        match.goLive();
+        await this.trackerRepo.save(match.tracker!);
         await this.matchRepo.save(match);
     }
 

@@ -4,7 +4,7 @@ import config from "../config/config";
 const sequelize: Sequelize = config.connection;
 
 export interface HomeAdData extends Model<InferAttributes<HomeAdData>> {
-    link: string;
+    link: string | null;
     image: string;
 }
 

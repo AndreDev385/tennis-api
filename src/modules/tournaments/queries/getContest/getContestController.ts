@@ -33,8 +33,6 @@ export class GetContestCtrl extends BaseController {
             }
         }
 
-        console.log(JSON.stringify(result.value));
-
         return this.ok(res, result.value);
     }
 }

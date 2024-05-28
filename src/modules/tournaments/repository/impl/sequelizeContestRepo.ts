@@ -37,14 +37,17 @@ export class SequlizeContestRepository implements ContestRepository {
                 {
                     model: models.ParticipantModel,
                     through: { attributes: ["position"] },
+                    order: [["createdAt", "ASC"]],
                 },
                 {
                     model: models.CoupleModel,
                     through: { attributes: ["position"] },
+                    order: [["createdAt", "ASC"]],
                 },
                 {
                     model: models.ContestTeamModel,
                     through: { attributes: ["position"] },
+                    order: [["createdAt", "ASC"]],
                 },
             ],
         });
@@ -84,13 +87,11 @@ export class SequlizeContestRepository implements ContestRepository {
         }
 
         if (contestData.mode == GameMode.team) {
-            console.log(`ENTER IF MODE = TEAM ${contestData}`)
             for (const t of contestData.contestTeams ?? []) {
                 const team = await this.teamRepo.get({
                     contestTeamId: t.contestTeamId,
                 });
 
-                console.log(`t: ${t}\nteam: ${team.getValue()}\n`);
                 const mustInscribed = Inscribed.create({
                     position: t.teamInscription.position,
                     team: team.getValue(),

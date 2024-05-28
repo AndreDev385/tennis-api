@@ -1,17 +1,15 @@
 import { Request, Response } from "express";
 import { BaseController } from "../../../../shared/infra/http/models/BaseController";
-import { PaginateParticipants } from "./paginateParticipants";
+import { ListHomeAds } from "./listHomeAds";
 
-export class PaginateParticipantsCtrl extends BaseController {
-    private readonly usecase: PaginateParticipants;
-
-    constructor(usecase: PaginateParticipants) {
+export class ListHomeAdsCtrl extends BaseController {
+    private readonly uc: ListHomeAds;
+    constructor(uc: ListHomeAds) {
         super();
-        this.usecase = usecase;
+        this.uc = uc;
     }
-
     async executeImpl(req: Request, res: Response) {
-        const result = await this.usecase.execute(req.query);
+        const result = await this.uc.execute(req.body);
 
         if (result.isLeft()) {
             return this.fail(res, result.value.getErrorValue().message);
