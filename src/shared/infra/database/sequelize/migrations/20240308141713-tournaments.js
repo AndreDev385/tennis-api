@@ -143,7 +143,7 @@ module.exports = {
                     allowNull: false,
                 },
                 matchIds: {
-                    type: Sequelize.ARRAY(DataTypes.UUID),
+                    type: Sequelize.ARRAY(Sequelize.UUID),
                     defaultValue: [],
                 },
                 t1WonClash: {
@@ -183,7 +183,7 @@ module.exports = {
                     allowNull: false,
                 },
                 participantsIds: {
-                    type: Sequelize.ARRAY(DataTypes.UUID),
+                    type: Sequelize.ARRAY(Sequelize.UUID),
                     defaultValue: [],
                 },
                 createdAt: {
@@ -572,7 +572,7 @@ module.exports = {
                         allowNull: false,
                     },
                     sets: {
-                        type: Sequelize.ARRAY(DataTypes.JSON),
+                        type: Sequelize.ARRAY(Sequelize.JSON),
                         allowNull: true,
                     },
                     superTieBreak: {
