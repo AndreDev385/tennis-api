@@ -3,166 +3,223 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
     async up(queryInterface, Sequelize) {
-        // TODO: change DataTypes with Sequelize
-        // TODO: add createdAt and UpdatedAt
-
         const CREATE_HOME_AD_TABLE = () =>
             queryInterface.createTable("homeAd", {
                 image: {
-                    type: DataTypes.STRING,
+                    type: Sequelize.STRING,
                     allowNull: false,
                 },
                 link: {
-                    type: DataTypes.STRING,
+                    type: Sequelize.STRING,
                     defaultValue: null,
+                },
+                createdAt: {
+                    type: Sequelize.DATE,
+                    allowNull: true,
+                    defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+                },
+                updatedAt: {
+                    type: Sequelize.DATE,
+                    allowNull: true,
+                    defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
             });
 
         const CREATE_BRACKET_TABLE = () =>
             queryInterface.createTable("bracket", {
                 id: {
-                    type: DataTypes.UUID,
+                    type: Sequelize.UUID,
                     allowNull: false,
                     primaryKey: true,
                 },
                 contestId: {
-                    type: DataTypes.UUID,
+                    type: Sequelize.UUID,
                     allowNull: false,
                 },
                 phase: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 matchId: {
-                    type: DataTypes.UUID,
+                    type: Sequelize.UUID,
                     allowNull: true,
                 },
                 clashId: {
-                    type: DataTypes.UUID,
+                    type: Sequelize.UUID,
                     allowNull: true,
                 },
                 left: {
-                    type: DataTypes.UUID,
+                    type: Sequelize.UUID,
                     allowNull: true,
                 },
                 right: {
-                    type: DataTypes.UUID,
+                    type: Sequelize.UUID,
                     allowNull: true,
                 },
                 parent: {
-                    type: DataTypes.UUID,
+                    type: Sequelize.UUID,
                     allowNull: true,
                 },
                 rightPlace: {
-                    type: DataTypes.STRING,
+                    type: Sequelize.STRING,
                     allowNull: false,
                 },
                 leftPlace: {
-                    type: DataTypes.STRING,
+                    type: Sequelize.STRING,
                     allowNull: false,
                 },
                 deep: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
+                },
+                createdAt: {
+                    type: Sequelize.DATE,
+                    allowNull: true,
+                    defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+                },
+                updatedAt: {
+                    type: Sequelize.DATE,
+                    allowNull: true,
+                    defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
             });
 
         const CREATE_CONTEST_TABLE = () =>
             queryInterface.createTable("contest", {
                 contestId: {
-                    type: DataTypes.UUID,
+                    type: Sequelize.UUID,
                     allowNull: false,
                     primaryKey: true,
                 },
                 tournamentId: {
-                    type: DataTypes.UUID,
+                    type: Sequelize.UUID,
                     allowNull: false,
                 },
                 mode: {
-                    type: DataTypes.STRING,
+                    type: Sequelize.STRING,
                     allowNull: false,
                 },
                 categoryType: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 category: {
-                    type: DataTypes.JSON,
+                    type: Sequelize.JSON,
                     allowNull: true,
                 },
                 summation: {
-                    type: DataTypes.JSON,
+                    type: Sequelize.JSON,
                     allowNull: true,
+                },
+                createdAt: {
+                    type: Sequelize.DATE,
+                    allowNull: true,
+                    defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+                },
+                updatedAt: {
+                    type: Sequelize.DATE,
+                    allowNull: true,
+                    defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
             });
 
         const CREATE_CONTEST_CLASH_TABLE = () =>
             queryInterface.createTable("contestClash", {
                 contestClashId: {
-                    type: DataTypes.UUID,
+                    type: Sequelize.UUID,
                     allowNull: false,
                     primaryKey: true,
                 },
                 contestId: {
-                    type: DataTypes.UUID,
+                    type: Sequelize.UUID,
                     allowNull: false,
                 },
                 team1Id: {
-                    type: DataTypes.UUID,
+                    type: Sequelize.UUID,
                     allowNull: false,
                 },
                 team2Id: {
-                    type: DataTypes.UUID,
+                    type: Sequelize.UUID,
                     allowNull: false,
                 },
                 matchIds: {
-                    type: DataTypes.ARRAY(DataTypes.UUID),
+                    type: Sequelize.ARRAY(DataTypes.UUID),
                     defaultValue: [],
                 },
                 t1WonClash: {
-                    type: DataTypes.BOOLEAN,
+                    type: Sequelize.BOOLEAN,
                     allowNull: true,
                     defaultValue: null,
                 },
                 isFinish: {
-                    type: DataTypes.BOOLEAN,
+                    type: Sequelize.BOOLEAN,
                     defaultValue: false,
+                },
+                createdAt: {
+                    type: Sequelize.DATE,
+                    allowNull: true,
+                    defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+                },
+                updatedAt: {
+                    type: Sequelize.DATE,
+                    allowNull: true,
+                    defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
             });
 
         const CREATE_CONTEST_TEAM_TABLE = () =>
             queryInterface.createTable("contestTeam", {
                 contestTeamId: {
-                    type: DataTypes.UUID,
+                    type: Sequelize.UUID,
                     allowNull: false,
                     primaryKey: true,
                 },
                 contestId: {
-                    type: DataTypes.UUID,
+                    type: Sequelize.UUID,
                     allowNull: false,
                 },
                 name: {
-                    type: DataTypes.STRING,
+                    type: Sequelize.STRING,
                     allowNull: false,
                 },
                 participantsIds: {
-                    type: DataTypes.ARRAY(DataTypes.UUID),
+                    type: Sequelize.ARRAY(DataTypes.UUID),
                     defaultValue: [],
+                },
+                createdAt: {
+                    type: Sequelize.DATE,
+                    allowNull: true,
+                    defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+                },
+                updatedAt: {
+                    type: Sequelize.DATE,
+                    allowNull: true,
+                    defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
             });
 
         const CREATE_COUPLE_TABLE = () =>
             queryInterface.createTable("couple", {
                 coupleId: {
-                    type: DataTypes.UUID,
+                    type: Sequelize.UUID,
                     allowNull: false,
                     primaryKey: true,
                 },
                 p1Id: {
-                    type: DataTypes.UUID,
+                    type: Sequelize.UUID,
                 },
                 p2Id: {
-                    type: DataTypes.UUID,
+                    type: Sequelize.UUID,
+                },
+                createdAt: {
+                    type: Sequelize.DATE,
+                    allowNull: true,
+                    defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+                },
+                updatedAt: {
+                    type: Sequelize.DATE,
+                    allowNull: true,
+                    defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
             });
 
@@ -171,12 +228,12 @@ module.exports = {
                 "participant",
                 {
                     participantId: {
-                        type: DataTypes.UUID,
+                        type: Sequelize.UUID,
                         allowNull: false,
                         primaryKey: true,
                     },
                     userId: {
-                        type: DataTypes.UUID,
+                        type: Sequelize.UUID,
                         allowNull: false,
                         references: {
                             model: "users",
@@ -184,16 +241,26 @@ module.exports = {
                         },
                     },
                     avatar: {
-                        type: DataTypes.STRING,
+                        type: Sequelize.STRING,
                         allowNull: true,
                     },
                     device: {
-                        type: DataTypes.STRING,
+                        type: Sequelize.STRING,
                         allowNull: true,
                     },
                     isDeleted: {
-                        type: DataTypes.BOOLEAN,
+                        type: Sequelize.BOOLEAN,
                         defaultValue: false,
+                    },
+                    createdAt: {
+                        type: Sequelize.DATE,
+                        allowNull: true,
+                        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+                    },
+                    updatedAt: {
+                        type: Sequelize.DATE,
+                        allowNull: true,
+                        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                     },
                 },
                 { tableName: "participant" }
@@ -202,199 +269,199 @@ module.exports = {
         const CREATE_PARTICIPANT_TRACKER_TABLE = () =>
             queryInterface.createTable("participantTracker", {
                 participantTrackerId: {
-                    type: DataTypes.UUID,
+                    type: Sequelize.UUID,
                     allowNull: false,
                     primaryKey: true,
                 },
                 participantId: {
-                    type: DataTypes.UUID,
+                    type: Sequelize.UUID,
                     allowNull: false,
                 },
                 tournamentId: {
-                    type: DataTypes.UUID,
+                    type: Sequelize.UUID,
                     allowNull: false,
                 },
                 matchId: {
-                    type: DataTypes.UUID,
+                    type: Sequelize.UUID,
                     allowNull: false,
                 },
 
                 isDouble: {
-                    type: DataTypes.BOOLEAN,
+                    type: Sequelize.BOOLEAN,
                     allowNull: false,
                 },
                 // serv
                 saveBreakPtsChances: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 breakPtsChances: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 breakPtsSaved: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 breakPts: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 firstServIn: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 secondServIn: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 aces: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 dobleFaults: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 firstServWon: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 secondServWon: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 pointsWinnedFirstServ: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 pointsWinnedSecondServ: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 gamesWonServing: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 gamesLostServing: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 gamesWonReturning: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 gamesLostReturning: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 // return
                 firstReturnWon: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 secondReturnWon: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 firstReturnWinner: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 secondReturnWinner: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 firstReturnIn: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 secondReturnIn: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 firstReturnOut: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 secondReturnOut: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 pointsWinnedFirstReturn: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 pointsWinnedSecondReturn: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 // places
                 meshPointsWon: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 meshPointsLost: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 meshWinner: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 meshError: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 bckgPointsWon: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 bckgPointsLost: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 bckgWinner: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 bckgError: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 // rally
                 shortRallyWon: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 shortRallyLost: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 mediumRallyWon: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 mediumRallyLost: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 longRallyWon: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 longRallyLost: {
-                    type: DataTypes.INTEGER,
+                    type: Sequelize.INTEGER,
                     allowNull: false,
                 },
                 createdAt: {
                     allowNull: true,
-                    type: DataTypes.DATE,
+                    type: Sequelize.DATE,
                     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
                 updatedAt: {
                     allowNull: true,
-                    type: DataTypes.DATE,
+                    type: Sequelize.DATE,
                     defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
             });
@@ -404,43 +471,43 @@ module.exports = {
                 "tournament",
                 {
                     tournamentId: {
-                        type: DataTypes.UUID,
-                        defaultValue: DataTypes.UUIDV4,
+                        type: Sequelize.UUID,
+                        defaultValue: Sequelize.UUIDV4,
                         allowNull: false,
                         primaryKey: true,
                     },
                     name: {
-                        type: DataTypes.STRING,
+                        type: Sequelize.STRING,
                         allowNull: false,
                     },
                     rules: {
-                        type: DataTypes.JSON,
+                        type: Sequelize.JSON,
                         allowNull: false,
                     },
                     status: {
-                        type: DataTypes.INTEGER,
+                        type: Sequelize.INTEGER,
                         allowNull: false,
                     },
                     startDate: {
-                        type: DataTypes.DATE,
+                        type: Sequelize.DATE,
                         allowNull: false,
                     },
                     endDate: {
-                        type: DataTypes.DATE,
+                        type: Sequelize.DATE,
                         allowNull: false,
                     },
                     image: {
-                        type: DataTypes.STRING,
+                        type: Sequelize.STRING,
                         allowNull: false,
                     },
                     createdAt: {
                         allowNull: true,
-                        type: DataTypes.DATE,
+                        type: Sequelize.DATE,
                         defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                     },
                     updatedAt: {
                         allowNull: true,
-                        type: DataTypes.DATE,
+                        type: Sequelize.DATE,
                         defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                     },
                 },
@@ -450,18 +517,28 @@ module.exports = {
         const CREATE_TOURNAMENT_AD_TABLE = () =>
             queryInterface.createTable("tournamentAd", {
                 tournamentId: {
-                    type: DataTypes.UUID,
-                    defaultValue: DataTypes.UUIDV4,
+                    type: Sequelize.UUID,
+                    defaultValue: Sequelize.UUIDV4,
                     allowNull: false,
                     primaryKey: true,
                 },
                 image: {
-                    type: DataTypes.STRING,
+                    type: Sequelize.STRING,
                     allowNull: false,
                 },
                 link: {
-                    type: DataTypes.STRING,
+                    type: Sequelize.STRING,
                     defaultValue: null,
+                },
+                createdAt: {
+                    type: Sequelize.DATE,
+                    allowNull: true,
+                    defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+                },
+                updatedAt: {
+                    type: Sequelize.DATE,
+                    allowNull: true,
+                    defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                 },
             });
 
@@ -470,78 +547,78 @@ module.exports = {
                 "tournamentMatch",
                 {
                     matchId: {
-                        type: DataTypes.UUID,
+                        type: Sequelize.UUID,
                         allowNull: false,
                         primaryKey: true,
                     },
                     tournamentId: {
-                        type: DataTypes.UUID,
+                        type: Sequelize.UUID,
                         allowNull: false,
                     },
                     contestId: {
-                        type: DataTypes.UUID,
+                        type: Sequelize.UUID,
                         allowNull: false,
                     },
                     rules: {
-                        type: DataTypes.JSON,
+                        type: Sequelize.JSON,
                         allowNull: false,
                     },
                     mode: {
-                        type: DataTypes.STRING,
+                        type: Sequelize.STRING,
                         allowNull: false,
                     },
                     surface: {
-                        type: DataTypes.STRING,
+                        type: Sequelize.STRING,
                         allowNull: false,
                     },
                     sets: {
-                        type: DataTypes.ARRAY(DataTypes.JSON),
+                        type: Sequelize.ARRAY(DataTypes.JSON),
                         allowNull: true,
                     },
                     superTieBreak: {
-                        type: DataTypes.BOOLEAN,
+                        type: Sequelize.BOOLEAN,
                         allowNull: true,
                     },
                     player1Id: {
-                        type: DataTypes.UUID,
+                        type: Sequelize.UUID,
                         allowNull: false,
                     },
                     player2Id: {
-                        type: DataTypes.UUID,
+                        type: Sequelize.UUID,
                         allowNull: false,
                     },
                     player3Id: {
-                        type: DataTypes.UUID,
+                        type: Sequelize.UUID,
                         allowNull: true,
                     },
                     player4Id: {
-                        type: DataTypes.UUID,
+                        type: Sequelize.UUID,
                         allowNull: true,
                     },
                     trackerId: {
-                        type: DataTypes.UUID,
+                        type: Sequelize.UUID,
                         allowNull: true,
                     },
                     status: {
-                        type: DataTypes.INTEGER,
+                        type: Sequelize.INTEGER,
                         allowNull: false,
                     },
                     matchInfo: {
-                        type: DataTypes.JSON,
+                        type: Sequelize.JSON,
                         allowNull: true,
                     },
                     matchWon: {
-                        type: DataTypes.BOOLEAN,
+                        type: Sequelize.BOOLEAN,
                         allowNull: true,
                     },
                     createdAt: {
                         allowNull: true,
-                        type: DataTypes.DATE,
+                        type: Sequelize.DATE,
                         defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                     },
                     updatedAt: {
                         allowNull: true,
-                        type: DataTypes.DATE,
+                        type: Sequelize.DATE,
                         defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                     },
                 },
@@ -553,29 +630,39 @@ module.exports = {
                 "tournamentMatchTracker",
                 {
                     trackerId: {
-                        type: DataTypes.UUID,
+                        type: Sequelize.UUID,
                         allowNull: false,
                         primaryKey: true,
                     },
                     matchId: {
-                        type: DataTypes.UUID,
+                        type: Sequelize.UUID,
                         allowNull: false,
                     },
                     playerTracker1: {
-                        type: DataTypes.UUID,
+                        type: Sequelize.UUID,
                         allowNull: false,
                     },
                     playerTracker2: {
-                        type: DataTypes.UUID,
+                        type: Sequelize.UUID,
                         allowNull: false,
                     },
                     playerTracker3: {
-                        type: DataTypes.UUID,
+                        type: Sequelize.UUID,
                         allowNull: true,
                     },
                     playerTracker4: {
-                        type: DataTypes.UUID,
+                        type: Sequelize.UUID,
                         allowNull: true,
+                    },
+                    createdAt: {
+                        type: Sequelize.DATE,
+                        allowNull: true,
+                        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+                    },
+                    updatedAt: {
+                        type: Sequelize.DATE,
+                        allowNull: true,
+                        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
                     },
                 },
                 { tableName: "tournamentMatchTracker" }
