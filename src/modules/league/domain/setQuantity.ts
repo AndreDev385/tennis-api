@@ -2,6 +2,12 @@ import { Guard } from "../../../shared/core/Guard";
 import { Result } from "../../../shared/core/Result";
 import { ValueObject } from "../../../shared/domain/ValueObject";
 
+export const ValidQuantities = {
+    one: 1,
+    three: 3,
+    five: 5,
+}
+
 interface SetQuantityProps {
     value: number;
 }

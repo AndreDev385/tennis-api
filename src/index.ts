@@ -6,3 +6,4 @@ import "./shared/infra/database/sequelize"
 // Subscriptions
 import "./modules/league/subscriptions"
 import "./modules/users/subscriptions/"
+import "./modules/tournaments/subscriptions/"

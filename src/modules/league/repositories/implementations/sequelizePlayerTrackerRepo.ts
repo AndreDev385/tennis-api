@@ -1,35 +1,38 @@
-import { PlayerTrackerModel } from "../../../../shared/infra/database/sequelize/models/PlayerTracker";
+import models from "../../../../shared/infra/database/sequelize/models";
 import { PlayerTracker } from "../../domain/playerTracker";
 import { PlayerTrackerMapper } from "../../mappers/playerTrackerMap";
-import { PlayerTrackerQuery, PlayerTrackerRepository } from "../playerTrackerRepo";
+import {
+    PlayerTrackerQuery,
+    PlayerTrackerRepository,
+} from "../playerTrackerRepo";
 
 export class SequelizePlayerTrackerRepository
-    implements PlayerTrackerRepository {
-
+    implements PlayerTrackerRepository
+{
     async save(playerTracker: PlayerTracker): Promise<void> {
         const raw = PlayerTrackerMapper.toPersistance(playerTracker);
 
-        const exist = await PlayerTrackerModel.findOne({
+        const exist = await models.PlayerTrackerModel.findOne({
             where: {
                 playerTrackerId: playerTracker.playerTrackerId.id.toString(),
             },
         });
 
         if (exist) {
-            await PlayerTrackerModel.update(raw, {
+            await models.PlayerTrackerModel.update(raw, {
                 where: {
                     playerTrackerId:
                         playerTracker.playerTrackerId.id.toString(),
                 },
             });
         } else {
-            const instance = await PlayerTrackerModel.create(raw);
+            const instance = await models.PlayerTrackerModel.create(raw);
             await instance.save();
         }
     }
 
     async getById(playerTrackerId: string): Promise<PlayerTracker> {
-        const playerTracker = await PlayerTrackerModel.findOne({
+        const playerTracker = await models.PlayerTrackerModel.findOne({
             where: { playerTrackerId },
         });
 
@@ -46,18 +49,18 @@ export class SequelizePlayerTrackerRepository
                 playerId: query.playerId,
                 isDouble: query.isDouble,
             },
-            order: [['createdAt', "DESC"]],
-        }
+            order: [["createdAt", "DESC"]],
+        };
 
         if (query.limit) {
             _query.limit = query.limit;
         }
 
         if (query.seasonId != null) {
-            _query.where["seasonId"] = query.seasonId
+            _query.where["seasonId"] = query.seasonId;
         }
 
-        const list = await PlayerTrackerModel.findAll(_query);
+        const list = await models.PlayerTrackerModel.findAll(_query);
 
         return list.map((t: any) => PlayerTrackerMapper.toDomain(t)!);
     }

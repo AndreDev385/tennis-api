@@ -1,6 +1,7 @@
 export type JWTData = {
     userId: string;
-    email: string;
+    email: string | null;
+    ci: string | null;
     firstName: string;
     lastName: string;
     canTrack: boolean;

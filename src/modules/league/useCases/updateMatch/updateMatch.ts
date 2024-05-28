@@ -10,8 +10,6 @@ type Response = Either<
     Result<void>
 >;
 
-//TODO: implement other updates
-
 export class UpdateMatch implements UseCase<UpdateMatchDto, Response> {
     private readonly matchRepo: MatchRepository;
 

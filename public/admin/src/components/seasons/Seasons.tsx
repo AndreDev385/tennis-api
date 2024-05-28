@@ -80,7 +80,6 @@ const Seasons = () => {
     }
   }
 
-  // TODO
   const dismissCreateModal = (event: boolean) => {
     if(event) getSeasons();
     setShowModalCreate(false)

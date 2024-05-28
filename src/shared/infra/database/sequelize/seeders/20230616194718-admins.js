@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-    async up(queryInterface, Sequelize) {
+    async up(queryInterface, _) {
         const SALT_ROUNDS = 5;
 
         const password = await bcrypt.hash("12345678", SALT_ROUNDS);
@@ -184,7 +184,7 @@ module.exports = {
         ]);
     },
 
-    async down(queryInterface, Sequelize) {
+    async down(queryInterface, _) {
         await queryInterface.bulkDelete("users", null, {});
     },
 };

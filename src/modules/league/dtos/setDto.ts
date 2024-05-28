@@ -1,3 +1,4 @@
+import { ParticipantTrackerDto } from "../../tournaments/dtos/participantTrackerDto";
 import { PlayerTrackerDto } from "./playerTrackerDto";
 import { TrackerDto } from "./trackerDto";
 
@@ -9,12 +10,30 @@ export interface SetDto {
     superTiebreak: boolean;
     myTiebreakPoints: number;
     rivalTiebreakPoints: number;
-    stats: SetStatsDto | null;
+    stats: any | null;
 }
 
-export type SetStatsDto = Omit<TrackerDto, "trackerId" | "matchId" | "me" | "partner"> & {
-    me: SetPlayerStatsDto,
-    partner: SetPlayerStatsDto | null,
+export type SetTournamentMatchStats = {
+    player1: ParticipantTrackerDto,
+    player2: ParticipantTrackerDto,
+    player3: ParticipantTrackerDto | null,
+    player4: ParticipantTrackerDto | null,
 }
 
-export type SetPlayerStatsDto = Omit<PlayerTrackerDto, "playerId" | "seasonId" | "playerTrackerId">;
+export type ParticipantStats = Omit<
+    ParticipantTrackerDto,
+    "participantTrackerId" | "participantId" | "tournamentId" | "matchId"
+>;
+
+export type SetStatsDto = Omit<
+    TrackerDto,
+    "trackerId" | "matchId" | "me" | "partner"
+> & {
+    me: SetPlayerStatsDto;
+    partner: SetPlayerStatsDto | null;
+};
+
+export type SetPlayerStatsDto = Omit<
+    PlayerTrackerDto,
+    "playerId" | "seasonId" | "playerTrackerId"
+>;

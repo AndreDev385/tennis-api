@@ -28,7 +28,7 @@ export class EditUser implements UseCase<EditUserRequest, Response> {
 
         try {
             try {
-                userToEdit = await this.userRepo.getUserByUserId(request.userId);
+                userToEdit = await this.userRepo.get({ userId: request.userId });
             } catch (error) {
                 return left(new AppError.NotFoundError(error));
             }
@@ -57,7 +57,7 @@ export class EditUser implements UseCase<EditUserRequest, Response> {
             const lastName = lastNameOrError.getValue();
             const email = emailOrError.getValue();
 
-            if (!email.equals(userToEdit.email)) {
+            if (userToEdit.email != null && !email.equals(userToEdit.email)) {
                 try {
                     await this.userRepo.getUserByEmail(email);
                     return left(

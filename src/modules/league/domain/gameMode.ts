@@ -5,6 +5,7 @@ import { ValueObject } from "../../../shared/domain/ValueObject";
 export enum GameMode {
     single = "single",
     double = "double",
+    team = "team",
 }
 
 interface ModeProps {
@@ -17,7 +18,11 @@ export class Mode extends ValueObject<ModeProps> {
     }
 
     private static validate(value: string): boolean {
-        if (value !== GameMode.single && value !== GameMode.double) {
+        if (
+            value !== GameMode.single &&
+            value !== GameMode.double &&
+            value !== GameMode.team
+        ) {
             return false;
         }
 

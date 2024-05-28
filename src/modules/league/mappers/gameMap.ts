@@ -21,6 +21,9 @@ export class GameMap implements Mapper<Game> {
 
     public static toDomain(raw: any): Game | null {
         let object: any
+        if (!raw) {
+            return null;
+        }
         if (typeof raw == "string") {
             object = JSON.parse(raw)
         } else {

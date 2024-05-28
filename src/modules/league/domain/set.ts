@@ -11,7 +11,7 @@ interface SetProps {
     myTiebreakPoints: number;
     rivalTiebreakPoints: number;
     setWon: boolean | null;
-    stats: SetStats | null;
+    stats: any | null;
 }
 
 export class Set extends ValueObject<SetProps> {
@@ -51,7 +51,7 @@ export class Set extends ValueObject<SetProps> {
         super(props);
     }
 
-    public static createDefaultLeague(): Set {
+    public static createEmptySet(): Set {
         return new Set({
             myGames: 0,
             rivalGames: 0,

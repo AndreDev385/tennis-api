@@ -1,8 +1,9 @@
 export interface UserDto {
     userId: string;
-    email: string;
     firstName: string;
     lastName: string;
+    email: string | null;
+    ci: string | null
     isAdmin: boolean;
     canTrack: boolean;
     isPlayer: boolean;

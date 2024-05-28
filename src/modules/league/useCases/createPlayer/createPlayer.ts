@@ -45,7 +45,7 @@ export class CreatePlayer
 
         try {
             try {
-                user = await this.userRepo.getUserByUserId(request.userId);
+                user = await this.userRepo.get({ userId: request.userId });
             } catch (error) {
                 return left(new CreatePlayerErrors.UserDoesNotExist());
             }

@@ -1,4 +1,4 @@
-import { TrackerModel } from "../../../../shared/infra/database/sequelize/models/Tracker";
+import models from "../../../../shared/infra/database/sequelize/models";
 import { MatchTracker } from "../../domain/matchTracker";
 import { TrackerMap } from "../../mappers/trackerMap";
 import { PlayerTrackerRepository } from "../playerTrackerRepo";
@@ -20,20 +20,22 @@ export class SequelizeTrackerRepository implements TrackerRepository {
 
         const raw = TrackerMap.toPersistance(tracker);
 
-        const exists = await TrackerModel.findOne({
+        const exists = await models.TrackerModel.findOne({
             where: { matchId: tracker.matchId.id.toString() },
         });
 
         if (!!exists == true) {
-            await TrackerModel.update(raw, { where: { matchId: raw.matchId } });
+            await models.TrackerModel.update(raw, {
+                where: { matchId: raw.matchId },
+            });
         } else {
-            const intance = await TrackerModel.create(raw);
+            const intance = await models.TrackerModel.create(raw);
             await intance.save();
         }
     }
 
     async findTrackerByMatchId(matchId: string): Promise<MatchTracker> {
-        const raw = await TrackerModel.findOne({
+        const raw = await models.TrackerModel.findOne({
             where: { matchId },
         });
 
@@ -81,6 +83,6 @@ export class SequelizeTrackerRepository implements TrackerRepository {
     }
 
     async delete(matchId: string): Promise<void> {
-        await TrackerModel.destroy({ where: { matchId } })
+        await models.TrackerModel.destroy({ where: { matchId } });
     }
 }

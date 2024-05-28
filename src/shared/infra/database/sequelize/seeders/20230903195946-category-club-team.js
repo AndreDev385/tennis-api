@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-    async up(queryInterface, Sequelize) {
+    async up(queryInterface, _) {
         const clubIdVAT = v4();
 
         await queryInterface.bulkInsert("club", [
@@ -406,7 +406,7 @@ module.exports = {
         /* Players for test */
     },
 
-    async down(queryInterface, Sequelize) {
+    async down(queryInterface, _) {
         await queryInterface.bulkDelete('club', null, {});
         await queryInterface.bulkDelete('category', null, {});
         await queryInterface.bulkDelete('team', null, {});

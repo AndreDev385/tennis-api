@@ -16,7 +16,10 @@ export class UpdateTeamStats implements UseCase<any, any> {
     private teamStatsRepo: TeamStatsRepository;
     private clashRepo: ClashRepository;
 
-    constructor(teamStatsRepo: TeamStatsRepository, clashRepo: ClashRepository) {
+    constructor(
+        teamStatsRepo: TeamStatsRepository,
+        clashRepo: ClashRepository
+    ) {
         this.clashRepo = clashRepo;
         this.teamStatsRepo = teamStatsRepo;
     }
@@ -30,6 +33,7 @@ export class UpdateTeamStats implements UseCase<any, any> {
             } catch (error) {
                 return left(new AppError.NotFoundError(error));
             }
+
             try {
                 teamStats = await this.teamStatsRepo.getStats(
                     clash.seasonId.id.toString(),
@@ -44,7 +48,7 @@ export class UpdateTeamStats implements UseCase<any, any> {
                 );
             }
 
-            teamStats.addClashStats(clash);
+            teamStats.addTeamStats([clash]);
 
             await this.teamStatsRepo.save(teamStats);
 

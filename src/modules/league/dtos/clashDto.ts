@@ -11,5 +11,6 @@ export interface ClashDto {
     journey: string;
     host: string;
     matchs?: Array<MatchDto>
+    wonClash: boolean;
     isFinish: boolean;
 }

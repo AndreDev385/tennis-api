@@ -2,7 +2,7 @@ import { Guard } from "../../../shared/core/Guard";
 import { Result } from "../../../shared/core/Result";
 import { ValueObject } from "../../../shared/domain/ValueObject";
 
-const Surfaces = {
+export const Surfaces = {
     grass: "grama",
     clay: "arcilla",
     hard: "dura",

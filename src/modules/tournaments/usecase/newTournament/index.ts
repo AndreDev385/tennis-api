@@ -1,10 +1,11 @@
-import { sequelizeCategoryRepo } from "../../../league/repositories";
+import { uploadImageCloudinary } from "../../../league/services";
 import { sequelizeTournamentRepo } from "../../repository";
 import { NewTournament } from "./newTournament";
 import { NewTournamentController } from "./newTournamentController";
 
-const newTournament = new NewTournament(sequelizeTournamentRepo, sequelizeCategoryRepo)
+const newTournament = new NewTournament(
+    sequelizeTournamentRepo,
+    uploadImageCloudinary
+);
 
-const newTournamentCtrl = new NewTournamentController(newTournament);
-
-export { newTournamentCtrl }
+export const newTournamentCtrl = new NewTournamentController(newTournament);
