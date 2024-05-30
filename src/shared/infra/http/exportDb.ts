@@ -10,9 +10,9 @@ export async function exportSequelizeDb(_: Request, res: Response) {
     try {
         await exportDatabaseToCSV(connection);
 
-        const PATH_TO_CSVS = "../../../../../src/shared/infra/database/sequelize/exports/";
+        const PATH_TO_CSVS = "../database/sequelize/exports/";
 
-        const files = fs.readdirSync(path.resolve(__dirname, PATH_TO_CSVS), "utf8")
+        const files = fs.readdirSync(path.join(__dirname, PATH_TO_CSVS), "utf8")
 
         const zip = new AdmZip();
 
@@ -20,7 +20,7 @@ export async function exportSequelizeDb(_: Request, res: Response) {
             if (!file.endsWith(".csv")) {
                 continue
             }
-            zip.addLocalFile(path.resolve(__dirname, `${PATH_TO_CSVS}${file}`));
+            zip.addLocalFile(path.join(__dirname, `${PATH_TO_CSVS}${file}`));
         }
 
         res.setHeader("Content-Type", "application/zip")

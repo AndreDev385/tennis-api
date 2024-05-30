@@ -1,7 +1,7 @@
 import { VITE_SERVER_URL } from "../env/env.prod";
 import { Result } from "../shared/Result";
 
-export async function importDb() {
+export async function importDb(): Promise<Result<any>> {
     const url = `${VITE_SERVER_URL}/api/v1/export-database`;
     const token: string = localStorage.getItem("authorization") || "";
 
@@ -15,9 +15,9 @@ export async function importDb() {
 
         const response = await fetch(url, requestOptions);
 
-        console.log(response, "RESPONSE");
+        const blob = await response.blob();
 
-        return Result.ok();
+        return Result.ok(blob);
     } catch (error) {
         console.log(error);
         return Result.fail("Ha ocurrido un error");
