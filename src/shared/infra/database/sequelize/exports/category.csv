@@ -1,0 +1,13 @@
+categoryId,name,fullName,createdAt,updatedAt
+63f11a48-27f4-4b3d-88e8-d8bb5dd62446,3F,3ra Femenina,Thu May 30 2024 12:59:06 GMT-0400 (Venezuela Time),Thu May 30 2024 12:59:06 GMT-0400 (Venezuela Time)
+f2607942-6ce0-4d76-8cfb-d8f18fd55682,3M,3ra Masculina,Thu May 30 2024 12:59:06 GMT-0400 (Venezuela Time),Thu May 30 2024 12:59:06 GMT-0400 (Venezuela Time)
+e9967489-8772-45ce-8d49-0e153851fe0f,4F,4ta Femenina,Thu May 30 2024 12:59:06 GMT-0400 (Venezuela Time),Thu May 30 2024 12:59:06 GMT-0400 (Venezuela Time)
+f3ad13a5-415f-481f-a7c2-b60042d3d707,4M,4ta Masculina,Thu May 30 2024 12:59:06 GMT-0400 (Venezuela Time),Thu May 30 2024 12:59:06 GMT-0400 (Venezuela Time)
+06bae386-06c6-4585-9d7b-bed548570201,5F,5ta Femenina,Thu May 30 2024 12:59:06 GMT-0400 (Venezuela Time),Thu May 30 2024 12:59:06 GMT-0400 (Venezuela Time)
+5641d74d-8725-4609-832e-d137dcb952ca,5M,5ta Masculina,Thu May 30 2024 12:59:06 GMT-0400 (Venezuela Time),Thu May 30 2024 12:59:06 GMT-0400 (Venezuela Time)
+231a3b4b-3931-419f-94a0-fbdfc70ad63e,5MM,5ta Masculina Master,Thu May 30 2024 12:59:06 GMT-0400 (Venezuela Time),Thu May 30 2024 12:59:06 GMT-0400 (Venezuela Time)
+9c7f32dd-7552-4537-830d-04ec9d247427,6F,6ta Femenina,Thu May 30 2024 12:59:06 GMT-0400 (Venezuela Time),Thu May 30 2024 12:59:06 GMT-0400 (Venezuela Time)
+054309be-36d4-42f7-b19b-0ef0ec06c15d,6M,6ta Masculina,Thu May 30 2024 12:59:06 GMT-0400 (Venezuela Time),Thu May 30 2024 12:59:06 GMT-0400 (Venezuela Time)
+011d5855-f7e4-40ef-b5c3-8b353ad65616,6MM,6ta Masculina Master,Thu May 30 2024 12:59:06 GMT-0400 (Venezuela Time),Thu May 30 2024 12:59:06 GMT-0400 (Venezuela Time)
+a3f4d1d3-e488-4dfe-8b5e-14c97d23d86f,DM,Mixto,Thu May 30 2024 12:59:06 GMT-0400 (Venezuela Time),Thu May 30 2024 12:59:06 GMT-0400 (Venezuela Time)
+15f4f539-9c31-480a-ad61-57530f62896e,FEM-MM,Femenina Master,Thu May 30 2024 12:59:06 GMT-0400 (Venezuela Time),Thu May 30 2024 12:59:06 GMT-0400 (Venezuela Time)

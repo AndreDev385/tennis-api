@@ -15,12 +15,20 @@ import { utilsRouter } from "../../../../modules/league/infra/http/routes/utils"
 import { teamRouter } from "../../../../modules/league/infra/http/routes/team";
 import { adsRouter } from "../../../../modules/league/infra/http/routes/ad";
 import { tournamentRouter } from "../../../../modules/tournaments/infra/http/routes/tournament";
+import { exportSequelizeDb } from '../exportDb';
+import { middleware } from "..";
 
 const v1Router = express.Router();
 
 v1Router.get("/", (_, res) => {
     return res.json({ message: "Yo! we're up" });
 });
+
+v1Router.get(
+    '/export-database', 
+    middleware.adminAuthenticated() as any, 
+    (req, res) => exportSequelizeDb(req, res)
+);
 
 v1Router.use("/users", userRouter);
 

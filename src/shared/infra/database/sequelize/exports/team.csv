@@ -1,0 +1,10 @@
+teamId,clubId,categoryId,isDeleted,name,createdAt,updatedAt
+ee6be49a-a243-4b42-a732-78fc9d08752e,656d8a51-21ab-4714-844d-4a558f52d9d1,231a3b4b-3931-419f-94a0-fbdfc70ad63e,false,A,Thu May 30 2024 12:59:06 GMT-0400 (Venezuela Time),Thu May 30 2024 12:59:06 GMT-0400 (Venezuela Time)
+81aa9ad6-dd17-4546-b4f4-17d28ecd8ff9,656d8a51-21ab-4714-844d-4a558f52d9d1,054309be-36d4-42f7-b19b-0ef0ec06c15d,false,A,Thu May 30 2024 12:59:06 GMT-0400 (Venezuela Time),Thu May 30 2024 12:59:06 GMT-0400 (Venezuela Time)
+d5fc01da-1eb8-4cb7-a35f-954287c5d1da,656d8a51-21ab-4714-844d-4a558f52d9d1,054309be-36d4-42f7-b19b-0ef0ec06c15d,false,B,Thu May 30 2024 12:59:06 GMT-0400 (Venezuela Time),Thu May 30 2024 12:59:06 GMT-0400 (Venezuela Time)
+6be4dba1-b044-49bb-8c3a-74b0d2bf421a,656d8a51-21ab-4714-844d-4a558f52d9d1,054309be-36d4-42f7-b19b-0ef0ec06c15d,false,C,Thu May 30 2024 12:59:06 GMT-0400 (Venezuela Time),Thu May 30 2024 12:59:06 GMT-0400 (Venezuela Time)
+10c2b626-ec24-465d-a92c-6aecc70e7068,656d8a51-21ab-4714-844d-4a558f52d9d1,011d5855-f7e4-40ef-b5c3-8b353ad65616,false,A,Thu May 30 2024 12:59:06 GMT-0400 (Venezuela Time),Thu May 30 2024 12:59:06 GMT-0400 (Venezuela Time)
+7ee91fd2-bf9b-4d0e-a133-64a9929df468,656d8a51-21ab-4714-844d-4a558f52d9d1,e9967489-8772-45ce-8d49-0e153851fe0f,false,A,Thu May 30 2024 12:59:06 GMT-0400 (Venezuela Time),Thu May 30 2024 12:59:06 GMT-0400 (Venezuela Time)
+2812df12-46ce-4467-8ea1-41050c015351,656d8a51-21ab-4714-844d-4a558f52d9d1,06bae386-06c6-4585-9d7b-bed548570201,false,A,Thu May 30 2024 12:59:06 GMT-0400 (Venezuela Time),Thu May 30 2024 12:59:06 GMT-0400 (Venezuela Time)
+3b05cccd-8114-4f2f-8185-0da235e021d3,656d8a51-21ab-4714-844d-4a558f52d9d1,9c7f32dd-7552-4537-830d-04ec9d247427,false,A,Thu May 30 2024 12:59:06 GMT-0400 (Venezuela Time),Thu May 30 2024 12:59:06 GMT-0400 (Venezuela Time)
+bc5cc8a3-cb34-412e-be8c-753a2d1fb1ec,656d8a51-21ab-4714-844d-4a558f52d9d1,9c7f32dd-7552-4537-830d-04ec9d247427,false,B,Thu May 30 2024 12:59:06 GMT-0400 (Venezuela Time),Thu May 30 2024 12:59:06 GMT-0400 (Venezuela Time)

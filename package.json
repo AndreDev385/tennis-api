@@ -25,6 +25,8 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "@types/adm-zip": "^0.5.5",
+        "adm-zip": "^0.5.12",
         "bcrypt": "^5.1.0",
         "bootstrap": "^5.3.0",
         "cloudinary": "^1.37.3",
@@ -37,6 +39,7 @@
         "engine.io-parser": "^5.2.1",
         "express": "^4.18.2",
         "firebase-admin": "^12.0.0",
+        "fs": "^0.0.1-security",
         "googleapis": "^134.0.0",
         "helmet": "^6.1.5",
         "jsdom": "^21.1.1",
