@@ -1,7 +1,7 @@
 import { Outlet, useLocation, useNavigate } from "react-router-dom"
 import "./Menu.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAd, faAddressBook, faAddressCard, faBaseballBall, faCalendar, faNewspaper, faPoll, faSignOutAlt, faStickyNote, faTableTennis, faTrophy, faUsers } from "@fortawesome/free-solid-svg-icons";
+import { faAd, faAddressBook, faAddressCard, faBaseballBall, faCalendar, faDatabase, faNewspaper, faPoll, faSignOutAlt, faStickyNote, faTableTennis, faTrophy, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import ModalQuestion from "../../components/modalQuestion/ModalQuestion";
 
@@ -26,6 +26,7 @@ const Menu = () => {
     const adsClassName = location.pathname === "/ads" ? "wrap-option menu-selected" : "wrap-option"
     const rankingClassName = location.pathname === "/ranking" ? "wrap-option menu-selected" : "wrap-option"
     const notificationsClassName = location.pathname === "/notifications" ? "wrap-option menu-selected" : "wrap-option"
+    const databaseClassName = location.pathname === "/database" ? "wrap-option menu-selected" : "wrap-option"
 
     const navigateTo = (path: string): void => {
         navigate(path)
@@ -137,6 +138,13 @@ const Menu = () => {
                         </span>
                     </div>
 
+                    <div className={databaseClassName}
+                        onClick={() => navigateTo("/database")}>
+                        <FontAwesomeIcon icon={faDatabase} />
+                        <span>
+                            Base de Datos
+                        </span>
+                    </div>
                     <div className="wrap-logout"
                         onClick={() => setShowLogOutModal(true)}>
                         <FontAwesomeIcon icon={faSignOutAlt} />
@@ -148,6 +156,7 @@ const Menu = () => {
 
                 <Outlet />
             </div>
+
 
             {showLogOutModal &&
                 <ModalQuestion

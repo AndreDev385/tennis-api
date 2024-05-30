@@ -21,6 +21,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Games from './components/results/games/Games'
 import GameStats from './components/results/stats/GameStats'
 import { Notifications } from './components/notifications/Notifications'
+import { ImportDb } from './components/importDb'
 
 const router = createBrowserRouter([
     {
@@ -81,6 +82,10 @@ const router = createBrowserRouter([
             {
                 path: '/notifications',
                 element: <Notifications />
+            },
+            {
+                path: '/database',
+                element: <ImportDb />
             },
         ],
     },
