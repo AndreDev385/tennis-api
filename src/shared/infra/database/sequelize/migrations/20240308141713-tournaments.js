@@ -693,9 +693,9 @@ module.exports = {
             await queryInterface.dropTable("bracket", { transaction });
             await queryInterface.dropTable("contest", { transaction });
             await queryInterface.dropTable("contestClash", { transaction });
-            await queryInterface.dropTable("participantInscription,{transaction}")
-            await queryInterface.dropTable("teamInscription,{transaction}")
-            await queryInterface.dropTable("coupleInscription,{transaction}")
+            await queryInterface.dropTable("participantInscription", { transaction });
+            await queryInterface.dropTable("teamInscription", { transaction });
+            await queryInterface.dropTable("coupleInscription", { transaction });
             await queryInterface.dropTable("contestTeam", { transaction });
             await queryInterface.dropTable("couple", { transaction });
             await queryInterface.dropTable("participant", { transaction });
