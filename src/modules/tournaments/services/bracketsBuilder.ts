@@ -1,4 +1,4 @@
-import { BracketNode, BracketPlace } from "../domain/brackets";
+import { BracketTreeNode, BracketPlace } from "../domain/brackets";
 import { Inscribed } from "../domain/inscribed";
 
 /**
@@ -13,7 +13,7 @@ import { Inscribed } from "../domain/inscribed";
  */
 export function buildBracketsBuilder(
     deep: number,
-    node: BracketNode,
+    node: BracketTreeNode,
     inscribed: Inscribed[]
 ) {
     if (node.deep == deep) {
@@ -89,7 +89,7 @@ export function buildBracketsBuilder(
     const nextDeep = node.deep + 1;
 
     if (node.right == null) {
-        const right = BracketNode.create({
+        const right = BracketTreeNode.create({
             phase: node.phase,
             parent: node,
             deep: nextDeep,
@@ -108,7 +108,7 @@ export function buildBracketsBuilder(
     }
 
     if (node.left == null) {
-        const left = BracketNode.create({
+        const left = BracketTreeNode.create({
             phase: node.phase,
             parent: node,
             deep: nextDeep,

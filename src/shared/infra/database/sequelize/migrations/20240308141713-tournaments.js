@@ -500,6 +500,10 @@ module.exports = {
                         type: Sequelize.STRING,
                         allowNull: false,
                     },
+                    address: {
+                        type: Sequelize.STRING,
+                        allowNull: false,
+                    },
                     createdAt: {
                         allowNull: true,
                         type: Sequelize.DATE,
@@ -668,6 +672,7 @@ module.exports = {
                 { tableName: "tournamentMatchTracker" }
             );
 
+        await CREATE_HOME_AD_TABLE();
         await CREATE_BRACKET_TABLE();
         await CREATE_CONTEST_TABLE();
         await CREATE_CONTEST_CLASH_TABLE();
@@ -682,6 +687,7 @@ module.exports = {
     },
 
     async down(queryInterface, _) {
+        await queryInterface.dropTable("homeAd");
         await queryInterface.dropTable("bracket");
         await queryInterface.dropTable("contest");
         await queryInterface.dropTable("contestClash");

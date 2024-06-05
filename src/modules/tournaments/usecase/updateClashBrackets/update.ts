@@ -24,13 +24,13 @@ export class UpdateClashBrackets implements UseCase<Req, Res> {
 
     async execute(request: Req): Promise<Res> {
         let bracket: BracketNode;
+        let parentBracket: BracketNode;
         let clash: ContestClash;
 
         try {
             try {
                 bracket = await this.bracketRepo.get(
-                    { clashId: request.clashId },
-                    true
+                    { clashId: request.clashId }
                 );
             } catch (error) {
                 return left(new AppError.NotFoundError(error));
@@ -58,32 +58,40 @@ export class UpdateClashBrackets implements UseCase<Req, Res> {
                 return left(Result.fail<string>("El encuentro no ha terminado"));
             }
 
+            try {
+                parentBracket = await this.bracketRepo.get(
+                    { id: bracket.parentId!.toString() }
+                );
+            } catch (error) {
+                return left(new AppError.NotFoundError(error));
+            }
+
             const WINNER_ADVANCE_TO_LEFT_IN_PARENT_NODE =
                 bracket.placeThatAdvance % 2 == 0;
 
             if (WINNER_ADVANCE_TO_LEFT_IN_PARENT_NODE) {
-                if (bracket.clash?.t1WonClash) {
-                    bracket.parent!.leftPlace.setInscribed(
+                if (clash.t1WonClash) {
+                    parentBracket.leftPlace.setInscribed(
                         bracket.rightPlace.participant,
                         bracket.rightPlace.couple,
                         bracket.rightPlace.contestTeam
                     );
                 } else {
-                    bracket.parent!.leftPlace.setInscribed(
+                    parentBracket.leftPlace.setInscribed(
                         bracket.leftPlace.participant,
                         bracket.leftPlace.couple,
                         bracket.leftPlace.contestTeam
                     );
                 }
             } else {
-                if (bracket.clash?.t1WonClash) {
-                    bracket.parent!.rightPlace.setInscribed(
+                if (clash.t1WonClash) {
+                    parentBracket.rightPlace.setInscribed(
                         bracket.rightPlace.participant,
                         bracket.rightPlace.couple,
                         bracket.rightPlace.contestTeam
                     );
                 } else {
-                    bracket.parent!.rightPlace.setInscribed(
+                    parentBracket.rightPlace.setInscribed(
                         bracket.leftPlace.participant,
                         bracket.leftPlace.couple,
                         bracket.leftPlace.contestTeam
@@ -91,7 +99,7 @@ export class UpdateClashBrackets implements UseCase<Req, Res> {
                 }
             }
 
-            await this.bracketRepo.save(bracket.parent!);
+            await this.bracketRepo.save(parentBracket);
 
             return right(Result.ok());
         } catch (error) {

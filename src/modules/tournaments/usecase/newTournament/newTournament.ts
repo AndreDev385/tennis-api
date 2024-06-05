@@ -29,7 +29,7 @@ export class NewTournament implements UseCase<NewTournamentDto, Response> {
         this.uploadImgService = uploadImageService;
     }
 
-    async execute(req: any): Promise<Response> {
+    async execute(req: NewTournamentDto & { file: any }): Promise<Response> {
         let rules: TournamentRules;
         let tournamet: Tournament;
         let imgURL: string;
@@ -52,6 +52,10 @@ export class NewTournament implements UseCase<NewTournamentDto, Response> {
                 },
                 {
                     argument: req.gamesPerSet,
+                    argumentName: "games por set",
+                },
+                {
+                    argument: req.address,
                     argumentName: "games por set",
                 },
                 {
@@ -115,6 +119,7 @@ export class NewTournament implements UseCase<NewTournamentDto, Response> {
                 startDate: new Date(req.startDate),
                 endDate: new Date(req.endDate),
                 image: imgURL,
+                address: req.address,
                 rules,
                 status: TournamentStatus.waiting(),
             }).getValue();

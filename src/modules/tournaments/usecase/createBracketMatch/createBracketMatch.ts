@@ -53,7 +53,6 @@ export class CreateBracketMatch implements UseCase<Req, Response> {
             try {
                 bracket = await this.bracketRepo.get(
                     { id: req.bracketId },
-                    false
                 );
             } catch (error) {
                 return left(new AppError.NotFoundError(error));
@@ -75,9 +74,7 @@ export class CreateBracketMatch implements UseCase<Req, Response> {
                 return left(new AppError.NotFoundError(error));
             }
 
-            console.log("BRACKET MATCH", bracket.match);
-
-            if (bracket.match != null) {
+            if (bracket.matchId != null) {
                 return left(Result.fail<string>("Ya se ha creado el partido"));
             }
 
@@ -101,24 +98,15 @@ export class CreateBracketMatch implements UseCase<Req, Response> {
                     ? null
                     : bracket.leftPlace.couple?.p2;
 
-            console.log(
-                player1,
-                player2,
-                player3,
-                player4,
-            )
 
             const INCOMPLETE_BRACKET_SINGLE =
                 contest.mode.value == GameMode.single && (!player1 || !player2);
 
-            console.log(INCOMPLETE_BRACKET_SINGLE);
 
             const INCOMPLETE_BRACKET_DOUBLE =
                 contest.mode.value == GameMode.double &&
                 (!player1 || !player2 || !player3 || !player4);
 
-
-            console.log(INCOMPLETE_BRACKET_DOUBLE);
 
             if (INCOMPLETE_BRACKET_SINGLE || INCOMPLETE_BRACKET_DOUBLE) {
                 return left(
@@ -167,7 +155,7 @@ export class CreateBracketMatch implements UseCase<Req, Response> {
             });
 
             match.addTracker(tracker);
-            bracket.setMatch(match);
+            bracket.setMatch(match.matchId);
 
             await this.bracketRepo.save(bracket);
             await this.trackerRepo.save(tracker);

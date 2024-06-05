@@ -13,6 +13,7 @@ type TournamentProps = {
     startDate: Date;
     endDate: Date;
     image: string;
+    address: string;
     createdAt?: Date;
     updatedAt?: Date;
 };
@@ -44,6 +45,10 @@ export class Tournament extends Entity<TournamentProps> {
 
     get image() {
         return this.props.image;
+    }
+
+    get address() {
+        return this.props.address;
     }
 
     get createdAt(): Date {

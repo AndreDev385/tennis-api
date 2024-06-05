@@ -15,8 +15,6 @@ export class BuildBracketsCtrl extends BaseController {
     async executeImpl(req: Request, res: Response) {
         const result = await this.usecase.execute(req.body);
 
-        console.log(result, "RESULT");
-
         if (result.isLeft()) {
             const error = result.value;
 

@@ -1,4 +1,4 @@
-import { BracketNode } from "../domain/brackets";
+import { BracketNode, BracketTreeNode } from "../domain/brackets";
 import { BracketDto } from "../dtos/bracketDto";
 
 export type BracketsQuery = {
@@ -14,8 +14,8 @@ export type BracketsQuery = {
 
 export type BracketsRepository = {
     list(q: BracketsQuery): Promise<BracketDto[]>;
-    get(q: BracketsQuery, getTree: boolean): Promise<BracketNode>;
+    get(q: BracketsQuery): Promise<BracketNode>;
     save(node: BracketNode): Promise<void>;
-    saveTree(node: BracketNode): Promise<void>;
+    saveTree(node: BracketTreeNode): Promise<void>;
     delete(q: BracketsQuery): Promise<void>;
 };

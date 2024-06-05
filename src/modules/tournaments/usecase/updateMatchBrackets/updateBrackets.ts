@@ -29,13 +29,13 @@ export class UpdateMatchBrackets implements UseCase<Req, Res> {
 
     async execute(request: Req): Promise<Res> {
         let bracket: BracketNode;
+        let parentBracket: BracketNode;
         let match: TournamentMatch;
 
         try {
             try {
                 bracket = await this.bracketRepo.get(
-                    { matchId: request.matchId },
-                    true
+                    { matchId: request.matchId }
                 );
             } catch (error) {
                 return left(new AppError.NotFoundError(error));
@@ -45,6 +45,14 @@ export class UpdateMatchBrackets implements UseCase<Req, Res> {
 
             if (IS_ROOT) {
                 return left(Result.fail("Ultimo partido del draw"));
+            }
+
+            try {
+                parentBracket = await this.bracketRepo.get(
+                    { id: bracket.parentId?.toString() }
+                );
+            } catch (error) {
+                return left(new AppError.NotFoundError(error));
             }
 
             const maybeMatch = await this.matchRepo.get({
@@ -67,28 +75,28 @@ export class UpdateMatchBrackets implements UseCase<Req, Res> {
                 bracket.placeThatAdvance % 2 == 0;
 
             if (WINNER_ADVANCE_TO_LEFT_IN_PARENT_NODE) {
-                if (bracket.match?.matchWon) {
-                    bracket.parent!.leftPlace.setInscribed(
+                if (match.matchWon) {
+                    parentBracket.leftPlace.setInscribed(
                         bracket.rightPlace.participant,
                         bracket.rightPlace.couple,
                         bracket.rightPlace.contestTeam
                     );
                 } else {
-                    bracket.parent!.leftPlace.setInscribed(
+                    parentBracket.leftPlace.setInscribed(
                         bracket.leftPlace.participant,
                         bracket.leftPlace.couple,
                         bracket.leftPlace.contestTeam
                     );
                 }
             } else {
-                if (bracket.match?.matchWon) {
-                    bracket.parent!.rightPlace.setInscribed(
+                if (match.matchWon) {
+                    parentBracket.rightPlace.setInscribed(
                         bracket.rightPlace.participant,
                         bracket.rightPlace.couple,
                         bracket.rightPlace.contestTeam
                     );
                 } else {
-                    bracket.parent!.rightPlace.setInscribed(
+                    parentBracket.rightPlace.setInscribed(
                         bracket.leftPlace.participant,
                         bracket.leftPlace.couple,
                         bracket.leftPlace.contestTeam
@@ -96,7 +104,7 @@ export class UpdateMatchBrackets implements UseCase<Req, Res> {
                 }
             }
 
-            await this.bracketRepo.save(bracket.parent!);
+            await this.bracketRepo.save(parentBracket);
 
             return right(Result.ok());
         } catch (error) {
