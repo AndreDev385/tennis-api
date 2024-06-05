@@ -687,20 +687,27 @@ module.exports = {
     },
 
     async down(queryInterface, _) {
-        await queryInterface.dropTable("homeAd");
-        await queryInterface.dropTable("bracket");
-        await queryInterface.dropTable("contest");
-        await queryInterface.dropTable("contestClash");
-        await queryInterface.dropTable("participantInscription")
-        await queryInterface.dropTable("teamInscription")
-        await queryInterface.dropTable("coupleInscription")
-        await queryInterface.dropTable("contestTeam");
-        await queryInterface.dropTable("couple");
-        await queryInterface.dropTable("participant");
-        await queryInterface.dropTable("participantTracker");
-        await queryInterface.dropTable("tournament");
-        await queryInterface.dropTable("tournamentAd");
-        await queryInterface.dropTable("tournamentMatch");
-        await queryInterface.dropTable("tournamentMatchTracker");
+        const transaction = await queryInterface.sequelize.transaction();
+        try {
+            await queryInterface.dropTable("homeAd", { transaction });
+            await queryInterface.dropTable("bracket", { transaction });
+            await queryInterface.dropTable("contest", { transaction });
+            await queryInterface.dropTable("contestClash", { transaction });
+            await queryInterface.dropTable("participantInscription,{transaction}")
+            await queryInterface.dropTable("teamInscription,{transaction}")
+            await queryInterface.dropTable("coupleInscription,{transaction}")
+            await queryInterface.dropTable("contestTeam", { transaction });
+            await queryInterface.dropTable("couple", { transaction });
+            await queryInterface.dropTable("participant", { transaction });
+            await queryInterface.dropTable("participantTracker", { transaction });
+            await queryInterface.dropTable("tournament", { transaction });
+            await queryInterface.dropTable("tournamentAd", { transaction });
+            await queryInterface.dropTable("tournamentMatch", { transaction });
+            await queryInterface.dropTable("tournamentMatchTracker", { transaction });
+            await transaction.commit();
+        } catch (e) {
+            await transaction.rollback();
+            throw e
+        }
     },
 };
