@@ -54,14 +54,14 @@ export class BracketTreeNodeMap implements Mapper<BracketTreeNode> {
             rightPlace: JSON.stringify({
                 value: node.rightPlace.value,
                 participantId:
-                node.rightPlace.participant?.participantId.id.toString(),
+                    node.rightPlace.participant?.participantId.id.toString(),
                 coupleId: node.rightPlace.couple?.coupleId.id.toString(),
                 contestTeamId: node.rightPlace.contestTeam?.contestTeamId.id.toString(),
             }),
             leftPlace: JSON.stringify({
                 value: node.leftPlace.value,
                 participantId:
-                node.leftPlace.participant?.participantId.id.toString(),
+                    node.leftPlace.participant?.participantId.id.toString(),
                 coupleId: node.leftPlace.couple?.coupleId.id.toString(),
                 contestTeamId: node.leftPlace.contestTeam?.contestTeamId.id.toString(),
             }),
@@ -75,8 +75,8 @@ export class BracketTreeNodeMap implements Mapper<BracketTreeNode> {
 }
 
 export class BracketNodeMap implements Mapper<BracketNode> {
-    public static toDomain(raw: any & {rightPlaceObj: BracketPlace, leftPlaceObj: BracketPlace}) {
-        BracketNode.create({
+    public static toDomain(raw: any & { rightPlaceObj: BracketPlace, leftPlaceObj: BracketPlace }) {
+        return BracketNode.create({
             contestId: ContestId.create(new UniqueEntityID(raw.contestId)).getValue(),
             matchId: raw.matchId ? TournamentMatchId.create(new UniqueEntityID(raw.matchId)).getValue() : null,
             clashId: raw.clashId ? ContestClashId.create(new UniqueEntityID(raw.clashId)).getValue() : null,
@@ -85,9 +85,9 @@ export class BracketNodeMap implements Mapper<BracketNode> {
             parentId: raw.parent ? new UniqueEntityID(raw.parent) : null,
             rightPlace: raw.rightPlaceObj,
             leftPlace: raw.leftPlaceObj,
-            phase: Phase.create(raw.phase).getValue() ,
+            phase: Phase.create(raw.phase).getValue(),
             deep: raw.deep,
-        }, new UniqueEntityID(raw.id))
+        }, new UniqueEntityID(raw.id)).getValue()
     }
 
     public static toPersistance(node: BracketNode) {
@@ -102,14 +102,14 @@ export class BracketNodeMap implements Mapper<BracketNode> {
             rightPlace: JSON.stringify({
                 value: node.rightPlace.value,
                 participantId:
-                node.rightPlace.participant?.participantId.id.toString(),
+                    node.rightPlace.participant?.participantId.id.toString(),
                 coupleId: node.rightPlace.couple?.coupleId.id.toString(),
                 contestTeamId: node.rightPlace.contestTeam?.contestTeamId.id.toString(),
             }),
             leftPlace: JSON.stringify({
                 value: node.leftPlace.value,
                 participantId:
-                node.leftPlace.participant?.participantId.id.toString(),
+                    node.leftPlace.participant?.participantId.id.toString(),
                 coupleId: node.leftPlace.couple?.coupleId.id.toString(),
                 contestTeamId: node.leftPlace.contestTeam?.contestTeamId.id.toString(),
             }),

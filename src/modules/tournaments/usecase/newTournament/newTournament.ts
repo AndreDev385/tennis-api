@@ -56,7 +56,7 @@ export class NewTournament implements UseCase<NewTournamentDto, Response> {
                 },
                 {
                     argument: req.address,
-                    argumentName: "games por set",
+                    argumentName: "direccion",
                 },
                 {
                     argument: req.matchesPerClash,
