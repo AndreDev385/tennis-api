@@ -693,9 +693,9 @@ module.exports = {
             await queryInterface.dropTable("bracket", { transaction });
             await queryInterface.dropTable("contest", { transaction });
             await queryInterface.dropTable("contestClash", { transaction, cascade: true });
-            await queryInterface.dropTable("contestTeam", { transaction });
-            await queryInterface.dropTable("couple", { transaction });
-            await queryInterface.dropTable("participant", { transaction });
+            await queryInterface.dropTable("contestTeam", { transaction, cascade: true });
+            await queryInterface.dropTable("couple", { transaction, cascade: true });
+            await queryInterface.dropTable("participant", { transaction, cascade: true });
             await queryInterface.dropTable("participantTracker", { transaction });
             await queryInterface.dropTable("tournament", { transaction });
             await queryInterface.dropTable("tournamentAd", { transaction });
