@@ -6,6 +6,7 @@ export type TournamentDto = {
     status: number;
     startDate: Date;
     endDate: Date;
+    address: string;
     createdAt?: Date;
     updatedAt?: Date;
 };

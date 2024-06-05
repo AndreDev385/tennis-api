@@ -1,7 +1,7 @@
 import { AppError } from "../../../../shared/core/AppError";
 import { Either, Result, left, right } from "../../../../shared/core/Result";
 import { UseCase } from "../../../../shared/core/UseCase";
-import { BracketNode, BracketPlace } from "../../domain/brackets";
+import { BracketTreeNode, BracketPlace } from "../../domain/brackets";
 import { Contest } from "../../domain/contest";
 import { Phase, mapPhaseToString } from "../../domain/phase";
 import { BracketsRepository } from "../../repository/bracketsRepo";
@@ -31,7 +31,7 @@ export class BuildBrackets implements UseCase<BuildBracketsDto, Response> {
 
     async execute(req: BuildBracketsDto): Promise<Response> {
         let contest: Contest;
-        let rootNode: BracketNode;
+        let rootNode: BracketTreeNode;
 
         try {
             try {
@@ -73,7 +73,7 @@ export class BuildBrackets implements UseCase<BuildBracketsDto, Response> {
                 );
             }
 
-            const mustNode = BracketNode.create({
+            const mustNode = BracketTreeNode.create({
                 deep: 1,
                 phase: phase,
                 rightPlace: BracketPlace.create({ value: 1 }).getValue(),
@@ -94,7 +94,12 @@ export class BuildBrackets implements UseCase<BuildBracketsDto, Response> {
             );
 
             // copy array
-            const inscribedCopy = contest.inscribed.getItems().map((i) => i);
+            const inscribedWithPosition = contest.inscribed.getItems().filter((i) => i.position != null)
+            const inscribedWithoutPosition = contest.inscribed.getItems().filter((i) => i.position == null)
+
+            shuffle(inscribedWithoutPosition);
+
+            const inscribedCopy = inscribedWithPosition.concat(inscribedWithoutPosition);
 
             // sort
             inscribedCopy.sort(
@@ -123,5 +128,14 @@ export class BuildBrackets implements UseCase<BuildBracketsDto, Response> {
         } catch (error) {
             return left(new AppError.UnexpectedError(error));
         }
+    }
+}
+
+function shuffle(array: Array<any>): void {
+    for (var i = array.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
     }
 }

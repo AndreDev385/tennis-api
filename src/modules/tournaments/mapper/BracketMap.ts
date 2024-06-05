@@ -1,52 +1,30 @@
 import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
 import { Mapper } from "../../../shared/infra/Mapper";
-import { BracketData } from "../../../shared/infra/database/sequelize/models/tournaments/Bracket";
-import { BracketNode, BracketPlace } from "../domain/brackets";
+import { BracketTreeNode, BracketPlace, BracketNode } from "../domain/brackets";
 import { ContestClash } from "../domain/contestClash";
+import { ContestClashId } from "../domain/contestClashId";
 import { ContestId } from "../domain/contestId";
 import { Phase, PhaseValues } from "../domain/phase";
 import { TournamentMatch } from "../domain/tournamentMatch";
-import { BracketDto } from "../dtos/bracketDto";
-import { ContestClashMap } from "./ContestClashMap";
-import { TournamentMatchMap } from "./TournamentMatchMap";
+import { TournamentMatchId } from "../domain/tournamentMatchId";
 
-export type BuildBracketData = {
+export type BuildBracketTreeNodeData = {
     id: string;
     phase: PhaseValues;
     contestId: string;
     match?: TournamentMatch | null;
     clash?: ContestClash | null;
-    left?: BracketNode | null;
-    right?: BracketNode | null;
-    parent?: BracketNode | null;
+    left?: BracketTreeNode | null;
+    right?: BracketTreeNode | null;
+    parent?: BracketTreeNode | null;
     rightPlace: BracketPlace;
     leftPlace: BracketPlace;
     deep: number;
 };
 
-export class BracketMap implements Mapper<BracketNode> {
-    public static forQuery(
-        node: BracketData & { match: TournamentMatch | null, clash: ContestClash | null }
-    ): BracketDto {
-        return {
-            id: node.id,
-            contestId: node.contestId,
-            matchId: node.matchId,
-            match: node.match != null ? TournamentMatchMap.toDto(node.match) : null,
-            clashId: node.clashId,
-            clash: node.clash != null ? ContestClashMap.toDto(node.clash) : null,
-            left: node.left,
-            right: node.right,
-            parent: node.parent,
-            rightPlace: JSON.parse(node.rightPlace),
-            leftPlace: JSON.parse(node.leftPlace),
-            phase: node.phase,
-            deep: node.deep,
-        };
-    }
-
-    public static toDomain(raw: BuildBracketData) {
-        const mustNode = BracketNode.create(
+export class BracketTreeNodeMap implements Mapper<BracketTreeNode> {
+    public static toDomain(raw: BuildBracketTreeNodeData) {
+        const mustNode = BracketTreeNode.create(
             {
                 ...raw,
                 phase: Phase.create(raw.phase).getValue(),
@@ -67,7 +45,7 @@ export class BracketMap implements Mapper<BracketNode> {
         return mustNode.isSuccess ? mustNode.getValue() : null;
     }
 
-    public static toPersistance(node: BracketNode) {
+    public static toPersistance(node: BracketTreeNode) {
         return {
             id: node.id.toString(),
             contestId: node.contestId.id.toString(),
@@ -76,14 +54,14 @@ export class BracketMap implements Mapper<BracketNode> {
             rightPlace: JSON.stringify({
                 value: node.rightPlace.value,
                 participantId:
-                    node.rightPlace.participant?.participantId.id.toString(),
+                node.rightPlace.participant?.participantId.id.toString(),
                 coupleId: node.rightPlace.couple?.coupleId.id.toString(),
                 contestTeamId: node.rightPlace.contestTeam?.contestTeamId.id.toString(),
             }),
             leftPlace: JSON.stringify({
                 value: node.leftPlace.value,
                 participantId:
-                    node.leftPlace.participant?.participantId.id.toString(),
+                node.leftPlace.participant?.participantId.id.toString(),
                 coupleId: node.leftPlace.couple?.coupleId.id.toString(),
                 contestTeamId: node.leftPlace.contestTeam?.contestTeamId.id.toString(),
             }),
@@ -93,5 +71,50 @@ export class BracketMap implements Mapper<BracketNode> {
             matchId: node.match?.matchId.id.toString() ?? null,
             clashId: node.clash?.contestClashId.id.toString(),
         };
+    }
+}
+
+export class BracketNodeMap implements Mapper<BracketNode> {
+    public static toDomain(raw: any & {rightPlaceObj: BracketPlace, leftPlaceObj: BracketPlace}) {
+        BracketNode.create({
+            contestId: ContestId.create(new UniqueEntityID(raw.contestId)).getValue(),
+            matchId: raw.matchId ? TournamentMatchId.create(new UniqueEntityID(raw.matchId)).getValue() : null,
+            clashId: raw.clashId ? ContestClashId.create(new UniqueEntityID(raw.clashId)).getValue() : null,
+            leftId: raw.left ? new UniqueEntityID(raw.left) : null,
+            rightId: raw.right ? new UniqueEntityID(raw.right) : null,
+            parentId: raw.parent ? new UniqueEntityID(raw.parent) : null,
+            rightPlace: raw.rightPlaceObj,
+            leftPlace: raw.leftPlaceObj,
+            phase: Phase.create(raw.phase).getValue() ,
+            deep: raw.deep,
+        }, new UniqueEntityID(raw.id))
+    }
+
+    public static toPersistance(node: BracketNode) {
+        return {
+            id: node.id.toString(),
+            contestId: node.contestId.id.toString(),
+            matchId: node.matchId?.id.toString()!,
+            clashId: node.clashId?.id.toString()!,
+            left: node.leftId?.toString()!,
+            right: node.rightId?.toString()!,
+            parent: node.parentId?.toString()!,
+            rightPlace: JSON.stringify({
+                value: node.rightPlace.value,
+                participantId:
+                node.rightPlace.participant?.participantId.id.toString(),
+                coupleId: node.rightPlace.couple?.coupleId.id.toString(),
+                contestTeamId: node.rightPlace.contestTeam?.contestTeamId.id.toString(),
+            }),
+            leftPlace: JSON.stringify({
+                value: node.leftPlace.value,
+                participantId:
+                node.leftPlace.participant?.participantId.id.toString(),
+                coupleId: node.leftPlace.couple?.coupleId.id.toString(),
+                contestTeamId: node.leftPlace.contestTeam?.contestTeamId.id.toString(),
+            }),
+            phase: node.phase.value,
+            deep: node.deep,
+        }
     }
 }

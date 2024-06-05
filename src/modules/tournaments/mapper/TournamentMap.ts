@@ -20,6 +20,7 @@ export class TournamentMap implements Mapper<Tournament> {
             startDate: raw.startDate,
             endDate: raw.endDate,
             image: raw.image,
+            address: raw.address,
             createdAt: raw.createdAt,
             updatedAt: raw.updatedAt,
         };
@@ -53,6 +54,7 @@ export class TournamentMap implements Mapper<Tournament> {
                 startDate: raw.startDate,
                 endDate: raw.endDate,
                 image: raw.image,
+                address: raw.address,
                 createdAt: raw.createdAt,
                 updatedAt: raw.updatedAt,
                 rules: mustRules.getValue(),
@@ -86,6 +88,7 @@ export class TournamentMap implements Mapper<Tournament> {
             startDate: t.startDate,
             endDate: t.endDate,
             image: t.image,
+            address: t.address,
             createdAt: t.createdAt,
             updatedAt: t.updatedAt,
         };

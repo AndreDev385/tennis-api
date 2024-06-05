@@ -56,7 +56,6 @@ export class UpdateMatch implements UseCase<Req | LiveReq, Response> {
             match = maybeMatch.getValue();
 
             if (isLiveReq(request)) {
-                // live
                 await this.live(match);
                 return right(Result.ok());
             }
@@ -96,6 +95,7 @@ export class UpdateMatch implements UseCase<Req | LiveReq, Response> {
             match.addTracker(tracker);
         }
 
+        match.goLive();
         await this.trackerRepo.save(match.tracker!);
         await this.matchRepo.save(match);
     }

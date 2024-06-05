@@ -1,7 +1,6 @@
 import { AppError } from "../../../../shared/core/AppError";
 import {
     Either,
-    Left,
     Result,
     left,
     right,
@@ -36,8 +35,7 @@ export class CreateBracketClash implements UseCase<Req, Res> {
         let clash: ContestClash;
         try {
             bracket = await this.bracketRepo.get(
-                { id: request.bracketId },
-                false
+                { id: request.bracketId }
             );
         } catch (error) {
             return left(new AppError.NotFoundError(error));
@@ -54,7 +52,7 @@ export class CreateBracketClash implements UseCase<Req, Res> {
             );
         }
 
-        if (bracket.clash != null) {
+        if (bracket.clashId != null) {
             return left(
                 Result.fail<string>(
                     "La llave seleccionada ya cuenta con un encuentro"

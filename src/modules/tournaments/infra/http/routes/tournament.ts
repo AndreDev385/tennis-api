@@ -5,6 +5,7 @@ import { middleware } from "../../../../../shared/infra/http";
 import { paginateTournamentsController } from "../../../queries/paginateTournaments";
 import { listTournamentAdsCtrl } from "../../../queries/listTournamentAds";
 import { deleteTournamentAdCtrl } from "../../../usecase/deleteTournamentAd";
+import { uploadTournamentAdCtrl } from "../../../usecase/uploadTournamentAds";
 
 const tournamentRouter = express.Router();
 
@@ -23,7 +24,7 @@ tournamentRouter.post(
     "/ads",
     middleware.adminAuthenticated() as any,
     middleware.uploadImageHandler.single("image"),
-    (req, res) => listTournamentAdsCtrl.execute(req, res)
+    (req, res) => uploadTournamentAdCtrl.execute(req, res)
 );
 
 tournamentRouter.get("/ads/:tournamentId", (req, res) =>

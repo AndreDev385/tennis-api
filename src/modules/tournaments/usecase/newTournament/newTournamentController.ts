@@ -19,6 +19,7 @@ export class NewTournamentController extends BaseController {
             setsQuantity,
             matchesPerClash,
             startDate,
+            address,
             endDate,
         } = req.body;
 
@@ -26,7 +27,8 @@ export class NewTournamentController extends BaseController {
             name,
             gamesPerSet: Number(gamesPerSet),
             setsQuantity: Number(setsQuantity),
-            matchesPerClash: Number(matchesPerClash),
+            matchesPerClash: Number(matchesPerClash) as any,
+            address,
             startDate,
             endDate,
             file: req.file,

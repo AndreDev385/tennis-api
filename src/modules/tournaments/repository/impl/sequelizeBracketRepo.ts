@@ -1,9 +1,10 @@
 import models from "../../../../shared/infra/database/sequelize/models";
-import { BracketNode, BracketPlace } from "../../domain/brackets";
+import { BracketTreeNode, BracketPlace, BracketNode } from "../../domain/brackets";
 import { ContestTeam } from "../../domain/contestTeam";
 import { Couple } from "../../domain/couple";
 import { Participant } from "../../domain/participant";
-import { BracketMap, BuildBracketData } from "../../mapper/BracketMap";
+import { BracketDto } from "../../dtos/bracketDto";
+import { BracketNodeMap, BracketTreeNodeMap } from "../../mapper/BracketMap";
 import { ContestClashMap } from "../../mapper/ContestClashMap";
 import { ContestTeamMap } from "../../mapper/ContestTeamMap";
 import { CoupleMap } from "../../mapper/CoupleMap";
@@ -41,8 +42,26 @@ export class SequelizeBracketRepository implements BracketsRepository {
         await models.BracketModel.destroy({ where: q });
     }
 
-    async saveTree(node: BracketNode): Promise<void> {
-        await this.save(node);
+    private async saveTreeNode(node: BracketTreeNode): Promise<void> {
+        const raw = BracketTreeNodeMap.toPersistance(node);
+
+        const exist = await models.BracketModel.findOne({
+            where: { id: raw.id },
+        });
+
+        if (!!exist === true) {
+            await models.BracketModel.update(
+                raw,
+                { where: { id: raw.id } }
+            );
+        } else {
+            const instance = await models.BracketModel.create(raw);
+            await instance.save();
+        }
+    }
+
+    async saveTree(node: BracketTreeNode): Promise<void> {
+        await this.saveTreeNode(node);
 
         if (!node.right && !node.left) {
             return;
@@ -52,7 +71,7 @@ export class SequelizeBracketRepository implements BracketsRepository {
         await this.saveTree(node.left!);
     }
 
-    async list(q: BracketsQuery): Promise<any> {
+    async list(q: BracketsQuery): Promise<BracketDto[]> {
         const result = await models.BracketModel.findAll({
             where: q,
             order: [["createdAt", "ASC"]],
@@ -133,7 +152,7 @@ export class SequelizeBracketRepository implements BracketsRepository {
     }
 
     // get function search de whole tree
-    async get(q: BracketsQuery, getTree: boolean): Promise<BracketNode> {
+    async get(q: BracketsQuery): Promise<BracketNode> {
         const raw = await models.BracketModel.findOne({ where: q });
 
         if (!raw) {
@@ -183,69 +202,25 @@ export class SequelizeBracketRepository implements BracketsRepository {
             leftT = result.getValue();
         }
 
-        const obj: BuildBracketData = {
-            deep: raw.deep,
-            id: raw.id,
-            phase: raw.phase,
-            contestId: raw.contestId,
-            match: null,
-            clash: null,
-            right: null,
-            left: null,
-            parent: null,
-            rightPlace: BracketPlace.create({
+        return BracketNodeMap.toDomain({
+            ...raw.dataValues,
+            rightPlaceObj: BracketPlace.create({
                 value: rightPlaceData.value,
                 participant: rightP,
                 couple: rightC,
                 contestTeam: rightT,
             }).getValue(),
-            leftPlace: BracketPlace.create({
+            leftPlaceObj: BracketPlace.create({
                 value: leftPlaceData.value,
                 participant: leftP,
                 couple: leftC,
                 contestTeam: leftT,
             }).getValue(),
-        };
-
-        if (raw.matchId) {
-            const mustMatch = await this.matchRepo.get({
-                matchId: raw.matchId,
-            });
-            if (mustMatch.isSuccess) {
-                obj.match = mustMatch.getValue();
-            }
-        }
-
-        if (raw.clashId) {
-            const clash = await this.clashRepo.get({ contestClashId: raw.clashId })
-
-            if (clash.isSuccess) {
-                obj.clash = clash.getValue();
-            }
-        }
-
-        if (getTree) {
-            if (raw.parent) {
-                obj.parent =
-                    (await this.get({ id: raw.parent }, false)) ?? null;
-            }
-
-            if (raw.right) {
-                obj.right = (await this.get({ id: raw.right }, false)) ?? null;
-            }
-
-            if (raw.left) {
-                obj.left = (await this.get({ id: raw.left }, false)) ?? null;
-            }
-        }
-
-        return BracketMap.toDomain(obj)!;
+        })!;
     }
 
     async save(node: BracketNode): Promise<void> {
-        const raw = BracketMap.toPersistance(node);
-
-        console.log(raw, "BRACK TO SAVE")
+        const raw = BracketNodeMap.toPersistance(node);
 
         const exist = await models.BracketModel.findOne({
             where: { id: raw.id },
