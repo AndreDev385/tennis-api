@@ -54,6 +54,7 @@ export class TournamentMatchMap implements Mapper<TournamentMatch> {
             rules: {
                 gamesPerSet: match.rules.gamesPerSet.value,
                 setsQuantity: match.rules.setsQuantity.value,
+                goldenPoint: match.rules.goldenPoint,
             },
             mode: match.mode.value,
             surface: match.surface.value,
@@ -100,6 +101,7 @@ export class TournamentMatchMap implements Mapper<TournamentMatch> {
             rules: JSON.stringify({
                 gamesPerSet: match.rules.gamesPerSet.value,
                 setsQuantity: match.rules.setsQuantity.value,
+                goldenPoint: match.rules.goldenPoint,
             }),
             mode: match.mode.value,
             surface: match.surface.value,
@@ -162,6 +164,7 @@ export class TournamentMatchMap implements Mapper<TournamentMatch> {
                     setsQuantity: SetQuantity.create({
                         value: rawRules.setsQuantity,
                     }).getValue(),
+                    goldenPoint: rawRules.goldenPoint,
                 }).getValue(),
                 status: MatchStatus.create({ value: raw.status }).getValue(),
                 player1: raw.player1,

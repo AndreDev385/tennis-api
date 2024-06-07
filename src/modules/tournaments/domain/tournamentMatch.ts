@@ -112,7 +112,11 @@ export class TournamentMatch extends AggregateRoot<TournamentMatchProps> {
     }
 
     public static create(props: TournamentMatchProps, id?: UniqueEntityID) {
-        return Result.ok<TournamentMatch>(new TournamentMatch(props, id));
+        return Result.ok<TournamentMatch>(new TournamentMatch({
+            ...props,
+            createdAt: props.createdAt ?? new Date(),
+            updatedAt: props.updatedAt ?? new Date(),
+        }, id));
     }
 
     private setMatchWon() {

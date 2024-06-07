@@ -12,6 +12,7 @@ export type TournamentMatchDto = {
     rules: {
         gamesPerSet: number;
         setsQuantity: number;
+        goldenPoint: boolean;
     };
     mode: string;
     surface: string;

@@ -45,6 +45,7 @@ export class TournamentMap implements Mapper<Tournament> {
                     value: rulesObj.matchesPerClash,
                 }).getValue()
                 : null,
+            goldenPoint: rulesObj.goldenPoint ?? false,
         });
 
         const mustTournament = Tournament.create(
@@ -78,6 +79,7 @@ export class TournamentMap implements Mapper<Tournament> {
             setsQuantity: t.rules.setsQuantity.value,
             gamesPerSet: t.rules.gamesPerSet.value,
             matchesPerClash: t.rules.matchesPerClash?.value,
+            goldenPoint: t.rules.goldenPoint ?? false,
         });
 
         return {

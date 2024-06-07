@@ -7,4 +7,5 @@ export interface GameDto {
     superTiebreak: boolean;
     pointsToWin: number;
     deucePoints: number;
+    goldenPoint: boolean;
 }

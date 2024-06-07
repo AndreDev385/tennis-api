@@ -8,6 +8,7 @@ type RulesProps = {
     setsQuantity: SetQuantity;
     gamesPerSet: GamesPerSet;
     matchesPerClash?: MatchesPerClash | null;
+    goldenPoint?: boolean;
 };
 
 export class TournamentRules extends ValueObject<RulesProps> {
@@ -23,6 +24,10 @@ export class TournamentRules extends ValueObject<RulesProps> {
         return this.props.matchesPerClash!;
     }
 
+    get goldenPoint(): boolean {
+        return this.props.goldenPoint!;
+    }
+
     private constructor(props: RulesProps) {
         super(props);
     }
@@ -32,6 +37,7 @@ export class TournamentRules extends ValueObject<RulesProps> {
             new TournamentRules({
                 ...props,
                 matchesPerClash: props.matchesPerClash ?? null,
+                goldenPoint: props.goldenPoint ?? false,
             })
         );
     }
