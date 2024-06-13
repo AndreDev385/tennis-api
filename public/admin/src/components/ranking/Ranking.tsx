@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ICategory, IClub, IRanking } from "../../interfaces/interfaces";
+import { ICategory, IClub, IRanking } from "../../types/interfaces";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleNotch, faTrophy } from "@fortawesome/free-solid-svg-icons";
 import { Button, Card, Form, Table } from "react-bootstrap";
@@ -36,42 +36,42 @@ const Ranking = () => {
     const url = `${VITE_SERVER_URL}/api/v1/team/rankings`
     const requestOptions = {
       method: 'GET',
-      headers: { 
+      headers: {
         'Content-Type': 'application/json',
         'Authorization': token
       }
     };
 
-    try{
+    try {
       const response = await fetch(url, requestOptions)
-      
+
       const data = await response.json()
 
-      if (response.status === 200){
+      if (response.status === 200) {
         setRanking(data)
-      } 
+      }
     } catch (error) {
       console.error(error)
       setLoading(false)
     }
   }
 
-  const getCategories= async () => {
+  const getCategories = async () => {
     const url = `${VITE_SERVER_URL}/api/v1/categories`
     const requestOptions = {
       method: 'GET',
-      headers: { 
+      headers: {
         'Content-Type': 'application/json',
         'Authorization': token
       }
     };
 
-    try{
+    try {
       const response = await fetch(url, requestOptions)
       const data = await response.json()
-      if (response.status === 200){
+      if (response.status === 200) {
         setCategories(data)
-      } 
+      }
     } catch (error) {
     }
   }
@@ -80,20 +80,20 @@ const Ranking = () => {
     const url = `${VITE_SERVER_URL}/api/v1/club`
     const requestOptions = {
       method: 'GET',
-      headers: { 
+      headers: {
         'Content-Type': 'application/json',
         'Authorization': token
       }
     };
 
-    try{
+    try {
       const response = await fetch(url, requestOptions)
-      
+
       const data = await response.json()
 
-      if (response.status === 200){
+      if (response.status === 200) {
         setClubs(data)
-      } 
+      }
     } catch (error) {
     }
   }
@@ -135,7 +135,7 @@ const Ranking = () => {
     setSelectedPosition('')
   }
 
-  const rankingTable = filteredRanking.map( (item) => {
+  const rankingTable = filteredRanking.map((item) => {
     return (
       <tr key={item.rankingId}>
         <td className="text-center">
@@ -153,7 +153,7 @@ const Ranking = () => {
       </tr>
     )
   })
-  
+
   return (
     <div className='ranking-container'>
       <div>
@@ -166,7 +166,7 @@ const Ranking = () => {
       <div className="filter-container">
         <Form.Select onChange={onChangePosition} value={selectedPosition} aria-label="Filtrar por posición">
           <option value="" disabled>Filtrar por posición</option>
-          {Object.keys(positions).map( (key, i) => {
+          {Object.keys(positions).map((key, i) => {
             return <option key={i} value={key}>{positions[key]}</option>
           })}
         </Form.Select>
@@ -186,7 +186,7 @@ const Ranking = () => {
         </Form.Select>
 
         <Button onClick={onReset} variant="secondary">
-            Limpiar filtro
+          Limpiar filtro
         </Button>
       </div>
 
@@ -211,14 +211,14 @@ const Ranking = () => {
 
           <tbody>
             {filteredRanking && rankingTable}
-            {loading && 
+            {loading &&
               <tr className="text-center mt-3" >
                 <td>
                   <FontAwesomeIcon className='center mt-5' icon={faCircleNotch} spin />
                 </td>
               </tr>
             }
-            {filteredRanking.length === 0 && !loading && 
+            {filteredRanking.length === 0 && !loading &&
               <tr className="text-center mt-3" >
                 <td>
                   No hay resultados

@@ -28,6 +28,10 @@ export class Participant extends Entity<ParticipantProps> {
         return this.props.isDeleted!;
     }
 
+    public delete() {
+        this.props.isDeleted = true;
+    }
+
     private constructor(props: ParticipantProps, id?: UniqueEntityID) {
         super(props, id);
     }

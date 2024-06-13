@@ -6,7 +6,11 @@ import { ParticipantDto } from "../dtos/participantDto";
 
 export class ParticipantMap implements Mapper<Participant> {
     public static forQuery(raw: any) {
-        return raw;
+        delete raw.user.dataValues.recoverPasswordCode;
+        delete raw.user.dataValues.password;
+        delete raw.user.dataValues.accessToken;
+        console.log(raw, "\n");
+        return raw.dataValues;
     }
 
     public static toDto(p: Participant): ParticipantDto {

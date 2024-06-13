@@ -89,11 +89,11 @@ export class AddContestParticipants
                     ci: mustCI.getValue(),
                 });
                 /* Build user object */
-                let user: User = mustUser.getValue();
+                let newUser: User = mustUser.getValue();
 
                 /* Build participant object */
-                let participant: Participant = Participant.create({
-                    user,
+                let newParticipant: Participant = Participant.create({
+                    user: newUser,
                 }).getValue();
 
                 let userAlreadyExist: User;
@@ -116,10 +116,17 @@ export class AddContestParticipants
                         );
                     } catch (_) {
                         // Add participant to save
-                        newRecords.push({ participant });
+                        let newParticipant = Participant.create({
+                            user: userAlreadyExist
+                        }).getValue();
+
+                        newRecords.push({
+                            participant: newParticipant
+                        });
+
                         addParticipantToList(
                             Inscribed.create({
-                                participant: participant,
+                                participant: newParticipant,
                                 position: p.position ?? null,
                             }).getValue(),
                             inscribedList
@@ -128,12 +135,12 @@ export class AddContestParticipants
                 } catch (_) {
                     // Add user and participant to save
                     newRecords.push({
-                        user,
-                        participant,
+                        user: newUser,
+                        participant: newParticipant,
                     });
                     addParticipantToList(
                         Inscribed.create({
-                            participant: participant,
+                            participant: newParticipant,
                             position: p.position ?? null,
                         }).getValue(),
                         inscribedList

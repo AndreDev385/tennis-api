@@ -5,42 +5,43 @@
   font-family: Poppins sans-serif;
 }
 
-body{
+body {
   overflow-x: hidden;
 }
 
-.btn-primary{
+.btn-primary {
   --bs-btn-bg: #001242 !important;
   --bs-btn-border-color: #001242 !important;
   --bs-btn-hover-bg: #011755 !important;
   --bs-btn-hover-border-color: #011755 !important;
 }
 
-.center{
+.center {
   display: block;
   margin: 0 auto;
 }
 
 .overlay {
-  position: fixed; 
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0,0,0,0.5);
-  z-index: 4; 
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 4;
   cursor: pointer;
 }
 
-.wrap-modal{
+.wrap-modal {
   display: block !important;
   position: absolute;
-  button{
+
+  button {
     width: 13rem;
   }
 }
 
-.card{
+.card {
   margin: 0 2rem;
   padding: 1rem;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
@@ -49,11 +50,12 @@ body{
   max-height: 30rem;
   // overflow-y: hidden;
 
-  table tr{
+  table tr {
     --bs-table-bg: #ffffff;
     height: 3rem;
-    &:hover{
-        --bs-table-bg: #fafafa;
+
+    &:hover {
+      --bs-table-bg: #fafafa;
     }
   }
 
@@ -68,61 +70,77 @@ body{
     overflow-x: hidden;
   }
 
-  thead, tbody tr {
+  thead,
+  tbody tr {
     display: table;
     width: 100%;
-    table-layout: fixed;/* even columns width , fix width of table too*/
+    table-layout: fixed;
+    /* even columns width , fix width of table too*/
   }
 
   thead {
-    width: calc( 100% - 1em )/* scrollbar is average 1em/16px width, remove it from thead width */
+    width: calc(100% - 1em)
+      /* scrollbar is average 1em/16px width, remove it from thead width */
   }
 
   // scrollbar
-  &:hover{
+  &:hover {
     ::-webkit-scrollbar-track {
       background: #f1f1f1;
     }
+
     ::-webkit-scrollbar-thumb {
       background: #c1c1c1;
     }
   }
+
   ::-webkit-scrollbar {
     width: 5px;
   }
-  ::-webkit-scrollbar-track, ::-webkit-scrollbar-thumb{
+
+  ::-webkit-scrollbar-track,
+  ::-webkit-scrollbar-thumb {
     background: transparent;
   }
+
   ::-webkit-scrollbar-thumb:hover {
     background: #a6a5a5;
   }
 }
 
-.btn{
+.btn {
   border-radius: 1rem;
 }
 
-.btn-secondary{
+.btn-secondary {
   border-color: #001242;
   background-color: #ffffff;
   color: #001242;
-  &:hover{
+
+  &:hover {
     background-color: #011b61;
     color: #ffffff;
   }
 }
 
-.btn-warning{
+.btn-warning {
   color: #ffffff;
 }
 
-h1{
+h1 {
   margin: 2rem;
   color: #ffca3ace;
 
-  svg{
-      font-size: 2rem;
-      margin-right: 1rem;
-      color: #ffca3ace;
+  svg {
+    font-size: 2rem;
+    margin-right: 1rem;
+    color: #ffca3ace;
   }
+}
+
+.logo {
+  width: 3rem;
+  margin: 0 auto;
+  margin-top: .5rem;
+  margin-bottom: .5rem;
 }

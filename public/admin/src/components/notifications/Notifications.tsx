@@ -5,7 +5,7 @@ import { Button, Card, Form } from "react-bootstrap";
 import { getClubsList } from "../../services/club/getClubList";
 import { Loading } from "../shared/loading";
 import { ErrorMessage } from "../shared/errorMessage";
-import { IClub } from "../../interfaces/interfaces";
+import { IClub } from "../../types/interfaces";
 import { sendNotifications } from "../../services/sendNotifications";
 import { toast } from "react-toastify";
 
@@ -28,7 +28,7 @@ const Notifications = () => {
         if (result.isFailure) {
             setState({
                 loading: false,
-                error: result.getErrorValue(),
+                error: result.getErrorValue()!,
             });
             return;
         }

@@ -1,7 +1,7 @@
 import { faCircleNotch, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Form, Modal } from 'react-bootstrap';
-import { IClub } from '../../../interfaces/interfaces';
+import { IClub } from '../../../types/interfaces';
 import { useState } from 'react';
 import validator from 'validator';
 import { VITE_SERVER_URL } from '../../../env/env.prod';
@@ -92,9 +92,8 @@ const CreatePlayerModal = ({ clubs, onClose, getPlayers }: IProps) => {
       await getPlayers();
     } catch (error) {
       toast.error(
-        `${
-          (error as Error).message ??
-          'Ha ocurrido un error al intentar agregar el jugador'
+        `${(error as Error).message ??
+        'Ha ocurrido un error al intentar agregar el jugador'
         }`
       );
     } finally {

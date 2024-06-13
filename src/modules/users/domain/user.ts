@@ -88,11 +88,17 @@ export class User extends AggregateRoot<UserProps> {
     public editUser(
         firstName: Name,
         lastName: Name,
-        email: UserEmail
+        email: UserEmail | null = null,
+        ci: CI | null = null,
     ) {
         this.props.firstName = firstName;
         this.props.lastName = lastName;
-        this.props.email = email;
+        if (email) {
+            this.props.email = email;
+        }
+        if (ci) {
+            this.props.ci = ci;
+        }
     }
 
     public becomePlayer(): void {
@@ -144,6 +150,7 @@ export class User extends AggregateRoot<UserProps> {
         const user = new User(
             {
                 ...props,
+                ci: props.ci ?? null,
                 email: props.email ?? null,
                 password: props.password ?? null,
                 isDeleted: props.isDeleted ?? false,

@@ -1,12 +1,12 @@
 export class Result<T> {
     public isSuccess: boolean;
     public isFailure: boolean;
-    private error: T | string | null;
+    private error: string | null;
     private _value: T | null;
 
     public constructor(
         isSuccess: boolean,
-        error?: T | string | null,
+        error?: string | null,
         value?: T
     ) {
         if (isSuccess && error) {
@@ -39,8 +39,8 @@ export class Result<T> {
         return this._value!;
     }
 
-    public getErrorValue(): T {
-        return this.error as T;
+    public getErrorValue(): string {
+        return this.error!;
     }
 
     public static ok<U>(value?: U): Result<U> {

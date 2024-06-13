@@ -18,7 +18,7 @@ const Login = () => {
     email: '',
     password: ''
   });
-  
+
   const [submitted, setSubmitted] = useState(false);
   const [validEmail, setValidEmail] = useState(false);
   const [validPassword, setValidPassword] = useState(false);
@@ -26,7 +26,7 @@ const Login = () => {
 
   const handleSubmit = (event: any) => {
     setSubmitted(true)
-    if(validEmail && validPassword){
+    if (validEmail && validPassword) {
       setLoading(true)
       login()
     }
@@ -42,23 +42,23 @@ const Login = () => {
       body: JSON.stringify(form)
     };
 
-    try{
+    try {
       const response = await fetch(url, requestOptions)
-      
+
       const data = await response.json()
 
-      if (response.status === 200 && data.access_token){
-          setLoading(false)
-          localStorage.setItem('authorization', data.access_token);
-          navigate("/clubs")
+      if (response.status === 200 && data.access_token) {
+        setLoading(false)
+        localStorage.setItem('authorization', data.access_token);
+        navigate("/dashboard/home/users")
       } else {
-          if(data.message) toast.error(data.message)
-          setLoading(false)
+        if (data.message) toast.error(data.message)
+        setLoading(false)
       }
     } catch (error) {
-        toast.error('Ha ocurrido un error, intente nuevamente')
-        console.error(error)
-        setLoading(false)
+      toast.error('Ha ocurrido un error, intente nuevamente')
+      console.error(error)
+      setLoading(false)
     }
   }
 
@@ -78,7 +78,7 @@ const Login = () => {
     }))
   }
 
-  return ( 
+  return (
     <Row >
       <Col xs={12} sm={7} lg={6} className='login-container center'>
         <img className='center' src='/gameMindLogo.svg' alt='GameMind' />
@@ -91,11 +91,11 @@ const Login = () => {
               Correo electrónico
             </Form.Label>
 
-            <Form.Control 
-              required 
+            <Form.Control
+              required
               value={form.email}
               type='email'
-              placeholder='Correo electrónico' 
+              placeholder='Correo electrónico'
               onChange={handleEmailChange}
             />
             {submitted && !validEmail && <span className='text-error'>
@@ -108,10 +108,10 @@ const Login = () => {
               Contraseña
             </Form.Label>
 
-            <Form.Control 
-              required 
+            <Form.Control
+              required
               value={form.password}
-              type='password' 
+              type='password'
               placeholder='Contraseña'
               onChange={handlePasswordChange}
             />
@@ -125,13 +125,13 @@ const Login = () => {
             ¿Olvidaste tu contraseña?
           </Button>
 
-          <Button 
-            disabled={loading} 
-            className='center mt-3 primary' 
-            variant='primary' 
+          <Button
+            disabled={loading}
+            className='center mt-3 primary'
+            variant='primary'
             onClick={handleSubmit}
           >
-            {loading?
+            {loading ?
               <FontAwesomeIcon icon={faCircleNotch} spin />
               :
               'Iniciar sesión'
@@ -141,7 +141,7 @@ const Login = () => {
       </Col>
       <Col sm={5} lg={6} className='login-img-wrap'>
         <h2>
-          Desbloquea<br/>el juego
+          Desbloquea<br />el juego
         </h2>
       </Col>
     </Row>

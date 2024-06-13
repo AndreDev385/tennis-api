@@ -22,6 +22,7 @@ export class CreateUserController extends BaseController {
             firstName: dto.firstName,
             lastName: dto.lastName,
             email: TextUtils.sanitize(dto.email),
+            ci: dto.ci,
             password: dto.password,
         };
 

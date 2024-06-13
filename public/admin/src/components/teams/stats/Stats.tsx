@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { IJourney, ISeason, IStats, IStatsId } from "../../../interfaces/interfaces"
+import { IJourney, ISeason, IStats, IStatsId } from "../../../types/interfaces"
 import { useParams } from "react-router"
 import { faChartBar } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -35,27 +35,27 @@ const Stats = () => {
     const url = `${VITE_SERVER_URL}/api/v1/team/stats?` + new URLSearchParams(params)
     const requestOptions = {
       method: 'GET',
-      headers: { 
+      headers: {
         'Content-Type': 'application/json',
         'Authorization': token
       }
     };
 
-    try{
+    try {
       const response = await fetch(url, requestOptions)
-      
+
       const data = await response.json()
 
-      if (response.status === 200){
+      if (response.status === 200) {
         setStats(calculateTotal(data))
-      } 
+      }
     } catch (error) {
       console.error(error)
     }
   }
 
   const calculateTotal = (stats: IStatsId[]) => {
-    let total : Record<keyof IStats, number> = {
+    let total: Record<keyof IStats, number> = {
       clashPlayedAsLocal: 0,
       clashPlayedAsVisitor: 0,
       clashWonAsLocal: 0,
@@ -99,7 +99,7 @@ const Stats = () => {
     stats.forEach((item: IStatsId) => {
       for (const key in total) {
         if (item.hasOwnProperty(key)) {
-          total[key as keyof IStats] +=  Number(item[key as keyof IStats]);
+          total[key as keyof IStats] += Number(item[key as keyof IStats]);
         }
       }
     });
@@ -110,20 +110,20 @@ const Stats = () => {
     const url = `${VITE_SERVER_URL}/api/v1/season`
     const requestOptions = {
       method: 'GET',
-      headers: { 
+      headers: {
         'Content-Type': 'application/json',
         'Authorization': token
       }
     };
 
-    try{
+    try {
       const response = await fetch(url, requestOptions)
-      
+
       const data = await response.json()
 
-      if (response.status === 200){
+      if (response.status === 200) {
         setSeasons(data)
-      } 
+      }
     } catch (error) {
       console.error(error)
     }
@@ -133,20 +133,20 @@ const Stats = () => {
     const url = `${VITE_SERVER_URL}/api/v1/utils/journeys`
     const requestOptions = {
       method: 'GET',
-      headers: { 
+      headers: {
         'Content-Type': 'application/json',
         'Authorization': token
       }
     };
 
-    try{
+    try {
       const response = await fetch(url, requestOptions)
-      
+
       const data = await response.json()
 
-      if (response.status === 200){
+      if (response.status === 200) {
         setJourney(data)
-      } 
+      }
     } catch (error) {
       console.error(error)
     }
@@ -197,7 +197,7 @@ const Stats = () => {
             Limpiar filtro
           </Button>
         </div>
-        
+
         <Card>
           <Table responsive="sm">
             <thead>
@@ -242,7 +242,7 @@ const Stats = () => {
 
                 <tr>
                   <td className="text-center">
-                  Sets ganados de local
+                    Sets ganados de local
                   </td>
                   <td className="text-center">
                     {stats.setsWonAsLocal}/{stats.setsPlayedAsLocal}
@@ -251,7 +251,7 @@ const Stats = () => {
 
                 <tr>
                   <td className="text-center">
-                  Sets ganados de visitante
+                    Sets ganados de visitante
                   </td>
                   <td className="text-center">
                     {stats.setsWonAsVisitor}/{stats.setsPlayedAsVisitor}
@@ -260,7 +260,7 @@ const Stats = () => {
 
                 <tr>
                   <td className="text-center">
-                  Sets ganados en total
+                    Sets ganados en total
                   </td>
                   <td className="text-center">
                     {stats.totalSetsWon}/{stats.totalSetsPlayed}
@@ -269,7 +269,7 @@ const Stats = () => {
 
                 <tr>
                   <td className="text-center">
-                  Super Tie-Breaks ganados de local
+                    Super Tie-Breaks ganados de local
                   </td>
                   <td className="text-center">
                     {stats.superTieBreaksWonAsLocal}/{stats.superTieBreaksPlayedAsLocal}
@@ -278,7 +278,7 @@ const Stats = () => {
 
                 <tr>
                   <td className="text-center">
-                  Super Tie-Breaks ganados de visitante
+                    Super Tie-Breaks ganados de visitante
                   </td>
                   <td className="text-center">
                     {stats.superTieBreaksWonAsVisitor}/{stats.superTieBreaksPlayedAsVisitor}
@@ -287,7 +287,7 @@ const Stats = () => {
 
                 <tr>
                   <td className="text-center">
-                  Super Tie-Breaks ganados en total
+                    Super Tie-Breaks ganados en total
                   </td>
                   <td className="text-center">
                     {stats.totalSuperTieBreaksWon}/{stats.totalSuperTieBreaksPlayed}
@@ -296,7 +296,7 @@ const Stats = () => {
 
                 <tr>
                   <td className="text-center">
-                  Partidos ganados de local
+                    Partidos ganados de local
                   </td>
                   <td className="text-center">
                     {stats.matchWonAsLocal}/{stats.matchPlayedAsLocal}
@@ -305,7 +305,7 @@ const Stats = () => {
 
                 <tr>
                   <td className="text-center">
-                  Partidos perdidos de local
+                    Partidos perdidos de local
                   </td>
                   <td className="text-center">
                     {stats.matchLostAsLocal}/{stats.matchPlayedAsLocal}
@@ -314,7 +314,7 @@ const Stats = () => {
 
                 <tr>
                   <td className="text-center">
-                  Partidos ganados de visitante
+                    Partidos ganados de visitante
                   </td>
                   <td className="text-center">
                     {stats.matchWonAsVisitor}/{stats.matchPlayedAsVisitor}
@@ -323,7 +323,7 @@ const Stats = () => {
 
                 <tr>
                   <td className="text-center">
-                  Partidos perdidos de visitante
+                    Partidos perdidos de visitante
                   </td>
                   <td className="text-center">
                     {stats.matchLostAsVisitor}/{stats.matchPlayedAsVisitor}
@@ -332,7 +332,7 @@ const Stats = () => {
 
                 <tr>
                   <td className="text-center">
-                  Partidos ganados en total
+                    Partidos ganados en total
                   </td>
                   <td className="text-center">
                     {stats.totalMatchWon}/{stats.totalMatchPlayed}
@@ -341,7 +341,7 @@ const Stats = () => {
 
                 <tr>
                   <td className="text-center">
-                  Partidos ganados ganando el primer set de local
+                    Partidos ganados ganando el primer set de local
                   </td>
                   <td className="text-center">
                     {stats.matchsWonWithFirstSetWonAsLocal}/{stats.matchsPlayedWithFirstSetWonAsLocal}
@@ -350,7 +350,7 @@ const Stats = () => {
 
                 <tr>
                   <td className="text-center">
-                  Partidos ganados ganando el primer set de visitante
+                    Partidos ganados ganando el primer set de visitante
                   </td>
                   <td className="text-center">
                     {stats.matchsWonWithFirstSetWonAsVisitor}/{stats.matchsPlayedWithFirstSetWonAsVisitor}
@@ -359,7 +359,7 @@ const Stats = () => {
 
                 <tr>
                   <td className="text-center">
-                  Total partidos ganados ganando el primer set
+                    Total partidos ganados ganando el primer set
                   </td>
                   <td className="text-center">
                     {stats.totalMatchsWonWithFirstSetWon}/{stats.totalMatchsPlayedWithFirstSetWon}
@@ -368,7 +368,7 @@ const Stats = () => {
 
                 <tr>
                   <td className="text-center">
-                  Encuentros ganados de local
+                    Encuentros ganados de local
                   </td>
                   <td className="text-center">
                     {stats.clashWonAsLocal}/{stats.clashPlayedAsLocal}
@@ -377,7 +377,7 @@ const Stats = () => {
 
                 <tr>
                   <td className="text-center">
-                  Encuentros ganados de visitante
+                    Encuentros ganados de visitante
                   </td>
                   <td className="text-center">
                     {stats.clashWonAsVisitor}/{stats.clashPlayedAsVisitor}
@@ -386,7 +386,7 @@ const Stats = () => {
 
                 <tr>
                   <td className="text-center">
-                  Encuentros ganados en total
+                    Encuentros ganados en total
                   </td>
                   <td className="text-center">
                     {stats.totalClashWon}/{stats.totalClashPlayed}

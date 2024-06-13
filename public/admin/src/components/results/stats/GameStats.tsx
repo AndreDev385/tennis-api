@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPoll } from '@fortawesome/free-solid-svg-icons';
 import { Button, ButtonGroup, Card, Table } from 'react-bootstrap';
 import { useParams } from 'react-router';
-import { IMatch, ISetStats } from '../../../interfaces/interfaces';
+import { IMatch, ISetStats } from '../../../types/interfaces';
 import AdvancedTable from './advancedTable/AdvancedTable';
 import CoupleVsTable from './coupleVsTable/CoupleVsTable';
 import './GameStats.scss';

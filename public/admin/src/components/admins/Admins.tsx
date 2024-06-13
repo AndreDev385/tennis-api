@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { Card, Form, InputGroup, Table } from 'react-bootstrap';
 import { ToastContainer } from 'react-toastify';
 import CreateAdmin from './createAdmin/createAdmin';
-import { IUser } from '../../interfaces/interfaces';
+import { IUser } from '../../types/interfaces';
 import './Admin.scss';
 import 'react-toastify/dist/ReactToastify.css';
 import { VITE_SERVER_URL } from '../../env/env.prod';
@@ -27,28 +27,28 @@ const Admins = () => {
   useEffect(() => {
     getAdmins()
   }, []);
-  
+
   const getAdmins = async (): Promise<void> => {
     setLoading(true)
     const url = `${VITE_SERVER_URL}/api/v1/users?isAdmin=true`
     const requestOptions = {
       method: 'GET',
-      headers: { 
+      headers: {
         'Content-Type': 'application/json',
         'Authorization': token
       }
     };
 
-    try{
+    try {
       const response = await fetch(url, requestOptions)
-      
+
       const data = await response.json()
 
-      if (response.status === 200){
+      if (response.status === 200) {
         setAdmins(data)
-      } 
+      }
     } catch (error) {
-        setLoading(false)
+      setLoading(false)
     }
   }
 
@@ -60,7 +60,7 @@ const Admins = () => {
           item.lastName.toUpperCase().includes(search.toUpperCase()) ||
           item.email.toUpperCase().includes(search.toUpperCase())
         )
-      ))
+        ))
       setLoading(false)
     }, 1000)
 
@@ -78,7 +78,7 @@ const Admins = () => {
     setShowModalCreate(false)
   }
 
-  const adminsTable = filteredAdmins.map( (item) => {
+  const adminsTable = filteredAdmins.map((item) => {
     return (
       <tr key={item.userId}>
         <td>
@@ -144,8 +144,8 @@ const Admins = () => {
             </thead>
 
             <tbody>
-              {loading? 
-                <FontAwesomeIcon className='center mt-5' icon={faCircleNotch} spin />:
+              {loading ?
+                <FontAwesomeIcon className='center mt-5' icon={faCircleNotch} spin /> :
                 <div>
                   {adminsTable}
                 </div>

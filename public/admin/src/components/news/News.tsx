@@ -5,7 +5,7 @@ import { Button, Card, Form, Table } from 'react-bootstrap';
 import ModalQuestion from '../modalQuestion/ModalQuestion';
 import CreateNews from './createNews/CreateNews';
 import { toast } from 'react-toastify';
-import { IClub, INews } from '../../interfaces/interfaces';
+import { IClub, INews } from '../../types/interfaces';
 import './News.scss';
 import 'react-toastify/dist/ReactToastify.css';
 import { VITE_SERVER_URL } from '../../env/env.prod';
@@ -32,14 +32,14 @@ const News = () => {
       headers: { 'Content-Type': 'application/json' }
     };
 
-    try{
+    try {
       const response = await fetch(url, requestOptions)
-      
+
       const data = await response.json()
 
-      if (response.status === 200){
+      if (response.status === 200) {
         setClubs(data)
-      } 
+      }
     } catch (error) {
       console.error(error)
     }
@@ -52,21 +52,21 @@ const News = () => {
       headers: { 'Content-Type': 'application/json' }
     };
 
-    try{
+    try {
       const response = await fetch(url, requestOptions)
-      
+
       const data = await response.json()
 
-      if (response.status === 200){
+      if (response.status === 200) {
         setNews(data)
         setFilteredNews(data)
-      } 
+      }
     } catch (error) {
-        console.error(error)
+      console.error(error)
     }
   }
 
-  const handleChangeClub = (event: React.ChangeEvent<HTMLSelectElement>):void => {
+  const handleChangeClub = (event: React.ChangeEvent<HTMLSelectElement>): void => {
     const value = event.target.value;
     const result = news.filter(item => item.clubId === value);
     setClubSelected(value)
@@ -92,32 +92,32 @@ const News = () => {
   const deleteEvent = async () => {
     const url = `${VITE_SERVER_URL}/api/v1/event/${id}`
     const requestOptions = {
-        method: 'DELETE',
-        headers: { 
-            'Content-Type': 'application/json',
-            'Authorization': token
-        }
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': token
+      }
     };
 
-    try{
+    try {
       const response = await fetch(url, requestOptions);
-      
+
       const data = await response.json();
 
-      if (response.status === 200){
-        if(data.message) toast.success(data.message);
+      if (response.status === 200) {
+        if (data.message) toast.success(data.message);
         setShowModalDelete(false)
         getNews();
         setClubSelected('');
       } else {
-        if(data.message) toast.error(data.message);
+        if (data.message) toast.error(data.message);
       }
     } catch (error) {
       console.error(error)
     }
   }
 
-  const newsTable = filteredNews.map( (item) => {
+  const newsTable = filteredNews.map((item) => {
     return (
       <tr key={item.clubEventId}>
         <td>
@@ -126,8 +126,8 @@ const News = () => {
           </a>
         </td>
         <td className='text-center'>
-          {clubs.filter(club => club.clubId === item.clubId)[0]? clubs.filter(club => club.clubId === item.clubId)[0].name: "-"}
-        </td> 
+          {clubs.filter(club => club.clubId === item.clubId)[0] ? clubs.filter(club => club.clubId === item.clubId)[0].name : "-"}
+        </td>
         <td className='text-center'>
           <img src={item.image} alt='novedad' />
         </td>
@@ -167,7 +167,7 @@ const News = () => {
             <Form.Select value={clubSelected} onChange={handleChangeClub}>
               <option disabled value="">Selecciona un club</option>
               {clubs.map(item => {
-                return <option key={item.clubId}  value={item.clubId}>{item.name}</option>
+                return <option key={item.clubId} value={item.clubId}>{item.name}</option>
               })}
             </Form.Select>
 
@@ -200,14 +200,14 @@ const News = () => {
         </Card>
       </div>
 
-      {showModalDelete && 
+      {showModalDelete &&
         <ModalQuestion
           title="Eliminar evento"
           question="¿Estás seguro que deseas eliminarla? Esta acción no se puede deshacer."
           dismiss={() => setShowModalDelete(false)}
           accept={deleteEvent}
         />
-      } 
+      }
 
       {showModalCreate && <CreateNews dismiss={handleDismissCreate} clubs={clubs} />}
     </>

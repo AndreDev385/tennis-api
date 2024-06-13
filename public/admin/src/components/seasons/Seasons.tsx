@@ -7,7 +7,7 @@ import CreateModal from "./createModal/CreateModal";
 import "./Seasons.scss";
 import 'react-toastify/dist/ReactToastify.css';
 import { toast } from "react-toastify";
-import { ISeason } from "../../interfaces/interfaces";
+import { ISeason } from "../../types/interfaces";
 import { VITE_SERVER_URL } from "../../env/env.prod";
 
 const Seasons = () => {
@@ -17,7 +17,7 @@ const Seasons = () => {
   const [seasons, setSeasons] = useState<ISeason[]>([])
   const token: string = localStorage.getItem('authorization') || '';
   const [loading, setLoading] = useState(true)
-  
+
   useEffect(() => {
     getSeasons()
   }, []);
@@ -27,21 +27,21 @@ const Seasons = () => {
     const url = `${VITE_SERVER_URL}/api/v1/season`
     const requestOptions = {
       method: 'GET',
-      headers: { 
+      headers: {
         'Content-Type': 'application/json',
         'Authorization': token
       }
     };
 
-    try{
+    try {
       const response = await fetch(url, requestOptions)
-      
+
       const data = await response.json()
 
-      if (response.status === 200){
+      if (response.status === 200) {
         setSeasons(data)
         setLoading(false)
-      } 
+      }
     } catch (error) {
       console.error(error)
       setLoading(false)
@@ -56,50 +56,50 @@ const Seasons = () => {
   const handleEndSeason = async () => {
     const url = `${VITE_SERVER_URL}/api/v1/season/finish`
     const requestOptions = {
-        method: 'PUT',
-        headers: { 
-            'Content-Type': 'application/json',
-            'Authorization': token
-        }
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': token
+      }
     };
 
-    try{
+    try {
       const response = await fetch(url, requestOptions);
-      
+
       const data = await response.json();
 
-      if (response.status === 200){
-        if(data.message) toast.success(data.message);
+      if (response.status === 200) {
+        if (data.message) toast.success(data.message);
         setShowModalQuestion(false)
         getSeasons()
       } else {
-        if(data.message) toast.error(data.message);
+        if (data.message) toast.error(data.message);
       }
     } catch (error) {
-        console.error(error);
+      console.error(error);
     }
   }
 
   const dismissCreateModal = (event: boolean) => {
-    if(event) getSeasons();
+    if (event) getSeasons();
     setShowModalCreate(false)
   }
 
-  const seasonTable = seasons.map( (item) => {
+  const seasonTable = seasons.map((item) => {
     return (
       <tr key={item.seasonId}>
         <td>
           {item.name}
         </td>
         <td>
-          {item.isFinish && 
+          {item.isFinish &&
             <span>
               <FontAwesomeIcon className='finish' icon={faCircle} />
               Finalizada<br />
             </span>
           }
 
-          {!item.isCurrentSeason && item.isCurrentSeason && 
+          {!item.isCurrentSeason && item.isCurrentSeason &&
             <span>
               <FontAwesomeIcon className='current' icon={faCircle} />
               En curso
@@ -107,10 +107,10 @@ const Seasons = () => {
           }
         </td>
         <td className='text-center'>
-          {item.isCurrentSeason?
+          {item.isCurrentSeason ?
             <Button variant="warning" disabled={item.isFinish} onClick={() => onClickEndSeason(item)}>
               Finalizar temporada
-            </Button>:
+            </Button> :
             <span>-</span>
           }
         </td>
@@ -153,14 +153,14 @@ const Seasons = () => {
 
             <tbody>
               {seasons && seasonTable}
-              {loading && 
+              {loading &&
                 <tr className="text-center mt-3" >
                   <td>
                     <FontAwesomeIcon className='center mt-5' icon={faCircleNotch} spin />
                   </td>
                 </tr>
               }
-              {seasons.length === 0 && !loading && 
+              {seasons.length === 0 && !loading &&
                 <tr className="text-center mt-3" >
                   <td>
                     No hay resultados
@@ -172,16 +172,16 @@ const Seasons = () => {
         </Card>
       </div>
 
-      {showModalQuestion && 
-        <ModalQuestion 
+      {showModalQuestion &&
+        <ModalQuestion
           title="Finalizar temporada"
           question={modalQuestion}
-          dismiss={() => setShowModalQuestion(false)} 
+          dismiss={() => setShowModalQuestion(false)}
           accept={() => handleEndSeason()}
         />
-      } 
+      }
 
-      {showModalCreate && <CreateModal dismiss={dismissCreateModal} />} 
+      {showModalCreate && <CreateModal dismiss={dismissCreateModal} />}
     </>
   )
 }

@@ -2,7 +2,7 @@ import { faChartBar, faCircleNotch, faSearch, faUsers } from "@fortawesome/free-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Button, Card, Form, InputGroup, Table } from "react-bootstrap"
 import { useEffect, useState } from "react";
-import { ICategory, IClub, ITeam } from "../../interfaces/interfaces";
+import { ICategory, IClub, ITeam } from "../../types/interfaces";
 import { useNavigate } from "react-router";
 import "./Teams.scss";
 import { VITE_SERVER_URL } from "../../env/env.prod";
@@ -18,7 +18,7 @@ const Teams = () => {
   const [loading, setLoading] = useState(true)
   const token: string = localStorage.getItem('authorization') || '';
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     getTeams()
     getClubs()
@@ -30,42 +30,42 @@ const Teams = () => {
     const url = `${VITE_SERVER_URL}/api/v1/team`
     const requestOptions = {
       method: 'GET',
-      headers: { 
+      headers: {
         'Content-Type': 'application/json',
         'Authorization': token
       }
     };
 
-    try{
+    try {
       const response = await fetch(url, requestOptions)
-      
+
       const data = await response.json()
 
-      if (response.status === 200){
+      if (response.status === 200) {
         setTeams(data)
-      } 
+      }
     } catch (error) {
       console.error(error)
       setLoading(false)
     }
   }
 
-  const getCategories= async () => {
+  const getCategories = async () => {
     const url = `${VITE_SERVER_URL}/api/v1/categories`
     const requestOptions = {
       method: 'GET',
-      headers: { 
+      headers: {
         'Content-Type': 'application/json',
         'Authorization': token
       }
     };
 
-    try{
+    try {
       const response = await fetch(url, requestOptions)
       const data = await response.json()
-      if (response.status === 200){
+      if (response.status === 200) {
         setCategories(data)
-      } 
+      }
     } catch (error) {
     }
   }
@@ -74,20 +74,20 @@ const Teams = () => {
     const url = `${VITE_SERVER_URL}/api/v1/club`
     const requestOptions = {
       method: 'GET',
-      headers: { 
+      headers: {
         'Content-Type': 'application/json',
         'Authorization': token
       }
     };
 
-    try{
+    try {
       const response = await fetch(url, requestOptions)
-      
+
       const data = await response.json()
 
-      if (response.status === 200){
+      if (response.status === 200) {
         setClubs(data)
-      } 
+      }
     } catch (error) {
     }
   }
@@ -95,22 +95,22 @@ const Teams = () => {
   // filter
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
-      if(selectedClub && selectedCategory){
+      if (selectedClub && selectedCategory) {
         setFilteredTeams(
-          teams.filter((item) => 
-            item.name.toUpperCase().includes(search.toUpperCase()) && 
-            item.club.clubId === selectedClub && 
+          teams.filter((item) =>
+            item.name.toUpperCase().includes(search.toUpperCase()) &&
+            item.club.clubId === selectedClub &&
             item.category.categoryId === selectedCategory)
         )
-      } else if(selectedClub && !selectedCategory){
+      } else if (selectedClub && !selectedCategory) {
         setFilteredTeams(
-          teams.filter((item) => 
-            item.name.toUpperCase().includes(search.toUpperCase()) && 
+          teams.filter((item) =>
+            item.name.toUpperCase().includes(search.toUpperCase()) &&
             item.club.clubId === selectedClub)
         )
-      }else if(!selectedClub && selectedCategory){
-        setFilteredTeams(teams.filter((item) => 
-          item.name.toUpperCase().includes(search.toUpperCase()) && 
+      } else if (!selectedClub && selectedCategory) {
+        setFilteredTeams(teams.filter((item) =>
+          item.name.toUpperCase().includes(search.toUpperCase()) &&
           item.category.categoryId === selectedCategory)
         )
       } else {
@@ -149,7 +149,7 @@ const Teams = () => {
     navigate(`stats/${id}`)
   }
 
-  const teamsTable = filteredTeams.map( (item) => {
+  const teamsTable = filteredTeams.map((item) => {
     return (
       <tr key={item.teamId}>
         <td className="text-center">
@@ -211,7 +211,7 @@ const Teams = () => {
           </Form.Select>
 
           <Button onClick={onReset} variant="secondary">
-             Limpiar filtro
+            Limpiar filtro
           </Button>
         </div>
 
@@ -236,14 +236,14 @@ const Teams = () => {
 
             <tbody>
               {filteredTeams && teamsTable}
-              {loading && 
+              {loading &&
                 <tr className="text-center mt-3" >
                   <td>
                     <FontAwesomeIcon className='center mt-5' icon={faCircleNotch} spin />
                   </td>
                 </tr>
               }
-              {filteredTeams.length === 0 && !loading && 
+              {filteredTeams.length === 0 && !loading &&
                 <tr className="text-center mt-3" >
                   <td>
                     No hay resultados

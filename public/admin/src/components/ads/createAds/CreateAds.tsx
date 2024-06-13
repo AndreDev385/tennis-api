@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { IAds, IClub } from "../../../interfaces/interfaces";
+import { IAds, IClub } from "../../../types/interfaces";
 import { VITE_SERVER_URL } from "../../../env/env.prod";
 
 interface ICreateAdsProps {
@@ -11,42 +11,42 @@ interface ICreateAdsProps {
     clubs: IClub[];
 }
 
-const CreateAds = ({clubs, dismiss}: ICreateAdsProps) => {
+const CreateAds = ({ clubs, dismiss }: ICreateAdsProps) => {
     const [form, setForm] = useState<IAds>({
         adId: "",
         clubId: "",
         link: "",
         image: ""
     })
-    const [ submitted, setSubmitted ] = useState(false)
-    const [ loading, setLoading ] = useState(false)
-    const [ preview, setPreview ] = useState("")
+    const [submitted, setSubmitted] = useState(false)
+    const [loading, setLoading] = useState(false)
+    const [preview, setPreview] = useState("")
     const token: string = localStorage.getItem('authorization') || '';
 
-    const handleChangeClub = (event: React.ChangeEvent<HTMLSelectElement>):void => {
+    const handleChangeClub = (event: React.ChangeEvent<HTMLSelectElement>): void => {
         const value = event.target.value;
         setForm((prev) => ({
-          ...prev,
-          clubId: value
+            ...prev,
+            clubId: value
         }))
     }
 
-    const handleChangeLink = (event: React.ChangeEvent<HTMLInputElement>):void => {
+    const handleChangeLink = (event: React.ChangeEvent<HTMLInputElement>): void => {
         const value = event.target.value;
         setForm((prev) => ({
-          ...prev,
-          link: value
+            ...prev,
+            link: value
         }))
     }
 
-    const handleChangeImage = (event: React.ChangeEvent<HTMLInputElement>):void => {
+    const handleChangeImage = (event: React.ChangeEvent<HTMLInputElement>): void => {
         const files = event.target.files;
-        if(files && files[0]){
+        if (files && files[0]) {
             const value = files[0]
             const objectUrl = URL.createObjectURL(value)
             setForm((prev) => ({
-              ...prev,
-              image: value
+                ...prev,
+                image: value
             }))
             setPreview(objectUrl)
         }
@@ -61,33 +61,33 @@ const CreateAds = ({clubs, dismiss}: ICreateAdsProps) => {
 
     const createAds = async () => {
         const url = `${VITE_SERVER_URL}/api/v1/ads`
-        
+
         let formData = new FormData();
         formData.append("clubId", form.clubId)
         formData.append("link", form.link)
         formData.append("image", form.image)
-        
+
         const requestOptions = {
             method: 'POST',
-            headers: { 
+            headers: {
                 'Authorization': token
             },
             body: formData
         };
-    
-        try{
-          const response = await fetch(url, requestOptions);
-          
-          const data = await response.json();
-    
-          if (response.status === 200){
-            if(data.message) toast.success(data.message);
-            setLoading(false);
-            dismiss(true);
-          } else {
-            setLoading(false);
-            if(data.message) toast.error(data.message);
-          }
+
+        try {
+            const response = await fetch(url, requestOptions);
+
+            const data = await response.json();
+
+            if (response.status === 200) {
+                if (data.message) toast.success(data.message);
+                setLoading(false);
+                dismiss(true);
+            } else {
+                setLoading(false);
+                if (data.message) toast.error(data.message);
+            }
         } catch (error) {
             setLoading(false);
             console.error(error);
@@ -113,10 +113,10 @@ const CreateAds = ({clubs, dismiss}: ICreateAdsProps) => {
                                     Club asociado
                                 </Form.Label>
 
-                                <Form.Select 
-                                    required 
+                                <Form.Select
+                                    required
                                     value={form.clubId}
-                                    placeholder='Club asociado' 
+                                    placeholder='Club asociado'
                                     onChange={handleChangeClub}
                                 >
                                     <option disabled value="">Selecciona un club</option>
@@ -124,7 +124,7 @@ const CreateAds = ({clubs, dismiss}: ICreateAdsProps) => {
                                         return <option key={item.clubId} value={item.clubId}>{item.name}</option>
                                     })}
                                 </Form.Select>
-                                { submitted && !form.clubId &&
+                                {submitted && !form.clubId &&
                                     <span className='ms-2 text-error'>
                                         Club requerido
                                     </span>
@@ -136,33 +136,33 @@ const CreateAds = ({clubs, dismiss}: ICreateAdsProps) => {
                                     Link
                                 </Form.Label>
 
-                                <Form.Control 
-                                    required 
+                                <Form.Control
+                                    required
                                     type="url"
                                     value={form.link}
-                                    placeholder='Link' 
+                                    placeholder='Link'
                                     onChange={handleChangeLink}
                                 />
-                                { submitted && !form.link &&
+                                {submitted && !form.link &&
                                     <span className='ms-2 text-error'>
                                         Link requerido
                                     </span>
                                 }
                             </Form.Group>
-                            
+
                             <Form.Group className='mb-3' controlId='formImage'>
                                 <Form.Label>
                                     Imagen
                                 </Form.Label>
 
-                                <Form.Control 
-                                    required 
+                                <Form.Control
+                                    required
                                     type="file"
                                     accept="image/png, image/jpeg"
-                                    placeholder='Imagen' 
+                                    placeholder='Imagen'
                                     onChange={handleChangeImage}
                                 />
-                                { submitted && !form.image &&
+                                {submitted && !form.image &&
                                     <span className='ms-2 text-error'>
                                         Imagen requerida
                                     </span>
@@ -177,8 +177,8 @@ const CreateAds = ({clubs, dismiss}: ICreateAdsProps) => {
                             Cancelar
                         </Button>
                         <Button onClick={() => handleSubmit()} variant="primary">
-                            {loading?
-                                <FontAwesomeIcon icon={faCircleNotch} spin />:
+                            {loading ?
+                                <FontAwesomeIcon icon={faCircleNotch} spin /> :
                                 <span>
                                     <FontAwesomeIcon className='me-2' icon={faPlus} />
                                     Crear ads

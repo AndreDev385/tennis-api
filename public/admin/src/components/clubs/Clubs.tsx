@@ -11,7 +11,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { IClub } from '../../interfaces/interfaces';
+import { IClub } from '../../types/interfaces';
 import './Clubs.scss';
 import { VITE_SERVER_URL } from '../../env/env.prod';
 import ModalQuestion from '../modalQuestion/ModalQuestion';
