@@ -16,6 +16,7 @@ export class GameMap implements Mapper<Game> {
             winGame: game.winGame,
             loseGame: game.loseGame,
             myPoints: game.myPoints,
+            goldenPoint: game.goldenPoint,
         }
     }
 
@@ -36,6 +37,7 @@ export class GameMap implements Mapper<Game> {
                 winGame: raw.winGame,
                 loseGame: raw.loseGame,
                 myPoints: raw.myPoints,
+                goldenPoint: raw.goldenPoint ?? false,
             }
         }
 

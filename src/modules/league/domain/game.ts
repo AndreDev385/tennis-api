@@ -11,6 +11,7 @@ interface GameProps {
     superTiebreak: boolean;
     pointsToWin: number;
     deucePoints: number;
+    goldenPoint: boolean;
 }
 
 export class Game extends ValueObject<GameProps> {
@@ -39,6 +40,9 @@ export class Game extends ValueObject<GameProps> {
     get deucePoints(): number {
         return this.props.deucePoints;
     }
+    get goldenPoint(): boolean {
+        return this.props.goldenPoint;
+    }
 
     private constructor(props: GameProps) {
         super(props);
@@ -54,6 +58,7 @@ export class Game extends ValueObject<GameProps> {
             { argument: props.superTiebreak, argumentName: "super tie break" },
             { argument: props.pointsToWin, argumentName: "puntos para ganar" },
             { argument: props.deucePoints, argumentName: "puntos para deuce" },
+            { argument: props.goldenPoint, argumentName: "punto de oro" },
         ])
 
         if (guard.isFailure) {
