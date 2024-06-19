@@ -6,5 +6,7 @@ export type NewTournamentDto = {
     setsQuantity: number;
     gamesPerSet: number;
     matchesPerClash: 3 | 5;
+    goldenPoint: boolean;
+
     address: string;
 };

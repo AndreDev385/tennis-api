@@ -93,6 +93,7 @@ export class NewTournament implements UseCase<NewTournamentDto, Response> {
                 gamesPerSet: gamesPerset!,
                 setsQuantity: setQty,
                 matchesPerClash: matchesPerClash,
+                goldenPoint: req.goldenPoint,
             });
 
             if (mustRules.isFailure) {

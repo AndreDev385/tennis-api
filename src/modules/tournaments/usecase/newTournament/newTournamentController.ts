@@ -18,13 +18,16 @@ export class NewTournamentController extends BaseController {
             gamesPerSet,
             setsQuantity,
             matchesPerClash,
+            goldenPoint,
             startDate,
-            address,
             endDate,
+            address,
+
         } = req.body;
 
         const result = await this.usecase.execute({
             name,
+            goldenPoint: JSON.parse(goldenPoint),
             gamesPerSet: Number(gamesPerSet),
             setsQuantity: Number(setsQuantity),
             matchesPerClash: Number(matchesPerClash) as any,
