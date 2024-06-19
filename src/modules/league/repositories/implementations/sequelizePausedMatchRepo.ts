@@ -1,4 +1,4 @@
-import { PausedMatchModel } from "../../../../shared/infra/database/sequelize/models/PausedMatch";
+import models from "../../../../shared/infra/database/sequelize/models";
 import { PausedMatch } from "../../domain/pausedMatch";
 import { PausedMatchMap } from "../../mappers/pausedMatchMap";
 import { PausedMatchRepository } from "../pausedMatchRepo";
@@ -14,22 +14,24 @@ export class SequelizePausedMatchRepository implements PausedMatchRepository {
     async save(value: PausedMatch): Promise<void> {
         const raw = PausedMatchMap.toPersistance(value);
 
-        const exist = await PausedMatchModel.findOne({
-            where: { matchId: raw.matchId }
-        })
+        const exist = await models.PausedMatchModel.findOne({
+            where: { matchId: raw.matchId },
+        });
 
         if (!!exist == true) {
-            await PausedMatchModel.update(raw, { where: { matchId: raw.matchId } })
+            await models.PausedMatchModel.update(raw, {
+                where: { matchId: raw.matchId },
+            });
         } else {
-            const instance = await PausedMatchModel.create(raw);
-            await instance.save()
+            const instance = await models.PausedMatchModel.create(raw);
+            await instance.save();
         }
     }
 
     async getByMatchId(matchId: string): Promise<PausedMatch> {
-        const rawMatch = await PausedMatchModel.findOne({
-            where: { matchId }
-        })
+        const rawMatch = await models.PausedMatchModel.findOne({
+            where: { matchId },
+        });
 
         if (!!rawMatch == false) {
             throw new Error("Partido no encontrado");
@@ -61,9 +63,8 @@ export class SequelizePausedMatchRepository implements PausedMatchRepository {
             setsLost: rawMatch!.setsLost,
             matchWon: rawMatch!.matchWon,
             matchFinish: rawMatch!.matchFinish,
-        })
+        });
 
         return match!;
     }
-
 }

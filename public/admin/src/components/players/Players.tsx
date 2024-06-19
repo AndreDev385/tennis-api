@@ -17,7 +17,7 @@ import {
   Table,
 } from "react-bootstrap";
 import { useEffect, useState } from "react";
-import { IClub, IUserPlayer } from "../../interfaces/interfaces";
+import { IClub, IUserPlayer } from "../../types/interfaces";
 import { useNavigate } from "react-router";
 import "./Players.scss";
 import { VITE_SERVER_URL } from "../../env/env.prod";

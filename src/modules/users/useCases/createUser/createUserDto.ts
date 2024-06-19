@@ -27,6 +27,7 @@ export interface CreateUserDto {
     lastName: string;
     email: string;
     password: string;
+    ci?: string;
     clubCode?: string;
     canTrack?: boolean;
 }

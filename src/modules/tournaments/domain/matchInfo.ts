@@ -10,7 +10,7 @@ type MatchInfoProps = {
     setsWon: number;
     setsLost: number;
     matchFinish: boolean;
-    superTiebreak?: boolean | null;
+    superTieBreak?: boolean | null;
     initialTeam?: number | null;
     doubleServeFlow?: DoubleServeFlow | null;
     singleServeFlow?: SingleServeFlow | null;
@@ -37,8 +37,8 @@ export class MatchInfo extends ValueObject<MatchInfoProps> {
         return this.props.matchFinish;
     }
 
-    get superTiebreak(): boolean | null {
-        return this.props.superTiebreak!;
+    get superTieBreak(): boolean | null {
+        return this.props.superTieBreak!;
     }
 
     get initialTeam(): number | null {
@@ -61,10 +61,13 @@ export class MatchInfo extends ValueObject<MatchInfoProps> {
         return Result.ok<MatchInfo>(
             new MatchInfo({
                 ...props,
-                superTiebreak: props.superTiebreak ?? null,
+                superTieBreak: props.superTieBreak ?? null,
                 initialTeam: props.initialTeam ?? null,
                 doubleServeFlow: props.doubleServeFlow ?? null,
                 singleServeFlow: props.singleServeFlow ?? null,
+                currentGame: props.currentGame ?? null,
+                setsWon: props.setsWon ?? 0,
+                setsLost: props.setsLost ?? 0,
             })
         );
     }

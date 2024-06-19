@@ -8,8 +8,15 @@ export const dispatchEventsCallback = (model: any, primaryKeyField: string) => {
 };
 
 (async function createHooksForAggregateRoots() {
-    const { UserModel, MatchModel, ClashModel, SeasonModel, PlayerModel } =
-        models;
+    const {
+        UserModel,
+        MatchModel,
+        ClashModel,
+        SeasonModel,
+        PlayerModel,
+        TournamentMatchModel,
+        ContestClashModel,
+    } = models;
 
     MatchModel.addHook("afterCreate", (m: any) =>
         dispatchEventsCallback(m, "matchId")
@@ -109,6 +116,44 @@ export const dispatchEventsCallback = (model: any, primaryKeyField: string) => {
     );
     PlayerModel.addHook("afterBulkUpdate", (m: any) =>
         dispatchEventsCallback(m.attributes, "playerId")
+    );
+
+    TournamentMatchModel.addHook("afterCreate", (m: any) =>
+        dispatchEventsCallback(m, "matchId")
+    );
+    TournamentMatchModel.addHook("afterDestroy", (m: any) =>
+        dispatchEventsCallback(m, "matchId")
+    );
+    TournamentMatchModel.addHook("afterUpdate", (m: any) =>
+        dispatchEventsCallback(m, "matchId")
+    );
+    TournamentMatchModel.addHook("afterSave", (m: any) =>
+        dispatchEventsCallback(m, "matchId")
+    );
+    TournamentMatchModel.addHook("afterUpsert", (m: any) =>
+        dispatchEventsCallback(m, "matchId")
+    );
+    TournamentMatchModel.addHook("afterBulkUpdate", (m: any) =>
+        dispatchEventsCallback(m.attributes, "matchId")
+    );
+
+    ContestClashModel.addHook("afterCreate", (m: any) =>
+        dispatchEventsCallback(m, "contestClashId")
+    );
+    ContestClashModel.addHook("afterDestroy", (m: any) =>
+        dispatchEventsCallback(m, "contestClashId")
+    );
+    ContestClashModel.addHook("afterUpdate", (m: any) =>
+        dispatchEventsCallback(m, "contestClashId")
+    );
+    ContestClashModel.addHook("afterSave", (m: any) =>
+        dispatchEventsCallback(m, "contestClashId")
+    );
+    ContestClashModel.addHook("afterUpsert", (m: any) =>
+        dispatchEventsCallback(m, "contestClashId")
+    );
+    ContestClashModel.addHook("afterBulkUpdate", (m: any) =>
+        dispatchEventsCallback(m.attributes, "contestClashId")
     );
 
     console.log("[Hooks]: Sequelize hooks setup.");

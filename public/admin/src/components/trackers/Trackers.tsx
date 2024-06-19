@@ -16,7 +16,7 @@ import {
   Table,
 } from "react-bootstrap";
 import CreateTrackers from "./createTrackers/CreateTrackers";
-import { IUser } from "../../interfaces/interfaces";
+import { IUser } from "../../types/interfaces";
 import "./Trackers.scss";
 import "react-toastify/dist/ReactToastify.css";
 import { VITE_SERVER_URL } from "../../env/env.prod";

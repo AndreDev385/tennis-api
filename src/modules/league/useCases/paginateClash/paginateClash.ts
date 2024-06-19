@@ -1,9 +1,10 @@
 import { AppError } from "../../../../shared/core/AppError";
 import { Either, Result, left, right } from "../../../../shared/core/Result";
 import { UseCase } from "../../../../shared/core/UseCase";
+import { PaginateQuery } from "../../../../shared/infra/database/sequelize/queries/sequelizeQueries";
 import { Clash } from "../../domain/clubClash";
 import { ClashMap } from "../../mappers/clashMap";
-import { ClashQuery, ClashRepository, PaginateQuery } from "../../repositories/clashRepo";
+import { ClashQuery, ClashRepository } from "../../repositories/clashRepo";
 
 type Response = Either<AppError.UnexpectedError, Result<any>>;
 
@@ -29,9 +30,9 @@ export class PaginateClash implements UseCase<any, Response> {
 
             const result = await this.clashRepo.paginate(query, { offset: request.offset, limit: request.limit });
 
-            result.rows = result.rows.map((r: Clash) => ClashMap.toDto(r));
+            const dtos = result.rows.map((r: Clash) => ClashMap.toDto(r));
 
-            return right(Result.ok(result));
+            return right(Result.ok({ rows: dtos, count: result.count }));
         } catch (error) {
             return left(new AppError.UnexpectedError(error));
         }

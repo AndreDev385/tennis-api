@@ -1,3 +1,4 @@
+import { Guard } from "../../../shared/core/Guard";
 import { Result } from "../../../shared/core/Result";
 import { Entity } from "../../../shared/domain/Entity";
 import { UniqueEntityID } from "../../../shared/domain/UniqueEntityID";
@@ -9,6 +10,10 @@ type TournamentProps = {
     name: string;
     rules: TournamentRules;
     status: TournamentStatus;
+    startDate: Date;
+    endDate: Date;
+    image: string;
+    address: string;
     createdAt?: Date;
     updatedAt?: Date;
 };
@@ -30,6 +35,22 @@ export class Tournament extends Entity<TournamentProps> {
         return this.props.status;
     }
 
+    get startDate() {
+        return this.props.startDate;
+    }
+
+    get endDate() {
+        return this.props.endDate;
+    }
+
+    get image() {
+        return this.props.image;
+    }
+
+    get address() {
+        return this.props.address;
+    }
+
     get createdAt(): Date {
         return this.props.createdAt!;
     }
@@ -42,11 +63,32 @@ export class Tournament extends Entity<TournamentProps> {
         super(props, id);
     }
 
-    public static create(props: TournamentProps, id?: UniqueEntityID) {
-        return Result.ok<Tournament>(new Tournament({
-            ...props,
-            createdAt: props.createdAt ?? new Date(),
-            updatedAt: props.updatedAt ?? new Date(),
-        }, id));
+    public static create(
+        props: TournamentProps,
+        id?: UniqueEntityID
+    ): Result<Tournament> {
+        const guard = Guard.againstNullOrUndefinedBulk([
+            { argument: props.name, argumentName: "nombre" },
+            { argument: props.rules, argumentName: "reglas" },
+            { argument: props.status, argumentName: "estado" },
+            { argument: props.startDate, argumentName: "fecha de inicio" },
+            { argument: props.endDate, argumentName: "fecha de cierre" },
+            { argument: props.image, argumentName: "imagen" },
+        ]);
+
+        if (guard.isFailure) {
+            return Result.fail(guard.getErrorValue());
+        }
+
+        return Result.ok<Tournament>(
+            new Tournament(
+                {
+                    ...props,
+                    createdAt: props.createdAt ?? new Date(),
+                    updatedAt: props.updatedAt ?? new Date(),
+                },
+                id
+            )
+        );
     }
 }

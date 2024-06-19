@@ -13,7 +13,29 @@ export class NewTournamentController extends BaseController {
     }
 
     async executeImpl(req: Request, res: Response) {
-        const result = await this.usecase.execute(req.body);
+        const {
+            name,
+            gamesPerSet,
+            setsQuantity,
+            matchesPerClash,
+            goldenPoint,
+            startDate,
+            endDate,
+            address,
+
+        } = req.body;
+
+        const result = await this.usecase.execute({
+            name,
+            goldenPoint: JSON.parse(goldenPoint),
+            gamesPerSet: Number(gamesPerSet),
+            setsQuantity: Number(setsQuantity),
+            matchesPerClash: Number(matchesPerClash) as any,
+            address,
+            startDate,
+            endDate,
+            file: req.file,
+        });
 
         if (result.isLeft()) {
             const error = result.value;

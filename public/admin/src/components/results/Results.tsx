@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ICategory, IClash, IClub, IJourney, ISeason } from '../../interfaces/interfaces';
+import { ICategory, IClash, IClub, IJourney, ISeason } from '../../types/interfaces';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleNotch, faPoll, faTableTennis } from '@fortawesome/free-solid-svg-icons';
 import { Button, Card, Form, Table } from 'react-bootstrap';
@@ -121,7 +121,7 @@ const Results = () => {
       if (response.status === 200) {
         setClubs(data);
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   // filter

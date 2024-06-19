@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Button, Card, Form, Table } from "react-bootstrap";
 import { useParams } from "react-router";
 import "./PlayerStats.scss";
-import { ISeason, ISetStatsIndiv } from "../../../interfaces/interfaces";
+import { ISeason, ISetStatsIndiv } from "../../../types/interfaces";
 import { VITE_SERVER_URL } from "../../../env/env.prod";
 import { mapToUrlString } from "../../../utils/mapToUrlString";
 import { getSeasonList } from "../../../services/season/getSeasonList";

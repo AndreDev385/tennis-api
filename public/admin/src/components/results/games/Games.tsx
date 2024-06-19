@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCircle, faCircleNotch, faMapMarkerAlt, faPoll, faTableTennis } from "@fortawesome/free-solid-svg-icons"
 import { Button, Card, Table } from "react-bootstrap"
 import { useNavigate, useParams } from "react-router"
-import { IMatch } from "../../../interfaces/interfaces"
+import { IMatch } from "../../../types/interfaces"
 import './Games.scss'
 import { VITE_SERVER_URL } from "../../../env/env.prod"
 
@@ -14,7 +14,7 @@ const Games = () => {
   const { id } = useParams()
   const requestOptions = {
     method: 'GET',
-    headers: { 
+    headers: {
       'Content-Type': 'application/json',
       'Authorization': token
     }
@@ -31,17 +31,17 @@ const Games = () => {
     const params = {
       ...(id && { clashId: id })
     };
-    
+
     const url = `${VITE_SERVER_URL}/api/v1/match?` + new URLSearchParams(params)
 
-    try{
+    try {
       const response = await fetch(url, requestOptions)
       const data = await response.json()
 
-      if (response.status === 200){
+      if (response.status === 200) {
         setGames(data)
         setLoading(false)
-      } 
+      }
     } catch (error) {
       console.error(error)
     }
@@ -51,31 +51,31 @@ const Games = () => {
     navigate(`match/${matchId}`)
   }
 
-  const gamesTable = games.map( (item) => {
+  const gamesTable = games.map((item) => {
     return (
       <tr key={item.matchId}>
         <td className="text-center players">
-          <p className={item.matchWon? "bold": ""}>
-            {item.player1.name} {item.mode === "double"? '/': ' '} {item.player3?.name}
+          <p className={item.matchWon ? "bold" : ""}>
+            {item.player1.name} {item.mode === "double" ? '/' : ' '} {item.player3?.name}
           </p>
-          <p className={item.matchWon? "": "bold"}>
-            {item.player2} {item.mode === "double"? '/': ' '} {item.player4}
+          <p className={item.matchWon ? "" : "bold"}>
+            {item.player2} {item.mode === "double" ? '/' : ' '} {item.player4}
           </p>
         </td>
         <td>
-          {item.sets.map( (set, index) => {
+          {item.sets.map((set, index) => {
             return (
-            <span key={index} className={index === 0? '': "set"}>
-              {set.myGames}
-            </span>
+              <span key={index} className={index === 0 ? '' : "set"}>
+                {set.myGames}
+              </span>
             )
           })}
-          {item.isFinish && item.matchWon && <FontAwesomeIcon className="won" icon={faCircle} />}<br/>
-          {item.sets.map( (set, index) => {
+          {item.isFinish && item.matchWon && <FontAwesomeIcon className="won" icon={faCircle} />}<br />
+          {item.sets.map((set, index) => {
             return (
-            <span key={index+10} className={index === 0? '': "set"}>
-              {set.rivalGames}
-            </span>
+              <span key={index + 10} className={index === 0 ? '' : "set"}>
+                {set.rivalGames}
+              </span>
             )
           })}
           {item.isFinish && !item.matchWon && <FontAwesomeIcon className="won" icon={faCircle} />}
@@ -85,7 +85,7 @@ const Games = () => {
         </td>
         <td className="text-center">
           <Button variant="primary" onClick={() => goToStats(item.matchId)}>
-            <FontAwesomeIcon icon={faPoll}/>
+            <FontAwesomeIcon icon={faPoll} />
             Ver stats
           </Button>
         </td>
@@ -98,7 +98,7 @@ const Games = () => {
       <div>
         <h1>
           <FontAwesomeIcon icon={faTableTennis} />
-          Partidos 
+          Partidos
         </h1>
         {games && games.length > 0 &&
           <h6>
@@ -129,14 +129,14 @@ const Games = () => {
 
           <tbody>
             {games && gamesTable}
-            {loading && 
+            {loading &&
               <tr className="text-center mt-3" >
                 <td>
                   <FontAwesomeIcon className='center mt-5' icon={faCircleNotch} spin />
                 </td>
               </tr>
             }
-            {games.length === 0 && !loading && 
+            {games.length === 0 && !loading &&
               <tr className="text-center mt-3" >
                 <td>
                   No hay resultados

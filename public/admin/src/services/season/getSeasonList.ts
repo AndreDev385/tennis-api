@@ -1,5 +1,5 @@
 import { VITE_SERVER_URL } from "../../env/env.prod";
-import { ISeason } from "../../interfaces/interfaces";
+import { ISeason } from "../../types/interfaces";
 import { Result } from "../../shared/Result";
 import { mapToUrlString } from "../../utils/mapToUrlString";
 

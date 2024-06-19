@@ -2,7 +2,7 @@ import { faAd, faFilter, faPlus, faTrash } from '@fortawesome/free-solid-svg-ico
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 import { Button, Card, Form, Table } from 'react-bootstrap';
-import { IAds, IClub } from '../../interfaces/interfaces';
+import { IAds, IClub } from '../../types/interfaces';
 import ModalQuestion from '../modalQuestion/ModalQuestion';
 import CreateAds from './createAds/CreateAds';
 import { toast } from 'react-toastify';
@@ -32,14 +32,14 @@ const Ads = () => {
       headers: { 'Content-Type': 'application/json' }
     };
 
-    try{
+    try {
       const response = await fetch(url, requestOptions)
-      
+
       const data = await response.json()
 
-      if (response.status === 200){
+      if (response.status === 200) {
         setClubs(data)
-      } 
+      }
     } catch (error) {
       console.error(error)
     }
@@ -52,20 +52,20 @@ const Ads = () => {
       headers: { 'Content-Type': 'application/json' }
     };
 
-    try{
+    try {
       const response = await fetch(url, requestOptions)
-      
+
       const data = await response.json()
-      if (response.status === 200){
+      if (response.status === 200) {
         setAds(data)
         setFilteredAds(data)
-      } 
+      }
     } catch (error) {
-        console.error(error)
+      console.error(error)
     }
   }
 
-  const handleChangeClub = (event: React.ChangeEvent<HTMLSelectElement>):void => {
+  const handleChangeClub = (event: React.ChangeEvent<HTMLSelectElement>): void => {
     const value = event.target.value;
     const result = ads.filter(item => item.clubId === value);
     setClubSelected(value)
@@ -91,32 +91,32 @@ const Ads = () => {
   const deleteAd = async () => {
     const url = `${VITE_SERVER_URL}/api/v1/ads/${id}`
     const requestOptions = {
-        method: 'DELETE',
-        headers: { 
-            'Content-Type': 'application/json',
-            'Authorization': token
-        }
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': token
+      }
     };
 
-    try{
+    try {
       const response = await fetch(url, requestOptions);
-      
+
       const data = await response.json();
 
-      if (response.status === 200){
-        if(data.message) toast.success(data.message);
+      if (response.status === 200) {
+        if (data.message) toast.success(data.message);
         setShowModalDelete(false)
         getAds();
         setClubSelected('');
       } else {
-        if(data.message) toast.error(data.message);
+        if (data.message) toast.error(data.message);
       }
     } catch (error) {
       console.error(error)
     }
   }
 
-  const adsTable = filteredAds.map( (item) => {
+  const adsTable = filteredAds.map((item) => {
     return (
       <tr key={item.adId}>
         <td>
@@ -125,7 +125,7 @@ const Ads = () => {
           </a>
         </td>
         <td className='text-center'>
-          {clubs.filter(club => club.clubId === item.clubId)[0]? clubs.filter(club => club.clubId === item.clubId)[0].name: "-"}
+          {clubs.filter(club => club.clubId === item.clubId)[0] ? clubs.filter(club => club.clubId === item.clubId)[0].name : "-"}
         </td>
         <td className='text-center'>
           <img src={item.image} alt="ad" />
@@ -164,7 +164,7 @@ const Ads = () => {
             <Form.Select value={clubSelected} onChange={handleChangeClub}>
               <option disabled value="">Selecciona un club</option>
               {clubs.map(item => {
-                return <option key={item.clubId}  value={item.clubId}>{item.name}</option>
+                return <option key={item.clubId} value={item.clubId}>{item.name}</option>
               })}
             </Form.Select>
 
@@ -198,14 +198,14 @@ const Ads = () => {
         </Card>
       </div>
 
-      {showModalDelete && 
+      {showModalDelete &&
         <ModalQuestion
           title="Eliminar publicidad"
           question="¿Estás seguro que deseas eliminarla? Esta acción no se puede deshacer."
           dismiss={() => setShowModalDelete(false)}
           accept={deleteAd}
         />
-      } 
+      }
 
       {showModalCreate && <CreateAds clubs={clubs} dismiss={handleDismissCreate} />}
     </>

@@ -1,7 +1,8 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { ToastContainer } from 'react-toastify'
+
 import Login from './components/login/Login'
 import ForgotPassword from './components/forgotPassword/ForgotPassword'
-import Menu from './layouts/menu/Menu'
 import Clubs from './components/clubs/Clubs'
 import Seasons from './components/seasons/Seasons'
 import News from './components/news/News'
@@ -15,13 +16,16 @@ import Players from './components/players/Players'
 import Ranking from './components/ranking/Ranking'
 import Stats from './components/teams/stats/Stats'
 import PlayerStats from './components/players/playerStats/PlayerStats'
-
-import { ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css';
 import Games from './components/results/games/Games'
 import GameStats from './components/results/stats/GameStats'
 import { Notifications } from './components/notifications/Notifications'
-import { ImportDb } from './components/importDb'
+
+import { NavbarLayout } from './layouts/navbar/Navbar'
+import { HomeSideBar } from './layouts/sideBars/homeSideBar'
+import { UsersTablePage } from './components/users'
+import { LeagueSideBar } from './layouts/sideBars/leagueSideBar'
+import { TournamentsSideBar } from './layouts/sideBars/tournamentSideBar'
+import { TournamentsPage } from './components/tournaments'
 
 const router = createBrowserRouter([
     {
@@ -37,56 +41,80 @@ const router = createBrowserRouter([
         element: <ForgotPassword />
     },
     {
-        element: <Menu />,
+        path: "dashboard",
+        element: <NavbarLayout />, // <Menu />,
         children: [
             {
-                path: "/clubs",
-                element: <Clubs />
+                path: "home",
+                element: <HomeSideBar />,
+                children: [
+                    {
+                        path: "trackers",
+                        element: <Trackers />
+                    },
+                    {
+                        path: "admins",
+                        element: <Admins />
+                    },
+                    {
+                        path: "users",
+                        element: <UsersTablePage />
+                    },
+                ]
             },
             {
-                path: "/seasons",
-                element: <Seasons />
+                path: "league",
+                element: <LeagueSideBar />,
+                children: [
+
+                    {
+                        path: "clubs",
+                        element: <Clubs />
+                    },
+                    {
+                        path: "seasons",
+                        element: <Seasons />
+                    },
+                    {
+                        path: "news",
+                        element: <News />
+                    },
+                    {
+                        path: "ads",
+                        element: <Ads />
+                    },
+                    {
+                        path: "teams",
+                        element: <Teams />
+                    },
+                    {
+                        path: "results",
+                        element: <Results />
+                    },
+                    {
+                        path: "players",
+                        element: <Players />
+                    },
+                    {
+                        path: 'notifications',
+                        element: <Notifications />
+                    },
+                    {
+                        path: 'ranking',
+                        element: <Ranking />
+                    },
+                ]
             },
             {
-                path: "/news",
-                element: <News />
-            },
-            {
-                path: "/ads",
-                element: <Ads />
-            },
-            {
-                path: "/trackers",
-                element: <Trackers />
-            },
-            {
-                path: "/teams",
-                element: <Teams />
-            },
-            {
-                path: "/results",
-                element: <Results />
-            },
-            {
-                path: "/players",
-                element: <Players />
-            },
-            {
-                path: "/admins",
-                element: <Admins />
-            },
-            {
-                path: '/ranking',
-                element: <Ranking />
-            },
-            {
-                path: '/notifications',
-                element: <Notifications />
-            },
-            {
-                path: '/database',
-                element: <ImportDb />
-            },
+                path: "tournaments",
+                element: <TournamentsSideBar />,
+                children: [
+                    {
+                        path: 'list',
+                        element: <TournamentsPage />
+                    },
+                ]
+            }
         ],
     },
     {

@@ -56,8 +56,6 @@ async function notificatePlayers({
 
         const accessToken = await getAccessToken();
 
-        console.log(`access_token: ${accessToken}\n`);
-
         for (const token of tokens) {
             const content = {
                 message: {
@@ -84,10 +82,7 @@ async function notificatePlayers({
 
             const data = await response.json();
 
-            console.log(response.status, data);
-
             if (response.status != 200) {
-                console.log('details', data?.error?.details)
                 results.fails += 1;
             } else {
                 results.successes += 1;

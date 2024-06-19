@@ -1,6 +1,7 @@
 import { AppError } from "../../../../shared/core/AppError";
 import { Either, Result, left, right } from "../../../../shared/core/Result";
 import { UseCase } from "../../../../shared/core/UseCase";
+import { CI } from "../../domain/ci";
 import { UserEmail } from "../../domain/email";
 import { Name } from "../../domain/names";
 import { User } from "../../domain/user";
@@ -25,10 +26,11 @@ export class EditUser implements UseCase<EditUserRequest, Response> {
     async execute(request: EditUserRequest): Promise<Response> {
         // user already in db
         let userToEdit: User;
+        let email: UserEmail | null = null;
 
         try {
             try {
-                userToEdit = await this.userRepo.getUserByUserId(request.userId);
+                userToEdit = await this.userRepo.get({ userId: request.userId });
             } catch (error) {
                 return left(new AppError.NotFoundError(error));
             }
@@ -41,12 +43,10 @@ export class EditUser implements UseCase<EditUserRequest, Response> {
                 value: request.lastName,
             });
 
-            const emailOrError = UserEmail.create(request.email);
 
             const result = Result.combine([
                 firstNameOrError,
                 lastNameOrError,
-                emailOrError,
             ]);
 
             if (result.isFailure) {
@@ -55,20 +55,40 @@ export class EditUser implements UseCase<EditUserRequest, Response> {
 
             const firstName = firstNameOrError.getValue();
             const lastName = lastNameOrError.getValue();
-            const email = emailOrError.getValue();
 
-            if (!email.equals(userToEdit.email)) {
-                try {
-                    await this.userRepo.getUserByEmail(email);
-                    return left(
-                        new CreateUserErrors.EmailAlreadyExistsError(
-                            email.value
-                        )
-                    );
-                } catch (error) { }
+            if (request.email) {
+
+                const emailOrError = UserEmail.create(request.email);
+                if (emailOrError.isFailure) {
+                    return left(Result.fail<string>(result.getErrorValue()));
+                }
+                email = emailOrError.getValue();
+
+                if (userToEdit.email != null && !email.equals(userToEdit.email)) {
+                    try {
+                        await this.userRepo.getUserByEmail(email);
+                        return left(
+                            new CreateUserErrors.EmailAlreadyExistsError(
+                                email.value
+                            )
+                        );
+                    } catch (error) { }
+                }
             }
 
-            userToEdit.editUser(firstName, lastName, email);
+            let ci: CI | null = null;
+
+            if (request.ci) {
+                const maybeCI = CI.create({ value: request.ci });
+
+                if (maybeCI.isFailure) {
+                    return left(Result.fail<string>(`${maybeCI.getErrorValue()}`));
+                }
+
+                ci = maybeCI.getValue();
+            }
+
+            userToEdit.editUser(firstName, lastName, email, ci);
 
             await this.userRepo.save(userToEdit);
 

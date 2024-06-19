@@ -1,0 +1,62 @@
+.dashboard-container {
+    display: grid;
+    grid-template-columns: 20% 80%;
+
+    .menu-wrap {
+        height: 100vh;
+
+
+        .wrap-option,
+        .wrap-logout {
+            padding: .6rem;
+            border-radius: 1rem;
+            cursor: pointer;
+            margin-left: 1rem;
+            margin-bottom: .5rem;
+
+            span {
+                margin-left: .5rem;
+            }
+
+            svg {
+                width: 2rem;
+                font-size: 1.2rem;
+            }
+        }
+
+        .wrap-option {
+            transition-property: background-color;
+            transition-timing-function: ease-in;
+
+            &:hover {
+                background-color: #fff3c2;
+
+                svg {
+                    color: #F5CD2E;
+                }
+
+            }
+
+            svg {
+                transition-property: color;
+                transition-timing-function: ease-in;
+                color: #bdbdbd;
+            }
+        }
+
+        .menu-selected {
+            background-color: #fff3c2;
+
+            svg {
+                color: #F5CD2E;
+            }
+        }
+
+        .wrap-logout {
+            &:hover {
+                background-color: #edededa1;
+            }
+        }
+
+    }
+}
