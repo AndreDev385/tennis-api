@@ -6,6 +6,7 @@ import { paginateTournamentsController } from "../../../queries/paginateTourname
 import { listTournamentAdsCtrl } from "../../../queries/listTournamentAds";
 import { deleteTournamentAdCtrl } from "../../../usecase/deleteTournamentAd";
 import { uploadTournamentAdCtrl } from "../../../usecase/uploadTournamentAds";
+import { deleteTournamentCtrl } from "../../../usecase/deleteTournament";
 
 const tournamentRouter = express.Router();
 
@@ -36,5 +37,11 @@ tournamentRouter.delete(
     middleware.adminAuthenticated() as any,
     (req, res) => deleteTournamentAdCtrl.execute(req, res)
 );
+
+tournamentRouter.delete(
+    "/:tournamentId",
+    middleware.adminAuthenticated() as any,
+    (req, res) => deleteTournamentCtrl.execute(req, res)
+)
 
 export { tournamentRouter };

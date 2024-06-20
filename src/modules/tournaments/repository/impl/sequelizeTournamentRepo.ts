@@ -9,6 +9,11 @@ import { TournamentMap } from "../../mapper/TournamentMap";
 import { TournamentQuery, TournamentRepository } from "../tournamentRepo";
 
 export class SequelizeTournamentRepository implements TournamentRepository {
+
+    async delete(tournamentId: string): Promise<void> {
+        await models.TournamentModel.destroy({ where: { tournamentId } })
+    }
+
     private async exists(tournamentId: string) {
         const exist = await models.TournamentModel.findOne({
             where: { tournamentId },
