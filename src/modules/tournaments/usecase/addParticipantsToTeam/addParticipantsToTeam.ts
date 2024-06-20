@@ -86,11 +86,11 @@ export class AddParticipantsToTeam implements UseCase<Req, Res> {
                     ci: mustCI.getValue(),
                 });
                 /* Build user object */
-                let user: User = mustUser.getValue();
+                let newUser: User = mustUser.getValue();
 
                 /* Build participant object */
-                let participant: Participant = Participant.create({
-                    user,
+                let newParticipant: Participant = Participant.create({
+                    user: newUser,
                 }).getValue();
 
                 let userAlreadyExist: User;
@@ -107,16 +107,17 @@ export class AddParticipantsToTeam implements UseCase<Req, Res> {
                         participants.push(participantAlreadyExist);
                     } catch (_) {
                         // Add participant to save
+                        let participant = Participant.create({ user: userAlreadyExist }).getValue();
                         newRecords.push({ participant });
                         participants.push(participant);
                     }
                 } catch (_) {
                     // Add user and participant to save
                     newRecords.push({
-                        user,
-                        participant,
+                        user: newUser,
+                        participant: newParticipant,
                     });
-                    participants.push(participant);
+                    participants.push(newParticipant);
                 }
             }
 
