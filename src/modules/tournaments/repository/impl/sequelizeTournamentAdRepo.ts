@@ -9,6 +9,7 @@ export class SequelizeTournamentAdRepository implements TournamentAdRepository {
     async save(ad: TournamentAd): Promise<Result<void>> {
         try {
             const instance = await models.TournamentAdModel.create({
+                id: new UniqueEntityID().toString(),
                 image: ad.image,
                 link: ad.link,
                 tournamentId: ad.tournamentId.id.toString(),
@@ -18,6 +19,7 @@ export class SequelizeTournamentAdRepository implements TournamentAdRepository {
 
             return Result.ok();
         } catch (error) {
+            console.log(error);
             return Result.fail("Ha ocurrido un error al guardar el ad");
         }
     }

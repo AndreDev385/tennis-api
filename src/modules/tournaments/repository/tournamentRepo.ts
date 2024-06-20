@@ -18,4 +18,5 @@ export type TournamentRepository = {
     ): Promise<PaginateResponse<TournamentDto>>;
     save(tournament: Tournament): Promise<void>;
     get(q: TournamentQuery): Promise<Tournament>;
+    delete(tournamentId: string): Promise<void>
 };
