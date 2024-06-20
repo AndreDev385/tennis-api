@@ -25,7 +25,7 @@ export class ListTournamentAds implements UseCase<Req, Res> {
                 result.map((a) => ({
                     link: a.link,
                     image: a.image,
-                    tournamentId: a.tournamentId,
+                    tournamentId: a.tournamentId.id.toString(),
                 }))
             );
         } catch (error) {

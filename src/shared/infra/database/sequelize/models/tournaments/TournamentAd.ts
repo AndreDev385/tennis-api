@@ -5,6 +5,7 @@ const sequelize: Sequelize = config.connection;
 
 export interface TournamentAddData
     extends Model<InferAttributes<TournamentAddData>> {
+    id: string;
     tournamentId: string;
     link: string | null;
     image: string;
@@ -13,11 +14,14 @@ export interface TournamentAddData
 export const TournamentAdModel = sequelize.define<TournamentAddData>(
     "tournamentAd",
     {
-        tournamentId: {
+        id: {
             type: DataTypes.UUID,
             defaultValue: DataTypes.UUIDV4,
-            allowNull: false,
             primaryKey: true,
+        },
+        tournamentId: {
+            type: DataTypes.UUID,
+            allowNull: false,
         },
         image: {
             type: DataTypes.STRING,

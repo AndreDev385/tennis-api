@@ -1,8 +1,10 @@
 import { AppError } from "../../../../shared/core/AppError";
 import { Either, Result, left, right } from "../../../../shared/core/Result";
 import { UseCase } from "../../../../shared/core/UseCase";
+import { UniqueEntityID } from "../../../../shared/domain/UniqueEntityID";
 import { UploadImageServices } from "../../../league/services/uploadImageService";
 import { TournamentAd } from "../../domain/tournamentAd";
+import { TournamentId } from "../../domain/tournamentId";
 import { TournamentAdRepository } from "../../repository/tournamentAdRepo";
 
 type Res = Either<AppError.UnexpectedError | Result<string>, Result<void>>;
@@ -35,7 +37,7 @@ export class UploadTournamentAd implements UseCase<any, Res> {
             const adOrError = TournamentAd.create({
                 image: imgUrl,
                 link: request.link,
-                tournamentId: request.tournamentId,
+                tournamentId: TournamentId.create(new UniqueEntityID(request.tournamentId)).getValue(),
             });
 
             if (adOrError.isFailure) {
@@ -46,7 +48,15 @@ export class UploadTournamentAd implements UseCase<any, Res> {
 
             const ad = adOrError.getValue();
 
-            await this.adRepo.save(ad);
+            const result = await this.adRepo.save(ad);
+
+            if (result.isFailure) {
+                return left(
+                    Result.fail<string>(
+                        "Ha ocurrido un error al guardar el archivo"
+                    )
+                );
+            }
 
             return right(Result.ok<void>());
         } catch (error) {
