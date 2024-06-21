@@ -24,6 +24,10 @@ export class SequlizeContestRepository implements ContestRepository {
         this.teamRepo = teamRepo;
     }
 
+    async delete(contestId: string): Promise<void> {
+        await models.ContestModel.destroy({ where: { contestId } });
+    }
+
     async list(q: ContestQuery): Promise<ContestDto[]> {
         const contests = await models.ContestModel.findAll({ where: q });
 

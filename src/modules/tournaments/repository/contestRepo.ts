@@ -7,6 +7,7 @@ export type ContestQuery = {
 };
 
 export type ContestRepository = {
+    delete(contestId: string): Promise<void>;
     list(q: ContestQuery): Promise<ContestDto[]>;
     get(q: ContestQuery): Promise<Contest>;
     save(contest: Contest): Promise<void>;
