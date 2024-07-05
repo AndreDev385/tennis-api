@@ -25,6 +25,9 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "@mantine/core": "^7.11.1",
+        "@mantine/dates": "^7.11.1",
+        "@mantine/hooks": "^7.11.1",
         "@types/adm-zip": "^0.5.5",
         "adm-zip": "^0.5.12",
         "bcrypt": "^5.1.0",

@@ -1,0 +1,28 @@
+.content-container {
+  .title-wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    h1 {
+      margin: 2rem;
+    }
+
+    button {
+      margin-right: 5rem;
+    }
+  }
+
+  button {
+    color: #ffffff;
+
+    svg {
+      margin-right: 0.5rem;
+    }
+  }
+
+  img {
+    width: 6rem;
+    border-radius: 0.5rem;
+  }
+}
