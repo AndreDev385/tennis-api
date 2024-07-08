@@ -10,10 +10,6 @@ export interface HomeAdData extends Model<InferAttributes<HomeAdData>> {
 }
 
 export const HomeAdModel = sequelize.define<HomeAdData>("homeAd", {
-	id: {
-		type: DataTypes.INTEGER,
-		primaryKey: true,
-	},
 	image: {
 		type: DataTypes.STRING,
 		allowNull: false,
