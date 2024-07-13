@@ -29,6 +29,8 @@ import { TournamentsPage } from "./components/tournaments";
 import { TournamentDetail } from "./components/tournaments/detail";
 import { CreateTournamentForm } from "./components/tournaments/createTournament";
 import { MantineProvider } from "@mantine/core";
+import { CreateContestForm } from "./components/tournaments/detail/createContest";
+import { ContestDetail } from "./components/tournaments/contest";
 
 const router = createBrowserRouter([
 	{
@@ -149,6 +151,14 @@ const router = createBrowserRouter([
 					{
 						path: "create",
 						element: <CreateTournamentForm />,
+					},
+					{
+						path: "contest/create",
+						element: <CreateContestForm />,
+					},
+					{
+						path: "contest/:contestId",
+						element: <ContestDetail />,
 					},
 					{
 						path: ":tournamentId",

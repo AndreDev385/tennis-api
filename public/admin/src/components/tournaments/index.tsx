@@ -14,6 +14,9 @@ import type { Tournament } from "../../types/tournament";
 import { paginateTournaments } from "../../services/tournaments/listTournaments";
 import { formatDate } from "../../utils/formatDate";
 import { useNavigate } from "react-router";
+import { deleteTournament } from "../../services/tournaments/deleteTournament";
+import { toast } from "react-toastify";
+import ModalQuestion from "../modalQuestion/ModalQuestion";
 
 export function TournamentsPage() {
 	const navigate = useNavigate();
@@ -26,6 +29,12 @@ export function TournamentsPage() {
 	});
 
 	const [tournaments, setTournaments] = useState<Tournament[]>([]);
+	const [selectedTournament, setSelectedTournament] =
+		useState<Tournament | null>(null);
+	const [deleteModal, setDeleteModal] = useState({
+		isVisible: false,
+	});
+	const token: string = localStorage.getItem("authorization") || "";
 
 	const handleListTournaments = async () => {
 		setState((prev) => ({
@@ -57,6 +66,30 @@ export function TournamentsPage() {
 			count: response.count,
 		}));
 		setTournaments(response.rows);
+	};
+
+	const handleDeleteTournament = async () => {
+		if (selectedTournament == null) {
+			return;
+		}
+
+		setState((prev) => ({ ...prev, loading: true }));
+
+		const result = await deleteTournament(
+			selectedTournament.tournamentId,
+			token,
+		);
+
+		setSelectedTournament(null);
+		setState((prev) => ({ ...prev, loading: false }));
+
+		if (result.isFailure) {
+			toast.error(result.getErrorValue());
+			return;
+		}
+
+		toast.success(result.getValue);
+		handleListTournaments();
 	};
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
@@ -94,8 +127,15 @@ export function TournamentsPage() {
 							>
 								Ver
 							</Dropdown.Item>
-							<Dropdown.Item>Editar</Dropdown.Item>
-							<Dropdown.Item>Eliminar</Dropdown.Item>
+							{/*<Dropdown.Item>Editar</Dropdown.Item>*/}
+							<Dropdown.Item
+								onMouseDown={() => {
+									setSelectedTournament(t);
+									setDeleteModal({ isVisible: true });
+								}}
+							>
+								Eliminar
+							</Dropdown.Item>
 						</Dropdown.Menu>
 					</Dropdown>
 				</td>
@@ -123,6 +163,14 @@ export function TournamentsPage() {
 
 	return (
 		<>
+			{deleteModal.isVisible && (
+				<ModalQuestion
+					title="Eliminar Torneo"
+					question="¿Estás seguro que deseas eliminarlo? Esta acción no se puede deshacer."
+					dismiss={() => setDeleteModal({ isVisible: false })}
+					accept={handleDeleteTournament}
+				/>
+			)}
 			<div className="content-container">
 				<div className="title-wrap">
 					<h1>
@@ -130,7 +178,7 @@ export function TournamentsPage() {
 						Torneos
 					</h1>
 
-					<Button variant="primary" onClick={() => navigate("create")}>
+					<Button variant="primary" onMouseDown={() => navigate("create")}>
 						<FontAwesomeIcon icon={faPlus} />
 						Crear nuevo
 					</Button>
@@ -153,7 +201,7 @@ export function TournamentsPage() {
 						{buildPagination().map((idx) => (
 							<Pagination.Item
 								key={idx}
-								onClick={() =>
+								onMouseDown={() =>
 									setState((prev) => ({ ...prev, offset: idx - 1 }))
 								}
 							>
