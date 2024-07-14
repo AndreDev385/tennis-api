@@ -2,30 +2,31 @@ import express from "express";
 
 import { userRouter } from "../../../../modules/users/infra/http/routes";
 import {
-    categoryRouter,
-    clubRouter,
-    leagueRouter,
-    seasonRouter,
-    clashRouter,
-    playerRoute,
-    matchRouter,
-    eventRouter,
+	categoryRouter,
+	clubRouter,
+	leagueRouter,
+	seasonRouter,
+	clashRouter,
+	playerRoute,
+	matchRouter,
+	eventRouter,
 } from "../../../../modules/league/infra/http/routes";
 import { utilsRouter } from "../../../../modules/league/infra/http/routes/utils";
 import { teamRouter } from "../../../../modules/league/infra/http/routes/team";
 import { adsRouter } from "../../../../modules/league/infra/http/routes/ad";
 
 import {
-    tournamentRouter,
-    particpantsRouter,
-    tournamentMatchRouter,
-    contestRouter,
+	tournamentRouter,
+	particpantsRouter,
+	tournamentMatchRouter,
+	contestRouter,
 } from "../../../../modules/tournaments/infra/http/routes/";
+import { couplesRouter } from "../../../../modules/tournaments/infra/http/routes/couples";
 
 const v1Router = express.Router();
 
 v1Router.get("/", (_, res) => {
-    return res.json({ message: "Yo! we're up" });
+	return res.json({ message: "Yo! we're up" });
 });
 
 v1Router.use("/users", userRouter);
@@ -47,5 +48,6 @@ v1Router.use("/tournament", tournamentRouter);
 v1Router.use("/participant", particpantsRouter);
 v1Router.use("/contest", contestRouter);
 v1Router.use("/tournament-match", tournamentMatchRouter);
+v1Router.use("/couples", couplesRouter);
 
 export { v1Router };
