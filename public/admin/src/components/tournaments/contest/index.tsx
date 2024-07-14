@@ -8,12 +8,12 @@ import type { Contest } from "../../../types/contest";
 export const ContestDetail = () => {
 	const { state } = useLocation();
 
-	const [status, setStatus] = useState({
+	const [_status, setStatus] = useState({
 		loading: true,
 		error: "",
 	});
 
-	const [contest, setContest] = useState<Contest | null>(null);
+	const [_contest, setContest] = useState<Contest | null>(null);
 
 	const handleGetContest = async () => {
 		setStatus({ loading: true, error: "" });
@@ -33,8 +33,6 @@ export const ContestDetail = () => {
 	useEffect(() => {
 		handleGetContest();
 	}, []);
-
-	const table = () => {};
 
 	return (
 		<div>
