@@ -6,35 +6,52 @@ import { CoupleId } from "./coupleId";
 import { Participant } from "./participant";
 
 type CoupleProps = {
-    p1: Participant;
-    p2: Participant;
+	p1: Participant;
+	p2: Participant;
 };
 
 export class Couple extends Entity<CoupleProps> {
-    get coupleId(): CoupleId {
-        return CoupleId.create(this._id).getValue();
-    }
-    get p1(): Participant {
-        return this.props.p1;
-    }
-    get p2(): Participant {
-        return this.props.p2;
-    }
+	get coupleId(): CoupleId {
+		return CoupleId.create(this._id).getValue();
+	}
+	get p1(): Participant {
+		return this.props.p1;
+	}
+	get p2(): Participant {
+		return this.props.p2;
+	}
 
-    private constructor(props: CoupleProps, id?: UniqueEntityID) {
-        super(props, id);
-    }
+	setP1(p: Participant) {
+		if (this.props.p1.equals(p)) {
+			return;
+		}
+		this.props.p1 = p;
+	}
 
-    public static create(props: CoupleProps, id?: UniqueEntityID): Result<Couple> {
-        const guard = Guard.againstNullOrUndefinedBulk([
-            { argument: props.p1, argumentName: "participante 1" },
-            { argument: props.p2, argumentName: "participante 2" },
-        ]);
+	setP2(p: Participant) {
+		if (this.props.p2.equals(p)) {
+			return;
+		}
+		this.props.p2 = p;
+	}
 
-        if (guard.isFailure) {
-            return Result.fail(guard.getErrorValue());
-        }
+	private constructor(props: CoupleProps, id?: UniqueEntityID) {
+		super(props, id);
+	}
 
-        return Result.ok<Couple>(new Couple(props, id));
-    }
+	public static create(
+		props: CoupleProps,
+		id?: UniqueEntityID,
+	): Result<Couple> {
+		const guard = Guard.againstNullOrUndefinedBulk([
+			{ argument: props.p1, argumentName: "participante 1" },
+			{ argument: props.p2, argumentName: "participante 2" },
+		]);
+
+		if (guard.isFailure) {
+			return Result.fail(guard.getErrorValue());
+		}
+
+		return Result.ok<Couple>(new Couple(props, id));
+	}
 }
