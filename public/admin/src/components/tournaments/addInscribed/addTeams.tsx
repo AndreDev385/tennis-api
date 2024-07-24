@@ -11,7 +11,7 @@ type Props = {
 };
 
 export const AddTeams: React.FC<Props> = (props) => {
-	const [teams, setTeams] = useState<InscribedTeam[]>([]);
+	const [teams, _setTeams] = useState<InscribedTeam[]>([]);
 
 	return (
 		<>

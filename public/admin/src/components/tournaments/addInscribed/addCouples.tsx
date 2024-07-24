@@ -11,7 +11,7 @@ export const AddCouples = () => {
 		state: { contest },
 	} = useLocation();
 
-	const [couples, setCouples] = useState<InscribedCouple[]>([]);
+	const [couples, _setCouples] = useState<InscribedCouple[]>([]);
 
 	return (
 		<div>
