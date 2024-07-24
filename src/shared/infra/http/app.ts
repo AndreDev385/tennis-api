@@ -16,7 +16,7 @@ import Sockets from "./sockets";
 import { swaggerDocs } from "./doc/swagger";
 
 const origin = {
-    origin: "*",
+	origin: "*",
 };
 
 const app = express();
@@ -29,7 +29,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors(origin));
 app.use(compression());
-app.use(helmet());
+app.use(
+	helmet.contentSecurityPolicy({
+		useDefaults: true,
+		directives: {
+			"img-src": ["'self'", "https: data:"],
+		},
+	}),
+);
 app.use(morgan("combined"));
 
 app.use("/api/v1", v1Router);
@@ -38,17 +45,16 @@ swaggerDocs(app);
 
 app.use(history());
 app.use(
-    "/public",
-    express.static(path.resolve(__dirname, "../../../../../public/"))
+	"/public",
+	express.static(path.resolve(__dirname, "../../../../../public/")),
 );
 app.use(
-    "/",
-    express.static(path.resolve(__dirname, "../../../../../public/admin/dist"))
+	"/",
+	express.static(path.resolve(__dirname, "../../../../../public/admin/dist")),
 );
 
 server.listen(environment.port, () => {
-    console.log(`[App]: Listening on port ${environment.port}`);
-
+	console.log(`[App]: Listening on port ${environment.port}`);
 });
 
 Sockets(io);

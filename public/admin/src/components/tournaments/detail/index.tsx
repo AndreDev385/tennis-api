@@ -106,7 +106,7 @@ export const TournamentDetail = () => {
 							onMouseDown={() =>
 								navigate(`/dashboard/tournaments/contest/${c.contestId}`, {
 									state: {
-										tournamentName: tournament.name,
+										tournament: tournament,
 										contest: c,
 									},
 								})

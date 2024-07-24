@@ -123,7 +123,11 @@ export function TournamentsPage() {
 						</Dropdown.Toggle>
 						<Dropdown.Menu>
 							<Dropdown.Item
-								onMouseDown={() => navigate(`${t.tournamentId}?name=${t.name}`)}
+								onMouseDown={() =>
+									navigate(`${t.tournamentId}?name=${t.name}`, {
+										state: { tournament: t },
+									})
+								}
 							>
 								Ver
 							</Dropdown.Item>
