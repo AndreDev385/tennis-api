@@ -1,7 +1,7 @@
 import { Outlet, useLocation, useNavigate } from "react-router";
 
 import "./index.scss";
-import { faTrophy } from "@fortawesome/free-solid-svg-icons";
+import { faBaseballBall, faTrophy } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export function TournamentsSideBar() {
@@ -26,6 +26,13 @@ export function TournamentsSideBar() {
 				>
 					<FontAwesomeIcon icon={faTrophy} />
 					<span>Torneos</span>
+				</div>
+				<div
+					className={`${location.pathname === "/dashboard/tournaments/matches" && "menu-selected"} wrap-option`}
+					onMouseDown={() => navigateTo("matches")}
+				>
+					<FontAwesomeIcon icon={faBaseballBall} />
+					<span>Partidos</span>
 				</div>
 			</div>
 			<Outlet />

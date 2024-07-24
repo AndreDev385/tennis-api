@@ -184,7 +184,11 @@ export const ContestDetail = () => {
 			return <FontAwesomeIcon icon={faCircleNotch} />;
 		}
 		if (status.error) {
-			return <h1 className="text-red">Ha ocurrido un error</h1>;
+			return (
+				<div className="d-flex justify-content-center align-items-center">
+					<h2 className="text-danger">Ha ocurrido un error</h2>
+				</div>
+			);
 		}
 		if (contest?.mode === GameModesValues.Team) {
 			return teamsTable();

@@ -1,22 +1,15 @@
 import { VITE_SERVER_URL } from "../../env/env.prod";
 import { Result } from "../../shared/Result";
 
-export type AddParticipantData = {
-	firstName: string;
-	lastName: string;
-	ci: string;
-	position: number | null;
-};
-
-type AddContestParticipants = {
+export type AddContestTeamDto = {
 	contestId: string;
-	participants: AddParticipantData[];
+	teams: {
+		name: string;
+		position: number | null;
+	}[];
 };
 
-export async function addContestParticipants(
-	data: AddContestParticipants,
-	token: string,
-) {
+export async function addContestTeams(data: AddContestTeamDto, token: string) {
 	const requestOptions: RequestInit = {
 		method: "PUT",
 		headers: {
@@ -28,7 +21,7 @@ export async function addContestParticipants(
 
 	try {
 		const response = await fetch(
-			`${VITE_SERVER_URL}/api/v1/contest/add-participants`,
+			`${VITE_SERVER_URL}/api/v1/contest/add-teams`,
 			requestOptions,
 		);
 

@@ -1,20 +1,27 @@
 import { VITE_SERVER_URL } from "../../env/env.prod";
 import { Result } from "../../shared/Result";
 
-export type AddParticipantData = {
-	firstName: string;
-	lastName: string;
-	ci: string;
-	position: number | null;
-};
-
-type AddContestParticipants = {
+export type AddContestCouplesDto = {
 	contestId: string;
-	participants: AddParticipantData[];
+	couples: AddCoupleDto[];
 };
 
-export async function addContestParticipants(
-	data: AddContestParticipants,
+export type AddCoupleDto = {
+	position: number | null;
+	p1: {
+		firstName: string;
+		lastName: string;
+		ci: string;
+	};
+	p2: {
+		firstName: string;
+		lastName: string;
+		ci: string;
+	};
+};
+
+export async function addContestCouples(
+	data: AddContestCouplesDto,
 	token: string,
 ) {
 	const requestOptions: RequestInit = {
@@ -28,7 +35,7 @@ export async function addContestParticipants(
 
 	try {
 		const response = await fetch(
-			`${VITE_SERVER_URL}/api/v1/contest/add-participants`,
+			`${VITE_SERVER_URL}/api/v1/contest/add-couples`,
 			requestOptions,
 		);
 

@@ -17,6 +17,7 @@ import { useNavigate } from "react-router";
 import { deleteTournament } from "../../services/tournaments/deleteTournament";
 import { toast } from "react-toastify";
 import ModalQuestion from "../modalQuestion/ModalQuestion";
+import { buildPagination } from "../../utils/buildPagination";
 
 export function TournamentsPage() {
 	const navigate = useNavigate();
@@ -147,12 +148,6 @@ export function TournamentsPage() {
 		);
 	});
 
-	function buildPagination() {
-		const pages = Math.ceil(state.count / state.limit);
-
-		return Array.from({ length: pages }, (_, i) => i + 1);
-	}
-
 	function render() {
 		if (state.loading) {
 			return (
@@ -202,7 +197,7 @@ export function TournamentsPage() {
 						<tbody>{render()}</tbody>
 					</Table>
 					<Pagination>
-						{buildPagination().map((idx) => (
+						{buildPagination(state.count, state.limit).map((idx) => (
 							<Pagination.Item
 								key={idx}
 								onMouseDown={() =>

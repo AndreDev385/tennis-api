@@ -10,6 +10,8 @@ export const AddInscribed = () => {
 	} = useLocation();
 
 	const render = () => {
+		console.log(contest, "contest");
+
 		if (contest.mode === GameModesValues.Team) {
 			return AddTeams({ contest });
 		}

@@ -1,29 +1,80 @@
-import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
+import {
+	faCircleNotch,
+	faEllipsisVertical,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { Button, Dropdown, Table } from "react-bootstrap";
-import { useLocation } from "react-router";
-import type { InscribedCouple } from "../../../types/inscribed";
+import { useLocation, useNavigate } from "react-router";
+
+import {
+	addContestCouples,
+	type AddCoupleDto,
+} from "../../../services/contest/addContestCouples";
 import { formatContestTitle } from "../contest/utils";
+import { AddCoupleModal } from "./addCoupleModal";
+import { toast } from "react-toastify";
 
 export const AddCouples = () => {
 	const {
-		state: { contest },
+		state: { contest, tournament },
 	} = useLocation();
 
-	const [couples, _setCouples] = useState<InscribedCouple[]>([]);
+	const navigate = useNavigate();
+
+	const [state, setState] = useState({ loading: false });
+	const [couples, setCouples] = useState<AddCoupleDto[]>([]);
+	const [addCoupleModal, setAddCoupleModal] = useState({
+		visible: false,
+	});
+
+	const token: string = localStorage.getItem("authorization") || "";
+
+	const addCouple = (c: AddCoupleDto) => {
+		setCouples((prev) => [...prev, c]);
+	};
+
+	const handleAddCouples = async () => {
+		setState({ loading: true });
+		const result = await addContestCouples(
+			{ contestId: contest.contestId, couples },
+			token,
+		);
+		setState({ loading: false });
+
+		if (result.isFailure) {
+			toast.error(result.getErrorValue());
+			return;
+		}
+
+		toast.success(result.getValue());
+		navigate(`/dashboard/tournaments/contest/${contest.contestId}`, {
+			state: {
+				tournament: tournament,
+				contest: contest,
+			},
+		});
+	};
 
 	return (
 		<div>
+			{addCoupleModal.visible && (
+				<AddCoupleModal
+					addCouple={addCouple}
+					close={() => setAddCoupleModal({ visible: false })}
+				/>
+			)}
 			<div className="d-flex justify-content-between mx-4">
-				<h1>Inscribir participantes {formatContestTitle(contest)}</h1>
+				<h1>Inscribir parejas {formatContestTitle(contest)}</h1>
 				<div className="d-flex align-items-center">
-					<Button>Agregar +</Button>
+					<Button onMouseDown={() => setAddCoupleModal({ visible: true })}>
+						Agregar +
+					</Button>
 					<div className="mx-2" />
 					<Button>Cargar lista +</Button>
 				</div>
 			</div>
-			<Table responsive="sm">
+			<Table style={{ minHeight: "10rem" }} responsive="sm">
 				<thead>
 					<tr>
 						<th className="text-center">Posición</th>
@@ -37,10 +88,10 @@ export const AddCouples = () => {
 						<tr key={c.position}>
 							<td className="text-center">{c.position}</td>
 							<td className="text-center">
-								{c.couple.p1.user.firstName} {c.couple.p1.user.lastName}
+								{c.p1.firstName} {c.p1.lastName}
 							</td>
 							<td className="text-center">
-								{c.couple.p2.user.firstName} {c.couple.p2.user.lastName}
+								{c.p2.firstName} {c.p2.lastName}
 							</td>
 							<td className="text-center">
 								<Dropdown>
@@ -63,6 +114,14 @@ export const AddCouples = () => {
 					))}
 				</tbody>
 			</Table>
+			<div className="d-grid mt-5 col-4 mx-auto">
+				<Button
+					disabled={state.loading || couples.length === 0}
+					onMouseDown={() => handleAddCouples()}
+				>
+					Aceptar {state.loading && <FontAwesomeIcon icon={faCircleNotch} />}
+				</Button>
+			</div>
 		</div>
 	);
 };

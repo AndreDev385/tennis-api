@@ -1,42 +1,94 @@
-import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
+import {
+	faCircleNotch,
+	faEllipsisVertical,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import { useState } from "react";
 import { Button, Dropdown, Table } from "react-bootstrap";
-import type { InscribedTeam } from "../../../types/inscribed";
+import { useLocation, useNavigate } from "react-router";
+import { toast } from "react-toastify";
+
+import { addContestTeams } from "../../../services/contest/addContestTeams";
 import { formatContestTitle } from "../contest/utils";
-import type { Contest } from "../../../types/contest";
+import { AddTeamModal } from "./addTeamModal";
 
-type Props = {
-	contest: Contest;
-};
+export const AddTeams: React.FC = () => {
+	const {
+		state: { tournament, contest },
+	} = useLocation();
+	const navigate = useNavigate();
 
-export const AddTeams: React.FC<Props> = (props) => {
-	const [teams, _setTeams] = useState<InscribedTeam[]>([]);
+	const [state, setState] = useState({ loading: false });
+	const [teams, setTeams] = useState<
+		{ name: string; position: number | null }[]
+	>([]);
+	const [addTeamModal, setAddTeamModal] = useState({
+		visible: false,
+	});
+	const token: string = localStorage.getItem("authorization") || "";
+
+	const addTeam = (data: { name: string; position: number | null }) => {
+		setTeams((prev) => [...prev, data]);
+	};
+
+	const handleAddTeams = async () => {
+		setState({ loading: true });
+		// service
+		const result = await addContestTeams(
+			{
+				contestId: contest.contestId,
+				teams,
+			},
+			token,
+		);
+
+		setState({ loading: false });
+		if (result.isFailure) {
+			toast.error(result.getErrorValue());
+			return;
+		}
+
+		toast.success(result.getValue());
+		navigate(`/dashboard/tournaments/contest/${contest.contestId}`, {
+			state: {
+				tournament: tournament,
+				contest: contest,
+			},
+		});
+	};
 
 	return (
 		<>
 			<div>
+				{addTeamModal.visible && (
+					<AddTeamModal
+						addTeam={addTeam}
+						close={() => setAddTeamModal({ visible: false })}
+					/>
+				)}
 				<div className="d-flex justify-content-between mx-4">
-					<h1>Inscribir participantes {formatContestTitle(props.contest)}</h1>
+					<h1>Inscribir participantes {formatContestTitle(contest)}</h1>
 					<div className="d-flex align-items-center">
-						<Button>Agregar +</Button>
+						<Button onClick={() => setAddTeamModal({ visible: true })}>
+							Agregar +
+						</Button>
 						<div className="mx-2" />
 						<Button>Cargar lista +</Button>
 					</div>
 				</div>
-				<Table responsive="sm">
+				<Table style={{ minHeight: "10rem" }} responsive="sm">
 					<thead>
 						<tr>
 							<th className="text-center">Posición</th>
 							<th className="text-center">Nombre</th>
-							<th className="text-center">Acciones</th>
 						</tr>
 					</thead>
 					<tbody>
 						{teams.map((t) => (
 							<tr key={t.position}>
 								<td className="text-center">{t.position}</td>
-								<td className="text-center">{t.contestTeam.name}</td>
+								<td className="text-center">{t.name}</td>
 								<td className="text-center">
 									<Dropdown>
 										<Dropdown.Toggle
@@ -58,6 +110,14 @@ export const AddTeams: React.FC<Props> = (props) => {
 						))}
 					</tbody>
 				</Table>
+				<div className="d-grid mt-5 col-4 mx-auto">
+					<Button
+						disabled={state.loading || teams.length === 0}
+						onMouseDown={() => handleAddTeams()}
+					>
+						Aceptar {state.loading && <FontAwesomeIcon icon={faCircleNotch} />}
+					</Button>
+				</div>
 			</div>
 		</>
 	);
