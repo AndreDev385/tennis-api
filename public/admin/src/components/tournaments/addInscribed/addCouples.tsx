@@ -43,6 +43,10 @@ export const AddCouples = () => {
 		setCouples((prev) => [...prev, ...c]);
 	};
 
+	const removeCouple = (p1CI: string, p2CI: string) => {
+		setCouples(couples.filter((c) => c.p1.ci !== p1CI && c.p2.ci !== p2CI));
+	};
+
 	const handleAddCouples = async () => {
 		setState({ loading: true });
 		const result = await addContestCouples(
@@ -124,7 +128,13 @@ export const AddCouples = () => {
 											icon={faEllipsisVertical}
 										/>
 									</Dropdown.Toggle>
-									<Dropdown.Menu />
+									<Dropdown.Menu>
+										<Dropdown.Item
+											onMouseDown={() => removeCouple(c.p1.ci, c.p2.ci)}
+										>
+											Eliminar
+										</Dropdown.Item>
+									</Dropdown.Menu>
 								</Dropdown>
 							</td>
 						</tr>

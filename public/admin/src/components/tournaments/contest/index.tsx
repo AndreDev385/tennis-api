@@ -15,8 +15,12 @@ import type {
 	InscribedParticipant,
 	InscribedTeam,
 } from "../../../types/inscribed";
+import { removeInscribed } from "../../../services/contest/removeInscribed";
+import { toast } from "react-toastify";
+import ModalQuestion from "../../modalQuestion/ModalQuestion";
 
 export const ContestDetail = () => {
+	const token: string = localStorage.getItem("authorization") || "";
 	const navigate = useNavigate();
 	const { state } = useLocation();
 
@@ -26,6 +30,46 @@ export const ContestDetail = () => {
 	});
 
 	const [contest, setContest] = useState<Contest | null>(null);
+
+	const [deleteInscribedModal, setDeleteInscribedModal] = useState({
+		visible: false,
+	});
+
+	const [selectedInscribed, setSelectedInscribed] = useState<
+		InscribedParticipant | InscribedCouple | InscribedTeam | null
+	>(null);
+
+	const handleDeleteInscribed = async () => {
+		if (selectedInscribed == null) {
+			toast.error("Error al selecionar al participante");
+			return;
+		}
+		setStatus({
+			loading: true,
+			error: "",
+		});
+
+		console.log(selectedInscribed);
+
+		const result = await removeInscribed(
+			state.contest.contestId,
+			selectedInscribed,
+			token,
+		);
+
+		setStatus({
+			loading: false,
+			error: "",
+		});
+
+		if (result.isFailure) {
+			toast.error(result.getErrorValue());
+			return;
+		}
+
+		toast.success(result.getValue());
+		await handleGetContest();
+	};
 
 	const handleGetContest = async () => {
 		setStatus({ loading: true, error: "" });
@@ -85,7 +129,16 @@ export const ContestDetail = () => {
 											icon={faEllipsisVertical}
 										/>
 									</Dropdown.Toggle>
-									<Dropdown.Menu />
+									<Dropdown.Menu>
+										<Dropdown.Item
+											onMouseDown={() => {
+												setSelectedInscribed(c);
+												setDeleteInscribedModal({ visible: true });
+											}}
+										>
+											Eliminar
+										</Dropdown.Item>
+									</Dropdown.Menu>
 								</Dropdown>
 							</td>
 						</tr>
@@ -134,7 +187,16 @@ export const ContestDetail = () => {
 											icon={faEllipsisVertical}
 										/>
 									</Dropdown.Toggle>
-									<Dropdown.Menu />
+									<Dropdown.Menu>
+										<Dropdown.Item
+											onMouseDown={() => {
+												setSelectedInscribed(p);
+												setDeleteInscribedModal({ visible: true });
+											}}
+										>
+											Eliminar
+										</Dropdown.Item>
+									</Dropdown.Menu>
 								</Dropdown>
 							</td>
 						</tr>
@@ -175,7 +237,16 @@ export const ContestDetail = () => {
 											icon={faEllipsisVertical}
 										/>
 									</Dropdown.Toggle>
-									<Dropdown.Menu />
+									<Dropdown.Menu>
+										<Dropdown.Item
+											onMouseDown={() => {
+												setSelectedInscribed(t);
+												setDeleteInscribedModal({ visible: true });
+											}}
+										>
+											Eliminar
+										</Dropdown.Item>
+									</Dropdown.Menu>
 								</Dropdown>
 							</td>
 						</tr>
@@ -207,6 +278,18 @@ export const ContestDetail = () => {
 
 	return (
 		<div>
+			{deleteInscribedModal.visible && (
+				<ModalQuestion
+					title="Eliminar"
+					question="¿Estás seguro que deseas eliminar a este participante? Esta acción no se puede deshacer."
+					accept={() => handleDeleteInscribed()}
+					dismiss={() =>
+						setDeleteInscribedModal({
+							visible: false,
+						})
+					}
+				/>
+			)}
 			<div className="d-flex justify-content-between mx-4">
 				<h1>
 					{state.tournament.name} {contest?.mode}{" "}

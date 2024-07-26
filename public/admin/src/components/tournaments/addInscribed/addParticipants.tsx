@@ -42,6 +42,10 @@ export const AddParticipants: React.FC = () => {
 		setParticipants((prev) => [...prev, ...data]);
 	};
 
+	const removeParticipant = (ci: string) => {
+		setParticipants(participants.filter((p) => p.ci !== ci));
+	};
+
 	const handleAddParticipants = async () => {
 		setState({ loading: true });
 		const result = await addContestParticipants(
@@ -127,7 +131,13 @@ export const AddParticipants: React.FC = () => {
 												icon={faEllipsisVertical}
 											/>
 										</Dropdown.Toggle>
-										<Dropdown.Menu />
+										<Dropdown.Menu>
+											<Dropdown.Item
+												onMouseDown={() => removeParticipant(p.ci)}
+											>
+												Eliminar
+											</Dropdown.Item>
+										</Dropdown.Menu>
 									</Dropdown>
 								</td>
 							</tr>

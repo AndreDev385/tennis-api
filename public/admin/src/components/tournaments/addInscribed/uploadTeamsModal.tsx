@@ -39,13 +39,14 @@ export const UploadTeamsModal: React.FC<Props> = ({ onClose, addTeams }) => {
 
 				const formattedData = data.map((row: string[]) => {
 					return {
-						position: row[0] ? Number(row[0].trim()) : null,
+						position: row[0] ? Number(row[0]) : null,
 						name: row[1],
 					};
 				});
 
 				setTeams(formattedData);
 			};
+
 			reader.readAsBinaryString(newFile);
 
 			setFile(newFile);

@@ -42,7 +42,7 @@ export const UploadParticipantsModal: React.FC<Props> = ({
 				const formattedData: AddParticipantData[] = data.map(
 					(row: string[]) => {
 						return {
-							position: row[0] ? Number(row[0].trim()) : null,
+							position: row[0] ? Number(row[0]) : null,
 							firstName: row[1].trim(),
 							lastName: row[2].trim(),
 							ci: row[3].trim(),

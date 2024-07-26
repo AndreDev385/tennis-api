@@ -37,6 +37,10 @@ export const AddTeams: React.FC = () => {
 		setTeams((prev) => [...prev, data]);
 	};
 
+	const removeTeam = (name: string) => {
+		setTeams(teams.filter((t) => t.name !== name));
+	};
+
 	const addTeams = (data: { name: string; position: number | null }[]) => {
 		setTeams((prev) => [...prev, ...data]);
 	};
@@ -83,7 +87,7 @@ export const AddTeams: React.FC = () => {
 					/>
 				)}
 				<div className="d-flex justify-content-between mx-4">
-					<h1>Inscribir participantes {formatContestTitle(contest)}</h1>
+					<h1>Inscribir equipos {formatContestTitle(contest)}</h1>
 					<div className="d-flex align-items-center">
 						<Button onClick={() => setAddTeamModal({ visible: true })}>
 							Agregar +
@@ -120,7 +124,11 @@ export const AddTeams: React.FC = () => {
 												icon={faEllipsisVertical}
 											/>
 										</Dropdown.Toggle>
-										<Dropdown.Menu />
+										<Dropdown.Menu>
+											<Dropdown.Item onMouseDown={() => removeTeam(t.name)}>
+												Eliminar
+											</Dropdown.Item>
+										</Dropdown.Menu>
 									</Dropdown>
 								</td>
 							</tr>
