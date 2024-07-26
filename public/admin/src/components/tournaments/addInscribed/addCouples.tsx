@@ -7,13 +7,14 @@ import { useState } from "react";
 import { Button, Dropdown, Table } from "react-bootstrap";
 import { useLocation, useNavigate } from "react-router";
 
+import { toast } from "react-toastify";
 import {
-	addContestCouples,
 	type AddCoupleDto,
+	addContestCouples,
 } from "../../../services/contest/addContestCouples";
 import { formatContestTitle } from "../contest/utils";
 import { AddCoupleModal } from "./addCoupleModal";
-import { toast } from "react-toastify";
+import { UploadCouplesModal } from "./uploadCouplesModal";
 
 export const AddCouples = () => {
 	const {
@@ -28,10 +29,18 @@ export const AddCouples = () => {
 		visible: false,
 	});
 
+	const [uploadCouplesModal, setUploadCouplesModal] = useState({
+		visible: false,
+	});
+
 	const token: string = localStorage.getItem("authorization") || "";
 
 	const addCouple = (c: AddCoupleDto) => {
 		setCouples((prev) => [...prev, c]);
+	};
+
+	const addCouples = (c: AddCoupleDto[]) => {
+		setCouples((prev) => [...prev, ...c]);
 	};
 
 	const handleAddCouples = async () => {
@@ -64,6 +73,12 @@ export const AddCouples = () => {
 					close={() => setAddCoupleModal({ visible: false })}
 				/>
 			)}
+			{uploadCouplesModal.visible && (
+				<UploadCouplesModal
+					onClose={() => setUploadCouplesModal({ visible: false })}
+					addCouples={addCouples}
+				/>
+			)}
 			<div className="d-flex justify-content-between mx-4">
 				<h1>Inscribir parejas {formatContestTitle(contest)}</h1>
 				<div className="d-flex align-items-center">
@@ -71,7 +86,9 @@ export const AddCouples = () => {
 						Agregar +
 					</Button>
 					<div className="mx-2" />
-					<Button>Cargar lista +</Button>
+					<Button onMouseDown={() => setUploadCouplesModal({ visible: true })}>
+						Cargar lista +
+					</Button>
 				</div>
 			</div>
 			<Table style={{ minHeight: "10rem" }} responsive="sm">
@@ -88,10 +105,10 @@ export const AddCouples = () => {
 						<tr key={c.position}>
 							<td className="text-center">{c.position}</td>
 							<td className="text-center">
-								{c.p1.firstName} {c.p1.lastName}
+								{c.p1.firstName} {c.p1.lastName} {c.p1.ci}
 							</td>
 							<td className="text-center">
-								{c.p2.firstName} {c.p2.lastName}
+								{c.p2.firstName} {c.p2.lastName} {c.p2.ci}
 							</td>
 							<td className="text-center">
 								<Dropdown>

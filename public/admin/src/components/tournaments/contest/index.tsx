@@ -63,11 +63,13 @@ export const ContestDetail = () => {
 							<td className="text-center">{c.position}</td>
 							<td className="text-center">
 								{(c as InscribedCouple).couple.p1.user.firstName}{" "}
-								{(c as InscribedCouple).couple.p1.user.lastName}
+								{(c as InscribedCouple).couple.p1.user.lastName}{" "}
+								{(c as InscribedCouple).couple.p1.user.ci}
 							</td>
 							<td className="text-center">
 								{(c as InscribedCouple).couple.p2.user.firstName}{" "}
-								{(c as InscribedCouple).couple.p2.user.lastName}
+								{(c as InscribedCouple).couple.p2.user.lastName}{" "}
+								{(c as InscribedCouple).couple.p2.user.ci}
 							</td>
 							<td className="text-center">
 								<Dropdown>
@@ -101,6 +103,7 @@ export const ContestDetail = () => {
 						<th className="text-center">Posición</th>
 						<th className="text-center">Nombre</th>
 						<th className="text-center">Apellido</th>
+						<th className="text-center">CI</th>
 						<th className="text-center">Acciones</th>
 					</tr>
 				</thead>
@@ -113,6 +116,9 @@ export const ContestDetail = () => {
 							</td>
 							<td className="text-center">
 								{(p as InscribedParticipant).participant.user.lastName}
+							</td>
+							<td className="text-center">
+								{(p as InscribedParticipant).participant.user.ci}
 							</td>
 							<td className="text-center">
 								<Dropdown>

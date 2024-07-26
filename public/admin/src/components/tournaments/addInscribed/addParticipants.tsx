@@ -6,14 +6,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { Button, Dropdown, Table } from "react-bootstrap";
 
+import { useLocation, useNavigate } from "react-router";
+import { toast } from "react-toastify";
 import {
 	type AddParticipantData,
 	addContestParticipants,
 } from "../../../services/contest/addContestParticipants";
 import { formatContestTitle } from "../contest/utils";
 import { AddParticipantModal } from "./addParticipantModal";
-import { toast } from "react-toastify";
-import { useLocation, useNavigate } from "react-router";
+import { UploadParticipantsModal } from "./uploadParticipantsModal";
 
 export const AddParticipants: React.FC = () => {
 	const {
@@ -23,13 +24,22 @@ export const AddParticipants: React.FC = () => {
 
 	const [state, setState] = useState({ loading: false });
 	const [participants, setParticipants] = useState<AddParticipantData[]>([]);
+
 	const [participantModal, setParticipantModal] = useState({
 		visible: false,
 	});
+	const [uploadParticipantsModal, setUploadParticipantsModal] = useState({
+		visible: false,
+	});
+
 	const token: string = localStorage.getItem("authorization") || "";
 
 	const addParticipant = (data: AddParticipantData) => {
 		setParticipants((prev) => [...prev, data]);
+	};
+
+	const addParticipants = (data: AddParticipantData[]) => {
+		setParticipants((prev) => [...prev, ...data]);
 	};
 
 	const handleAddParticipants = async () => {
@@ -66,6 +76,12 @@ export const AddParticipants: React.FC = () => {
 						close={() => setParticipantModal({ visible: false })}
 					/>
 				)}
+				{uploadParticipantsModal.visible && (
+					<UploadParticipantsModal
+						onClose={() => setUploadParticipantsModal({ visible: false })}
+						addParticipants={addParticipants}
+					/>
+				)}
 				<div className="d-flex justify-content-between mx-4">
 					<h1>Inscribir participantes {formatContestTitle(contest)}</h1>
 					<div className="d-flex align-items-center">
@@ -73,7 +89,11 @@ export const AddParticipants: React.FC = () => {
 							Agregar +
 						</Button>
 						<div className="mx-2" />
-						<Button>Cargar lista +</Button>
+						<Button
+							onMouseDown={() => setUploadParticipantsModal({ visible: true })}
+						>
+							Cargar lista +
+						</Button>
 					</div>
 				</div>
 				<Table style={{ minHeight: "10rem" }} responsive="sm">

@@ -12,6 +12,7 @@ import { toast } from "react-toastify";
 import { addContestTeams } from "../../../services/contest/addContestTeams";
 import { formatContestTitle } from "../contest/utils";
 import { AddTeamModal } from "./addTeamModal";
+import { UploadTeamsModal } from "./uploadTeamsModal";
 
 export const AddTeams: React.FC = () => {
 	const {
@@ -26,10 +27,18 @@ export const AddTeams: React.FC = () => {
 	const [addTeamModal, setAddTeamModal] = useState({
 		visible: false,
 	});
+
+	const [uploadTeamsModal, setUploadTeamsModal] = useState({
+		visible: false,
+	});
 	const token: string = localStorage.getItem("authorization") || "";
 
 	const addTeam = (data: { name: string; position: number | null }) => {
 		setTeams((prev) => [...prev, data]);
+	};
+
+	const addTeams = (data: { name: string; position: number | null }[]) => {
+		setTeams((prev) => [...prev, ...data]);
 	};
 
 	const handleAddTeams = async () => {
@@ -67,6 +76,12 @@ export const AddTeams: React.FC = () => {
 						close={() => setAddTeamModal({ visible: false })}
 					/>
 				)}
+				{uploadTeamsModal.visible && (
+					<UploadTeamsModal
+						addTeams={addTeams}
+						onClose={() => setUploadTeamsModal({ visible: false })}
+					/>
+				)}
 				<div className="d-flex justify-content-between mx-4">
 					<h1>Inscribir participantes {formatContestTitle(contest)}</h1>
 					<div className="d-flex align-items-center">
@@ -74,7 +89,9 @@ export const AddTeams: React.FC = () => {
 							Agregar +
 						</Button>
 						<div className="mx-2" />
-						<Button>Cargar lista +</Button>
+						<Button onMouseDown={() => setUploadTeamsModal({ visible: true })}>
+							Cargar lista +
+						</Button>
 					</div>
 				</div>
 				<Table style={{ minHeight: "10rem" }} responsive="sm">
