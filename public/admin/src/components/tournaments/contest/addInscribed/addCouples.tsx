@@ -11,10 +11,10 @@ import { toast } from "react-toastify";
 import {
 	type AddCoupleDto,
 	addContestCouples,
-} from "../../../services/contest/addContestCouples";
-import { formatContestTitle } from "../contest/utils";
+} from "../../../../services/contest/addContestCouples";
 import { AddCoupleModal } from "./addCoupleModal";
 import { UploadCouplesModal } from "./uploadCouplesModal";
+import { formatContestTitle } from "../utils";
 
 export const AddCouples = () => {
 	const {

@@ -1,7 +1,7 @@
-import { GameModesValues } from "../../../utils/tennisConfigs";
 import { useLocation } from "react-router";
-import { AddParticipants } from "./addParticipants";
+import { GameModesValues } from "../../../../utils/tennisConfigs";
 import { AddCouples } from "./addCouples";
+import { AddParticipants } from "./addParticipants";
 import { AddTeams } from "./addTeams";
 
 export const AddInscribed = () => {

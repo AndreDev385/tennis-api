@@ -5,8 +5,8 @@ import { Button, Modal } from "react-bootstrap";
 import { FileUploader } from "react-drag-drop-files";
 
 import * as XLSX from "xlsx";
-import type { AddParticipantData } from "../../../services/contest/addContestParticipants";
-import { fileSizeInKB } from "../../../utils/fileSizeInKb";
+import type { AddParticipantData } from "../../../../services/contest/addContestParticipants";
+import { fileSizeInKB } from "../../../../utils/fileSizeInKb";
 
 const fileTypes = ["XLSX", "XLS"];
 

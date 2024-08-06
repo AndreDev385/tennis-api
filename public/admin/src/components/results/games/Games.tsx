@@ -55,7 +55,7 @@ const Games = () => {
 	};
 
 	const goToStats = (matchId: string) => {
-		navigate(`match/${matchId}`);
+		navigate(`/dashboard/league/results/match/${matchId}`);
 	};
 
 	const gamesTable = games.map((item) => {

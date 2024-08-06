@@ -4,8 +4,8 @@ import { useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { toast } from "react-toastify";
 
-import type { AddCoupleDto } from "../../../services/contest/addContestCouples";
-import { CI_TYPES } from "../../../utils/ci";
+import type { AddCoupleDto } from "../../../../services/contest/addContestCouples";
+import { CI_TYPES } from "../../../../utils/ci";
 
 type Props = {
 	addCouple: (c: AddCoupleDto) => void;

@@ -2,13 +2,13 @@ import { VITE_SERVER_URL } from "../../env/env.prod";
 import { Result } from "../../shared/Result";
 import type { Couple } from "../../types/couple";
 import type { Participant } from "../../types/participant";
-import type { Team } from "../../types/team";
+import type { ContestTeam } from "../../types/contestTeam";
 
 type Req = {
 	position?: number | null;
 	participant?: Participant | null;
 	couple?: Couple | null;
-	contestTeam?: Team | null;
+	contestTeam?: ContestTeam | null;
 };
 
 export async function removeInscribed(

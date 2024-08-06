@@ -5,21 +5,23 @@ import { Button, Modal } from "react-bootstrap";
 import { FileUploader } from "react-drag-drop-files";
 
 import * as XLSX from "xlsx";
-import { fileSizeInKB } from "../../../utils/fileSizeInKb";
+import type { AddCoupleDto } from "../../../../services/contest/addContestCouples";
+import { fileSizeInKB } from "../../../../utils/fileSizeInKb";
 
 const fileTypes = ["XLSX", "XLS"];
 
 type Props = {
 	onClose: () => void;
-	addTeams: (data: { name: string; position: number | null }[]) => void;
+	addCouples: (data: AddCoupleDto[]) => void;
 };
 
-export const UploadTeamsModal: React.FC<Props> = ({ onClose, addTeams }) => {
+export const UploadCouplesModal: React.FC<Props> = ({
+	onClose,
+	addCouples,
+}) => {
 	const [file, setFile] = useState<File | null>(null);
 
-	const [teams, setTeams] = useState<
-		{ position: number | null; name: string }[]
-	>([]);
+	const [couples, setCouples] = useState<AddCoupleDto[]>([]);
 
 	const handleChange = (file: File | null) => {
 		if (file) {
@@ -37,16 +39,24 @@ export const UploadTeamsModal: React.FC<Props> = ({ onClose, addTeams }) => {
 					blankrows: false,
 				});
 
-				const formattedData = data.map((row: string[]) => {
+				const formattedData: AddCoupleDto[] = data.map((row: string[]) => {
 					return {
-						position: row[0] ? Number(row[0]) : null,
-						name: row[1],
+						position: row[0] ? Number(row[0].trim()) : null,
+						p1: {
+							firstName: row[1].trim(),
+							lastName: row[2].trim(),
+							ci: row[3].trim(),
+						},
+						p2: {
+							firstName: row[4].trim(),
+							lastName: row[5].trim(),
+							ci: row[6].trim(),
+						},
 					};
 				});
 
-				setTeams(formattedData);
+				setCouples(formattedData);
 			};
-
 			reader.readAsBinaryString(newFile);
 
 			setFile(newFile);
@@ -54,7 +64,7 @@ export const UploadTeamsModal: React.FC<Props> = ({ onClose, addTeams }) => {
 	};
 
 	const handleSubmit = () => {
-		addTeams(teams);
+		addCouples(couples);
 		onClose();
 	};
 
@@ -65,12 +75,12 @@ export const UploadTeamsModal: React.FC<Props> = ({ onClose, addTeams }) => {
 			<div className="modal show wrap-modal">
 				<Modal.Dialog size="lg">
 					<Modal.Header>
-						<Modal.Title>Agregar equipos</Modal.Title>
+						<Modal.Title>Agregar parejas</Modal.Title>
 					</Modal.Header>
 
 					<Modal.Body>
 						<section className="create-players-section">
-							<h2>Cargar equipos</h2>
+							<h2>Cargar parejas</h2>
 							{!file && (
 								<div className="uploader">
 									<FileUploader
@@ -78,7 +88,7 @@ export const UploadTeamsModal: React.FC<Props> = ({ onClose, addTeams }) => {
 										handleChange={handleChange}
 										name="file"
 										fileTypes={fileTypes}
-										label="Arrastra un archivo o haz click aquí para cargar equipos. Recuerda que el archivo debe ser .xlsx o .xls"
+										label="Arrastra un archivo o haz click aquí para cargar parejas. Recuerda que el archivo debe ser .xlsx o .xls"
 										multiple={false}
 										disabled={!!file}
 									/>
@@ -109,18 +119,10 @@ export const UploadTeamsModal: React.FC<Props> = ({ onClose, addTeams }) => {
 							justifyContent: "center",
 						}}
 					>
-						<Button
-							variant="secondary"
-							onClick={() => onClose()}
-							//disabled={state.loading}
-						>
+						<Button variant="secondary" onClick={() => onClose()}>
 							Cancelar
 						</Button>
-						<Button
-							variant="primary"
-							//disabled={state.loading}
-							onClick={handleSubmit}
-						>
+						<Button variant="primary" onClick={handleSubmit}>
 							<span>
 								<FontAwesomeIcon className="me-2" icon={faPlus} />
 								Agregar

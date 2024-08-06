@@ -11,8 +11,8 @@ import { toast } from "react-toastify";
 import {
 	type AddParticipantData,
 	addContestParticipants,
-} from "../../../services/contest/addContestParticipants";
-import { formatContestTitle } from "../contest/utils";
+} from "../../../../services/contest/addContestParticipants";
+import { formatContestTitle } from "../utils";
 import { AddParticipantModal } from "./addParticipantModal";
 import { UploadParticipantsModal } from "./uploadParticipantsModal";
 

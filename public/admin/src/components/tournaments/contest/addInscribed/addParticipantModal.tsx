@@ -3,8 +3,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { CI_TYPES } from "../../../utils/ci";
-import type { AddParticipantData } from "../../../services/contest/addContestParticipants";
+import type { AddParticipantData } from "../../../../services/contest/addContestParticipants";
+import { CI_TYPES } from "../../../../utils/ci";
 
 type Props = {
 	addParticipant: (p: AddParticipantData) => void;

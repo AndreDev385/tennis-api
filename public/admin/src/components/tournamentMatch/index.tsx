@@ -7,7 +7,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import { Button, Card, Dropdown, Pagination, Table } from "react-bootstrap";
-//import { useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 
 import { paginateTournamentMatches } from "../../services/tournamentMatch/paginate";
 import type { Participant } from "../../types/participant";
@@ -17,7 +17,7 @@ import { formatParticipantName } from "../../utils/formatParticipantName";
 import { GameModesValues } from "../../utils/tennisConfigs";
 
 export const MatchesPage = () => {
-	//const _navigate = useNavigate();
+	const navigate = useNavigate();
 
 	const [state, setState] = useState({
 		loading: true,
@@ -120,7 +120,22 @@ export const MatchesPage = () => {
 								icon={faEllipsisVertical}
 							/>
 						</Dropdown.Toggle>
-						<Dropdown.Menu />
+						<Dropdown.Menu>
+							<Dropdown.Item
+								onMouseDown={() =>
+									navigate(`${item.matchId}`, {
+										state: {
+											p1: item.participant1,
+											p2: item.participant2,
+											p3: item.participant3,
+											p4: item.participant4,
+										},
+									})
+								}
+							>
+								Ver
+							</Dropdown.Item>
+						</Dropdown.Menu>
 					</Dropdown>
 				</td>
 			</tr>

@@ -9,8 +9,8 @@ import { Button, Dropdown, Table } from "react-bootstrap";
 import { useLocation, useNavigate } from "react-router";
 import { toast } from "react-toastify";
 
-import { addContestTeams } from "../../../services/contest/addContestTeams";
-import { formatContestTitle } from "../contest/utils";
+import { addContestTeams } from "../../../../services/contest/addContestTeams";
+import { formatContestTitle } from "../utils";
 import { AddTeamModal } from "./addTeamModal";
 import { UploadTeamsModal } from "./uploadTeamsModal";
 

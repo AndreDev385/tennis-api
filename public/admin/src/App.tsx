@@ -1,38 +1,39 @@
 import "@mantine/core/styles.css";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
-import Login from "./components/login/Login";
-import ForgotPassword from "./components/forgotPassword/ForgotPassword";
-import Clubs from "./components/clubs/Clubs";
-import Seasons from "./components/seasons/Seasons";
-import News from "./components/news/News";
-import Ads from "./components/ads/Ads";
-import Trackers from "./components/trackers/Trackers";
+import { MantineProvider } from "@mantine/core";
 import Admins from "./components/admins/Admins";
+import Ads from "./components/ads/Ads";
+import Clubs from "./components/clubs/Clubs";
 import DeleteAccount from "./components/deleteAccount/DeleteAccount";
-import Teams from "./components/teams/Teams";
-import Results from "./components/results/Results";
+import ForgotPassword from "./components/forgotPassword/ForgotPassword";
+import Login from "./components/login/Login";
+import { MatchesPage } from "./components/tournamentMatch";
+import News from "./components/news/News";
+import { Notifications } from "./components/notifications/Notifications";
 import Players from "./components/players/Players";
-import Ranking from "./components/ranking/Ranking";
-import Stats from "./components/teams/stats/Stats";
 import PlayerStats from "./components/players/playerStats/PlayerStats";
+import Ranking from "./components/ranking/Ranking";
+import Results from "./components/results/Results";
 import Games from "./components/results/games/Games";
 import GameStats from "./components/results/stats/GameStats";
-import { Notifications } from "./components/notifications/Notifications";
+import Seasons from "./components/seasons/Seasons";
+import Teams from "./components/teams/Teams";
+import Stats from "./components/teams/stats/Stats";
+import { TournamentsPage } from "./components/tournaments";
+import { ContestDetail } from "./components/tournaments/contest";
+import { CreateTournamentForm } from "./components/tournaments/createTournament";
+import { TournamentDetail } from "./components/tournaments/detail";
+import { CreateContestForm } from "./components/tournaments/detail/createContest";
+import Trackers from "./components/trackers/Trackers";
+import { UsersTablePage } from "./components/users";
 import { NavbarLayout } from "./layouts/navbar/Navbar";
 import { HomeSideBar } from "./layouts/sideBars/homeSideBar";
-import { UsersTablePage } from "./components/users";
 import { LeagueSideBar } from "./layouts/sideBars/leagueSideBar";
 import { TournamentsSideBar } from "./layouts/sideBars/tournamentSideBar";
-import { TournamentsPage } from "./components/tournaments";
-import { TournamentDetail } from "./components/tournaments/detail";
-import { CreateTournamentForm } from "./components/tournaments/createTournament";
-import { MantineProvider } from "@mantine/core";
-import { CreateContestForm } from "./components/tournaments/detail/createContest";
-import { ContestDetail } from "./components/tournaments/contest";
-import { AddInscribed } from "./components/tournaments/addInscribed";
-import { MatchesPage } from "./components/match";
+import { AddInscribed } from "./components/tournaments/contest/addInscribed";
+import { TournamentMatchDetail } from "./components/tournamentMatch/detail";
 
 const router = createBrowserRouter([
 	{
@@ -176,6 +177,10 @@ const router = createBrowserRouter([
 							{
 								path: "",
 								element: <MatchesPage />,
+							},
+							{
+								path: ":matchId",
+								element: <TournamentMatchDetail />,
 							},
 						],
 					},

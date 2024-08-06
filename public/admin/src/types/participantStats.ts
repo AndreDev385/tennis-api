@@ -4,6 +4,11 @@ export type ParticipantStats = {
 	tournamentId: string;
 	matchId: string;
 	isDouble: boolean;
+
+	saveBreakPtsChances: number;
+	breakPtsSaved: number;
+	breakPtsChances: number;
+	breakPts: number;
 	// serv
 	firstServIn: number;
 	secondServIn: number;

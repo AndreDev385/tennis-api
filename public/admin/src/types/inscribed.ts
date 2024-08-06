@@ -1,6 +1,6 @@
 import type { Couple } from "./couple";
 import type { Participant } from "./participant";
-import type { Team } from "./team";
+import type { ContestTeam } from "./contestTeam";
 
 export type InscribedParticipant = {
 	position: number | null;
@@ -14,5 +14,5 @@ export type InscribedCouple = {
 
 export type InscribedTeam = {
 	position: number | null;
-	contestTeam: Team;
+	contestTeam: ContestTeam;
 };
