@@ -60,6 +60,7 @@ export const MatchesPage = () => {
 	const contests = useQuery({
 		queryKey: ["contests", tournamentId],
 		queryFn: async () => listContest({ tournamentId }),
+		//enabled: tournamentId,
 	});
 
 	const matchesTable = matches.data?.getValue().rows.map((item) => {

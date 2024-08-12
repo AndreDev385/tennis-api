@@ -185,7 +185,7 @@ export const ContestBrackets: React.FC = () => {
 					accept={() => handleCreateBrackets()}
 				/>
 			)}
-			<div className="d-flex justify-content-between mx-4">
+			<div className="d-flex justify-content-between m-4">
 				<div className="d-flex align-items-center">
 					<Form.Select
 						defaultValue={deep as number}
@@ -196,7 +196,7 @@ export const ContestBrackets: React.FC = () => {
 						{buildDeepFilters(deep as number)}
 					</Form.Select>
 				</div>
-				<h1>Brackets</h1>
+				<h2>Brackets</h2>
 				<div className="d-flex">
 					<div className="d-flex align-items-center mx-2">
 						<Button

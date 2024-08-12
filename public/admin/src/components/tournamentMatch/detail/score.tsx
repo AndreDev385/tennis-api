@@ -9,30 +9,16 @@ type Props = {
 };
 
 export function Score({ match }: Props) {
-	function buildDisplayName(showRival: boolean) {
-		if (match.mode === GameModesValues.Double) {
-			if (showRival) {
-				return `${formatParticipantName(match.participant2)} / ${formatParticipantName(match.participant4 as Participant)}`;
-			}
-			return `${formatParticipantName(match.participant1)} / ${formatParticipantName(match.participant3 as Participant)}`;
-		}
-
-		if (showRival) {
-			return formatParticipantName(match.participant2 as Participant);
-		}
-		return formatParticipantName(match.participant1);
-	}
-
 	return (
 		<div className="mb-3">
 			<Row
-				name={buildDisplayName(false)}
+				name={buildDisplayName(false, match)}
 				sets={match.sets}
 				showRival={false}
 				hasWon={match.matchWon === true}
 			/>
 			<Row
-				name={buildDisplayName(true)}
+				name={buildDisplayName(true, match)}
 				sets={match.sets}
 				showRival={true}
 				hasWon={match.matchWon === false}
@@ -96,4 +82,18 @@ function Row({ hasWon, sets, showRival, name }: RowProps) {
 			</div>
 		</div>
 	);
+}
+
+export function buildDisplayName(showRival: boolean, match: TournamentMatch) {
+	if (match.mode === GameModesValues.Double) {
+		if (showRival) {
+			return `${formatParticipantName(match.participant2)} / ${formatParticipantName(match.participant4 as Participant)}`;
+		}
+		return `${formatParticipantName(match.participant1)} / ${formatParticipantName(match.participant3 as Participant)}`;
+	}
+
+	if (showRival) {
+		return formatParticipantName(match.participant2 as Participant);
+	}
+	return formatParticipantName(match.participant1);
 }

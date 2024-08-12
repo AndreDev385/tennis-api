@@ -279,7 +279,7 @@ export const Inscribed: React.FC = () => {
 	};
 
 	return (
-		<div>
+		<div className="mt-4">
 			{deleteInscribedModal.visible && (
 				<ModalQuestion
 					title="Eliminar"

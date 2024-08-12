@@ -23,7 +23,7 @@ export const ContestDetail = () => {
 				{state.tournament.name} {state.contest?.mode}{" "}
 				{formatContestTitle(state.contest)}
 			</h1>
-			<div className="d-flex justify-content-center mb-5">
+			<div className="d-flex justify-content-center">
 				<ButtonGroup>
 					<Button
 						variant={showInscribed ? "primary" : "secondary"}

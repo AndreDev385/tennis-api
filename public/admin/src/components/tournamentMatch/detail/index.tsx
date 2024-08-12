@@ -1,9 +1,8 @@
 import { faPoll } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// biome-ignore lint/style/useImportType: <explanation>
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button, ButtonGroup, Table } from "react-bootstrap";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { getTournamentMatch } from "../../../services/tournamentMatch/getMatch";
 import type { Participant } from "../../../types/participant";
 import type { Set as GameSet } from "../../../types/set";
@@ -21,6 +20,8 @@ import { buildStandardSections } from "./buildStardardSections";
 import { calculateStatsBySet } from "./calculateStastBySet";
 import { Score } from "./score";
 import { StatsTable } from "./statsTable";
+import { useQuery } from "@tanstack/react-query";
+import { TableOptions, TablesButtons } from "./tablesButtons";
 
 function buildSelectSetOptions(quantity: number): boolean[] {
 	const options = [];
@@ -34,93 +35,27 @@ function buildSelectSetOptions(quantity: number): boolean[] {
 	return options;
 }
 
-enum TableOptions {
-	standard = 0,
-	j1vsj2 = 1,
-	j3vsj4 = 2,
-}
-
 export const TournamentMatchDetail: React.FC = () => {
+	const navigate = useNavigate();
 	const { matchId } = useParams();
 
-	const [status, setStatus] = useState({
-		loading: true,
-		error: "",
-	});
-
 	const [selectSetOptions, setSelectSetOptions] = useState<boolean[]>([]);
-
-	const [match, setMatch] = useState<TournamentMatch>();
-
 	const [showTable, setShowTable] = useState(TableOptions.standard);
 
+	const result = useQuery({
+		queryKey: ["match", matchId],
+		queryFn: () => handleGetMatch(matchId as string),
+	});
+
+	const match = result.data?.getValue();
+
 	const handleGetMatch = async (matchId: string) => {
-		setStatus({
-			loading: true,
-			error: "",
-		});
 		const result = await getTournamentMatch({
 			matchId,
 		});
-
-		setStatus({
-			loading: false,
-			error: result.isFailure ? result.getErrorValue() : "",
-		});
-
-		if (result.isFailure) {
-			return;
-		}
-
 		setSelectSetOptions(buildSelectSetOptions(result.getValue().sets.length));
-		setMatch(result.getValue());
+		return result;
 	};
-
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-	useEffect(() => {
-		handleGetMatch(matchId as string);
-	}, []);
-
-	if (status.loading) {
-		return Loading();
-	}
-
-	if (status.error.length > 0) {
-		return ErrorMessage(status.error);
-	}
-
-	function renderStatsButtons() {
-		if (match?.mode === "single") {
-			return (
-				<ButtonGroup>
-					<Button variant="primary">Jugador vs Jugador</Button>
-				</ButtonGroup>
-			);
-		}
-
-		return (
-			<ButtonGroup>
-				<Button
-					variant={showTable == TableOptions.standard ? "primary" : "secondary"}
-					onClick={() => setShowTable(TableOptions.standard)}
-				>
-					Pareja vs Pareja
-				</Button>
-				<Button
-					variant={showTable == TableOptions.j1vsj2 ? "primary" : "secondary"}
-					onClick={() => setShowTable(TableOptions.j1vsj2)}
-				>
-					J1 vs J2
-				</Button>
-				<Button
-					variant={showTable == TableOptions.j3vsj4 ? "primary" : "secondary"}
-					onClick={() => setShowTable(TableOptions.j3vsj4)}
-				>
-					J3 vs J4
-				</Button>
-			</ButtonGroup>
-		);
-	}
 
 	function displayLeftName(tableOption: number): string {
 		if (tableOption == TableOptions.j1vsj2) {
@@ -157,15 +92,27 @@ export const TournamentMatchDetail: React.FC = () => {
 		return formatParticipantName(match?.participant2 as Participant);
 	}
 
-	if (status.loading) return Loading();
-	if (status.error) return ErrorMessage(status.error);
+	if (result.isLoading) return Loading();
+	if (result.data?.isFailure) return ErrorMessage(result.data.getErrorValue());
 	return (
 		<div>
-			<div>
-				<h1>
+			<div className="d-flex justify-content-between">
+				<h1 className="text-center">
 					<FontAwesomeIcon icon={faPoll} />
 					Detalle del partido
 				</h1>
+				<div className="d-flex align-items-center">
+					<Button
+						className="mx-4"
+						onMouseDown={() =>
+							navigate(
+								`/dashboard/tournaments/matches/update/${match!.matchId}`,
+							)
+						}
+					>
+						Actualizar
+					</Button>
+				</div>
 			</div>
 			<div
 				style={{
@@ -184,15 +131,10 @@ export const TournamentMatchDetail: React.FC = () => {
 						<h4>{mapMatchStatusToString(match?.status as MatchStatus)}</h4>
 					</div>
 				</div>
-				{/* Score board */}
 				<Score match={match as TournamentMatch} />
-				{/* End Score board */}
-				{/* Select table buttons */}
 				<div className="d-flex justify-content-center mb-3">
-					{renderStatsButtons()}
+					{TablesButtons(match?.mode as string, showTable, setShowTable)}
 				</div>
-				{/* End */}
-				{/* Sets filter Table */}
 				<ButtonGroup className="w-100 mb-3">
 					{selectSetOptions.map(function displaySets(active, i) {
 						function disable() {
@@ -209,7 +151,7 @@ export const TournamentMatchDetail: React.FC = () => {
 								variant={active ? "primary" : "secondary"}
 								// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
 								key={i}
-								onMouseDown={() => {
+								onMouseDown={function changeSelectOptions() {
 									const options = [];
 									for (let j = 0; j < selectSetOptions.length; j++) {
 										if (j === i) {
@@ -226,7 +168,6 @@ export const TournamentMatchDetail: React.FC = () => {
 						);
 					})}
 				</ButtonGroup>
-				{/* End */}
 				<Table responsive="sm">
 					<tbody>
 						<tr>
@@ -236,7 +177,6 @@ export const TournamentMatchDetail: React.FC = () => {
 						</tr>
 					</tbody>
 				</Table>
-				{/* Table */}
 				<StatsTable
 					sections={buildStandardSections(
 						calculateStatsBySet(
@@ -246,7 +186,6 @@ export const TournamentMatchDetail: React.FC = () => {
 						),
 					)}
 				/>
-				{/* End */}
 			</div>
 		</div>
 	);

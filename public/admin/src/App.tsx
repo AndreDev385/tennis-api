@@ -35,6 +35,7 @@ import { NavbarLayout } from "./layouts/navbar/Navbar";
 import { HomeSideBar } from "./layouts/sideBars/homeSideBar";
 import { LeagueSideBar } from "./layouts/sideBars/leagueSideBar";
 import { TournamentsSideBar } from "./layouts/sideBars/tournamentSideBar";
+import { UpdateTournamentMatch } from "./components/tournamentMatch/update";
 
 const router = createBrowserRouter([
 	{
@@ -178,6 +179,10 @@ const router = createBrowserRouter([
 							{
 								path: "",
 								element: <MatchesPage />,
+							},
+							{
+								path: "update/:matchId",
+								element: <UpdateTournamentMatch />,
 							},
 							{
 								path: ":matchId",
