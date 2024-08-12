@@ -1,15 +1,15 @@
 import "@mantine/core/styles.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-
 import { MantineProvider } from "@mantine/core";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
 import Admins from "./components/admins/Admins";
 import Ads from "./components/ads/Ads";
 import Clubs from "./components/clubs/Clubs";
 import DeleteAccount from "./components/deleteAccount/DeleteAccount";
 import ForgotPassword from "./components/forgotPassword/ForgotPassword";
 import Login from "./components/login/Login";
-import { MatchesPage } from "./components/tournamentMatch";
 import News from "./components/news/News";
 import { Notifications } from "./components/notifications/Notifications";
 import Players from "./components/players/Players";
@@ -21,8 +21,11 @@ import GameStats from "./components/results/stats/GameStats";
 import Seasons from "./components/seasons/Seasons";
 import Teams from "./components/teams/Teams";
 import Stats from "./components/teams/stats/Stats";
+import { MatchesPage } from "./components/tournamentMatch";
+import { TournamentMatchDetail } from "./components/tournamentMatch/detail";
 import { TournamentsPage } from "./components/tournaments";
 import { ContestDetail } from "./components/tournaments/contest";
+import { AddInscribed } from "./components/tournaments/contest/addInscribed";
 import { CreateTournamentForm } from "./components/tournaments/createTournament";
 import { TournamentDetail } from "./components/tournaments/detail";
 import { CreateContestForm } from "./components/tournaments/detail/createContest";
@@ -32,8 +35,6 @@ import { NavbarLayout } from "./layouts/navbar/Navbar";
 import { HomeSideBar } from "./layouts/sideBars/homeSideBar";
 import { LeagueSideBar } from "./layouts/sideBars/leagueSideBar";
 import { TournamentsSideBar } from "./layouts/sideBars/tournamentSideBar";
-import { AddInscribed } from "./components/tournaments/contest/addInscribed";
-import { TournamentMatchDetail } from "./components/tournamentMatch/detail";
 
 const router = createBrowserRouter([
 	{
@@ -191,23 +192,27 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-	return (
-		<MantineProvider>
-			<RouterProvider router={router} />
+	const queryClient = new QueryClient();
 
-			<ToastContainer
-				position="top-right"
-				autoClose={5000}
-				hideProgressBar={false}
-				newestOnTop={false}
-				closeOnClick
-				rtl={false}
-				pauseOnFocusLoss
-				draggable
-				pauseOnHover
-				theme="light"
-			/>
-		</MantineProvider>
+	return (
+		<QueryClientProvider client={queryClient}>
+			<MantineProvider>
+				<RouterProvider router={router} />
+
+				<ToastContainer
+					position="top-right"
+					autoClose={5000}
+					hideProgressBar={false}
+					newestOnTop={false}
+					closeOnClick
+					rtl={false}
+					pauseOnFocusLoss
+					draggable
+					pauseOnHover
+					theme="light"
+				/>
+			</MantineProvider>
+		</QueryClientProvider>
 	);
 }
 

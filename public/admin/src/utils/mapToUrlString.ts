@@ -1,18 +1,19 @@
 function mapToUrlString(object: Record<string, any>) {
-  let url = "";
+	let url = "";
 
-  let firstEntry = true;
+	let firstEntry = true;
 
-  for (const [key, value] of Object.entries(object)) {
-    if (firstEntry) {
-      url += `${key}=${value}`;
-      firstEntry = false
-    } else {
-      url += `&${key}=${value}`;
-    }
-  }
+	for (const [key, value] of Object.entries(object)) {
+		if (!value) continue;
+		if (firstEntry) {
+			url += `${key}=${value}`;
+			firstEntry = false;
+		} else {
+			url += `&${key}=${value}`;
+		}
+	}
 
-  return url;
+	return url;
 }
 
-export { mapToUrlString }
+export { mapToUrlString };

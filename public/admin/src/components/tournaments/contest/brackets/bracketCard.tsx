@@ -28,7 +28,7 @@ export const BracketCard: React.FC<Props> = ({ bracket }) => {
 
 	return (
 		<div className="bracket__card d-flex flex-column">
-			<Row
+			<ScoreRow
 				isTop
 				hasWon={match?.matchWon === true}
 				sets={match?.sets}
@@ -36,7 +36,7 @@ export const BracketCard: React.FC<Props> = ({ bracket }) => {
 				name={buildNameForDisplay(bracket.rightPlace)}
 			/>
 			<div className="divider" />
-			<Row
+			<ScoreRow
 				isTop={false}
 				hasWon={match?.matchWon === false}
 				sets={match?.sets}
@@ -55,7 +55,13 @@ type RowProps = {
 	name: string;
 };
 
-const Row: React.FC<RowProps> = ({ isTop, hasWon, sets, showRival, name }) => {
+export const ScoreRow: React.FC<RowProps> = ({
+	isTop,
+	hasWon,
+	sets,
+	showRival,
+	name,
+}) => {
 	return (
 		<div
 			className={`${isTop ? "bracket__top_field" : "bracket__bottom_field"} d-flex justify-content-between px-5`}

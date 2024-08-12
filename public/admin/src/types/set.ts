@@ -1,4 +1,5 @@
 import type { ParticipantStats } from "./participantStats";
+import type { TournamentMatchTracker } from "./tournamentTracker";
 
 export type Set = {
 	myGames: number;
@@ -8,7 +9,7 @@ export type Set = {
 	superTiebreak: boolean;
 	myTiebreakPoints: number;
 	rivalTiebreakPoints: number;
-	stats: ParticipantStats;
+	stats: TournamentMatchTracker;
 };
 
 export type SetTournamentMatchStats = {

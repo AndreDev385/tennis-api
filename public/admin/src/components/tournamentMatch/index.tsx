@@ -1,57 +1,68 @@
+import "./index.scss";
 import {
 	faBaseballBall,
 	faCheck,
-	faCircleNotch,
 	faEllipsisVertical,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useState } from "react";
-import { Button, Card, Dropdown, Pagination, Table } from "react-bootstrap";
+import { useState } from "react";
+import {
+	Button,
+	Card,
+	Dropdown,
+	Form,
+	InputGroup,
+	Pagination,
+	Table,
+} from "react-bootstrap";
 import { useNavigate } from "react-router";
 
+import { useQuery } from "@tanstack/react-query";
+import { listContest } from "../../services/contest/listContest";
 import { paginateTournamentMatches } from "../../services/tournamentMatch/paginate";
+import { paginateTournaments } from "../../services/tournaments/listTournaments";
 import type { Participant } from "../../types/participant";
-import type { TournamentMatch } from "../../types/tournamentMatch";
 import { buildPagination } from "../../utils/buildPagination";
 import { formatParticipantName } from "../../utils/formatParticipantName";
 import { GameModesValues } from "../../utils/tennisConfigs";
+import { ErrorMessage } from "../shared/errorMessage";
+import { Loading } from "../shared/loading";
+import { formatContestTitle } from "../tournaments/contest/utils";
 
 export const MatchesPage = () => {
 	const navigate = useNavigate();
 
+	const [tournamentId, setTournamentId] = useState("");
+	const [contestId, setContestId] = useState("");
+
 	const [state, setState] = useState({
-		loading: true,
-		error: "",
 		offset: 0,
 		limit: 20,
 		count: 0,
 	});
 
-	const [matches, setMatches] = useState<TournamentMatch[]>([]);
+	const tournaments = useQuery({
+		queryKey: ["tournaments"],
+		queryFn: async () => paginateTournaments({ limit: 9999, offset: 0 }),
+	});
 
-	const handlePaginateMatches = async () => {
-		setState((prev) => ({ ...prev, loading: true, error: "" }));
-		const result = await paginateTournamentMatches({
-			limit: state.limit,
-			offset: state.offset,
-		});
-		setState((prev) => ({ ...prev, loading: false }));
+	const matches = useQuery({
+		queryKey: ["tournamentMatches", tournamentId, contestId, state],
+		queryFn: async () =>
+			paginateTournamentMatches({
+				limit: state.limit,
+				offset: state.offset,
+				tournamentId,
+				contestId,
+			}),
+	});
 
-		if (result.isFailure) {
-			setState((prev) => ({ ...prev, error: result.getErrorValue() }));
-			return;
-		}
+	const contests = useQuery({
+		queryKey: ["contests", tournamentId],
+		queryFn: async () => listContest({ tournamentId }),
+	});
 
-		setState((prev) => ({ ...prev, count: result.getValue().count }));
-		setMatches(result.getValue().rows);
-	};
-
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-	useEffect(() => {
-		handlePaginateMatches();
-	}, [state.offset]);
-
-	const matchesTable = matches.map((item) => {
+	const matchesTable = matches.data?.getValue().rows.map((item) => {
 		return (
 			<tr key={item.matchId}>
 				<td className="text-center players">
@@ -143,13 +154,11 @@ export const MatchesPage = () => {
 	});
 
 	function render() {
-		if (state.loading) {
-			return (
-				<FontAwesomeIcon className="center mt-5" icon={faCircleNotch} spin />
-			);
+		if (matches.isLoading) {
+			return Loading();
 		}
-		if (state.error.length > 0) {
-			return state.error;
+		if (matches.data?.isFailure) {
+			return ErrorMessage(matches.data.getErrorValue());
 		}
 		return matchesTable;
 	}
@@ -162,6 +171,45 @@ export const MatchesPage = () => {
 						<FontAwesomeIcon icon={faBaseballBall} />
 						Partidos
 					</h1>
+				</div>
+				<div className="filter-container">
+					<InputGroup>
+						<Form.Select
+							value={tournamentId}
+							onChange={(e) => {
+								setTournamentId(e.target.value);
+								if (e.target.value === "") setContestId("");
+							}}
+						>
+							<option value="">Selecciona un torneo</option>
+							{tournaments.data
+								?.getValue()
+								.rows.map(function tournamentsOptions(t) {
+									return (
+										<option key={t.tournamentId} value={t.tournamentId}>
+											{t.name}
+										</option>
+									);
+								})}
+						</Form.Select>
+					</InputGroup>
+					<div className="mx-2" />
+					<InputGroup>
+						<Form.Select
+							value={contestId}
+							disabled={!tournamentId}
+							onChange={(e) => setContestId(e.target.value)}
+						>
+							<option value="">Selecciona una competencia</option>
+							{contests.data?.getValue().map(function contestOptions(c) {
+								return (
+									<option value={c.contestId} key={c.contestId}>
+										{formatContestTitle(c)}
+									</option>
+								);
+							})}
+						</Form.Select>
+					</InputGroup>
 				</div>
 				<Card>
 					<Table responsive="sm">
