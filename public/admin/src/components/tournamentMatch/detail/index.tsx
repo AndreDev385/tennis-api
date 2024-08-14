@@ -22,18 +22,7 @@ import { Score } from "./score";
 import { StatsTable } from "./statsTable";
 import { useQuery } from "@tanstack/react-query";
 import { TableOptions, TablesButtons } from "./tablesButtons";
-
-function buildSelectSetOptions(quantity: number): boolean[] {
-	const options = [];
-
-	for (let i = 0; i <= quantity; i++) {
-		options[i] = false;
-	}
-
-	options[quantity] = true;
-
-	return options;
-}
+import { buildSelectSetOptions } from "../buildSetOptions";
 
 export const TournamentMatchDetail: React.FC = () => {
 	const navigate = useNavigate();

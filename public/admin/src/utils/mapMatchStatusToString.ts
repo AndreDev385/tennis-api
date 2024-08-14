@@ -1,12 +1,12 @@
 export type MatchStatus = 0 | 1 | 2 | 3 | 4;
 
-export enum StatusValues {
-	Waiting = 0,
-	Live = 1,
-	Paused = 2,
-	Canceled = 3,
-	Finished = 4,
-}
+export const StatusValues = {
+	Waiting: 0,
+	Live: 1,
+	Paused: 2,
+	Canceled: 3,
+	Finished: 4,
+} as const;
 
 export function mapMatchStatusToString(status: MatchStatus) {
 	if (status === StatusValues.Live) {

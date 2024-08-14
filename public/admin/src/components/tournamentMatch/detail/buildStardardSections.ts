@@ -9,7 +9,7 @@ export function buildStandardSections(
 
 	const t1Aces = () => {
 		if (player3 != null) {
-			return player1.aces + player3!.aces;
+			return player1!.aces + player3!.aces;
 		}
 		return player1.aces;
 	};

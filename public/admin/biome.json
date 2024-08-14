@@ -16,6 +16,14 @@
 				"noDoubleEquals": {
 					"level": "off"
 				}
+			},
+			"style": {
+				"noNonNullAssertion": {
+					"level": "off"
+				},
+				"noVar": {
+					"level": "off"
+				}
 			}
 		}
 	}
