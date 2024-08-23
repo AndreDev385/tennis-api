@@ -1,9 +1,10 @@
 import "@mantine/core/styles.css";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
 import { MantineProvider } from "@mantine/core";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 
+import { useState } from "react";
 import Admins from "./components/admins/Admins";
 import Ads from "./components/ads/Ads";
 import Clubs from "./components/clubs/Clubs";
@@ -23,9 +24,11 @@ import Teams from "./components/teams/Teams";
 import Stats from "./components/teams/stats/Stats";
 import { MatchesPage } from "./components/tournamentMatch";
 import { TournamentMatchDetail } from "./components/tournamentMatch/detail";
+import { UpdateTournamentMatch } from "./components/tournamentMatch/update";
 import { TournamentsPage } from "./components/tournaments";
 import { ContestDetail } from "./components/tournaments/contest";
 import { AddInscribed } from "./components/tournaments/contest/addInscribed";
+import type { BracketPairData } from "./components/tournaments/contest/brackets/bracketPair";
 import { CreateTournamentForm } from "./components/tournaments/createTournament";
 import { TournamentDetail } from "./components/tournaments/detail";
 import { CreateContestForm } from "./components/tournaments/detail/createContest";
@@ -35,7 +38,7 @@ import { NavbarLayout } from "./layouts/navbar/Navbar";
 import { HomeSideBar } from "./layouts/sideBars/homeSideBar";
 import { LeagueSideBar } from "./layouts/sideBars/leagueSideBar";
 import { TournamentsSideBar } from "./layouts/sideBars/tournamentSideBar";
-import { UpdateTournamentMatch } from "./components/tournamentMatch/update";
+import { BracketContext } from "./shared/context/bracket";
 
 const router = createBrowserRouter([
 	{
@@ -199,23 +202,35 @@ const router = createBrowserRouter([
 function App() {
 	const queryClient = new QueryClient();
 
+	const [bracketPairs, setBracketPairs] = useState<BracketPairData[]>([]);
+	const [deep, setDeep] = useState<null | number>(null);
+
 	return (
 		<QueryClientProvider client={queryClient}>
 			<MantineProvider>
-				<RouterProvider router={router} />
+				<BracketContext.Provider
+					value={{
+						bracketPairs,
+						setBracketPairs,
+						deep,
+						setDeep,
+					}}
+				>
+					<RouterProvider router={router} />
 
-				<ToastContainer
-					position="top-right"
-					autoClose={5000}
-					hideProgressBar={false}
-					newestOnTop={false}
-					closeOnClick
-					rtl={false}
-					pauseOnFocusLoss
-					draggable
-					pauseOnHover
-					theme="light"
-				/>
+					<ToastContainer
+						position="top-right"
+						autoClose={5000}
+						hideProgressBar={false}
+						newestOnTop={false}
+						closeOnClick
+						rtl={false}
+						pauseOnFocusLoss
+						draggable
+						pauseOnHover
+						theme="light"
+					/>
+				</BracketContext.Provider>
 			</MantineProvider>
 		</QueryClientProvider>
 	);

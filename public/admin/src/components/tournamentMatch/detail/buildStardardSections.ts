@@ -11,580 +11,544 @@ export function buildStandardSections(
 		if (player3 != null) {
 			return player1!.aces + player3!.aces;
 		}
-		return player1.aces;
+		return player1?.aces;
 	};
 
 	const t2Aces = () => {
 		if (player4 != null) {
-			return player2.aces + player4!.aces;
+			return player2!.aces + player4!.aces;
 		}
-		return player2.aces;
+		return player2!.aces;
 	};
 
 	const t1DoubleFaults = () => {
 		if (player3 != null) {
-			return player1.dobleFaults + player3!.dobleFaults;
+			return player1!.dobleFaults + player3!.dobleFaults;
 		}
-		return player1.dobleFaults;
+		return player1!.dobleFaults;
 	};
 
 	const t2DoubleFaults = () => {
 		if (player4 != null) {
-			return player2.dobleFaults + player4!.dobleFaults;
+			return player2!.dobleFaults + player4!.dobleFaults;
 		}
-		return player2.dobleFaults;
+		return player2!.dobleFaults;
 	};
 
 	const t1FirstServIn = () => {
 		if (player3 != null) {
-			return player1.firstServIn + player3!.firstServIn;
+			return player1!.firstServIn + player3!.firstServIn;
 		}
-		return player1.firstServIn;
+		return player1!.firstServIn;
 	};
 
 	const t2FirstServIn = () => {
 		if (player4 != null) {
-			return player2.firstServIn + player4!.firstServIn;
+			return player2!.firstServIn + player4!.firstServIn;
 		}
-		return player2.firstServIn;
+		return player2!.firstServIn;
 	};
 
 	const t1FirstServWon = () => {
 		if (player3 != null) {
-			return player1.firstServWon + player3!.firstServWon;
+			return player1!.firstServWon + player3!.firstServWon;
 		}
-		return player1.firstServWon;
+		return player1!.firstServWon;
 	};
 
 	const t2FirstServWon = () => {
 		if (player4 != null) {
-			return player2.firstServWon + player4!.firstServWon;
+			return player2!.firstServWon + player4!.firstServWon;
 		}
-		return player2.firstServWon;
+		return player2!.firstServWon;
 	};
 
 	const t1PointsWinnedFirstServ = () => {
 		if (player3 != null) {
-			return player1.pointsWinnedFirstServ + player3!.pointsWinnedFirstServ;
+			return player1!.pointsWinnedFirstServ + player3!.pointsWinnedFirstServ;
 		}
-		return player1.pointsWinnedFirstServ;
+		return player1!.pointsWinnedFirstServ;
 	};
 
 	const t2PointsWinnedFirstServ = () => {
 		if (player4 != null) {
-			return player2.pointsWinnedFirstServ + player4!.pointsWinnedFirstServ;
+			return player2!.pointsWinnedFirstServ + player4!.pointsWinnedFirstServ;
 		}
-		return player2.pointsWinnedFirstServ;
+		return player2!.pointsWinnedFirstServ;
 	};
 
 	const t1SecondServIn = () => {
 		if (player3 != null) {
-			return player1.secondServIn + player3!.secondServIn;
+			return player1!.secondServIn + player3!.secondServIn;
 		}
-		return player1.secondServIn;
+		return player1!.secondServIn;
 	};
 
 	const t2SecondServIn = () => {
 		if (player4 != null) {
-			return player2.secondServIn + player4!.secondServIn;
+			return player2!.secondServIn + player4!.secondServIn;
 		}
-		return player2.secondServIn;
+		return player2!.secondServIn;
 	};
 
 	const t1SecondServWon = () => {
 		if (player3 != null) {
-			return player1.secondServWon + player3!.secondServWon;
+			return player1!.secondServWon + player3!.secondServWon;
 		}
-		return player1.secondServWon;
+		return player1!.secondServWon;
 	};
 
 	const t2SecondServWon = () => {
 		if (player4 != null) {
-			return player2.secondServWon + player4!.secondServWon;
+			return player2!.secondServWon + player4!.secondServWon;
 		}
-		return player2.secondServWon;
+		return player2!.secondServWon;
 	};
 
 	const t1PointsWinnedSecondServ = () => {
 		if (player3 != null) {
-			return player1.pointsWinnedSecondServ + player3!.pointsWinnedSecondServ;
+			return player1!.pointsWinnedSecondServ + player3!.pointsWinnedSecondServ;
 		}
-		return player1.pointsWinnedSecondServ;
+		return player1!.pointsWinnedSecondServ;
 	};
 
 	const t2PointsWinnedSecondServ = () => {
 		if (player4 != null) {
-			return player2.pointsWinnedSecondServ + player4!.pointsWinnedSecondServ;
+			return player2!.pointsWinnedSecondServ + player4!.pointsWinnedSecondServ;
 		}
-		return player2.pointsWinnedSecondServ;
+		return player2!.pointsWinnedSecondServ;
 	};
 
 	const t1GamesWonServing = () => {
 		if (player3 != null) {
-			return player1.gamesWonServing + player3!.gamesWonServing;
+			return player1!.gamesWonServing + player3!.gamesWonServing;
 		}
-		return player1.gamesWonServing;
+		return player1!.gamesWonServing;
 	};
 
 	const t2GamesWonServing = () => {
 		if (player4 != null) {
-			return player2.gamesWonServing + player4!.gamesWonServing;
+			return player2!.gamesWonServing + player4!.gamesWonServing;
 		}
-		return player2.gamesWonServing;
+		return player2!.gamesWonServing;
 	};
 
 	const t1GamesLostServing = () => {
 		if (player3 != null) {
-			return player1.gamesLostServing + player3!.gamesLostServing;
+			return player1!.gamesLostServing + player3!.gamesLostServing;
 		}
-		return player1.gamesLostServing;
+		return player1!.gamesLostServing;
 	};
 
 	const t2GamesLostServing = () => {
 		if (player4 != null) {
-			return player2.gamesLostServing + player4!.gamesLostServing;
+			return player2!.gamesLostServing + player4!.gamesLostServing;
 		}
-		return player2.gamesLostServing;
+		return player2!.gamesLostServing;
 	};
 
 	const t1FirstReturnIn = () => {
 		if (player3 != null) {
-			return player1.firstReturnIn + player3!.firstReturnIn;
+			return player1!.firstReturnIn + player3!.firstReturnIn;
 		}
-		return player1.firstReturnIn;
+		return player1!.firstReturnIn;
 	};
 
 	const t2FirstReturnIn = () => {
 		if (player4 != null) {
-			return player2.firstReturnIn + player4!.firstReturnIn;
+			return player2!.firstReturnIn + player4!.firstReturnIn;
 		}
-		return player2.firstReturnIn;
+		return player2!.firstReturnIn;
 	};
 
 	const t1FirstReturnOut = () => {
 		if (player3 != null) {
-			return player1.firstReturnOut + player3!.firstReturnOut;
+			return player1!.firstReturnOut + player3!.firstReturnOut;
 		}
-		return player1.firstReturnOut;
+		return player1!.firstReturnOut;
 	};
 
 	const t2FirstReturnOut = () => {
 		if (player4 != null) {
-			return player2.firstReturnOut + player4!.firstReturnOut;
+			return player2!.firstReturnOut + player4!.firstReturnOut;
 		}
-		return player2.firstReturnOut;
+		return player2!.firstReturnOut;
 	};
 
 	const t1FirstReturnWon = () => {
 		if (player3 != null) {
-			return player1.firstReturnWon + player3!.firstReturnWon;
+			return player1!.firstReturnWon + player3!.firstReturnWon;
 		}
-		return player1.firstReturnWon;
+		return player1!.firstReturnWon;
 	};
 
 	const t2FirstReturnWon = () => {
 		if (player4 != null) {
-			return player2.firstReturnWon + player4!.firstReturnWon;
+			return player2!.firstReturnWon + player4!.firstReturnWon;
 		}
-		return player2.firstReturnWon;
+		return player2!.firstReturnWon;
 	};
 
 	const t1FirstReturnWinner = () => {
 		if (player3 != null) {
-			return player1.firstReturnWinner + player3!.firstReturnWinner;
+			return player1!.firstReturnWinner + player3!.firstReturnWinner;
 		}
-		return player1.firstReturnWinner;
+		return player1!.firstReturnWinner;
 	};
 
 	const t2FirstReturnWinner = () => {
 		if (player4 != null) {
-			return player2.firstReturnWinner + player4!.firstReturnWinner;
+			return player2!.firstReturnWinner + player4!.firstReturnWinner;
 		}
-		return player2.firstReturnWinner;
+		return player2!.firstReturnWinner;
 	};
 
 	const t1PointsWinnedFirstReturn = () => {
 		if (player3 != null) {
-			return player1.pointsWinnedFirstReturn + player3!.pointsWinnedFirstReturn;
+			return (
+				player1!.pointsWinnedFirstReturn + player3!.pointsWinnedFirstReturn
+			);
 		}
-		return player1.pointsWinnedFirstReturn;
+		return player1!.pointsWinnedFirstReturn;
 	};
 
 	const t2PointsWinnedFirstReturn = () => {
 		if (player4 != null) {
-			return player2.pointsWinnedFirstReturn + player4!.pointsWinnedFirstReturn;
+			return (
+				player2!.pointsWinnedFirstReturn + player4!.pointsWinnedFirstReturn
+			);
 		}
-		return player2.pointsWinnedFirstReturn;
+		return player2!.pointsWinnedFirstReturn;
 	};
 
 	const t1SecondReturnIn = () => {
 		if (player3 != null) {
-			return player1.secondReturnIn + player3!.secondReturnIn;
+			return player1!.secondReturnIn + player3!.secondReturnIn;
 		}
-		return player1.secondReturnIn;
+		return player1!.secondReturnIn;
 	};
 
 	const t2SecondReturnIn = () => {
 		if (player4 != null) {
-			return player2.secondReturnIn + player4!.secondReturnIn;
+			return player2!.secondReturnIn + player4!.secondReturnIn;
 		}
-		return player2.secondReturnIn;
+		return player2!.secondReturnIn;
 	};
 
 	const t1SecondReturnOut = () => {
 		if (player3 != null) {
-			return player1.secondReturnOut + player3!.secondReturnOut;
+			return player1!.secondReturnOut + player3!.secondReturnOut;
 		}
-		return player1.secondReturnOut;
+		return player1!.secondReturnOut;
 	};
 
 	const t2SecondReturnOut = () => {
 		if (player4 != null) {
-			return player2.secondReturnOut + player4!.secondReturnOut;
+			return player2!.secondReturnOut + player4!.secondReturnOut;
 		}
-		return player2.secondReturnOut;
+		return player2!.secondReturnOut;
 	};
 
 	const t1SecondReturnWon = () => {
 		if (player3 != null) {
-			return player1.secondReturnWon + player3!.secondReturnWon;
+			return player1!.secondReturnWon + player3!.secondReturnWon;
 		}
-		return player1.secondReturnWon;
+		return player1!.secondReturnWon;
 	};
 
 	const t2SecondReturnWon = () => {
 		if (player4 != null) {
-			return player2.secondReturnWon + player4!.secondReturnWon;
+			return player2!.secondReturnWon + player4!.secondReturnWon;
 		}
-		return player2.secondReturnWon;
+		return player2!.secondReturnWon;
 	};
 
 	const t1SecondReturnWinner = () => {
 		if (player3 != null) {
-			return player1.secondReturnWinner + player3!.secondReturnWinner;
+			return player1!.secondReturnWinner + player3!.secondReturnWinner;
 		}
-		return player1.secondReturnWinner;
+		return player1!.secondReturnWinner;
 	};
 
 	const t2SecondReturnWinner = () => {
 		if (player4 != null) {
-			return player2.secondReturnWinner + player4!.secondReturnWinner;
+			return player2!.secondReturnWinner + player4!.secondReturnWinner;
 		}
-		return player2.secondReturnWinner;
+		return player2!.secondReturnWinner;
 	};
 
 	const t1SaveBreakPtsChances = () => {
 		if (player3 != null) {
-			return player1.saveBreakPtsChances + player3!.saveBreakPtsChances;
+			return player1!.saveBreakPtsChances + player3!.saveBreakPtsChances;
 		}
-		return player1.saveBreakPtsChances;
+		return player1!.saveBreakPtsChances;
 	};
 
 	const t2SaveBreakPtsChances = () => {
 		if (player4 != null) {
-			return player2.saveBreakPtsChances + player4!.saveBreakPtsChances;
+			return player2!.saveBreakPtsChances + player4!.saveBreakPtsChances;
 		}
-		return player2.saveBreakPtsChances;
+		return player2!.saveBreakPtsChances;
 	};
 
 	const t1BreakPtsSaved = () => {
 		if (player3 != null) {
-			return player1.breakPtsSaved + player3!.breakPtsSaved;
+			return player1!.breakPtsSaved + player3!.breakPtsSaved;
 		}
-		return player1.breakPtsSaved;
+		return player1!.breakPtsSaved;
 	};
 
 	const t2BreakPtsSaved = () => {
 		if (player4 != null) {
-			return player2.breakPtsSaved + player4!.breakPtsSaved;
+			return player2!.breakPtsSaved + player4!.breakPtsSaved;
 		}
-		return player2.breakPtsSaved;
+		return player2!.breakPtsSaved;
 	};
 
 	const t1BreakPtsChances = () => {
-		return player1.breakPtsChances;
+		return player1!.breakPtsChances;
 	};
 
 	const t2BreakPtsChances = () => {
-		return player2.breakPtsChances;
+		return player2!.breakPtsChances;
 	};
 
 	const t1BreakPts = () => {
-		return player1.breakPts;
+		return player1!.breakPts;
 	};
 
 	const t2BreakPts = () => {
-		return player2.breakPts;
+		return player2!.breakPts;
 	};
 
 	const t1GamesWonReturning = () => {
-		return player1.gamesWonReturning;
+		return player1!.gamesWonReturning;
 	};
 
 	const t2GamesWonReturning = () => {
-		return player2.gamesWonReturning;
+		return player2!.gamesWonReturning;
 	};
 
 	const t1GamesLostReturning = () => {
-		return player1.gamesLostReturning;
+		return player1!.gamesLostReturning;
 	};
 
 	const t2GamesLostReturning = () => {
-		return player2.gamesLostReturning;
+		return player2!.gamesLostReturning;
 	};
 
 	const t1PointsWinnedSecondReturn = () => {
 		if (player3 != null) {
 			return (
-				player1.pointsWinnedSecondReturn + player3!.pointsWinnedSecondReturn
+				player1!.pointsWinnedSecondReturn + player3!.pointsWinnedSecondReturn
 			);
 		}
-		return player1.pointsWinnedSecondReturn;
+		return player1!.pointsWinnedSecondReturn;
 	};
 
 	const t2PointsWinnedSecondReturn = () => {
 		if (player4 != null) {
 			return (
-				player2.pointsWinnedSecondReturn + player4!.pointsWinnedSecondReturn
+				player2!.pointsWinnedSecondReturn + player4!.pointsWinnedSecondReturn
 			);
 		}
-		return player2.pointsWinnedSecondReturn;
+		return player2!.pointsWinnedSecondReturn;
 	};
 
 	const t1MeshPointsWon = () => {
 		if (player3 != null) {
-			return player1.meshPointsWon + player3!.meshPointsWon;
+			return player1!.meshPointsWon + player3!.meshPointsWon;
 		}
-		return player1.meshPointsWon;
+		return player1!.meshPointsWon;
 	};
 
 	const t2MeshPointsWon = () => {
 		if (player4 != null) {
-			return player2.meshPointsWon + player4!.meshPointsWon;
+			return player2!.meshPointsWon + player4!.meshPointsWon;
 		}
-		return player2.meshPointsWon;
+		return player2!.meshPointsWon;
 	};
 
 	const t1MeshPointsLost = () => {
 		if (player3 != null) {
-			return player1.meshPointsLost + player3!.meshPointsLost;
+			return player1!.meshPointsLost + player3!.meshPointsLost;
 		}
-		return player1.meshPointsLost;
+		return player1!.meshPointsLost;
 	};
 
 	const t2MeshPointsLost = () => {
 		if (player4 != null) {
-			return player2.meshPointsLost + player4!.meshPointsLost;
+			return player2!.meshPointsLost + player4!.meshPointsLost;
 		}
-		return player2.meshPointsLost;
+		return player2!.meshPointsLost;
 	};
 
 	const t1MeshWinners = () => {
 		if (player3 != null) {
-			return player1.meshWinner + player3!.meshWinner;
+			return player1!.meshWinner + player3!.meshWinner;
 		}
-		return player1.meshWinner;
+		return player1!.meshWinner;
 	};
 
 	const t2MeshWinners = () => {
 		if (player4 != null) {
-			return player2.meshWinner + player4!.meshWinner;
+			return player2!.meshWinner + player4!.meshWinner;
 		}
-		return player2.meshWinner;
+		return player2!.meshWinner;
 	};
 
 	const t1MeshError = () => {
 		if (player3 != null) {
-			return player1.meshError + player3!.meshError;
+			return player1!.meshError + player3!.meshError;
 		}
-		return player1.meshError;
+		return player1!.meshError;
 	};
 
 	const t2MeshError = () => {
 		if (player4 != null) {
-			return player2.meshError + player4!.meshError;
+			return player2!.meshError + player4!.meshError;
 		}
-		return player2.meshError;
+		return player2!.meshError;
 	};
 
 	const t1BckgPointsWon = () => {
 		if (player3 != null) {
-			return player1.bckgPointsWon + player3!.bckgPointsWon;
+			return player1!.bckgPointsWon + player3!.bckgPointsWon;
 		}
-		return player1.bckgPointsWon;
+		return player1!.bckgPointsWon;
 	};
 
 	const t2BckgPointsWon = () => {
 		if (player4 != null) {
-			return player2.bckgPointsWon + player4!.bckgPointsWon;
+			return player2!.bckgPointsWon + player4!.bckgPointsWon;
 		}
-		return player2.bckgPointsWon;
+		return player2!.bckgPointsWon;
 	};
 
 	const t1BckgPointsLost = () => {
 		if (player3 != null) {
-			return player1.bckgPointsLost + player3!.bckgPointsLost;
+			return player1!.bckgPointsLost + player3!.bckgPointsLost;
 		}
-		return player1.bckgPointsLost;
+		return player1!.bckgPointsLost;
 	};
 
 	const t2BckgPointsLost = () => {
 		if (player4 != null) {
-			return player2.bckgPointsLost + player4!.bckgPointsLost;
+			return player2!.bckgPointsLost + player4!.bckgPointsLost;
 		}
-		return player2.bckgPointsLost;
+		return player2!.bckgPointsLost;
 	};
 
 	const t1BckgWinner = () => {
 		if (player3 != null) {
-			return player1.bckgWinner + player3!.bckgWinner;
+			return player1!.bckgWinner + player3!.bckgWinner;
 		}
-		return player1.bckgWinner;
+		return player1!.bckgWinner;
 	};
 
 	const t2BckgWinner = () => {
 		if (player4 != null) {
-			return player2.bckgWinner + player4!.bckgWinner;
+			return player2!.bckgWinner + player4!.bckgWinner;
 		}
-		return player2.bckgWinner;
+		return player2!.bckgWinner;
 	};
 
 	const t1BckgError = () => {
 		if (player3 != null) {
-			return player1.bckgError + player3!.bckgError;
+			return player1!.bckgError + player3!.bckgError;
 		}
-		return player1.bckgError;
+		return player1!.bckgError;
 	};
 
 	const t2BckgError = () => {
 		if (player4 != null) {
-			return player2.bckgError + player4!.bckgError;
+			return player2!.bckgError + player4!.bckgError;
 		}
-		return player2.bckgError;
-	};
-
-	const gamesWonServing = () => {
-		if (player3 != null) {
-			return player1.gamesWonServing + player3!.gamesWonServing;
-		}
-		return player1.gamesWonServing;
-	};
-
-	const gamesLostServing = () => {
-		if (player3 != null) {
-			return player1.gamesLostServing + player3!.gamesLostServing;
-		}
-		return player1.gamesLostServing;
-	};
-
-	const gamesWonReturning = () => {
-		if (player3 != null) {
-			return player1.gamesWonReturning + player3!.gamesWonServing;
-		}
-		return player1.gamesWonReturning;
-	};
-
-	const gamesLostReturning = () => {
-		if (player3 != null) {
-			return player1.gamesLostReturning + player3!.gamesLostServing;
-		}
-		return player1.gamesLostReturning;
-	};
-
-	const totalGamesWon = () => {
-		return gamesWonServing() + gamesWonReturning();
-	};
-
-	const totalGamesLost = () => {
-		return gamesLostServing() + gamesLostReturning();
-	};
-
-	const gamesPlayed = () => {
-		return totalGamesWon() + totalGamesLost();
+		return player2!.bckgError;
 	};
 
 	const t1ShortRallyWon = () => {
 		if (player3 != null) {
-			return player1.shortRallyWon + player3!.shortRallyWon;
+			return player1!.shortRallyWon + player3!.shortRallyWon;
 		}
-		return player1.shortRallyWon;
+		return player1!.shortRallyWon;
 	};
 
 	const t1MediumRallyWon = () => {
 		if (player3 != null) {
-			return player1.mediumRallyWon + player3!.mediumRallyWon;
+			return player1!.mediumRallyWon + player3!.mediumRallyWon;
 		}
-		return player1.mediumRallyWon;
+		return player1!.mediumRallyWon;
 	};
 
 	const t1LongRallyWon = () => {
 		if (player3 != null) {
-			return player1.longRallyWon + player3!.longRallyWon;
+			return player1!.longRallyWon + player3!.longRallyWon;
 		}
-		return player1.longRallyWon;
+		return player1!.longRallyWon;
 	};
 
 	const t1ShortRallyLost = () => {
 		if (player3 != null) {
-			return player1.shortRallyLost + player3!.shortRallyLost;
+			return player1!.shortRallyLost + player3!.shortRallyLost;
 		}
-		return player1.shortRallyLost;
+		return player1!.shortRallyLost;
 	};
 
 	const t1MediumRallyLost = () => {
 		if (player3 != null) {
-			return player1.mediumRallyLost + player3!.mediumRallyLost;
+			return player1!.mediumRallyLost + player3!.mediumRallyLost;
 		}
-		return player1.mediumRallyLost;
+		return player1!.mediumRallyLost;
 	};
 
 	const t1LongRallyLost = () => {
 		if (player3 != null) {
-			return player1.longRallyLost + player3!.longRallyLost;
+			return player1!.longRallyLost + player3!.longRallyLost;
 		}
-		return player1.longRallyLost;
+		return player1!.longRallyLost;
 	};
 
 	const t2ShortRallyWon = () => {
 		if (player4 != null) {
-			return player2.shortRallyWon + player4!.shortRallyWon;
+			return player2!.shortRallyWon + player4!.shortRallyWon;
 		}
-		return player2.shortRallyWon;
+		return player2!.shortRallyWon;
 	};
 
 	const t2MediumRallyWon = () => {
 		if (player4 != null) {
-			return player2.mediumRallyWon + player4!.mediumRallyWon;
+			return player2!.mediumRallyWon + player4!.mediumRallyWon;
 		}
-		return player2.mediumRallyWon;
+		return player2!.mediumRallyWon;
 	};
 
 	const t2LongRallyWon = () => {
 		if (player4 != null) {
-			return player2.longRallyWon + player4!.longRallyWon;
+			return player2!.longRallyWon + player4!.longRallyWon;
 		}
-		return player2.longRallyWon;
+		return player2!.longRallyWon;
 	};
 
 	const t2ShortRallyLost = () => {
 		if (player4 != null) {
-			return player2.shortRallyLost + player4!.shortRallyLost;
+			return player2!.shortRallyLost + player4!.shortRallyLost;
 		}
-		return player2.shortRallyLost;
+		return player2!.shortRallyLost;
 	};
 
 	const t2MediumRallyLost = () => {
 		if (player4 != null) {
-			return player2.mediumRallyLost + player4!.mediumRallyLost;
+			return player2!.mediumRallyLost + player4!.mediumRallyLost;
 		}
-		return player2.mediumRallyLost;
+		return player2!.mediumRallyLost;
 	};
 
 	const t2LongRallyLost = () => {
 		if (player4 != null) {
-			return player2.longRallyLost + player4!.longRallyLost;
+			return player2!.longRallyLost + player4!.longRallyLost;
 		}
-		return player2.longRallyLost;
+		return player2!.longRallyLost;
 	};
 
 	const t1ServicesDone = t1FirstServIn() + t1SecondServIn() + t1DoubleFaults();
@@ -810,7 +774,7 @@ export function buildStandardSections(
 				},
 				{
 					name: "Total winner",
-					firstValue: `${t1MeshWinners() + t1BckgWinner() + t1FirstReturnWinner() + t1SecondReturnWinner() + t1Aces()}`,
+					firstValue: `${t1MeshWinners() + t1BckgWinner() + t1FirstReturnWinner() + t1SecondReturnWinner() + t1Aces()!}`,
 					secondValue: `${t2MeshWinners() + t2BckgWinner() + t2FirstReturnWinner() + t2SecondReturnWinner() + t2Aces()}`,
 				},
 				{

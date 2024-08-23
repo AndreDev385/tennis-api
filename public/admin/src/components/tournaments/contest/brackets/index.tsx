@@ -1,46 +1,23 @@
 import "./brackets.scss";
-import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type React from "react";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { useLocation } from "react-router";
 import { toast } from "react-toastify";
 import { deleteBrackets } from "../../../../services/contest/deleteBrackets";
 import { listDraw } from "../../../../services/contest/listBrackets";
-import type { Bracket } from "../../../../types/bracket";
-import { BracketPair, type BracketPairData } from "./bracketPair";
+import { BracketPair } from "./bracketPair";
 import { createBrackets } from "../../../../services/contest/createBrackets";
 import ModalQuestion from "../../../modalQuestion/ModalQuestion";
-
-function buildBracketPairs(brackets: Bracket[]): BracketPairData[] {
-	const pairs: BracketPairData[] = [];
-
-	for (let i = 0; i < brackets.length; i++) {
-		if (i % 2 === 0) {
-			pairs.push({
-				first: brackets[i],
-				second: i + 1 > brackets.length ? null : brackets[i + 1],
-			});
-		}
-	}
-
-	return pairs;
-}
-
-function getDeep(list: Bracket[]) {
-	if (list.length < 1) {
-		return 0;
-	}
-
-	list.sort((a, b) => {
-		return b.deep - a.deep;
-	});
-
-	return list[0].deep;
-}
+import { Loading } from "../../../shared/loading";
+import { ErrorMessage } from "../../../shared/errorMessage";
+import { BracketContext } from "../../../../shared/context/bracket";
+import { buildBracketPairs, getDeep } from "./utils";
 
 export const ContestBrackets: React.FC = () => {
+	const { deep, setDeep, bracketPairs, setBracketPairs } =
+		useContext(BracketContext)!;
+
 	const token: string = localStorage.getItem("authorization") || "";
 	const { state } = useLocation();
 
@@ -49,8 +26,6 @@ export const ContestBrackets: React.FC = () => {
 		error: "",
 	});
 
-	const [deep, setDeep] = useState<null | number>(null);
-	const [bracketPairs, setBracketPairs] = useState<BracketPairData[]>([]);
 	const [deleteBracketsModal, setDeleteBracketsModal] = useState({
 		visible: false,
 	});
@@ -131,20 +106,6 @@ export const ContestBrackets: React.FC = () => {
 		handleListDraw(deep);
 	}, []);
 
-	const render = () => {
-		if (status.loading) {
-			return <FontAwesomeIcon icon={faCircleNotch} />;
-		}
-
-		if (status.error.length > 0) {
-			return <h2 className="text-danger">{status.error}</h2>;
-		}
-
-		return bracketPairs.map((bp) => (
-			<BracketPair key={bp.first.id} pair={bp} />
-		));
-	};
-
 	const buildDeepFilters = (value: number) => {
 		const filters = [];
 
@@ -165,6 +126,20 @@ export const ContestBrackets: React.FC = () => {
 		}
 
 		return filters;
+	};
+
+	const render = () => {
+		if (status.loading) {
+			return Loading();
+		}
+
+		if (status.error.length > 0) {
+			return ErrorMessage(status.error);
+		}
+
+		return bracketPairs.map((bp) => (
+			<BracketPair key={bp.first.id} pair={bp} />
+		));
 	};
 
 	return (

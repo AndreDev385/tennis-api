@@ -1,6 +1,6 @@
 import "./index.scss";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Button, ButtonGroup, Form, InputGroup } from "react-bootstrap";
 import { useParams } from "react-router";
 import { getTournamentMatch } from "../../../services/tournamentMatch/getMatch";
@@ -19,6 +19,7 @@ import { buildSelectSetOptions } from "../buildSetOptions";
 
 export function UpdateTournamentMatch() {
 	const { matchId } = useParams();
+	const formRef = useRef<HTMLFormElement | null>(null);
 
 	const result = useQuery({
 		queryKey: ["updateMatch", matchId],
@@ -68,7 +69,7 @@ export function UpdateTournamentMatch() {
 					{buildDisplayName(true, match!)}
 				</div>
 			</div>
-			<form onSubmit={handleSubmit}>
+			<form ref={formRef} onSubmit={handleSubmit}>
 				<InputGroup className="d-flex mb-3">
 					<InputGroup.Text>Estado</InputGroup.Text>
 					<Form.Select

@@ -53,8 +53,6 @@ export class RemoveInscribed implements UseCase<Req, Res> {
 		let couple: Couple | null;
 		let contestTeam: ContestTeam | null;
 
-		console.log(inscribed.contestTeam, "TEAM");
-
 		try {
 			try {
 				contest = await this.contestRepo.get({
@@ -80,10 +78,8 @@ export class RemoveInscribed implements UseCase<Req, Res> {
 				const teamResult = await this.contestTeamRepo.get({
 					contestTeamId: inscribed.contestTeam?.contestTeamId,
 				});
-				console.log(teamResult);
 				if (teamResult.isSuccess) {
 					contestTeam = teamResult.getValue();
-					console.log(contestTeam);
 				}
 			} catch (e) {}
 
@@ -98,13 +94,7 @@ export class RemoveInscribed implements UseCase<Req, Res> {
 				return left(new AppError.NotFoundError("Participante no encontrado"));
 			}
 
-			console.log(contest.inscribed, "BEFORE");
-
-			console.log(inscribedObj.getValue(), "VALUE TO DELTE");
-
 			contest.removeInscribed([inscribedObj.getValue()]);
-
-			console.log(contest.inscribed, "AFTER");
 
 			await this.contestRepo.save(contest);
 

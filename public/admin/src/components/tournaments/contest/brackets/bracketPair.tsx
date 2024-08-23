@@ -12,8 +12,6 @@ type Props = {
 };
 
 export const BracketPair: React.FC<Props> = ({ pair }) => {
-	console.log(pair.second);
-
 	return (
 		<div className="match_pair mb-5">
 			<BracketCard bracket={pair.first} />

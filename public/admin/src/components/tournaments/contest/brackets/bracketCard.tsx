@@ -1,7 +1,10 @@
 import "./brackets.scss";
-import type { Bracket, Place } from "../../../../types/bracket";
-import type { Set } from "../../../../types/set";
-import { formatParticipantName } from "../../../../utils/formatParticipantName";
+import type { Bracket } from "../../../../types/bracket";
+import type { Set as GameSet } from "../../../../types/set";
+import { useState } from "react";
+import { buildNameForDisplay } from "./formatNames";
+import { UpdateBracketModal } from "./updateBracket";
+import { Modal } from "../../../modalQuestion/Modal";
 
 type Props = {
 	bracket: Bracket;
@@ -10,24 +13,24 @@ type Props = {
 export const BracketCard: React.FC<Props> = ({ bracket }) => {
 	const { match } = bracket;
 
-	function buildNameForDisplay(place: Place) {
-		if (place.couple != null) {
-			return `${formatParticipantName(place.couple.p1)} / ${formatParticipantName(place.couple.p2)}`;
-		}
+	const [updateModal, setUpdateModal] = useState({
+		visible: false,
+	});
 
-		if (place.participant != null) {
-			return `${formatParticipantName(place.participant)}`;
-		}
-
-		if (place.contestTeam != null) {
-			return place.contestTeam.name;
-		}
-
-		return "";
+	function hideModal() {
+		setUpdateModal({ visible: false });
 	}
 
 	return (
-		<div className="bracket__card d-flex flex-column">
+		<div
+			onMouseDown={() => setUpdateModal({ visible: true })}
+			className="bracket__card d-flex flex-column"
+		>
+			{updateModal.visible && (
+				<Modal>
+					<UpdateBracketModal bracket={bracket} dismiss={hideModal} />
+				</Modal>
+			)}
 			<ScoreRow
 				isTop
 				hasWon={match?.matchWon === true}
@@ -50,7 +53,7 @@ export const BracketCard: React.FC<Props> = ({ bracket }) => {
 type RowProps = {
 	isTop: boolean;
 	hasWon?: boolean | null;
-	sets?: Set[];
+	sets?: GameSet[];
 	showRival: boolean;
 	name: string;
 };

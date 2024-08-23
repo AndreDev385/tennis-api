@@ -17,6 +17,7 @@ import { deleteContestClashCtrl } from "../../../usecase/deleteContestClash";
 import { checkClashIsFinishedCtrl } from "../../../usecase/checkBracketClash";
 import { deleteContestCtrl } from "../../../usecase/deleteContest";
 import { removeInscribedCtrl } from "../../../usecase/removeInscribed";
+import { updateBracketCtrl } from "../../../usecase/updateBracket";
 
 export const contestRouter = express.Router();
 
@@ -52,6 +53,10 @@ contestRouter.delete("/brackets", (req, res) =>
 
 contestRouter.put("/brackets", (req, res) =>
 	buildBracketCtrl.execute(req, res),
+);
+
+contestRouter.patch("/bracket", (req, res) =>
+	updateBracketCtrl.execute(req, res),
 );
 
 contestRouter.get("/brackets/:contestId", (req, res) =>

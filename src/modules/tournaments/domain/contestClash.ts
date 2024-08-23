@@ -11,112 +11,125 @@ import { TournamentMatchesIds } from "./tournamentMatches";
 import { TournamentRules } from "./tournamentRules";
 
 type ContestClashProps = {
-    contestId: ContestId;
-    team1: ContestTeam;
-    team2: ContestTeam;
-    matchIds: TournamentMatchesIds;
-    t1WonClash?: boolean | null;
-    isFinish?: boolean;
+	contestId: ContestId;
+	team1: ContestTeam;
+	team2: ContestTeam;
+	matchIds: TournamentMatchesIds;
+	t1WonClash?: boolean | null;
+	isFinish?: boolean;
 };
 
 export class ContestClash extends AggregateRoot<ContestClashProps> {
-    get contestClashId() {
-        return ContestClashId.create(this._id).getValue();
-    }
-    get contestId(): ContestId {
-        return this.props.contestId;
-    }
-    get team1(): ContestTeam {
-        return this.props.team1;
-    }
-    get team2(): ContestTeam {
-        return this.props.team2;
-    }
-    get matchIds(): TournamentMatchesIds {
-        return this.props.matchIds;
-    }
-    get isFinish(): boolean {
-        return this.props.isFinish!;
-    }
-    get t1WonClash(): boolean | null {
-        return this.props.t1WonClash!;
-    }
+	get contestClashId() {
+		return ContestClashId.create(this._id).getValue();
+	}
+	get contestId(): ContestId {
+		return this.props.contestId;
+	}
+	get team1(): ContestTeam {
+		return this.props.team1;
+	}
+	get team2(): ContestTeam {
+		return this.props.team2;
+	}
+	get matchIds(): TournamentMatchesIds {
+		return this.props.matchIds;
+	}
+	get isFinish(): boolean {
+		return this.props.isFinish!;
+	}
+	get t1WonClash(): boolean | null {
+		return this.props.t1WonClash!;
+	}
 
-    public setMatches(ids: TournamentMatchesIds) {
-        this.props.matchIds = ids;
-    }
+	public changeTeam(team: ContestTeam, position: 1 | 2) {
+		if (this.props.matchIds.getItems().length > 0) {
+			return;
+		}
+		if (position == 1) {
+			if (!this.team1.equals(team)) {
+				this.props.team1 = team;
+			}
+		}
+		if (position == 2) {
+			if (!this.team2.equals(team)) {
+				this.props.team2 = team;
+			}
+		}
+	}
 
-    public checkIsFinish(
-        matches: TournamentMatch[],
-        rules: TournamentRules
-    ): Result<boolean> {
-        if (matches.length != this.matchIds.getItems().length) {
-            return Result.fail(
-                `Los paridos de este encuentro no coinciden con los partidos propocionados`
-            );
-        }
+	public setMatches(ids: TournamentMatchesIds) {
+		this.props.matchIds = ids;
+	}
 
-        for (const m of matches) {
-            const exist = this.matchIds.exists(m.matchId);
-            if (!exist) {
-                return Result.fail(
-                    `${m.matchId} no pertenece a este encuentro`
-                );
-            }
-        }
+	public checkIsFinish(
+		matches: TournamentMatch[],
+		rules: TournamentRules,
+	): Result<boolean> {
+		if (matches.length != this.matchIds.getItems().length) {
+			return Result.fail(
+				`Los paridos de este encuentro no coinciden con los partidos propocionados`,
+			);
+		}
 
-        const matchesFinished = matches.filter((m) => m.matchWon != null);
-        const matchesNeededToWin =
-            Math.floor(rules.matchesPerClash!.value / 2) + 1;
+		for (const m of matches) {
+			const exist = this.matchIds.exists(m.matchId);
+			if (!exist) {
+				return Result.fail(`${m.matchId} no pertenece a este encuentro`);
+			}
+		}
 
-        const t1MatchesWon = matchesFinished.filter((m) => m.matchWon);
-        const t2MatchesWon = matchesFinished.filter((m) => !m.matchWon);
+		const matchesFinished = matches.filter((m) => m.matchWon != null);
+		const matchesNeededToWin = Math.floor(rules.matchesPerClash!.value / 2) + 1;
 
-        const TEAM_1_WIN = t1MatchesWon.length >= matchesNeededToWin;
-        const TEAM_2_WIN = t2MatchesWon.length >= matchesNeededToWin;
+		const t1MatchesWon = matchesFinished.filter((m) => m.matchWon);
+		const t2MatchesWon = matchesFinished.filter((m) => !m.matchWon);
 
-        if (!TEAM_1_WIN && !TEAM_2_WIN) {
-            return Result.ok(false);
-        }
+		const TEAM_1_WIN = t1MatchesWon.length >= matchesNeededToWin;
+		const TEAM_2_WIN = t2MatchesWon.length >= matchesNeededToWin;
 
-        this.props.isFinish = true;
-        this.setT1WonClash(TEAM_1_WIN);
-        this.addDomainEvent(new ContestClashFinished(this));
-        return Result.ok(true)
-    }
+		if (!TEAM_1_WIN && !TEAM_2_WIN) {
+			return Result.ok(false);
+		}
 
-    private setT1WonClash(value: boolean) {
-        this.props.t1WonClash = value;
-    }
+		this.props.isFinish = true;
+		this.setT1WonClash(TEAM_1_WIN);
+		this.addDomainEvent(new ContestClashFinished(this));
+		return Result.ok(true);
+	}
 
-    private constructor(props: ContestClashProps, id?: UniqueEntityID) {
-        super(props, id);
-    }
+	private setT1WonClash(value: boolean) {
+		this.props.t1WonClash = value;
+	}
 
-    public static create(
-        props: ContestClashProps,
-        id?: UniqueEntityID
-    ): Result<ContestClash> {
-        const guard = Guard.againstNullOrUndefinedBulk([
-            { argument: props.matchIds, argumentName: "Partidos" },
-            { argument: props.team1, argumentName: "Equipo 1" },
-            { argument: props.team2, argumentName: "Equipo 2" },
-            { argument: props.contestId, argumentName: "Id de competencia" },
-        ]);
+	private constructor(props: ContestClashProps, id?: UniqueEntityID) {
+		super(props, id);
+	}
 
-        if (guard.isFailure) {
-            return Result.fail(guard.getErrorValue());
-        }
+	public static create(
+		props: ContestClashProps,
+		id?: UniqueEntityID,
+	): Result<ContestClash> {
+		const guard = Guard.againstNullOrUndefinedBulk([
+			{ argument: props.matchIds, argumentName: "Partidos" },
+			{ argument: props.team1, argumentName: "Equipo 1" },
+			{ argument: props.team2, argumentName: "Equipo 2" },
+			{ argument: props.contestId, argumentName: "Id de competencia" },
+		]);
 
-        return Result.ok(
-            new ContestClash(
-                {
-                    ...props,
-                    isFinish: props.isFinish ?? false,
-                    t1WonClash: props.t1WonClash ?? null,
-                },
-                id
-            )
-        );
-    }
+		if (guard.isFailure) {
+			return Result.fail(guard.getErrorValue());
+		}
+
+		return Result.ok(
+			new ContestClash(
+				{
+					...props,
+					isFinish: props.isFinish ?? false,
+					t1WonClash: props.t1WonClash ?? null,
+				},
+				id,
+			),
+		);
+	}
 }
