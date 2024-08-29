@@ -152,22 +152,20 @@ export function UpdateBracketModal({ dismiss, bracket }: Props) {
 				: null;
 
 		const rightCouple =
-			mode == GameModesValues.Single && rightValue
+			mode == GameModesValues.Double && rightValue
 				? JSON.parse(rightValue)
 				: null;
 		const leftCouple =
-			mode == GameModesValues.Single && leftValue
+			mode == GameModesValues.Double && leftValue
 				? JSON.parse(leftValue)
 				: null;
 
 		const rightTeam =
-			mode == GameModesValues.Single && rightValue
+			mode == GameModesValues.Team && rightValue
 				? JSON.parse(rightValue)
 				: null;
 		const leftTeam =
-			mode == GameModesValues.Single && leftValue
-				? JSON.parse(leftValue)
-				: null;
+			mode == GameModesValues.Team && leftValue ? JSON.parse(leftValue) : null;
 
 		const result = await updateBracket(
 			{

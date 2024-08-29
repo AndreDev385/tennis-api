@@ -45,7 +45,7 @@ export const AddCoupleModal: React.FC<Props> = ({ addCouple, close }) => {
 		}
 
 		addCouple({
-			position: Number(form.position),
+			position: form.position ? Number(form.position) : null,
 			p1: {
 				firstName: form.firstNameP1,
 				lastName: form.lastNameP1,

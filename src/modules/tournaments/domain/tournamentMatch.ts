@@ -9,7 +9,6 @@ import { ContestId } from "./contestId";
 import { TournamentMatchFinished } from "./events/tournamentMatchFinished";
 import { MatchInfo } from "./matchInfo";
 import { Participant } from "./participant";
-import { ParticipantId } from "./participantId";
 import { TournamentId } from "./tournamentId";
 import { TournamentMatchId } from "./tournamentMatchId";
 import { TournamentMatchTracker } from "./tournamentMatchTracker";
@@ -193,19 +192,23 @@ export class TournamentMatch extends AggregateRoot<TournamentMatchProps> {
 		this.addDomainEvent(new TournamentMatchFinished(this));
 	}
 
-	public changePlayer(pId: ParticipantId, player: 1 | 2 | 3 | 4) {
+	public changePlayer(p: Participant, player: 1 | 2 | 3 | 4) {
 		switch (player) {
 			case 1:
-				this.tracker?.player1.changeParticipantId(pId);
+				this.props.player1 = p;
+				this.tracker?.player1.changeParticipantId(p.participantId);
 				break;
 			case 2:
-				this.tracker?.player2.changeParticipantId(pId);
+				this.props.player2 = p;
+				this.tracker?.player2.changeParticipantId(p.participantId);
 				break;
 			case 3:
-				this.tracker?.player3?.changeParticipantId(pId);
+				this.props.player3 = p;
+				this.tracker?.player3?.changeParticipantId(p.participantId);
 				break;
 			case 4:
-				this.tracker?.player4?.changeParticipantId(pId);
+				this.props.player4 = p;
+				this.tracker?.player4?.changeParticipantId(p.participantId);
 				break;
 			default:
 				return;

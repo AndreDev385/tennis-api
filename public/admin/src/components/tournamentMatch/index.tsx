@@ -28,6 +28,10 @@ import { GameModesValues } from "../../utils/tennisConfigs";
 import { ErrorMessage } from "../shared/errorMessage";
 import { Loading } from "../shared/loading";
 import { formatContestTitle } from "../tournaments/contest/utils";
+import {
+	type MatchStatus,
+	mapMatchStatusToString,
+} from "../../utils/mapMatchStatusToString";
 
 export const MatchesPage = () => {
 	const navigate = useNavigate();
@@ -118,6 +122,9 @@ export const MatchesPage = () => {
 					</div>
 				</td>
 				<td className="text-center">{item.mode}</td>
+				<td className="text-center">
+					{mapMatchStatusToString(item.status as MatchStatus)}
+				</td>
 				<td className="text-center">
 					<Dropdown>
 						<Dropdown.Toggle
@@ -219,6 +226,7 @@ export const MatchesPage = () => {
 								<th className="text-center">Jugadores</th>
 								<th className="text-center">Sets</th>
 								<th className="text-center">Tipo</th>
+								<th className="text-center">Status</th>
 								<th className="text-center">Acciones</th>
 							</tr>
 						</thead>
