@@ -39,6 +39,8 @@ import { HomeSideBar } from "./layouts/sideBars/homeSideBar";
 import { LeagueSideBar } from "./layouts/sideBars/leagueSideBar";
 import { TournamentsSideBar } from "./layouts/sideBars/tournamentSideBar";
 import { BracketContext } from "./shared/context/bracket";
+import { TournamentTeams } from "./components/contestTeams";
+import { ContestTeamDetail } from "./components/contestTeams/teamDetail";
 
 const router = createBrowserRouter([
 	{
@@ -190,6 +192,19 @@ const router = createBrowserRouter([
 							{
 								path: ":matchId",
 								element: <TournamentMatchDetail />,
+							},
+						],
+					},
+					{
+						path: "teams",
+						children: [
+							{
+								path: "",
+								element: <TournamentTeams />,
+							},
+							{
+								path: ":teamId",
+								element: <ContestTeamDetail />,
 							},
 						],
 					},
