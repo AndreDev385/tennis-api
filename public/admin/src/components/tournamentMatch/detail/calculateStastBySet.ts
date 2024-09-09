@@ -15,14 +15,14 @@ export function calculateStatsBySet(
 			}
 
 			if (i === 0) {
-				return sets[i].stats;
+				return sets[i].stats!;
 			}
 
 			if (sets[i - 1].stats == null || sets[i].stats == null) {
 				return total;
 			}
 
-			return calculateSetStats(sets[i].stats, sets[i - 1].stats);
+			return calculateSetStats(sets[i].stats!, sets[i - 1].stats!);
 		}
 	}
 	return total;

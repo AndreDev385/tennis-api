@@ -17,8 +17,6 @@ export async function paginateParticipants(
 ): Promise<Result<PaginateResponse<Participant>>> {
 	const urlQuery = mapToUrlString(q);
 
-	console.log(q, urlQuery);
-
 	const options: RequestInit = {
 		method: "GET",
 		headers: {

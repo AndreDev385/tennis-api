@@ -91,7 +91,7 @@ export function UpdateBracketModal({ dismiss, bracket }: Props) {
 								</Form.Select>
 							</Form.Group>
 							<Form.Group className="mb-3">
-								<Form.Label htmlFor="">Puesto superior</Form.Label>
+								<Form.Label htmlFor="">Puesto inferior</Form.Label>
 								<Form.Select
 									name="leftPlace"
 									defaultValue=""

@@ -34,7 +34,6 @@ export function StatsTable({ sections }: { sections: Section[] }) {
 				<tbody className="w-full">
 					{s.stats.map((stats) => (
 						<tr key={stats.name}>
-							{/* TODO class colors */}
 							<td
 								style={{ color: mapPercentageToColor(stats.percentage1) }}
 								className="text-center"

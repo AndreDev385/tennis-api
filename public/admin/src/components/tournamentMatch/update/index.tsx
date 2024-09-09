@@ -1,8 +1,7 @@
 import "./index.scss";
-import { useQuery } from "@tanstack/react-query";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button, ButtonGroup, Form, InputGroup } from "react-bootstrap";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { getTournamentMatch } from "../../../services/tournamentMatch/getMatch";
 import {
 	StatusValues,
@@ -12,182 +11,193 @@ import { GameModesValues } from "../../../utils/tennisConfigs";
 import { ErrorMessage } from "../../shared/errorMessage";
 import { Loading } from "../../shared/loading";
 import { buildDisplayName } from "../detail/score";
-import { TableOptions, TablesButtons } from "../detail/tablesButtons";
 import { buildStatsInputsSections } from "./buildStatsInputsSections";
 import { StatsInputs } from "./statsInputs";
 import { buildSelectSetOptions } from "../buildSetOptions";
+import { UpdateTournamentMatchContext } from "../../../shared/context/updateTournamentMatch";
+import type { TournamentMatch } from "../../../types/tournamentMatch";
+import { buildSetsForUpdate } from "./buildDefaultObj";
+import { FormSets } from "./sets";
+import { updateTournamentMatch } from "../../../services/tournamentMatch/update";
+import { toast } from "react-toastify";
 
 export function UpdateTournamentMatch() {
+	const navigate = useNavigate();
 	const { matchId } = useParams();
 	const formRef = useRef<HTMLFormElement | null>(null);
+	const token: string = localStorage.getItem("authorization") || "";
 
-	const result = useQuery({
-		queryKey: ["updateMatch", matchId],
-		queryFn: () => handleGetMatch(matchId!),
+	const [status, setStatus] = useState({
+		loading: true,
+		error: "",
 	});
+	const [match, setMatch] = useState<TournamentMatch | null>(null);
 
-	const [showTable, setShowTable] = useState(TableOptions.standard);
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+	useEffect(() => {
+		handleGetMatch(matchId!);
+	}, []);
+
 	const [setsOptions, setSetsOptions] = useState<boolean[]>([]);
 
 	const handleGetMatch = async (matchId: string) => {
+		setStatus({ loading: true, error: "" });
 		const result = await getTournamentMatch({
 			matchId,
 		});
+		setStatus({
+			loading: false,
+			error: result.isFailure ? result.getErrorValue() : "",
+		});
+		if (result.isFailure) return;
 
-		const options = buildSelectSetOptions(result.getValue().sets.length);
-
+		const match = result.getValue();
+		const sets = buildSetsForUpdate(match);
+		const options = buildSelectSetOptions(sets.length);
 		setSetsOptions(options);
-		return result;
+		setMatch({ ...match, sets });
 	};
 
-	function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+	async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault();
-		console.log(e);
-		console.log(e.currentTarget, "current target");
-		console.log(e.currentTarget.elements);
-		console.log(new FormData(e.currentTarget));
+
+		const result = await updateTournamentMatch({
+			match: match!,
+			token,
+		});
+
+		if (result.isFailure) {
+			toast.error(result.getErrorValue());
+			return;
+		}
+
+		toast.success(result.getValue());
+		navigate(`/dashboard/tournaments/matches/${match?.matchId}`);
 	}
 
-	if (result.isLoading) return Loading();
-	if (result.error || result.data?.isFailure) {
-		return ErrorMessage(result.data?.getErrorValue() ?? "Ha ocurrido un error");
+	if (status.loading) return Loading();
+	if (status.error.length > 0) {
+		return ErrorMessage(status.error);
 	}
-
-	const match = result.data?.getValue();
 
 	return (
-		<div className="mx-4 mb-5">
-			<div>
-				<h1>Actualizar partido</h1>
-			</div>
-			<div className="mx-4 d-flex justify-content-between mb-3">
-				<div style={{ fontSize: "1.2rem" }}>
-					{buildDisplayName(false, match!)}
+		<UpdateTournamentMatchContext.Provider value={{ match, setMatch }}>
+			<div className="mx-4 mb-5">
+				<div>
+					<h1>Actualizar partido</h1>
 				</div>
-				<div style={{ fontSize: "1.2rem" }}>Nombres</div>
-				<div style={{ fontSize: "1.2rem" }}>
-					{buildDisplayName(true, match!)}
+				<div className="mx-4 d-flex justify-content-between mb-3">
+					<div style={{ fontSize: "1.2rem" }}>
+						{buildDisplayName(false, match!)}
+					</div>
+					<div style={{ fontSize: "1.2rem" }}>Nombres</div>
+					<div style={{ fontSize: "1.2rem" }}>
+						{buildDisplayName(true, match!)}
+					</div>
 				</div>
-			</div>
-			<form ref={formRef} onSubmit={handleSubmit}>
-				<InputGroup className="d-flex mb-3">
-					<InputGroup.Text>Estado</InputGroup.Text>
-					<Form.Select
-						name="state"
-						aria-label="Estado"
-						defaultValue={match?.status}
-					>
-						{Object.values(StatusValues).map(function displayOptions(v) {
+				<form ref={formRef} onSubmit={handleSubmit}>
+					<InputGroup className="d-flex mb-3">
+						<InputGroup.Text>Estado</InputGroup.Text>
+						<Form.Select
+							name="state"
+							aria-label="Estado"
+							value={match?.status}
+							onChange={(e) =>
+								setMatch((prev) => ({
+									...prev!,
+									status: Number(e.target.value),
+								}))
+							}
+						>
+							{Object.values(StatusValues).map(function displayOptions(v) {
+								return (
+									<option key={v} value={v}>
+										{mapMatchStatusToString(v)}
+									</option>
+								);
+							})}
+						</Form.Select>
+					</InputGroup>
+					<div className="mb-3">
+						<InputGroup>
+							<InputGroup.Text>Ganador</InputGroup.Text>
+							<Form.Select
+								name="matchWon"
+								value={`${match?.matchWon}`}
+								onChange={(e) =>
+									setMatch((prev) => ({
+										...prev!,
+										matchWon: JSON.parse(e.target.value),
+									}))
+								}
+							>
+								<option value="null">Elige un ganador</option>
+								<option value="true">{buildDisplayName(false, match!)}</option>
+								<option value="false">{buildDisplayName(true, match!)}</option>
+							</Form.Select>
+						</InputGroup>
+					</div>
+					<div className="mb-3">
+						<InputGroup>
+							<InputGroup.Text>Sets jugados</InputGroup.Text>
+							<Form.Select
+								name="currentSetIdx"
+								id="currentSetIdx"
+								value={match!.matchInfo.currentSetIdx ?? 0}
+								onChange={(e) => setCurrentSetIdx(e.target.value)}
+							>
+								{Array.from(Array(match?.sets.length).keys()).map((n) => (
+									<option value={n} key={n}>
+										{n + 1}
+									</option>
+								))}
+							</Form.Select>
+						</InputGroup>
+						<Form.Text id="currentSetIdx">
+							Cantidad de sets que se mostraran en la app
+						</Form.Text>
+					</div>
+					<FormSets />
+					<ButtonGroup className="w-100 mb-3">
+						{setsOptions.map(function displaySets(active, i) {
 							return (
-								<option key={v} value={v}>
-									{mapMatchStatusToString(v)}
-								</option>
+								<Button
+									// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+									key={i}
+									variant={active ? "primary" : "secondary"}
+									onMouseDown={() => changeSelectOptions(i)}
+								>
+									{i === setsOptions.length - 1 ? "Total" : `Set ${i + 1}`}
+								</Button>
 							);
 						})}
-					</Form.Select>
-				</InputGroup>
-				{match?.sets.map(function setRowForm(s, i) {
-					return (
-						<div
-							// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-							key={i}
-							className="d-flex justify-content-between set-container"
-						>
-							<div className="set-group">
-								<Form.Control
-									defaultValue={s.myGames}
-									className="set"
-									type="number"
-									name={`set${i}-myGames`}
-								/>
-								<div className="d-flex align-items-start">
-									<Form.Control
-										defaultValue={s.myTiebreakPoints}
-										className="tiebreak"
-										type="number"
-										name={`set${i}-myTieBreakPoints`}
-									/>
-								</div>
-							</div>
-							<div className="d-flex flex-column align-items-center justify-content-center">
-								<span className="bold">Set {i + 1}</span>
-								<div
-									className="d-flex justify-content-around"
-									style={{ gap: "2rem" }}
-								>
-									<Form.Check
-										defaultChecked={s.tiebreak}
-										type="switch"
-										label="Tiebreak"
-										name={`set${i}-tiebreak`}
-									/>
-									<Form.Check
-										defaultChecked={s.superTiebreak}
-										type="switch"
-										label="Super Tiebreak"
-										name={`set${i}-superTiebreak`}
-									/>
-								</div>
-							</div>
-							<div className="set-group">
-								<Form.Control
-									defaultValue={s.rivalGames}
-									className="set"
-									type="number"
-									name={`set${i}-rivalGames`}
-								/>
-								<div className="d-flex align-items-start">
-									<Form.Control
-										defaultValue={s.rivalTiebreakPoints}
-										className="tiebreak"
-										type="number"
-										name={`set${i}-rivalTiebreakPoints`}
-									/>
-								</div>
-							</div>
-						</div>
-					);
-				})}
-				<div className="d-flex justify-content-center mb-3">
-					{TablesButtons(match?.mode as string, showTable, setShowTable)}
-				</div>
-				<ButtonGroup className="w-100 mb-3">
-					{setsOptions.map(function displaySets(active, i) {
-						function disable() {
-							if (i < setsOptions.length - 1) {
-								return !match?.sets[i]?.stats;
-							}
-
-							return false;
-						}
-
-						return (
-							<Button
-								disabled={disable()}
-								variant={active ? "primary" : "secondary"}
-								// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-								key={i}
-								onMouseDown={() => changeSelectOptions(i)}
-							>
-								{i === setsOptions.length - 1 ? "Total" : `Set ${i + 1}`}
-							</Button>
-						);
-					})}
-				</ButtonGroup>
-				<div>
-					<StatsInputs
-						double={match?.mode === GameModesValues.Double}
-						sections={buildStatsInputsSections(sendStats())}
-					/>
-				</div>
-				<div className="d-grid">
-					<Button size="lg" type="submit">
-						Actualizar
-					</Button>
-				</div>
-			</form>
-		</div>
+					</ButtonGroup>
+					<div>
+						<StatsInputs
+							double={match?.mode === GameModesValues.Double}
+							sections={buildStatsInputsSections(sendStats())}
+							idx={setsOptions.indexOf(true)}
+						/>
+					</div>
+					<div className="d-grid">
+						<Button size="lg" type="submit">
+							Actualizar
+						</Button>
+					</div>
+				</form>
+			</div>
+		</UpdateTournamentMatchContext.Provider>
 	);
+
+	function setCurrentSetIdx(value: string) {
+		setMatch((prev) => ({
+			...prev!,
+			matchInfo: {
+				...prev!.matchInfo,
+				currentSetIdx: Number(value),
+			},
+		}));
+	}
 
 	function changeSelectOptions(i: number) {
 		const options = [];
@@ -216,10 +226,10 @@ export function UpdateTournamentMatch() {
 				}
 
 				return {
-					p1: match!.sets[i].stats.player1!,
-					p2: match!.sets[i].stats.player2!,
-					p3: match!.sets[i].stats.player3!,
-					p4: match!.sets[i].stats.player4!,
+					p1: match!.sets[i].stats!.player1!,
+					p2: match!.sets[i].stats!.player2!,
+					p3: match!.sets[i].stats!.player3!,
+					p4: match!.sets[i].stats!.player4!,
 				};
 			}
 		}

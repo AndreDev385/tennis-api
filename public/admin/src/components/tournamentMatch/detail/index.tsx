@@ -16,7 +16,10 @@ import {
 import { GameModesValues } from "../../../utils/tennisConfigs";
 import { ErrorMessage } from "../../shared/errorMessage";
 import { Loading } from "../../shared/loading";
-import { buildStandardSections } from "./buildStardardSections";
+import {
+	buildParticipantsSections,
+	buildStandardSections,
+} from "./buildStardardSections";
 import { calculateStatsBySet } from "./calculateStastBySet";
 import { Score } from "./score";
 import { StatsTable } from "./statsTable";
@@ -47,14 +50,14 @@ export const TournamentMatchDetail: React.FC = () => {
 	};
 
 	function displayLeftName(tableOption: number): string {
-		if (tableOption == TableOptions.j1vsj2) {
+		if (tableOption == TableOptions.j1vsj3) {
 			// j1
 			return formatParticipantName(match?.participant1 as Participant);
 		}
 
-		if (tableOption == TableOptions.j3vsj4) {
+		if (tableOption == TableOptions.j2vsj4) {
 			// j3
-			return formatParticipantName(match?.participant3 as Participant);
+			return formatParticipantName(match?.participant2 as Participant);
 		}
 
 		// couple 1
@@ -65,11 +68,11 @@ export const TournamentMatchDetail: React.FC = () => {
 	}
 
 	function displayRightName(tableOption: number): string {
-		if (tableOption === TableOptions.j1vsj2) {
-			return formatParticipantName(match?.participant2 as Participant);
+		if (tableOption === TableOptions.j1vsj3) {
+			return formatParticipantName(match?.participant3 as Participant);
 		}
 
-		if (tableOption === TableOptions.j3vsj4) {
+		if (tableOption === TableOptions.j2vsj4) {
 			// j3
 			return formatParticipantName(match?.participant4 as Participant);
 		}
@@ -79,6 +82,44 @@ export const TournamentMatchDetail: React.FC = () => {
 			return `${formatParticipantName(match?.participant2)} / ${formatParticipantName(match?.participant4 as Participant)}`;
 		}
 		return formatParticipantName(match?.participant2 as Participant);
+	}
+
+	function selectTableStats(option: TableOptions) {
+		if (option === TableOptions.j1vsj3) {
+			return buildParticipantsSections(
+				calculateStatsBySet(
+					match?.sets as GameSet[],
+					selectSetOptions,
+					match?.tracker as TournamentMatchTracker,
+				).player1!,
+				calculateStatsBySet(
+					match?.sets as GameSet[],
+					selectSetOptions,
+					match?.tracker as TournamentMatchTracker,
+				).player3!,
+			);
+		}
+		if (option === TableOptions.j2vsj4) {
+			return buildParticipantsSections(
+				calculateStatsBySet(
+					match?.sets as GameSet[],
+					selectSetOptions,
+					match?.tracker as TournamentMatchTracker,
+				).player2!,
+				calculateStatsBySet(
+					match?.sets as GameSet[],
+					selectSetOptions,
+					match?.tracker as TournamentMatchTracker,
+				).player4!,
+			);
+		}
+		return buildStandardSections(
+			calculateStatsBySet(
+				match?.sets as GameSet[],
+				selectSetOptions,
+				match?.tracker as TournamentMatchTracker,
+			),
+		);
 	}
 
 	if (result.isLoading) return Loading();
@@ -136,10 +177,10 @@ export const TournamentMatchDetail: React.FC = () => {
 
 						return (
 							<Button
-								disabled={disable()}
-								variant={active ? "primary" : "secondary"}
 								// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
 								key={i}
+								disabled={disable()}
+								variant={active ? "primary" : "secondary"}
 								onMouseDown={function changeSelectOptions() {
 									const options = [];
 									for (let j = 0; j < selectSetOptions.length; j++) {
@@ -158,23 +199,15 @@ export const TournamentMatchDetail: React.FC = () => {
 					})}
 				</ButtonGroup>
 				<Table responsive="sm">
-					<tbody>
-						<tr>
-							<td className="text-center">{displayLeftName(showTable)}</td>
-							<td className="text-center">Nombre</td>
-							<td className="text-center">{displayRightName(showTable)}</td>
+					<tbody className="w-full">
+						<tr className="d-flex justify-content-between">
+							<div className="text-center">{displayLeftName(showTable)}</div>
+							<div className="text-center">Nombre</div>
+							<div className="text-center">{displayRightName(showTable)}</div>
 						</tr>
 					</tbody>
 				</Table>
-				<StatsTable
-					sections={buildStandardSections(
-						calculateStatsBySet(
-							match?.sets as GameSet[],
-							selectSetOptions,
-							match?.tracker as TournamentMatchTracker,
-						),
-					)}
-				/>
+				<StatsTable sections={selectTableStats(showTable)} />
 			</div>
 		</div>
 	);

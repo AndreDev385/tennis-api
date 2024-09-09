@@ -63,8 +63,6 @@ export class UpdateBracket implements UseCase<Req, Res> {
 			let rightCouple, leftCouple;
 			let rightTeam, leftTeam;
 
-			console.log("REQ", req);
-
 			if (req.mode == GameMode.single) {
 				try {
 					rightParticipant = await this.participantRepo.get({
@@ -116,7 +114,6 @@ export class UpdateBracket implements UseCase<Req, Res> {
 			}
 
 			if (Object.values(req.rightPlace).some((x) => x)) {
-				console.log("update right obj");
 				bracket.rightPlace.setInscribed(
 					rightParticipant!,
 					rightCouple!,
@@ -124,7 +121,6 @@ export class UpdateBracket implements UseCase<Req, Res> {
 				);
 			}
 			if (Object.values(req.leftPlace).some((x) => x)) {
-				console.log("update left obj");
 				bracket.leftPlace.setInscribed(
 					leftParticipant!,
 					leftCouple!,
@@ -132,15 +128,12 @@ export class UpdateBracket implements UseCase<Req, Res> {
 				);
 			}
 
-			// TODO: update match if state is waiting
 			if (bracket.matchId) {
-				console.log("enter if");
 				const maybeMatch = await this.matchRepo.get({
 					matchId: bracket.matchId?.id.toString(),
 				});
 
 				if (maybeMatch.isSuccess) {
-					console.log("match found");
 					const match = maybeMatch.getValue();
 
 					if (match.status.value != MatchStatuses.Waiting) {
@@ -163,18 +156,11 @@ export class UpdateBracket implements UseCase<Req, Res> {
 						match.changePlayer(bracket.leftPlace.couple!.p2, 4);
 					}
 
-					console.log(match.matchId);
-					console.log(JSON.stringify(match.player1));
-					console.log(JSON.stringify(match.player2));
-					console.log(JSON.stringify(match.player3));
-					console.log(JSON.stringify(match.player4));
-
 					await this.matchRepo.save(match);
 					await this.trackerRepo.save(match.tracker!);
 				}
 			}
 
-			// TODO: update clash
 			if (bracket.clashId) {
 				const maybeClash = await this.clashRepo.get({
 					contestClashId: bracket.clashId?.id.toString(),

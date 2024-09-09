@@ -63,8 +63,8 @@ export const AddCouples = () => {
 		toast.success(result.getValue());
 		navigate(`/dashboard/tournaments/contest/${contest.contestId}`, {
 			state: {
-				tournament: tournament,
-				contest: contest,
+				tournament,
+				contest,
 			},
 		});
 	};

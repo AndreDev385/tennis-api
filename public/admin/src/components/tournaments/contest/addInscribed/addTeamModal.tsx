@@ -23,7 +23,7 @@ export const AddTeamModal: React.FC<Props> = ({ addTeam, close }) => {
 
 		addTeam({
 			position: form.position ? Number(form.position) : null,
-			name: form.name, //TODO
+			name: form.name,
 		});
 
 		toast.success("Equipo agregado");

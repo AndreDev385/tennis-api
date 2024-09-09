@@ -45,7 +45,10 @@ export function CreateTournamentForm() {
 	) => {
 		setForm((prev) => ({
 			...prev,
-			[e.target.name]: e.target.value,
+			[e.target.name]:
+				e.target.name === "goldenPoint"
+					? (e.target as HTMLInputElement).checked
+					: e.target.value,
 		}));
 	};
 

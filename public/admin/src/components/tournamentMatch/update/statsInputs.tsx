@@ -1,13 +1,16 @@
-import { nanoid } from "nanoid";
+import { useContext } from "react";
 import { Form, Table } from "react-bootstrap";
+import { UpdateTournamentMatchContext } from "../../../shared/context/updateTournamentMatch";
+import type { ParticipantStats } from "../../../types/participantStats";
+import type { TournamentMatchTracker } from "../../../types/tournamentTracker";
 
 type InputRow = {
 	name: string;
 	property: string;
-	p1Value: number;
-	p2Value: number;
-	p3Value?: number;
-	p4Value?: number;
+	player1Value: number;
+	player2Value: number;
+	player3Value?: number;
+	player4Value?: number;
 };
 
 export type InputSection = {
@@ -15,9 +18,73 @@ export type InputSection = {
 	row: InputRow[];
 };
 
-type Data = { sections: InputSection[]; double: boolean };
+type Data = { sections: InputSection[]; double: boolean; idx: number };
 
-export function StatsInputs({ sections, double }: Data) {
+type StatName = keyof ParticipantStats;
+
+export function StatsInputs({ sections, double, idx }: Data) {
+	const { match, setMatch } = useContext(UpdateTournamentMatchContext)!;
+
+	function getStat(
+		player: keyof TournamentMatchTracker,
+		statName: keyof ParticipantStats,
+		idx: number,
+	): string {
+		if (idx === match?.sets.length) {
+			const playerObj = match.tracker[player] as ParticipantStats;
+			const result = `${playerObj[statName]}`;
+			return result;
+		}
+		const playerObj = match?.sets[idx].stats![player] as ParticipantStats;
+		const result = `${playerObj[statName]}`;
+		return result;
+	}
+
+	function updateStat(name: string, value: string, idx: number) {
+		const [player, stat] = name.split("-");
+
+		const TOTAL_IDX = idx === match?.sets.length;
+
+		if (TOTAL_IDX) {
+			let playerStats = match.tracker[
+				player as keyof TournamentMatchTracker
+			] as ParticipantStats;
+
+			playerStats = {
+				...playerStats,
+				[stat]: Number(value),
+			};
+
+			setMatch((prev) => ({
+				...prev!,
+				tracker: {
+					...match.tracker,
+					[player]: playerStats,
+				},
+			}));
+			return;
+		}
+
+		const stats = match!.sets[idx].stats!;
+
+		let playerStats = stats[
+			player as keyof TournamentMatchTracker
+		] as ParticipantStats;
+
+		playerStats = {
+			...playerStats,
+			[stat]: Number(value),
+		};
+
+		setMatch((prev) => ({
+			...prev!,
+			sets: prev!.sets.map((s, i) => {
+				if (i != idx) return s;
+				return { ...s, stats: { ...stats, [player]: { ...playerStats } } };
+			}),
+		}));
+	}
+
 	return sections.map((s) => (
 		<div key={s.title}>
 			<div
@@ -30,33 +97,48 @@ export function StatsInputs({ sections, double }: Data) {
 				<tbody className="w-full">
 					{s.row.map((stats) => (
 						<tr key={stats.name}>
-							{/* TODO class colors */}
-							<td className="text-center">
+							<td className="d-flex gap-2">
 								<Form.Control
-									key={nanoid()}
-									name={`p1-${stats.property}`}
-									defaultValue={stats.p1Value}
+									style={{ width: "5rem" }}
+									name={`player1-${stats.property}`}
+									type="number"
+									value={getStat("player1", stats.property as StatName, idx)}
+									onChange={(e) =>
+										updateStat(e.target.name, e.target.value, idx)
+									}
 								/>
 								{double && (
 									<Form.Control
-										key={nanoid()}
-										name={`p3-${stats.property}`}
-										defaultValue={stats.p3Value}
+										style={{ width: "5rem" }}
+										name={`player3-${stats.property}`}
+										type="number"
+										value={getStat("player3", stats.property as StatName, idx)}
+										onChange={(e) =>
+											updateStat(e.target.name, e.target.value, idx)
+										}
 									/>
 								)}
 							</td>
 							<td className="text-center">{stats.name}</td>
-							<td className="text-center">
+							<td className="d-flex gap-2 justify-content-end">
 								<Form.Control
-									key={nanoid()}
-									name={`p2-${stats.property}`}
-									defaultValue={stats.p2Value}
+									style={{ width: "5rem" }}
+									name={`player2-${stats.property}`}
+									type="number"
+									value={getStat("player2", stats.property as StatName, idx)}
+									onChange={(e) =>
+										updateStat(e.target.name, e.target.value, idx)
+									}
 								/>
 								{double && (
 									<Form.Control
-										key={nanoid()}
-										name={`p2-${stats.property}`}
-										defaultValue={stats.p4Value}
+										style={{ width: "5rem" }}
+										name={`player4-${stats.property}`}
+										type="number"
+										value={getStat("player4", stats.property as StatName, idx)}
+										onChange={(e) =>
+											updateStat(e.target.name, e.target.value, idx)
+										}
 									/>
 								)}
 							</td>
