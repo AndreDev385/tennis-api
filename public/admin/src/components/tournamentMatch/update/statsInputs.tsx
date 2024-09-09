@@ -7,10 +7,10 @@ import type { TournamentMatchTracker } from "../../../types/tournamentTracker";
 type InputRow = {
 	name: string;
 	property: string;
-	player1Value: number;
-	player2Value: number;
-	player3Value?: number;
-	player4Value?: number;
+	p1Value: number;
+	p2Value: number;
+	p3Value?: number;
+	p4Value?: number;
 };
 
 export type InputSection = {
