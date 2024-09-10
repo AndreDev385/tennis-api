@@ -73,8 +73,8 @@ export function CreateTournamentForm() {
 		const formData = new FormData();
 
 		formData.append("name", form.name);
-		formData.append("startDate", startDate.toLocaleString());
-		formData.append("endDate", endDate.toLocaleString());
+		formData.append("startDate", startDate.toString());
+		formData.append("endDate", endDate.toString());
 		formData.append("setsQuantity", `${form.setsQuantity}`);
 		formData.append("gamesPerSet", `${form.gamesPerSet}`);
 		formData.append("matchesPerClash", `${form.matchesPerClash}`);
