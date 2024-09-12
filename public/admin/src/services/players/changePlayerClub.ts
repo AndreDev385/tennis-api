@@ -2,38 +2,38 @@ import { VITE_SERVER_URL } from "../../env/env.prod";
 import { Result } from "../../shared/Result";
 
 type Params = {
-    playerId: string;
-    clubId: string;
-    token: string;
+	playerId: string;
+	clubId: string;
+	token: string;
 };
 
 async function changePlayerClub({ playerId, clubId, token }: Params) {
-    const url = `${VITE_SERVER_URL}/api/v1/player/change-club`;
+	const url = `${VITE_SERVER_URL}/api/v1/player/change-club`;
 
-    const body = JSON.stringify({ playerId, clubId });
+	const body = JSON.stringify({ playerId, clubId });
 
-    const requestOptions: RequestInit = {
-        method: "PUT",
-        body,
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: token,
-        },
-    };
+	const requestOptions: RequestInit = {
+		method: "PUT",
+		body,
+		headers: {
+			"Content-Type": "application/json",
+			Authorization: token,
+		},
+	};
 
-    try {
-        const response = await fetch(url, requestOptions);
+	try {
+		const response = await fetch(url, requestOptions);
 
-        const data = await response.json();
+		const data = await response.json();
 
-        if (response.status !== 200) {
-            return Result.fail<string>(data["message"]);
-        }
+		if (response.status !== 200) {
+			return Result.fail<string>(data.message);
+		}
 
-        return Result.ok<string>(data["message"]);
-    } catch (error) {
-        return Result.fail<string>("Ha ocurrido un error");
-    }
+		return Result.ok<string>(data.message);
+	} catch (error) {
+		return Result.fail<string>("Ha ocurrido un error");
+	}
 }
 
 export { changePlayerClub };

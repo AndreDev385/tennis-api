@@ -1,4 +1,4 @@
-export type Team = {
+export type ContestTeam = {
 	contestTeamId: string;
 	contestId: string;
 	name: string;

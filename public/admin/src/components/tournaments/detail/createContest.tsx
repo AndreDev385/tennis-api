@@ -104,7 +104,7 @@ export const CreateContestForm = () => {
 					categoryId: form.categoryId,
 					summation: {
 						letter: form.letter,
-						value: form.value,
+						value: Number(form.value),
 					},
 				},
 			},

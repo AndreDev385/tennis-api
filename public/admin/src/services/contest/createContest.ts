@@ -33,6 +33,8 @@ export const createContest = async (
 	try {
 		const response = await fetch(url, requestOptions);
 
+		console.log(response.body);
+
 		const data = await response.json();
 
 		if (response.status !== 200) {

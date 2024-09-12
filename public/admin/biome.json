@@ -3,10 +3,28 @@
 	"organizeImports": {
 		"enabled": true
 	},
+	"files": {
+		"ignore": [
+			"./src/components/tournamentMatch/detail/buildSingleTable.ts"
+		]
+	},
 	"linter": {
 		"enabled": true,
 		"rules": {
-			"recommended": true
+			"recommended": true,
+			"suspicious": {
+				"noDoubleEquals": {
+					"level": "off"
+				}
+			},
+			"style": {
+				"noNonNullAssertion": {
+					"level": "off"
+				},
+				"noVar": {
+					"level": "off"
+				}
+			}
 		}
 	}
 }

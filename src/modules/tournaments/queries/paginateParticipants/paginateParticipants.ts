@@ -4,42 +4,45 @@ import { UseCase } from "../../../../shared/core/UseCase";
 import { PaginateResponse } from "../../../../shared/infra/database/sequelize/queries/sequelizeQueries";
 import { ParticipantDto } from "../../dtos/participantDto";
 import {
-    ParticipantQuery,
-    ParticipantRepo,
+	ParticipantQuery,
+	ParticipantRepo,
 } from "../../repository/participantRepo";
 
 type Response = Either<
-    AppError.UnexpectedError,
-    PaginateResponse<ParticipantDto>
+	AppError.UnexpectedError,
+	PaginateResponse<ParticipantDto>
 >;
 
 export class PaginateParticipants implements UseCase<any, Response> {
-    private readonly participantRepo: ParticipantRepo;
+	private readonly participantRepo: ParticipantRepo;
 
-    constructor(repo: ParticipantRepo) {
-        this.participantRepo = repo;
-    }
+	constructor(repo: ParticipantRepo) {
+		this.participantRepo = repo;
+	}
 
-    async execute(req: any): Promise<Response> {
-        const validQueries: Array<keyof ParticipantQuery> = ["userId", "participantId"];
+	async execute(req: any): Promise<Response> {
+		const validQueries: Array<keyof ParticipantQuery> = [
+			"userId",
+			"participantId",
+		];
 
-        const query: ParticipantQuery = {};
+		const query: ParticipantQuery = {};
 
-        try {
-            for (const [k, v] of Object.entries(req)) {
-                if (validQueries.includes(k as keyof ParticipantQuery)) {
-                    query[k as keyof ParticipantQuery] = v as any;
-                }
-            }
+		try {
+			for (const [k, v] of Object.entries(req)) {
+				if (validQueries.includes(k as keyof ParticipantQuery)) {
+					query[k as keyof ParticipantQuery] = v as any;
+				}
+			}
 
-            const result = await this.participantRepo.paginate(query, {
-                limit: Number(req.limit),
-                offset: Number(req.offset),
-            });
+			const result = await this.participantRepo.paginate(query, {
+				limit: Number(req.limit),
+				offset: Number(req.offset),
+			});
 
-            return right(result);
-        } catch (error) {
-            return left(new AppError.UnexpectedError(error));
-        }
-    }
+			return right(result);
+		} catch (error) {
+			return left(new AppError.UnexpectedError(error));
+		}
+	}
 }

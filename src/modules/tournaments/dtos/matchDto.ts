@@ -6,36 +6,36 @@ import { ParticipantDto } from "./participantDto";
 import { TournamentMatchTrackerDto } from "./trackerDto";
 
 export type TournamentMatchDto = {
-    matchId: string;
-    tournamentId: string;
-    contestId: string;
-    rules: {
-        gamesPerSet: number;
-        setsQuantity: number;
-        goldenPoint: boolean;
-    };
-    mode: string;
-    surface: string;
-    sets: SetDto[];
-    superTieBreak: boolean | null;
-    participant1: ParticipantDto;
-    participant2: ParticipantDto;
-    participant3: ParticipantDto | null;
-    participant4: ParticipantDto | null;
-    tracker: TournamentMatchTrackerDto;
-    status: number;
-    matchInfo: {
-        currentSetIdx: number | null;
-        currentGame: GameDto | null;
-        setsWon?: number;
-        setsLost?: number;
-        matchFinish: boolean | null;
-        superTiebreak?: boolean | null;
-        initialTeam?: number | null;
-        doubleServeFlow: DoubleServeFlowDto | null;
-        singleServeFlow?: SingleServeFlowDto | null;
-    };
-    matchWon: boolean | null;
-    createdAt: Date;
-    updatedAt: Date;
+	matchId: string;
+	tournamentId: string;
+	contestId: string;
+	rules: {
+		gamesPerSet: number;
+		setsQuantity: number;
+		goldenPoint: boolean;
+	};
+	mode: string;
+	surface: string;
+	sets: SetDto[];
+	superTieBreak: boolean | null;
+	participant1: ParticipantDto;
+	participant2: ParticipantDto;
+	participant3: ParticipantDto | null;
+	participant4: ParticipantDto | null;
+	tracker: TournamentMatchTrackerDto;
+	status: number;
+	matchInfo: {
+		currentSetIdx: number | null;
+		currentGame: GameDto | null;
+		setsWon?: number;
+		setsLost?: number;
+		matchFinish: boolean | null;
+		superTiebreak?: boolean | null;
+		initialTeam?: number | null;
+		doubleServeFlow: DoubleServeFlowDto | null;
+		singleServeFlow?: SingleServeFlowDto | null;
+	};
+	matchWon: boolean | null;
+	createdAt: Date;
+	updatedAt: Date;
 };

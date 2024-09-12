@@ -1,60 +1,45 @@
-import { Card, Table } from "react-bootstrap";
+import { useState } from "react";
 import { useLocation } from "react-router";
+import { ContestBrackets } from "./brackets";
+import { Inscribed } from "./inscribed";
 import { formatContestTitle } from "./utils";
-import { useEffect, useState } from "react";
-import { getContest } from "../../../services/contest/getContest";
-import type { Contest } from "../../../types/contest";
+import { Button, ButtonGroup } from "react-bootstrap";
 
 export const ContestDetail = () => {
 	const { state } = useLocation();
 
-	const [_status, setStatus] = useState({
-		loading: true,
-		error: "",
-	});
+	const [showInscribed, setShowInscribed] = useState(true);
 
-	const [_contest, setContest] = useState<Contest | null>(null);
-
-	const handleGetContest = async () => {
-		setStatus({ loading: true, error: "" });
-
-		const result = await getContest(state.contest.contestId);
-
-		setStatus((prev) => ({ ...prev, loading: false }));
-		if (result.isFailure) {
-			setStatus((prev) => ({ ...prev, error: result.getErrorValue() }));
-			return;
+	const render = () => {
+		if (showInscribed) {
+			return <Inscribed />;
 		}
-
-		setContest(result.getValue());
+		return <ContestBrackets />;
 	};
-
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-	useEffect(() => {
-		handleGetContest();
-	}, []);
 
 	return (
 		<div>
-			<div className="title-wrap">
-				<h1>
-					{state.tournamentName} {formatContestTitle(state.contest)}
-				</h1>
+			<h1 className="text-center">
+				{state.tournament.name} {state.contest?.mode}{" "}
+				{formatContestTitle(state.contest)}
+			</h1>
+			<div className="d-flex justify-content-center">
+				<ButtonGroup>
+					<Button
+						variant={showInscribed ? "primary" : "secondary"}
+						onMouseDown={() => setShowInscribed(true)}
+					>
+						Participantes
+					</Button>
+					<Button
+						variant={!showInscribed ? "primary" : "secondary"}
+						onMouseDown={() => setShowInscribed(false)}
+					>
+						Brackets
+					</Button>
+				</ButtonGroup>
 			</div>
-			<Card>
-				<h2 className="text-center">Participantes</h2>
-				<Table responsive="sm">
-					<thead>
-						<tr>
-							<th className="text-center">Nombre</th>
-							<th className="text-center">Apellido</th>
-							<th className="text-center">CI</th>
-							<th className="text-center">Acciones</th>
-						</tr>
-					</thead>
-					<tbody>{}</tbody>
-				</Table>
-			</Card>
+			{render()}
 		</div>
 	);
 };

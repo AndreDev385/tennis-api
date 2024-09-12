@@ -1,0 +1,22 @@
+.set-group {
+    height: 3rem;
+    display: flex;
+}
+
+.set-container {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border: 1px solid #eee;
+    border-radius: 1rem;
+}
+
+.set {
+    text-align: center;
+    width: 6rem !important;
+    margin-right: .5rem;
+}
+
+.tiebreak {
+    height: 2rem;
+    width: 4rem !important;
+}

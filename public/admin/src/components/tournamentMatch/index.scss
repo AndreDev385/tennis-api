@@ -1,0 +1,17 @@
+.won {
+    color: #ffca3ace;
+    font-size: .7rem;
+    margin-left: .5rem;
+}
+
+
+.filter-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    margin: 1rem 2rem;
+    gap: 1rem;
+
+    .form-select {
+        border-radius: 1rem;
+    }
+}

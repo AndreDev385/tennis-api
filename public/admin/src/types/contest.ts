@@ -1,4 +1,8 @@
-import type { InscribedList } from "./inscribed";
+import type {
+	InscribedCouple,
+	InscribedParticipant,
+	InscribedTeam,
+} from "./inscribed";
 import type { ICategory } from "./interfaces";
 
 export type Contest = {
@@ -8,7 +12,7 @@ export type Contest = {
 	categoryType: 0 | 1 | 2;
 	category: ICategory | null;
 	summation: Summation | null;
-	inscribed?: InscribedList[];
+	inscribed: InscribedCouple[] | InscribedTeam[] | InscribedParticipant[];
 };
 
 export type Summation = {
