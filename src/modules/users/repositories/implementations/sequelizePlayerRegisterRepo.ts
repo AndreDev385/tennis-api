@@ -11,48 +11,47 @@ import models from "../../../../shared/infra/database/sequelize/models";
 const sequelize: Sequelize = config.connection;
 
 export class SequelizePlayerRegisterRepository
-    implements PlayerRegisterRepository {
-    async registerBulk(
-        users: User[],
-        players: Player[]
-    ): Promise<Result<void>> {
-        const t = await sequelize.transaction();
+	implements PlayerRegisterRepository {
+	async registerBulk(users: User[], players: Player[]): Promise<Result<void>> {
+		const t = await sequelize.transaction();
 
-        try {
-            for (let i = 0; i < users.length; i++) {
-                const rawUser = await UserMap.toPersistance(users[i]);
+		try {
+			for (let i = 0; i < users.length; i++) {
+				if (users[i]) {
+					const rawUser = await UserMap.toPersistance(users[i]);
+					await models.UserModel.create(rawUser, { transaction: t });
+				}
+			}
+			for (let i = 0; i < players.length; i++) {
+				if (players[i]) {
+					const rawPlayer = PlayerMap.toPersistance(players[i]);
+					await models.PlayerModel.create(rawPlayer, { transaction: t });
+				}
+			}
+			await t.commit();
+			return Result.ok<void>();
+		} catch (error) {
+			await t.rollback();
+			return Result.fail((error as Error).message ?? error);
+		}
+	}
 
-                await models.UserModel.create(rawUser, { transaction: t });
-            }
-            for (let i = 0; i < players.length; i++) {
-                const rawPlayer = PlayerMap.toPersistance(players[i]);
+	async register(user: User, player: Player): Promise<Result<void>> {
+		const t = await sequelize.transaction();
 
-                await models.PlayerModel.create(rawPlayer, { transaction: t });
-            }
-            await t.commit();
-            return Result.ok<void>();
-        } catch (error) {
-            await t.rollback();
-            return Result.fail((error as Error).message ?? error);
-        }
-    }
+		const rawPlayer = PlayerMap.toPersistance(player);
+		const rawUser = await UserMap.toPersistance(user);
 
-    async register(user: User, player: Player): Promise<Result<void>> {
-        const t = await sequelize.transaction();
+		try {
+			await models.UserModel.create(rawUser, { transaction: t });
+			await models.PlayerModel.create(rawPlayer, { transaction: t });
 
-        const rawPlayer = PlayerMap.toPersistance(player);
-        const rawUser = await UserMap.toPersistance(user);
+			await t.commit();
 
-        try {
-            await models.UserModel.create(rawUser, { transaction: t });
-            await models.PlayerModel.create(rawPlayer, { transaction: t });
-
-            await t.commit();
-
-            return Result.ok<void>();
-        } catch (error) {
-            await t.rollback();
-            return Result.fail((error as Error).message ?? error);
-        }
-    }
+			return Result.ok<void>();
+		} catch (error) {
+			await t.rollback();
+			return Result.fail((error as Error).message ?? error);
+		}
+	}
 }

@@ -4,6 +4,7 @@ import { UseCase } from "../../../../shared/core/UseCase";
 import { Club } from "../../../league/domain/club";
 import { Player } from "../../../league/domain/player";
 import { ClubRepository } from "../../../league/repositories/clubRepo";
+import { PlayerRepository } from "../../../league/repositories/playerRepo";
 import { UserEmail } from "../../../users/domain/email";
 import { User } from "../../../users/domain/user";
 import { Name } from "../../domain/names";
@@ -20,13 +21,16 @@ export class RegisterPlayer implements UseCase<any, Response> {
     private readonly userRepo: UserRepository;
     private readonly clubRepo: ClubRepository;
     private readonly playerRegisterRepo: PlayerRegisterRepository;
+    private readonly playerRepo: PlayerRepository;
 
     constructor(
         userRepo: UserRepository,
+        playerRepo: PlayerRepository,
         clubRepo: ClubRepository,
         playerRegisterRepo: PlayerRegisterRepository
     ) {
         this.userRepo = userRepo;
+        this.playerRepo = playerRepo
         this.clubRepo = clubRepo;
         this.playerRegisterRepo = playerRegisterRepo;
     }
@@ -41,57 +45,10 @@ export class RegisterPlayer implements UseCase<any, Response> {
         let club: Club;
         let player: Player;
 
-        const randomPassword = generatePassword();
+        let usersToCreate: User[] = [];
+        let playerToCreate: Player[] = [];
 
         try {
-            const firstNameResult = Name.create({ value: firstName });
-            const lastNameResult = Name.create({ value: lastName });
-            const emailResult = UserEmail.create(email);
-            const passwordResult = UserPassword.create({
-                value: randomPassword,
-            });
-
-            const dtoResult = Result.combine([
-                firstNameResult,
-                lastNameResult,
-                emailResult,
-                passwordResult,
-            ]);
-
-            if (dtoResult.isFailure) {
-                return left(Result.fail<string>(dtoResult.getErrorValue()));
-            }
-
-            const createUserResult = User.create({
-                firstName: firstNameResult.getValue(),
-                lastName: lastNameResult.getValue(),
-                email: emailResult.getValue(),
-                password: passwordResult.getValue(),
-                isPlayer: true,
-            });
-
-            if (createUserResult.isFailure) {
-                return left(
-                    Result.fail<string>(`${createUserResult.getErrorValue()}`)
-                );
-            }
-
-            user = createUserResult.getValue();
-            user.provisionalPasswordGranted(randomPassword);
-
-            try {
-                const userAlreadyExist = await this.userRepo.getUserByEmail(
-                    user.email!
-                );
-                if (userAlreadyExist) {
-                    return left(
-                        new CreateUserErrors.EmailAlreadyExistsError(
-                            user.email!.value
-                        )
-                    );
-                }
-            } catch (error) { }
-
             try {
                 club = await this.clubRepo.find({
                     symbol: clubSymbol,
@@ -105,11 +62,20 @@ export class RegisterPlayer implements UseCase<any, Response> {
                 );
             }
 
+            const userResult = this.createUser(firstName, lastName, email);
+
+            if (userResult.isFailure) {
+                return left(Result.fail<string>(`${userResult.getErrorValue()}`));
+            }
+
+            user = userResult.getValue().user;
+            user.provisionalPasswordGranted(userResult.getValue().password);
+
             const playerResult = Player.create({
-                firstName: firstNameResult.getValue(),
-                lastName: lastNameResult.getValue(),
-                clubId: club.clubId,
+                firstName: user.firstName,
+                lastName: user.lastName,
                 userId: user.userId,
+                clubId: club.clubId,
             });
 
             if (playerResult.isFailure) {
@@ -120,7 +86,34 @@ export class RegisterPlayer implements UseCase<any, Response> {
 
             player = playerResult.getValue();
 
-            const result = await this.playerRegisterRepo.register(user, player);
+            let userAlreadyExist: User;
+            let playerAlreadyExist: Player;
+
+            try {
+                userAlreadyExist = await this.userRepo.getUserByEmail(
+                    user.email!
+                );
+
+                try {
+                    playerAlreadyExist =
+                        await this.playerRepo.getPlayerByUserId(
+                            userAlreadyExist.userId.id.toString()
+                        );
+
+                    return left(
+                        new CreateUserErrors.EmailAlreadyExistsError(
+                            user.email!.value
+                        )
+                    );
+                } catch (error) {
+                    playerToCreate.push(player);
+                }
+            } catch (error) {
+                usersToCreate.push(user);
+                playerToCreate.push(player);
+            }
+
+            const result = await this.playerRegisterRepo.registerBulk(usersToCreate, playerToCreate);
 
             if (result.isFailure) {
                 return left(
@@ -134,5 +127,44 @@ export class RegisterPlayer implements UseCase<any, Response> {
         } catch (error) {
             return left(new AppError.UnexpectedError(error));
         }
+    }
+
+    createUser(
+        firstName: string,
+        lastName: string,
+        email: string,
+    ): Result<{ user: User, password: string }> {
+        const randomPassword = generatePassword();
+        const firstNameResult = Name.create({ value: firstName });
+        const lastNameResult = Name.create({ value: lastName });
+        const emailResult = UserEmail.create(email);
+        const passwordResult = UserPassword.create({
+            value: randomPassword,
+        });
+
+        const dtoResult = Result.combine([
+            firstNameResult,
+            lastNameResult,
+            emailResult,
+            passwordResult,
+        ]);
+
+        if (dtoResult.isFailure) {
+            return Result.fail(dtoResult.getErrorValue() as string);
+        }
+
+        const createUserResult = User.create({
+            firstName: firstNameResult.getValue(),
+            lastName: lastNameResult.getValue(),
+            email: emailResult.getValue(),
+            password: passwordResult.getValue(),
+            isPlayer: true,
+        });
+
+        if (createUserResult.isFailure) {
+            return Result.fail(`${createUserResult.getErrorValue()}`)
+        }
+
+        return Result.ok({ user: createUserResult.getValue(), password: randomPassword })
     }
 }
