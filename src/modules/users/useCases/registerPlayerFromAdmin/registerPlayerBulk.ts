@@ -73,20 +73,6 @@ export class RegisterPlayerBulk implements UseCase<any, Response> {
                 user = userResult.getValue();
                 user.provisionalPasswordGranted(randomPassword);
 
-                const playerResult = Player.create({
-                    firstName: user.firstName,
-                    lastName: user.lastName,
-                    clubId: club.clubId,
-                    userId: user.userId,
-                });
-
-                if (playerResult.isFailure) {
-                    return left(
-                        Result.fail<string>(`${playerResult.getErrorValue()}`)
-                    );
-                }
-
-                player = playerResult.getValue();
 
                 let userAlreadyExist: User;
                 let playerAlreadyExist: Player;
@@ -104,10 +90,36 @@ export class RegisterPlayerBulk implements UseCase<any, Response> {
                         return left(Result.fail<string>(`El usuario ${userAlreadyExist.ci?.value} ya se encuentra registrado como jugador`));
                     } catch (error) {
                         // user exist but player dont
+                        const playerResult = Player.create({
+                            firstName: userAlreadyExist.firstName,
+                            lastName: userAlreadyExist.lastName,
+                            clubId: club.clubId,
+                            userId: userAlreadyExist.userId,
+                        });
+
+                        if (playerResult.isFailure) {
+                            return left(
+                                Result.fail<string>(`${playerResult.getErrorValue()}`)
+                            );
+                        }
+                        player = playerResult.getValue();
                         players.push(player);
                     }
                 } catch (error) {
                     // both user and player dont exist
+                    const playerResult = Player.create({
+                        firstName: user.firstName,
+                        lastName: user.lastName,
+                        clubId: club.clubId,
+                        userId: user.userId,
+                    });
+
+                    if (playerResult.isFailure) {
+                        return left(
+                            Result.fail<string>(`${playerResult.getErrorValue()}`)
+                        );
+                    }
+                    player = playerResult.getValue();
                     users.push(user);
                     players.push(player);
                 }

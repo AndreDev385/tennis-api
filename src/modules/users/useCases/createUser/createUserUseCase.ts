@@ -45,22 +45,22 @@ export class CreateUserUseCase
         try {
             const userRegisteredByAdmin = await this.repository.get({ ci: data.ci.value });
 
-            if (userRegisteredByAdmin.email == null && userRegisteredByAdmin.password == null) {
-                // update user
-                userRegisteredByAdmin.editUser(
-                    userRegisteredByAdmin.firstName,
-                    userRegisteredByAdmin.lastName,
-                    data.email,
-                    data.ci,
-                )
-
-                userRegisteredByAdmin.changePassword(data.password);
-
-                await this.repository.save(userRegisteredByAdmin);
-                return right(Result.ok<void>());
+            if (!userRegisteredByAdmin.email) {
+                return left(Result.fail<string>(`CI: ${data.ci.value} ya se encuentra registrada`))
             }
+            // update user
+            userRegisteredByAdmin.editUser(
+                userRegisteredByAdmin.firstName,
+                userRegisteredByAdmin.lastName,
+                data.email,
+                data.ci,
+            )
 
-            return left(Result.fail<string>(`CI: ${data.ci.value} ya se encuentra registrada`))
+            userRegisteredByAdmin.changePassword(data.password);
+
+            await this.repository.save(userRegisteredByAdmin);
+            return right(Result.ok<void>());
+
         } catch (e) { }
 
         const userOrError = User.create({

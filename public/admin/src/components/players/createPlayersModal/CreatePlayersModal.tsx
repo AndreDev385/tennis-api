@@ -99,9 +99,8 @@ const CreatePlayersModal = ({ onClose, getPlayers }: IProps) => {
 			await getPlayers();
 		} catch (error) {
 			toast.error(
-				`${
-					(error as Error).message ??
-					"Ha ocurrido un error al intentar agregar los jugadores"
+				`${(error as Error).message ??
+				"Ha ocurrido un error al intentar agregar los jugadores"
 				}`,
 			);
 		} finally {
@@ -172,7 +171,7 @@ const CreatePlayersModal = ({ onClose, getPlayers }: IProps) => {
 											<tr>
 												<th className="text-center">Nombre</th>
 												<th className="text-center">Apellido</th>
-												<th className="text-center">Email</th>
+												<th className="text-center">Documento</th>
 												<th className="text-center">Club</th>
 											</tr>
 										</thead>
