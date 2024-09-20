@@ -29,6 +29,7 @@ export class SequelizeTournamentRepository implements TournamentRepository {
         const result = await models.TournamentModel.findAndCountAll({
             where: filters,
             ...pagination,
+            order: [["createdAt", "ASC"]],
         });
 
         const dtos = result.rows.map((d) => TournamentMap.forQuery(d));

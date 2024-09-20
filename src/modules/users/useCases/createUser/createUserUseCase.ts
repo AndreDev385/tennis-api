@@ -45,8 +45,6 @@ export class CreateUserUseCase
         try {
             const userRegisteredByAdmin = await this.repository.get({ ci: data.ci.value });
 
-            console.log(userRegisteredByAdmin.email);
-
             if (!userRegisteredByAdmin.email == null) {
                 return left(Result.fail<string>(`CI: ${data.ci.value} ya se encuentra registrada`))
             }
