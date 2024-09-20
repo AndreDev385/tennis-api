@@ -10,6 +10,7 @@ import { RegisterPlayerController } from "./registerPlayerController";
 
 const registerPlayer = new RegisterPlayer(
     sequelizeUserRepo,
+    sequelizePlayerRepo,
     sequelizeClubRepo,
     sequelizePlayerRegisterRepo
 );

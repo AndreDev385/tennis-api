@@ -31,6 +31,7 @@ export class SequelizePlayerRegisterRepository
 			await t.commit();
 			return Result.ok<void>();
 		} catch (error) {
+			console.log(error);
 			await t.rollback();
 			return Result.fail((error as Error).message ?? error);
 		}

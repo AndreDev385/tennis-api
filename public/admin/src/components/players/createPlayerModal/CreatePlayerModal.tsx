@@ -1,11 +1,11 @@
 import { faCircleNotch, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Form, Modal } from "react-bootstrap";
-import type { IClub } from "../../../types/interfaces";
 import { useState } from "react";
-import validator from "validator";
-import { VITE_SERVER_URL } from "../../../env/env.prod";
+import { Button, Form, Modal } from "react-bootstrap";
 import { toast } from "react-toastify";
+import { VITE_SERVER_URL } from "../../../env/env.prod";
+import type { IClub } from "../../../types/interfaces";
+import { CI_TYPES } from "../../../utils/ci";
 
 interface IProps {
 	clubs: IClub[];
@@ -17,48 +17,25 @@ const CreatePlayerModal = ({ clubs, onClose, getPlayers }: IProps) => {
 	const [form, setForm] = useState({
 		firstName: "",
 		lastName: "",
-		email: "",
+		ciType: "",
+		ciValue: "",
 		clubSymbol: "",
 	});
 	const [submitted, setSubmitted] = useState(false);
-	const [validEmail, setValidEmail] = useState(false);
 	const [validClub, setValidClub] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const filterClubs = clubs.filter((item) => item.isSubscribed === true);
 	const token: string = localStorage.getItem("authorization") || "";
 
-	const onChangeFirstName = (event: React.ChangeEvent<HTMLInputElement>) => {
-		const value = event.target.value;
+	const onFormChange = (
+		event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+	) => {
+		if (event.target.name === "clubSymbol") {
+			setValidClub(event.target.value !== "");
+		}
 		setForm((prev) => ({
 			...prev,
-			firstName: value,
-		}));
-	};
-
-	const onChangeLastName = (event: React.ChangeEvent<HTMLInputElement>) => {
-		const value = event.target.value;
-		setForm((prev) => ({
-			...prev,
-			lastName: value,
-		}));
-	};
-
-	const onChangeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
-		const value = event.target.value;
-		setValidEmail(validator.isEmail(value));
-		setForm((prev) => ({
-			...prev,
-			email: value,
-		}));
-	};
-
-	const onChangeClub = (event: React.ChangeEvent<HTMLSelectElement>) => {
-		const value = event.target.value;
-		setValidClub(value !== "");
-
-		setForm((prev) => ({
-			...prev,
-			clubSymbol: value,
+			[event.target.name]: event.target.value,
 		}));
 	};
 
@@ -70,20 +47,20 @@ const CreatePlayerModal = ({ clubs, onClose, getPlayers }: IProps) => {
 				"Content-Type": "application/json",
 				Authorization: token,
 			},
-			body: JSON.stringify(form),
+			body: JSON.stringify({
+				firstName: form.firstName,
+				lastName: form.lastName,
+				ci: `${form.ciType}${form.ciValue}`,
+				clubSymbol: form.clubSymbol,
+			}),
 		};
 
 		try {
 			const response = await fetch(url, requestOptions);
-			const clone = response.clone();
-			let data;
-			try {
-				data = await response.json();
-			} catch {
-				data = await clone.text();
-			}
+			console.log(response);
+			const data = await response.json();
 
-			if (response.status !== 201) {
+			if (!response.ok) {
 				throw new Error(data?.message);
 			}
 
@@ -103,7 +80,7 @@ const CreatePlayerModal = ({ clubs, onClose, getPlayers }: IProps) => {
 	};
 
 	const handleSubmit = async () => {
-		if (!form.firstName || !form.lastName || !form.email || !form.clubSymbol) {
+		if (!form.firstName || !form.lastName || !form.clubSymbol) {
 			return;
 		}
 		setSubmitted(true);
@@ -129,8 +106,11 @@ const CreatePlayerModal = ({ clubs, onClose, getPlayers }: IProps) => {
 								<Form.Control
 									required
 									type="text"
+									name="firstName"
 									placeholder="Nombre"
-									onChange={onChangeFirstName}
+									onChange={(e) =>
+										onFormChange(e as React.ChangeEvent<HTMLInputElement>)
+									}
 								/>
 
 								{submitted && !form.firstName && (
@@ -144,8 +124,11 @@ const CreatePlayerModal = ({ clubs, onClose, getPlayers }: IProps) => {
 								<Form.Control
 									required
 									type="text"
+									name="lastName"
 									placeholder="Apellido"
-									onChange={onChangeLastName}
+									onChange={(e) =>
+										onFormChange(e as React.ChangeEvent<HTMLInputElement>)
+									}
 								/>
 
 								{submitted && !form.firstName && (
@@ -153,29 +136,46 @@ const CreatePlayerModal = ({ clubs, onClose, getPlayers }: IProps) => {
 								)}
 							</Form.Group>
 
-							<Form.Group className="mb-3" controlId="formEmail">
-								<Form.Label>Correo electrónico</Form.Label>
-
+							<Form.Group className="mb-3">
+								<Form.Label>Tipo de documento</Form.Label>
+								<Form.Select
+									value={form.ciType}
+									required
+									onChange={onFormChange}
+									defaultValue=""
+									name="ciType"
+								>
+									<option value="">Selecciona un tipo de documento</option>
+									{CI_TYPES.map((v) => (
+										<option key={v} value={v}>
+											{v}
+										</option>
+									))}
+								</Form.Select>
+							</Form.Group>
+							<Form.Group className="mb-3">
+								<Form.Label>ID Documento</Form.Label>
 								<Form.Control
 									required
-									type="email"
-									placeholder="Correo electrónico"
-									onChange={onChangeEmail}
+									name="ciValue"
+									type="text"
+									placeholder="CI"
+									onChange={(e) =>
+										onFormChange(e as React.ChangeEvent<HTMLInputElement>)
+									}
 								/>
-
-								{submitted && !validEmail && (
-									<span className="ms-2 text-error">
-										Correo electrónico inválido
-									</span>
-								)}
 							</Form.Group>
 
 							<Form.Group className="mb-3" controlId="formClub">
 								<Form.Label>Club</Form.Label>
 								<Form.Select
+									name="clubSymbol"
+									required
 									aria-label="Selecciona un club"
 									defaultValue=""
-									onChange={onChangeClub}
+									onChange={(e) =>
+										onFormChange(e as React.ChangeEvent<HTMLSelectElement>)
+									}
 								>
 									<option value="" disabled>
 										Selecciona un club

@@ -106,7 +106,7 @@ export const AddParticipants: React.FC = () => {
 							<th className="text-center">Posición</th>
 							<th className="text-center">Nombre</th>
 							<th className="text-center">Apellido</th>
-							<th className="text-center">CI</th>
+							<th className="text-center">Documento</th>
 							<th className="text-center">Acciones</th>
 						</tr>
 					</thead>

@@ -1,6 +1,6 @@
-export interface RegisterPlayerRequestDto {
+export type RegisterPlayerRequestDto = {
    firstName: string;
    lastName: string;
-   email: string;
+   ci: string;
    clubSymbol: string;
 }

@@ -130,7 +130,7 @@ export const AddCoupleModal: React.FC<Props> = ({ addCouple, close }) => {
 										</Form.Select>
 									</Form.Group>
 									<Form.Group className="mb-3">
-										<Form.Label>CI</Form.Label>
+										<Form.Label>ID Documento</Form.Label>
 										<Form.Control
 											required
 											name="ciP1"

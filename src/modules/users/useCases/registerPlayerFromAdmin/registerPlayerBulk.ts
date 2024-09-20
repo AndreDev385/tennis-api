@@ -5,14 +5,12 @@ import { Club } from "../../../league/domain/club";
 import { Player } from "../../../league/domain/player";
 import { ClubRepository } from "../../../league/repositories/clubRepo";
 import { PlayerRepository } from "../../../league/repositories/playerRepo";
-import { UserEmail } from "../../domain/email";
-import { Name } from "../../domain/names";
-import { UserPassword } from "../../domain/password";
 import { User } from "../../domain/user";
 import { PlayerRegisterRepository } from "../../repositories/playerRegisterRepo";
 import { UserRepository } from "../../repositories/userRepo";
 import { generatePassword } from "../../services/generatePassword";
 import { CreateUserErrors } from "../createUser/createUserErrors";
+import { createUser } from "./registerPlayer";
 import { RegisterPlayerRequestDto } from "./registerPlayerDto";
 
 type Response = Either<
@@ -63,51 +61,21 @@ export class RegisterPlayerBulk implements UseCase<any, Response> {
                 }
 
                 const randomPassword = generatePassword();
-
-                const firstNameResult = Name.create({
-                    value: dto.firstName,
+                const userResult = createUser({
+                    firstName: dto.firstName,
+                    lastName: dto.lastName,
+                    password: randomPassword,
+                    ciString: dto.ci
                 });
-                const lastNameResult = Name.create({
-                    value: dto.lastName,
-                });
-                const emailResult = UserEmail.create(dto.email);
-                const passwordResult = UserPassword.create({
-                    value: randomPassword,
-                });
-
-                const dtoResult = Result.combine([
-                    firstNameResult,
-                    lastNameResult,
-                    emailResult,
-                    passwordResult,
-                ]);
-
-                if (dtoResult.isFailure) {
-                    return left(Result.fail<string>(dtoResult.getErrorValue()));
+                if (userResult.isFailure) {
+                    return left(Result.fail<string>(`${userResult.getErrorValue()}`));
                 }
-
-                const createUserResult = User.create({
-                    firstName: firstNameResult.getValue(),
-                    lastName: lastNameResult.getValue(),
-                    email: emailResult.getValue(),
-                    password: passwordResult.getValue(),
-                    isPlayer: true,
-                });
-
-                if (createUserResult.isFailure) {
-                    return left(
-                        Result.fail<string>(
-                            `${createUserResult.getErrorValue()}`
-                        )
-                    );
-                }
-
-                user = createUserResult.getValue();
+                user = userResult.getValue();
                 user.provisionalPasswordGranted(randomPassword);
 
                 const playerResult = Player.create({
-                    firstName: firstNameResult.getValue(),
-                    lastName: lastNameResult.getValue(),
+                    firstName: user.firstName,
+                    lastName: user.lastName,
                     clubId: club.clubId,
                     userId: user.userId,
                 });
@@ -124,9 +92,7 @@ export class RegisterPlayerBulk implements UseCase<any, Response> {
                 let playerAlreadyExist: Player;
 
                 try {
-                    userAlreadyExist = await this.userRepo.getUserByEmail(
-                        user.email!
-                    );
+                    userAlreadyExist = await this.userRepo.get({ ci: dto.ci });
 
                     try {
                         playerAlreadyExist =
@@ -135,11 +101,7 @@ export class RegisterPlayerBulk implements UseCase<any, Response> {
                             );
 
                         // both user and player already exist
-                        return left(
-                            new CreateUserErrors.EmailAlreadyExistsError(
-                                user.email!.value
-                            )
-                        );
+                        return left(Result.fail<string>(`El usuario ${userAlreadyExist.ci?.value} ya se encuentra registrado como jugador`));
                     } catch (error) {
                         // user exist but player dont
                         players.push(player);

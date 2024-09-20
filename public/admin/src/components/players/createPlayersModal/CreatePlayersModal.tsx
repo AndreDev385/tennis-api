@@ -22,7 +22,7 @@ interface IProps {
 type Player = {
 	firstName: string;
 	lastName: string;
-	email: string;
+	ci: string;
 	clubSymbol: string;
 };
 
@@ -55,7 +55,7 @@ const CreatePlayersModal = ({ onClose, getPlayers }: IProps) => {
 					return {
 						firstName: row[0],
 						lastName: row[1],
-						email: row[2],
+						ci: row[2],
 						clubSymbol: row[3],
 					};
 				});
@@ -182,7 +182,7 @@ const CreatePlayersModal = ({ onClose, getPlayers }: IProps) => {
 												<tr key={index}>
 													<td className="text-center">{player.firstName}</td>
 													<td className="text-center">{player.lastName}</td>
-													<td className="text-center">{player.email}</td>
+													<td className="text-center">{player.ci}</td>
 													<td className="text-center">{player.clubSymbol}</td>
 												</tr>
 											))}
