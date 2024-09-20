@@ -16,8 +16,6 @@ export class RegisterPlayerController extends BaseController {
     async executeImpl(req: Request, res: Response) {
         const result = await this.usecase.execute(req.body);
 
-        console.log(result);
-
         if (result.isLeft()) {
             const error = result.value
             switch (error.constructor) {

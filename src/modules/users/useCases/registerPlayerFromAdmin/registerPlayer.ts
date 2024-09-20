@@ -73,20 +73,16 @@ export class RegisterPlayer implements UseCase<RegisterPlayerRequestDto, Respons
                             userAlreadyExist.userId.id.toString()
                         );
 
-                    console.log(playerAlreadyExist)
                     // Player already exist
                     if (playerAlreadyExist.isDeleted) {
-                        console.log("is deleted")
                         playerAlreadyExist.restore(club.clubId);
 
                         await this.playerRepo.save(playerAlreadyExist);
                         return right(Result.ok())
                     }
-                    console.log("left after if")
 
                     return left(Result.fail<string>(`El usuario ${userAlreadyExist.ci?.value} ya se encuentra registrado como jugador`));
                 } catch (error) {
-                    console.log(error)
                     // player doesn't exist
                     const playerResult = Player.create({
                         firstName: user.firstName,
@@ -99,7 +95,6 @@ export class RegisterPlayer implements UseCase<RegisterPlayerRequestDto, Respons
                         return left(Result.fail<string>(`${playerResult.getErrorValue()}`))
                     }
                     await this.playerRepo.save(playerResult.getValue());
-                    console.log("create player right")
                     return right(Result.ok<void>());
                 }
             } catch (error) { }
@@ -126,7 +121,6 @@ export class RegisterPlayer implements UseCase<RegisterPlayerRequestDto, Respons
                 );
             }
 
-            console.log("last right")
             return right(Result.ok<void>());
         } catch (error) {
             return left(new AppError.UnexpectedError(error));
