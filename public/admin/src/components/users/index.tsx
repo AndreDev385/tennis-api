@@ -216,7 +216,7 @@ export function UsersTablePage() {
         <div className="title-wrap">
           <h1>
             <FontAwesomeIcon icon={faUser} />
-            Usuaios
+            Usuarios
           </h1>
         </div>
 
