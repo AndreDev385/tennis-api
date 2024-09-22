@@ -17,7 +17,12 @@ export const editUser = async (
 
   const requestOptions: RequestInit = {
     method: "PUT",
-    body: JSON.stringify(user),
+    body: JSON.stringify({
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email ?? undefined,
+      ci: user.ci,
+    }),
     headers: {
       "Content-Type": "application/json",
       Authorization: token,
