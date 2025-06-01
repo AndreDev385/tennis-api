@@ -43,7 +43,7 @@ app.use("/api/v1", v1Router);
 
 swaggerDocs(app);
 
-app.use(history());
+app.use(history() as any);
 app.use(
 	"/public",
 	express.static(path.resolve(__dirname, "../../../../../public/")),
